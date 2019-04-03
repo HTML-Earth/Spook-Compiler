@@ -1,4 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/Test.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\Test.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -274,20 +274,20 @@ public class TestParser extends Parser {
 			}
 			setState(26);
 			match(SEMICOLON);
-			setState(28); 
+			setState(30);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			do {
+			while (_la==T__0) {
 				{
 				{
 				setState(27);
 				match(T__0);
 				}
 				}
-				setState(30); 
+				setState(32);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( _la==T__0 );
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -323,9 +323,9 @@ public class TestParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(32);
-			match(T__1);
 			setState(33);
+			match(T__1);
+			setState(34);
 			match(DIGIT);
 			}
 		}
@@ -365,13 +365,13 @@ public class TestParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(35);
-			match(T__2);
 			setState(36);
-			match(DIGIT);
+			match(T__2);
 			setState(37);
-			match(T__3);
+			match(DIGIT);
 			setState(38);
+			match(T__3);
+			setState(39);
 			match(DIGIT);
 			}
 		}
@@ -387,17 +387,17 @@ public class TestParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\b+\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\b,\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\3\3\3\3\3\3\3\5\3\25\n\3"+
-		"\3\4\3\4\3\5\3\5\5\5\33\n\5\3\5\3\5\6\5\37\n\5\r\5\16\5 \3\6\3\6\3\6\3"+
-		"\7\3\7\3\7\3\7\3\7\3\7\2\2\b\2\4\6\b\n\f\2\2\2\'\2\16\3\2\2\2\4\24\3\2"+
-		"\2\2\6\26\3\2\2\2\b\32\3\2\2\2\n\"\3\2\2\2\f%\3\2\2\2\16\17\5\4\3\2\17"+
-		"\3\3\2\2\2\20\21\5\6\4\2\21\22\5\4\3\2\22\25\3\2\2\2\23\25\5\6\4\2\24"+
-		"\20\3\2\2\2\24\23\3\2\2\2\25\5\3\2\2\2\26\27\5\b\5\2\27\7\3\2\2\2\30\33"+
-		"\5\n\6\2\31\33\5\f\7\2\32\30\3\2\2\2\32\31\3\2\2\2\33\34\3\2\2\2\34\36"+
-		"\7\b\2\2\35\37\7\3\2\2\36\35\3\2\2\2\37 \3\2\2\2 \36\3\2\2\2 !\3\2\2\2"+
-		"!\t\3\2\2\2\"#\7\4\2\2#$\7\7\2\2$\13\3\2\2\2%&\7\5\2\2&\'\7\7\2\2\'(\7"+
-		"\6\2\2()\7\7\2\2)\r\3\2\2\2\5\24\32 ";
+		"\3\4\3\4\3\5\3\5\5\5\33\n\5\3\5\3\5\7\5\37\n\5\f\5\16\5\"\13\5\3\6\3\6"+
+		"\3\6\3\7\3\7\3\7\3\7\3\7\3\7\2\2\b\2\4\6\b\n\f\2\2\2(\2\16\3\2\2\2\4\24"+
+		"\3\2\2\2\6\26\3\2\2\2\b\32\3\2\2\2\n#\3\2\2\2\f&\3\2\2\2\16\17\5\4\3\2"+
+		"\17\3\3\2\2\2\20\21\5\6\4\2\21\22\5\4\3\2\22\25\3\2\2\2\23\25\5\6\4\2"+
+		"\24\20\3\2\2\2\24\23\3\2\2\2\25\5\3\2\2\2\26\27\5\b\5\2\27\7\3\2\2\2\30"+
+		"\33\5\n\6\2\31\33\5\f\7\2\32\30\3\2\2\2\32\31\3\2\2\2\33\34\3\2\2\2\34"+
+		" \7\b\2\2\35\37\7\3\2\2\36\35\3\2\2\2\37\"\3\2\2\2 \36\3\2\2\2 !\3\2\2"+
+		"\2!\t\3\2\2\2\" \3\2\2\2#$\7\4\2\2$%\7\7\2\2%\13\3\2\2\2&\'\7\5\2\2\'"+
+		"(\7\7\2\2()\7\6\2\2)*\7\7\2\2*\r\3\2\2\2\5\24\32 ";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
