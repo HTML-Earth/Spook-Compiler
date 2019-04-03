@@ -17,25 +17,26 @@ public class TestParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, ANY=3;
+		T__0=1, T__1=2, T__2=3, T__3=4, DIGIT=5, SEMICOLON=6;
 	public static final int
-		RULE_main = 0, RULE_name = 1;
+		RULE_main = 0, RULE_declarations = 1, RULE_declaration = 2, RULE_numberDecl = 3, 
+		RULE_integerDecl = 4, RULE_floatDecl = 5;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"main", "name"
+			"main", "declarations", "declaration", "numberDecl", "integerDecl", "floatDecl"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'Hello '", "'!'"
+			null, "'\n'", "'int '", "'float '", "'.'", null, "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, "ANY"
+			null, null, null, null, null, "DIGIT", "SEMICOLON"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -90,8 +91,8 @@ public class TestParser extends Parser {
 	}
 
 	public static class MainContext extends ParserRuleContext {
-		public NameContext name() {
-			return getRuleContext(NameContext.class,0);
+		public DeclarationsContext declarations() {
+			return getRuleContext(DeclarationsContext.class,0);
 		}
 		public MainContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -113,12 +114,8 @@ public class TestParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(4);
-			match(T__0);
-			setState(5);
-			name();
-			setState(6);
-			match(T__1);
+			setState(12);
+			declarations();
 			}
 		}
 		catch (RecognitionException re) {
@@ -132,46 +129,250 @@ public class TestParser extends Parser {
 		return _localctx;
 	}
 
-	public static class NameContext extends ParserRuleContext {
-		public List<TerminalNode> ANY() { return getTokens(TestParser.ANY); }
-		public TerminalNode ANY(int i) {
-			return getToken(TestParser.ANY, i);
+	public static class DeclarationsContext extends ParserRuleContext {
+		public DeclarationContext declaration() {
+			return getRuleContext(DeclarationContext.class,0);
 		}
-		public NameContext(ParserRuleContext parent, int invokingState) {
+		public DeclarationsContext declarations() {
+			return getRuleContext(DeclarationsContext.class,0);
+		}
+		public DeclarationsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_name; }
+		@Override public int getRuleIndex() { return RULE_declarations; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TestListener ) ((TestListener)listener).enterName(this);
+			if ( listener instanceof TestListener ) ((TestListener)listener).enterDeclarations(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TestListener ) ((TestListener)listener).exitName(this);
+			if ( listener instanceof TestListener ) ((TestListener)listener).exitDeclarations(this);
 		}
 	}
 
-	public final NameContext name() throws RecognitionException {
-		NameContext _localctx = new NameContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_name);
+	public final DeclarationsContext declarations() throws RecognitionException {
+		DeclarationsContext _localctx = new DeclarationsContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_declarations);
+		try {
+			setState(18);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(14);
+				declaration();
+				setState(15);
+				declarations();
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(17);
+				declaration();
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class DeclarationContext extends ParserRuleContext {
+		public NumberDeclContext numberDecl() {
+			return getRuleContext(NumberDeclContext.class,0);
+		}
+		public DeclarationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_declaration; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).enterDeclaration(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).exitDeclaration(this);
+		}
+	}
+
+	public final DeclarationContext declaration() throws RecognitionException {
+		DeclarationContext _localctx = new DeclarationContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_declaration);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(20);
+			numberDecl();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NumberDeclContext extends ParserRuleContext {
+		public TerminalNode SEMICOLON() { return getToken(TestParser.SEMICOLON, 0); }
+		public IntegerDeclContext integerDecl() {
+			return getRuleContext(IntegerDeclContext.class,0);
+		}
+		public FloatDeclContext floatDecl() {
+			return getRuleContext(FloatDeclContext.class,0);
+		}
+		public NumberDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_numberDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).enterNumberDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).exitNumberDecl(this);
+		}
+	}
+
+	public final NumberDeclContext numberDecl() throws RecognitionException {
+		NumberDeclContext _localctx = new NumberDeclContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_numberDecl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(9); 
+			setState(24);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case T__1:
+				{
+				setState(22);
+				integerDecl();
+				}
+				break;
+			case T__2:
+				{
+				setState(23);
+				floatDecl();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			setState(26);
+			match(SEMICOLON);
+			setState(28); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(8);
-				match(ANY);
+				setState(27);
+				match(T__0);
 				}
 				}
-				setState(11); 
+				setState(30); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( _la==ANY );
+			} while ( _la==T__0 );
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class IntegerDeclContext extends ParserRuleContext {
+		public TerminalNode DIGIT() { return getToken(TestParser.DIGIT, 0); }
+		public IntegerDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_integerDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).enterIntegerDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).exitIntegerDecl(this);
+		}
+	}
+
+	public final IntegerDeclContext integerDecl() throws RecognitionException {
+		IntegerDeclContext _localctx = new IntegerDeclContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_integerDecl);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(32);
+			match(T__1);
+			setState(33);
+			match(DIGIT);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class FloatDeclContext extends ParserRuleContext {
+		public List<TerminalNode> DIGIT() { return getTokens(TestParser.DIGIT); }
+		public TerminalNode DIGIT(int i) {
+			return getToken(TestParser.DIGIT, i);
+		}
+		public FloatDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_floatDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).enterFloatDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TestListener ) ((TestListener)listener).exitFloatDecl(this);
+		}
+	}
+
+	public final FloatDeclContext floatDecl() throws RecognitionException {
+		FloatDeclContext _localctx = new FloatDeclContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_floatDecl);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(35);
+			match(T__2);
+			setState(36);
+			match(DIGIT);
+			setState(37);
+			match(T__3);
+			setState(38);
+			match(DIGIT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -186,11 +387,17 @@ public class TestParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\5\20\4\2\t\2\4\3"+
-		"\t\3\3\2\3\2\3\2\3\2\3\3\6\3\f\n\3\r\3\16\3\r\3\3\2\2\4\2\4\2\2\2\16\2"+
-		"\6\3\2\2\2\4\13\3\2\2\2\6\7\7\3\2\2\7\b\5\4\3\2\b\t\7\4\2\2\t\3\3\2\2"+
-		"\2\n\f\7\5\2\2\13\n\3\2\2\2\f\r\3\2\2\2\r\13\3\2\2\2\r\16\3\2\2\2\16\5"+
-		"\3\2\2\2\3\r";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\b+\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\3\3\3\3\3\3\3\5\3\25\n\3"+
+		"\3\4\3\4\3\5\3\5\5\5\33\n\5\3\5\3\5\6\5\37\n\5\r\5\16\5 \3\6\3\6\3\6\3"+
+		"\7\3\7\3\7\3\7\3\7\3\7\2\2\b\2\4\6\b\n\f\2\2\2\'\2\16\3\2\2\2\4\24\3\2"+
+		"\2\2\6\26\3\2\2\2\b\32\3\2\2\2\n\"\3\2\2\2\f%\3\2\2\2\16\17\5\4\3\2\17"+
+		"\3\3\2\2\2\20\21\5\6\4\2\21\22\5\4\3\2\22\25\3\2\2\2\23\25\5\6\4\2\24"+
+		"\20\3\2\2\2\24\23\3\2\2\2\25\5\3\2\2\2\26\27\5\b\5\2\27\7\3\2\2\2\30\33"+
+		"\5\n\6\2\31\33\5\f\7\2\32\30\3\2\2\2\32\31\3\2\2\2\33\34\3\2\2\2\34\36"+
+		"\7\b\2\2\35\37\7\3\2\2\36\35\3\2\2\2\37 \3\2\2\2 \36\3\2\2\2 !\3\2\2\2"+
+		"!\t\3\2\2\2\"#\7\4\2\2#$\7\7\2\2$\13\3\2\2\2%&\7\5\2\2&\'\7\7\2\2\'(\7"+
+		"\6\2\2()\7\7\2\2)\r\3\2\2\2\5\24\32 ";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
