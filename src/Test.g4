@@ -1,10 +1,14 @@
 grammar Test;
-main: decl;
-decl: (number SEMICOLON)+;
-number: integer | float;
-integer: 'int ' DIGIT+;
-float: 'float ' DIGIT+'.'DIGIT+;
+main: declarations;
+declarations: declaration declarations
+    | declaration;
+declaration: numberDecl;
+numberDecl: (integer | float) SEMICOLON ('\n')+;
+
+integer: 'int ' DIGIT;
+float: 'float ' DIGIT'.'DIGIT;
 
 
-DIGIT: '1'..'9' '0'..'9'*;
+DIGIT: '0'
+    | '1'..'9' '0'..'9'*;
 SEMICOLON: ';';
