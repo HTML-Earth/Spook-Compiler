@@ -1,3 +1,5 @@
+package dk.aau.cs.d403;
+
 import dk.aau.cs.d403.parser.TestLexer;
 import dk.aau.cs.d403.parser.TestParser;
 import org.antlr.v4.runtime.CharStreams;
