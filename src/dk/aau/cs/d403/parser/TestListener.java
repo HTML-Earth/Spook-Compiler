@@ -18,13 +18,53 @@ public interface TestListener extends ParseTreeListener {
 	 */
 	void exitMain(TestParser.MainContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TestParser#name}.
+	 * Enter a parse tree produced by {@link TestParser#declarations}.
 	 * @param ctx the parse tree
 	 */
-	void enterName(TestParser.NameContext ctx);
+	void enterDeclarations(TestParser.DeclarationsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TestParser#name}.
+	 * Exit a parse tree produced by {@link TestParser#declarations}.
 	 * @param ctx the parse tree
 	 */
-	void exitName(TestParser.NameContext ctx);
+	void exitDeclarations(TestParser.DeclarationsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaration(TestParser.DeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaration(TestParser.DeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#numberDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumberDecl(TestParser.NumberDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#numberDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumberDecl(TestParser.NumberDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#integerDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntegerDecl(TestParser.IntegerDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#integerDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntegerDecl(TestParser.IntegerDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#floatDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatDecl(TestParser.FloatDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#floatDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatDecl(TestParser.FloatDeclContext ctx);
 }

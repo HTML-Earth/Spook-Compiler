@@ -3,10 +3,10 @@ main: declarations;
 declarations: declaration declarations
     | declaration;
 declaration: numberDecl;
-numberDecl: (integer | float) SEMICOLON ('\n')+;
+numberDecl: (integerDecl | floatDecl) SEMICOLON ('\n')+;
 
-integer: 'int ' DIGIT;
-float: 'float ' DIGIT'.'DIGIT;
+integerDecl: 'int ' DIGIT;
+floatDecl: 'float ' DIGIT'.'DIGIT;
 
 
 DIGIT: '0'
