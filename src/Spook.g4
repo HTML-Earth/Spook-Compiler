@@ -10,7 +10,7 @@ declarations: declaration declarations
     | declaration;
 
 // Int/float/vector, comments
-declaration: space* (comment | numberDecl);
+declaration: space* (comment | numberDecl | boolDecl);
 
 // Single-line comment
 comment: '#' (LETTER | STRING | SPACE | digit)*;
@@ -23,11 +23,7 @@ functionDecl: returnType space variable '(' (dataTypeVariable)* ')' space '{' (s
 
 // Return types
 returnType: 'void'
-    | 'int'
-    | 'float'
-    | 'vector2'
-    | 'vector3'
-    | 'vector4';
+    | dataType;
 
 // Data types
 dataType: 'int'
@@ -51,28 +47,37 @@ numberDecl: (integerDecl
 
 // Integer and float declarations
 integerDecl: dataTypeVariable ASSIGN (digit | variable);
-floatDecl: dataTypeVariable ASSIGN ('(' arithExpression ')' | arithExpression) arithOperation*;
+floatDecl: dataTypeVariable ASSIGN ('(' arithOperation ')' | arithOperation) arithOperation*;
+
+// Boolean declaration
+boolDecl: 'boolean' space variable ASSIGN ('true' | 'false' | '(' boolOperation ')' | boolOperation) boolOperation* SEMICOLON;
+
+// Boolean operations
+boolOperation: ('true' | 'false' | variable) BOOLOPERATOR (variable | 'true' | 'false' | ('(' boolOperation ')'))
+    | BOOLOPERATOR (variable | 'true' | 'false' | ('(' boolOperation ')'));
 
 // Vector declarations
-vector2Decl: dataTypeVariable ASSIGN '('real_number space* ',' space* real_number')';
-vector3Decl: dataTypeVariable ASSIGN '('real_number space* ',' space* real_number space* ',' space* real_number')';
-vector4Decl: dataTypeVariable ASSIGN '('real_number space* ',' space* real_number space* ',' space* real_number space* ',' space* real_number')';
+vector2Decl: 'vector2' space variable ASSIGN '('real_number space* ',' space* real_number')';
+vector3Decl: 'vector3' space variable ASSIGN '('real_number space* ',' space* real_number space* ',' space* real_number')';
+vector4Decl: 'vector4' space variable ASSIGN '('real_number space* ',' space* real_number space* ',' space* real_number space* ',' space* real_number')';
+
+/* Overvej det her. Ulempe: Vi kan ikke sørge for at der er PRÆCIST 2, 3 eller 4 arguments.
+Måske vi kan fange den error et andet sted i compileren.
+vectorArgs: real_number space* ',' space* vectorArgs
+    | real_number;
+*/
 
 // Data type and variable - Example: int value
 dataTypeVariable: dataType space variable;
 
 // Arithmetic operations
-arithOperation: OPERATOR variable
-    | OPERATOR real_number
-    | OPERATOR math_function
-    | OPERATOR '(' arithExpression ')';
+arithOperation: (real_number | math_function | variable) OPERATOR (real_number | math_function | variable | '(' arithOperation ')')
+    | OPERATOR (real_number | math_function | variable | '(' arithOperation ')');
 
-// Arithmetic Expression
-arithExpression: (real_number | math_function | variable) arithOperation*;
+// Mathematical functions
 math_function: MATH_FUNCTION (variable | real_number | math_function | UNIFORM) arithOperation* ')';
 
 // Strings
-reserved_word: UNIFORM;
 space: SPACE;
 
 // Numbers
@@ -87,11 +92,19 @@ DIGIT: '0'
     | '1'..'9' '0'..'9'*
     | '(-'('1'..'9') ('0'..'9')*')';
 FLOAT_DIGIT: DIGIT'.'DIGIT+;
+
 SEMICOLON: ';';
 NEWLINE: '\n';
 DOUBLE_SLASH: '//';
 SPACE: ' ';
 ASSIGN: SPACE* '=' SPACE*;
+
+BOOLOPERATOR: SPACE* ('=='
+    | '||'
+    | '&&'
+    | '!='
+    | '!') SPACE*;
+
 OPERATOR: SPACE* ('+'
     | '-'
     | '%'
