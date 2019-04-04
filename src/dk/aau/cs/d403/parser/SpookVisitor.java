@@ -95,11 +95,35 @@ public interface SpookVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFloatDecl(SpookParser.FloatDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#arithOperations}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithOperations(SpookParser.ArithOperationsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#arithOperation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithOperation(SpookParser.ArithOperationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#math_function}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMath_function(SpookParser.Math_functionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#boolDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBoolDecl(SpookParser.BoolDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#boolOperations}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolOperations(SpookParser.BoolOperationsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#boolOperation}.
 	 * @param ctx the parse tree
@@ -130,18 +154,6 @@ public interface SpookVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDataTypeVariable(SpookParser.DataTypeVariableContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#arithOperation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithOperation(SpookParser.ArithOperationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#math_function}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMath_function(SpookParser.Math_functionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#space}.
 	 * @param ctx the parse tree

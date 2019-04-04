@@ -148,6 +148,36 @@ public interface SpookListener extends ParseTreeListener {
 	 */
 	void exitFloatDecl(SpookParser.FloatDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#arithOperations}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithOperations(SpookParser.ArithOperationsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#arithOperations}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithOperations(SpookParser.ArithOperationsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#arithOperation}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithOperation(SpookParser.ArithOperationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#arithOperation}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithOperation(SpookParser.ArithOperationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#math_function}.
+	 * @param ctx the parse tree
+	 */
+	void enterMath_function(SpookParser.Math_functionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#math_function}.
+	 * @param ctx the parse tree
+	 */
+	void exitMath_function(SpookParser.Math_functionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolDecl}.
 	 * @param ctx the parse tree
 	 */
@@ -157,6 +187,16 @@ public interface SpookListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolDecl(SpookParser.BoolDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolOperations}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolOperations(SpookParser.BoolOperationsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolOperations}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolOperations(SpookParser.BoolOperationsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolOperation}.
 	 * @param ctx the parse tree
@@ -207,26 +247,6 @@ public interface SpookListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataTypeVariable(SpookParser.DataTypeVariableContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#arithOperation}.
-	 * @param ctx the parse tree
-	 */
-	void enterArithOperation(SpookParser.ArithOperationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#arithOperation}.
-	 * @param ctx the parse tree
-	 */
-	void exitArithOperation(SpookParser.ArithOperationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#math_function}.
-	 * @param ctx the parse tree
-	 */
-	void enterMath_function(SpookParser.Math_functionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#math_function}.
-	 * @param ctx the parse tree
-	 */
-	void exitMath_function(SpookParser.Math_functionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#space}.
 	 * @param ctx the parse tree
