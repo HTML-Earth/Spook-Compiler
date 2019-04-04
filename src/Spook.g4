@@ -3,7 +3,7 @@ grammar Spook;
 program: main (NEWLINE | comment | classDecl | functionDecl)*;
 
 // Classes (Optional), Functions (Optional), Shader() {} (Needed)
-main: 'Shader() {' (NEWLINE | space | declarations)* '}';
+main: 'Shader {' (NEWLINE | space | declarations)* '}';
 
 // One or more declarations
 declarations: declaration declarations

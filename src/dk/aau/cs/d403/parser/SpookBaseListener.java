@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\Spook.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\Spook.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -11,6 +11,18 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * of the available methods.
  */
 public class SpookBaseListener implements SpookListener {
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProgram(SpookParser.ProgramContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProgram(SpookParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -64,6 +76,66 @@ public class SpookBaseListener implements SpookListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterClassDecl(SpookParser.ClassDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClassDecl(SpookParser.ClassDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionDecl(SpookParser.FunctionDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionDecl(SpookParser.FunctionDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReturnType(SpookParser.ReturnTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturnType(SpookParser.ReturnTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDataType(SpookParser.DataTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDataType(SpookParser.DataTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVectorType(SpookParser.VectorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVectorType(SpookParser.VectorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVariable(SpookParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -112,6 +184,30 @@ public class SpookBaseListener implements SpookListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolDecl(SpookParser.BoolDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolDecl(SpookParser.BoolDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolOperation(SpookParser.BoolOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolOperation(SpookParser.BoolOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVector2Decl(SpookParser.Vector2DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -148,13 +244,25 @@ public class SpookBaseListener implements SpookListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArith(SpookParser.ArithContext ctx) { }
+	@Override public void enterDataTypeVariable(SpookParser.DataTypeVariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArith(SpookParser.ArithContext ctx) { }
+	@Override public void exitDataTypeVariable(SpookParser.DataTypeVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithOperation(SpookParser.ArithOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithOperation(SpookParser.ArithOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -172,6 +280,18 @@ public class SpookBaseListener implements SpookListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSpace(SpookParser.SpaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSpace(SpookParser.SpaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReal_number(SpookParser.Real_numberContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -184,13 +304,25 @@ public class SpookBaseListener implements SpookListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReserved_word(SpookParser.Reserved_wordContext ctx) { }
+	@Override public void enterDigit(SpookParser.DigitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReserved_word(SpookParser.Reserved_wordContext ctx) { }
+	@Override public void exitDigit(SpookParser.DigitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFloat_digit(SpookParser.Float_digitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFloat_digit(SpookParser.Float_digitContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

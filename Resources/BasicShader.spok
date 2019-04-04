@@ -1,0 +1,3 @@
+Shader {
+    int one = 1337;
+}
