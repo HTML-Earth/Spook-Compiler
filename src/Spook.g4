@@ -28,6 +28,7 @@ returnType: 'void'
 // Data types
 dataType: 'int'
     | 'float'
+    | 'boolean'
     | vectorType;
 
 // Vector types
@@ -36,7 +37,7 @@ vectorType: 'vector2'
     | 'vector4';
 
 // Variable name
-variable: (LETTER | STRING | space | digit)*;
+variable: (LETTER | STRING | space | digit)+;
 
 // Integer, float and vector declaration
 numberDecl: (integerDecl
@@ -47,14 +48,31 @@ numberDecl: (integerDecl
 
 // Integer and float declarations
 integerDecl: dataTypeVariable ASSIGN (digit | variable);
-floatDecl: dataTypeVariable ASSIGN ('(' arithOperation ')' | arithOperation) arithOperation*;
+floatDecl: dataTypeVariable ASSIGN (arithOperations | real_number);
+
+// Recursive arithmetic operations
+arithOperations: arithOperation arithOperations
+    | arithOperation;
+
+// Arithmetic operations
+arithOperation: (real_number | math_function | variable) OPERATOR (real_number | math_function | variable | '(' arithOperation ')')
+    | OPERATOR (real_number | math_function | variable | '(' arithOperation ')')
+    | '(' arithOperation ')'; // Paranteser skal måske ikke håndteres her
+
+// Mathematical functions
+math_function: MATH_FUNCTION (variable | real_number | math_function | UNIFORM) arithOperation* ')';
 
 // Boolean declaration
-boolDecl: 'boolean' space variable ASSIGN ('true' | 'false' | '(' boolOperation ')' | boolOperation) boolOperation* SEMICOLON;
+boolDecl: dataTypeVariable ASSIGN (boolOperations | 'true' | 'false') SEMICOLON;
+
+// Recursive boolean operations
+boolOperations: boolOperation boolOperations
+    | boolOperation;
 
 // Boolean operations
-boolOperation: ('true' | 'false' | variable) BOOLOPERATOR (variable | 'true' | 'false' | ('(' boolOperation ')'))
-    | BOOLOPERATOR (variable | 'true' | 'false' | ('(' boolOperation ')'));
+boolOperation: ('true' | 'false' | variable) BOOLOPERATOR ('true' | 'false' | variable | ('(' boolOperation ')'))
+    | BOOLOPERATOR ('true' | 'false' | variable | ('(' boolOperation ')'))
+    | '(' boolOperation ')';
 
 // Vector declarations
 vector2Decl: 'vector2' space variable ASSIGN '('real_number space* ',' space* real_number')';
@@ -69,13 +87,6 @@ vectorArgs: real_number space* ',' space* vectorArgs
 
 // Data type and variable - Example: int value
 dataTypeVariable: dataType space variable;
-
-// Arithmetic operations
-arithOperation: (real_number | math_function | variable) OPERATOR (real_number | math_function | variable | '(' arithOperation ')')
-    | OPERATOR (real_number | math_function | variable | '(' arithOperation ')');
-
-// Mathematical functions
-math_function: MATH_FUNCTION (variable | real_number | math_function | UNIFORM) arithOperation* ')';
 
 // Strings
 space: SPACE;
