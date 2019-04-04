@@ -1,13 +1,10 @@
-// Generated from C:/Programming/P4/src\Test.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\Spook.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class TestParser extends Parser {
@@ -74,7 +71,7 @@ public class TestParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Test.g4"; }
+	public String getGrammarFileName() { return "Spook.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
