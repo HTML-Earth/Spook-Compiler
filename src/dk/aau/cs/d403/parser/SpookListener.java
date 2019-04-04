@@ -1,4 +1,5 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/Spook.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\Spook.g4 by ANTLR 4.7.2
+package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
