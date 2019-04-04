@@ -184,6 +184,42 @@ public class SpookBaseListener implements SpookListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArithOperations(SpookParser.ArithOperationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithOperations(SpookParser.ArithOperationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithOperation(SpookParser.ArithOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithOperation(SpookParser.ArithOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMath_function(SpookParser.Math_functionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMath_function(SpookParser.Math_functionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolDecl(SpookParser.BoolDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -191,6 +227,18 @@ public class SpookBaseListener implements SpookListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolDecl(SpookParser.BoolDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolOperations(SpookParser.BoolOperationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolOperations(SpookParser.BoolOperationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -251,30 +299,6 @@ public class SpookBaseListener implements SpookListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDataTypeVariable(SpookParser.DataTypeVariableContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArithOperation(SpookParser.ArithOperationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithOperation(SpookParser.ArithOperationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMath_function(SpookParser.Math_functionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMath_function(SpookParser.Math_functionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
