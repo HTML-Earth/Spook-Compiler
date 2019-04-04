@@ -1,3 +1,20 @@
-shader() {
-int hej = 0;
+Shader {
+    #Ball values
+    float ballSize = 64;
+    vector4 ballColor = (0.6, 0, 0, 1);
+
+    #Position and size values
+    float groundHeight = 100;
+    float jumpHeight   = 150;
+
+    float xPos = 150;
+}
+
+class CustomShape extends Shape {
+    int sides = 4;
+}
+
+float GiveMeTen(int irrelevant) {
+    #function comment
+    float result = 10;
 }
