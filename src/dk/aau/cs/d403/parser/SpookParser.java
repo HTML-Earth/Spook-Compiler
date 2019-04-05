@@ -1,4 +1,4 @@
-// Generated from D:/GitHub/P4/src\Spook.g4 by ANTLR 4.7.2
+// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -17,46 +17,51 @@ public class SpookParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
-		LETTER=18, STRING=19, DIGIT=20, FLOAT_DIGIT=21, SEMICOLON=22, NEWLINE=23, 
-		DOUBLE_SLASH=24, SPACE=25, ASSIGN=26, BOOLOPERATOR=27, OPERATOR=28, MATH_FUNCTION=29, 
-		UNIFORM=30;
+		MAIN=1, CLASS=2, INT=3, FLOAT=4, BOOL=5, VECTOR2=6, VECTOR3=7, VECTOR4=8, 
+		CIRCLE=9, RECTANGLE=10, TRIANGLE=11, SHAPE=12, COLOR=13, VOID=14, ID=15, 
+		DIGIT=16, FLOAT_DIGIT=17, TRUE=18, FALSE=19, SEMICOLON=20, DOUBLE_SLASH=21, 
+		ASSIGN=22, LEFT_BRACKET=23, RIGHT_BRACKET=24, LEFT_PAREN=25, RIGHT_PAREN=26, 
+		DOT=27, COMMA=28, BOOLOPERATOR=29, OPERATOR=30, MATH_FUNCTION=31, UNIFORM=32, 
+		COMMENT_STRING=33, WS=34;
 	public static final int
 		RULE_program = 0, RULE_main = 1, RULE_declarations = 2, RULE_declaration = 3, 
-		RULE_comment = 4, RULE_classDecl = 5, RULE_functionDecl = 6, RULE_returnType = 7, 
-		RULE_dataType = 8, RULE_vectorType = 9, RULE_variable = 10, RULE_numberDecl = 11, 
-		RULE_integerDecl = 12, RULE_floatDecl = 13, RULE_arithOperations = 14, 
-		RULE_arithOperation = 15, RULE_math_function = 16, RULE_boolDecl = 17, 
-		RULE_boolOperations = 18, RULE_boolOperation = 19, RULE_vector2Decl = 20, 
-		RULE_vector3Decl = 21, RULE_vector4Decl = 22, RULE_dataTypeVariable = 23, 
-		RULE_space = 24, RULE_real_number = 25, RULE_digit = 26, RULE_float_digit = 27;
+		RULE_comment = 4, RULE_classDecl = 5, RULE_objectDecl = 6, RULE_objectArgs = 7, 
+		RULE_objectArg = 8, RULE_objectFunctionCall = 9, RULE_functionDecl = 10, 
+		RULE_returnType = 11, RULE_classType = 12, RULE_objectVariable = 13, RULE_functionName = 14, 
+		RULE_numberDecl = 15, RULE_integerDecl = 16, RULE_floatDecl = 17, RULE_arithOperations = 18, 
+		RULE_arithOperation = 19, RULE_math_function = 20, RULE_boolDecl = 21, 
+		RULE_boolOperations = 22, RULE_boolOperation = 23, RULE_vector2Decl = 24, 
+		RULE_vector3Decl = 25, RULE_vector4Decl = 26, RULE_real_number = 27, RULE_digit = 28, 
+		RULE_float_digit = 29;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"program", "main", "declarations", "declaration", "comment", "classDecl", 
-			"functionDecl", "returnType", "dataType", "vectorType", "variable", "numberDecl", 
+			"objectDecl", "objectArgs", "objectArg", "objectFunctionCall", "functionDecl", 
+			"returnType", "classType", "objectVariable", "functionName", "numberDecl", 
 			"integerDecl", "floatDecl", "arithOperations", "arithOperation", "math_function", 
 			"boolDecl", "boolOperations", "boolOperation", "vector2Decl", "vector3Decl", 
-			"vector4Decl", "dataTypeVariable", "space", "real_number", "digit", "float_digit"
+			"vector4Decl", "real_number", "digit", "float_digit"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'Shader {'", "'}'", "'#'", "'class'", "'{'", "'('", "')'", "'void'", 
-			"'int'", "'float'", "'boolean'", "'vector2'", "'vector3'", "'vector4'", 
-			"'true'", "'false'", "','", null, null, null, null, "';'", "'\n'", "'//'", 
-			"' '", null, null, null, null, "'Time'"
+			null, "'Shader'", "'class'", "'int'", "'float'", "'bool'", "'vector2'", 
+			"'vector3'", "'vector4'", "'Circle'", "'Rectangle'", "'Triangle'", "'Shape'", 
+			"'Color'", "'void'", null, null, null, "'true'", "'false'", "';'", "'//'", 
+			"'='", "'{'", "'}'", "'('", "')'", "'.'", "','", null, null, null, "'Time'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, "LETTER", "STRING", "DIGIT", "FLOAT_DIGIT", 
-			"SEMICOLON", "NEWLINE", "DOUBLE_SLASH", "SPACE", "ASSIGN", "BOOLOPERATOR", 
-			"OPERATOR", "MATH_FUNCTION", "UNIFORM"
+			null, "MAIN", "CLASS", "INT", "FLOAT", "BOOL", "VECTOR2", "VECTOR3", 
+			"VECTOR4", "CIRCLE", "RECTANGLE", "TRIANGLE", "SHAPE", "COLOR", "VOID", 
+			"ID", "DIGIT", "FLOAT_DIGIT", "TRUE", "FALSE", "SEMICOLON", "DOUBLE_SLASH", 
+			"ASSIGN", "LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_PAREN", "RIGHT_PAREN", 
+			"DOT", "COMMA", "BOOLOPERATOR", "OPERATOR", "MATH_FUNCTION", "UNIFORM", 
+			"COMMENT_STRING", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -94,7 +99,7 @@ public class SpookParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Spook.g4"; }
+	public String getGrammarFileName() { return "SpookParser.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -113,10 +118,6 @@ public class SpookParser extends Parser {
 	public static class ProgramContext extends ParserRuleContext {
 		public MainContext main() {
 			return getRuleContext(MainContext.class,0);
-		}
-		public List<TerminalNode> NEWLINE() { return getTokens(SpookParser.NEWLINE); }
-		public TerminalNode NEWLINE(int i) {
-			return getToken(SpookParser.NEWLINE, i);
 		}
 		public List<CommentContext> comment() {
 			return getRuleContexts(CommentContext.class);
@@ -142,15 +143,15 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_program; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterProgram(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterProgram(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitProgram(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitProgram(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitProgram(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitProgram(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -162,43 +163,31 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56);
+			setState(60);
 			main();
-			setState(63);
+			setState(66);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__3) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << NEWLINE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CLASS) | (1L << VOID) | (1L << COMMENT_STRING))) != 0)) {
 				{
-				setState(61);
+				setState(64);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
-				case NEWLINE:
+				case COMMENT_STRING:
 					{
-					setState(57);
-					match(NEWLINE);
-					}
-					break;
-				case T__2:
-					{
-					setState(58);
+					setState(61);
 					comment();
 					}
 					break;
-				case T__3:
+				case CLASS:
 					{
-					setState(59);
+					setState(62);
 					classDecl();
 					}
 					break;
-				case T__7:
-				case T__8:
-				case T__9:
-				case T__10:
-				case T__11:
-				case T__12:
-				case T__13:
+				case VOID:
 					{
-					setState(60);
+					setState(63);
 					functionDecl();
 					}
 					break;
@@ -206,7 +195,7 @@ public class SpookParser extends Parser {
 					throw new NoViableAltException(this);
 				}
 				}
-				setState(65);
+				setState(68);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -224,21 +213,20 @@ public class SpookParser extends Parser {
 	}
 
 	public static class MainContext extends ParserRuleContext {
-		public List<TerminalNode> NEWLINE() { return getTokens(SpookParser.NEWLINE); }
-		public TerminalNode NEWLINE(int i) {
-			return getToken(SpookParser.NEWLINE, i);
-		}
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
+		public TerminalNode MAIN() { return getToken(SpookParser.MAIN, 0); }
+		public TerminalNode LEFT_BRACKET() { return getToken(SpookParser.LEFT_BRACKET, 0); }
+		public TerminalNode RIGHT_BRACKET() { return getToken(SpookParser.RIGHT_BRACKET, 0); }
 		public List<DeclarationsContext> declarations() {
 			return getRuleContexts(DeclarationsContext.class);
 		}
 		public DeclarationsContext declarations(int i) {
 			return getRuleContext(DeclarationsContext.class,i);
+		}
+		public List<CommentContext> comment() {
+			return getRuleContexts(CommentContext.class);
+		}
+		public CommentContext comment(int i) {
+			return getRuleContext(CommentContext.class,i);
 		}
 		public MainContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -246,15 +234,15 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_main; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterMain(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterMain(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitMain(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitMain(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitMain(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitMain(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -266,42 +254,51 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(66);
-			match(T__0);
-			setState(72);
+			setState(69);
+			match(MAIN);
+			setState(70);
+			match(LEFT_BRACKET);
+			setState(75);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << NEWLINE) | (1L << SPACE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT) | (1L << FLOAT) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << CIRCLE) | (1L << RECTANGLE) | (1L << TRIANGLE) | (1L << SHAPE) | (1L << COLOR) | (1L << ID) | (1L << COMMENT_STRING))) != 0)) {
 				{
-				setState(70);
+				setState(73);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
-				case 1:
+				switch (_input.LA(1)) {
+				case INT:
+				case FLOAT:
+				case BOOL:
+				case VECTOR2:
+				case VECTOR3:
+				case VECTOR4:
+				case CIRCLE:
+				case RECTANGLE:
+				case TRIANGLE:
+				case SHAPE:
+				case COLOR:
+				case ID:
 					{
-					setState(67);
-					match(NEWLINE);
-					}
-					break;
-				case 2:
-					{
-					setState(68);
-					space();
-					}
-					break;
-				case 3:
-					{
-					setState(69);
+					setState(71);
 					declarations();
 					}
 					break;
+				case COMMENT_STRING:
+					{
+					setState(72);
+					comment();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				}
-				setState(74);
+				setState(77);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(75);
-			match(T__1);
+			setState(78);
+			match(RIGHT_BRACKET);
 			}
 		}
 		catch (RecognitionException re) {
@@ -328,15 +325,15 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_declarations; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterDeclarations(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterDeclarations(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitDeclarations(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitDeclarations(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitDeclarations(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitDeclarations(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -345,22 +342,22 @@ public class SpookParser extends Parser {
 		DeclarationsContext _localctx = new DeclarationsContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_declarations);
 		try {
-			setState(81);
+			setState(84);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(77);
+				setState(80);
 				declaration();
-				setState(78);
+				setState(81);
 				declarations();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(80);
+				setState(83);
 				declaration();
 				}
 				break;
@@ -378,20 +375,17 @@ public class SpookParser extends Parser {
 	}
 
 	public static class DeclarationContext extends ParserRuleContext {
-		public CommentContext comment() {
-			return getRuleContext(CommentContext.class,0);
-		}
 		public NumberDeclContext numberDecl() {
 			return getRuleContext(NumberDeclContext.class,0);
 		}
 		public BoolDeclContext boolDecl() {
 			return getRuleContext(BoolDeclContext.class,0);
 		}
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
+		public ObjectDeclContext objectDecl() {
+			return getRuleContext(ObjectDeclContext.class,0);
 		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
+		public ObjectFunctionCallContext objectFunctionCall() {
+			return getRuleContext(ObjectFunctionCallContext.class,0);
 		}
 		public DeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -399,15 +393,15 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_declaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterDeclaration(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitDeclaration(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitDeclaration(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -415,45 +409,46 @@ public class SpookParser extends Parser {
 	public final DeclarationContext declaration() throws RecognitionException {
 		DeclarationContext _localctx = new DeclarationContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_declaration);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(86);
+			setState(90);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
+			switch (_input.LA(1)) {
+			case INT:
+			case FLOAT:
+			case VECTOR2:
+			case VECTOR3:
+			case VECTOR4:
 				{
-				{
-				setState(83);
-				space();
-				}
-				}
-				setState(88);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(92);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-			case 1:
-				{
-				setState(89);
-				comment();
-				}
-				break;
-			case 2:
-				{
-				setState(90);
+				setState(86);
 				numberDecl();
 				}
 				break;
-			case 3:
+			case BOOL:
 				{
-				setState(91);
+				setState(87);
 				boolDecl();
 				}
 				break;
+			case CIRCLE:
+			case RECTANGLE:
+			case TRIANGLE:
+			case SHAPE:
+			case COLOR:
+				{
+				setState(88);
+				objectDecl();
+				}
+				break;
+			case ID:
+				{
+				setState(89);
+				objectFunctionCall();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 			}
 		}
@@ -469,39 +464,22 @@ public class SpookParser extends Parser {
 	}
 
 	public static class CommentContext extends ParserRuleContext {
-		public List<TerminalNode> LETTER() { return getTokens(SpookParser.LETTER); }
-		public TerminalNode LETTER(int i) {
-			return getToken(SpookParser.LETTER, i);
-		}
-		public List<TerminalNode> STRING() { return getTokens(SpookParser.STRING); }
-		public TerminalNode STRING(int i) {
-			return getToken(SpookParser.STRING, i);
-		}
-		public List<TerminalNode> SPACE() { return getTokens(SpookParser.SPACE); }
-		public TerminalNode SPACE(int i) {
-			return getToken(SpookParser.SPACE, i);
-		}
-		public List<DigitContext> digit() {
-			return getRuleContexts(DigitContext.class);
-		}
-		public DigitContext digit(int i) {
-			return getRuleContext(DigitContext.class,i);
-		}
+		public TerminalNode COMMENT_STRING() { return getToken(SpookParser.COMMENT_STRING, 0); }
 		public CommentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comment; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterComment(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterComment(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitComment(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitComment(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitComment(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitComment(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -510,53 +488,10 @@ public class SpookParser extends Parser {
 		CommentContext _localctx = new CommentContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_comment);
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(94);
-			match(T__2);
-			setState(101);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					setState(99);
-					_errHandler.sync(this);
-					switch (_input.LA(1)) {
-					case LETTER:
-						{
-						setState(95);
-						match(LETTER);
-						}
-						break;
-					case STRING:
-						{
-						setState(96);
-						match(STRING);
-						}
-						break;
-					case SPACE:
-						{
-						setState(97);
-						match(SPACE);
-						}
-						break;
-					case DIGIT:
-						{
-						setState(98);
-						digit();
-						}
-						break;
-					default:
-						throw new NoViableAltException(this);
-					}
-					} 
-				}
-				setState(103);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
-			}
+			setState(92);
+			match(COMMENT_STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -571,19 +506,10 @@ public class SpookParser extends Parser {
 	}
 
 	public static class ClassDeclContext extends ParserRuleContext {
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
-		public List<TerminalNode> NEWLINE() { return getTokens(SpookParser.NEWLINE); }
-		public TerminalNode NEWLINE(int i) {
-			return getToken(SpookParser.NEWLINE, i);
-		}
+		public TerminalNode CLASS() { return getToken(SpookParser.CLASS, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
+		public TerminalNode LEFT_BRACKET() { return getToken(SpookParser.LEFT_BRACKET, 0); }
+		public TerminalNode RIGHT_BRACKET() { return getToken(SpookParser.RIGHT_BRACKET, 0); }
 		public List<NumberDeclContext> numberDecl() {
 			return getRuleContexts(NumberDeclContext.class);
 		}
@@ -602,15 +528,15 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_classDecl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterClassDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterClassDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitClassDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitClassDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitClassDecl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitClassDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -622,56 +548,363 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(104);
-			match(T__3);
-			setState(105);
-			space();
-			setState(106);
-			variable();
-			setState(107);
-			space();
-			setState(108);
-			match(T__4);
-			setState(115);
+			setState(94);
+			match(CLASS);
+			setState(95);
+			match(ID);
+			setState(96);
+			match(LEFT_BRACKET);
+			setState(101);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << NEWLINE) | (1L << SPACE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT) | (1L << FLOAT) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << VOID))) != 0)) {
+				{
+				setState(99);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case INT:
+				case FLOAT:
+				case VECTOR2:
+				case VECTOR3:
+				case VECTOR4:
+					{
+					setState(97);
+					numberDecl();
+					}
+					break;
+				case VOID:
+					{
+					setState(98);
+					functionDecl();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
+				}
+				setState(103);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(104);
+			match(RIGHT_BRACKET);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ObjectDeclContext extends ParserRuleContext {
+		public ClassTypeContext classType() {
+			return getRuleContext(ClassTypeContext.class,0);
+		}
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
+		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
+		public ObjectArgsContext objectArgs() {
+			return getRuleContext(ObjectArgsContext.class,0);
+		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
+		public ObjectDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_objectDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterObjectDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitObjectDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitObjectDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ObjectDeclContext objectDecl() throws RecognitionException {
+		ObjectDeclContext _localctx = new ObjectDeclContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_objectDecl);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(106);
+			classType();
+			setState(107);
+			match(ID);
+			setState(108);
+			match(ASSIGN);
+			setState(109);
+			match(LEFT_PAREN);
+			setState(110);
+			objectArgs();
+			setState(111);
+			match(RIGHT_PAREN);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ObjectArgsContext extends ParserRuleContext {
+		public ObjectArgContext objectArg() {
+			return getRuleContext(ObjectArgContext.class,0);
+		}
+		public ObjectArgsContext objectArgs() {
+			return getRuleContext(ObjectArgsContext.class,0);
+		}
+		public ObjectArgsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_objectArgs; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterObjectArgs(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitObjectArgs(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitObjectArgs(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ObjectArgsContext objectArgs() throws RecognitionException {
+		ObjectArgsContext _localctx = new ObjectArgsContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_objectArgs);
+		try {
+			setState(117);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
 				{
 				setState(113);
+				objectArg();
+				setState(114);
+				objectArgs();
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(116);
+				objectArg();
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ObjectArgContext extends ParserRuleContext {
+		public TerminalNode COMMA() { return getToken(SpookParser.COMMA, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
+		public Real_numberContext real_number() {
+			return getRuleContext(Real_numberContext.class,0);
+		}
+		public ArithOperationContext arithOperation() {
+			return getRuleContext(ArithOperationContext.class,0);
+		}
+		public ObjectArgContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_objectArg; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterObjectArg(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitObjectArg(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitObjectArg(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ObjectArgContext objectArg() throws RecognitionException {
+		ObjectArgContext _localctx = new ObjectArgContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_objectArg);
+		try {
+			setState(130);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(122);
 				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 				case 1:
 					{
-					setState(109);
-					space();
+					setState(119);
+					match(ID);
 					}
 					break;
 				case 2:
 					{
-					setState(110);
-					match(NEWLINE);
+					setState(120);
+					real_number();
 					}
 					break;
 				case 3:
 					{
-					setState(111);
-					numberDecl();
-					}
-					break;
-				case 4:
-					{
-					setState(112);
-					functionDecl();
+					setState(121);
+					arithOperation();
 					}
 					break;
 				}
+				setState(124);
+				match(COMMA);
 				}
-				setState(117);
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(128);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
+				switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
+				case 1:
+					{
+					setState(125);
+					match(ID);
+					}
+					break;
+				case 2:
+					{
+					setState(126);
+					real_number();
+					}
+					break;
+				case 3:
+					{
+					setState(127);
+					arithOperation();
+					}
+					break;
+				}
+				}
+				break;
 			}
-			setState(118);
-			match(T__1);
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ObjectFunctionCallContext extends ParserRuleContext {
+		public ObjectVariableContext objectVariable() {
+			return getRuleContext(ObjectVariableContext.class,0);
+		}
+		public TerminalNode DOT() { return getToken(SpookParser.DOT, 0); }
+		public FunctionNameContext functionName() {
+			return getRuleContext(FunctionNameContext.class,0);
+		}
+		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
+		public ObjectArgsContext objectArgs() {
+			return getRuleContext(ObjectArgsContext.class,0);
+		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
+		public ObjectFunctionCallContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_objectFunctionCall; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterObjectFunctionCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitObjectFunctionCall(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitObjectFunctionCall(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ObjectFunctionCallContext objectFunctionCall() throws RecognitionException {
+		ObjectFunctionCallContext _localctx = new ObjectFunctionCallContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_objectFunctionCall);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(147);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
+			case 1:
+				{
+				setState(132);
+				objectVariable();
+				setState(133);
+				match(DOT);
+				setState(134);
+				functionName();
+				setState(135);
+				match(ASSIGN);
+				setState(136);
+				match(LEFT_PAREN);
+				setState(137);
+				objectArgs();
+				setState(138);
+				match(RIGHT_PAREN);
+				}
+				break;
+			case 2:
+				{
+				setState(140);
+				objectVariable();
+				setState(141);
+				match(DOT);
+				setState(142);
+				functionName();
+				setState(143);
+				match(LEFT_PAREN);
+				setState(144);
+				objectArgs();
+				setState(145);
+				match(RIGHT_PAREN);
+				}
+				break;
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -689,24 +922,14 @@ public class SpookParser extends Parser {
 		public ReturnTypeContext returnType() {
 			return getRuleContext(ReturnTypeContext.class,0);
 		}
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
-		public List<DataTypeVariableContext> dataTypeVariable() {
-			return getRuleContexts(DataTypeVariableContext.class);
-		}
-		public DataTypeVariableContext dataTypeVariable(int i) {
-			return getRuleContext(DataTypeVariableContext.class,i);
-		}
-		public List<TerminalNode> NEWLINE() { return getTokens(SpookParser.NEWLINE); }
-		public TerminalNode NEWLINE(int i) {
-			return getToken(SpookParser.NEWLINE, i);
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
+		public TerminalNode LEFT_BRACKET() { return getToken(SpookParser.LEFT_BRACKET, 0); }
+		public TerminalNode RIGHT_BRACKET() { return getToken(SpookParser.RIGHT_BRACKET, 0); }
+		public List<TerminalNode> INT() { return getTokens(SpookParser.INT); }
+		public TerminalNode INT(int i) {
+			return getToken(SpookParser.INT, i);
 		}
 		public List<DeclarationContext> declaration() {
 			return getRuleContexts(DeclarationContext.class);
@@ -720,88 +943,66 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_functionDecl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterFunctionDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterFunctionDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitFunctionDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitFunctionDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitFunctionDecl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitFunctionDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final FunctionDeclContext functionDecl() throws RecognitionException {
 		FunctionDeclContext _localctx = new FunctionDeclContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_functionDecl);
+		enterRule(_localctx, 20, RULE_functionDecl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(120);
+			setState(149);
 			returnType();
-			setState(121);
-			space();
-			setState(122);
-			variable();
-			setState(123);
-			match(T__5);
-			setState(127);
+			setState(150);
+			match(ID);
+			setState(151);
+			match(LEFT_PAREN);
+			setState(155);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13))) != 0)) {
+			while (_la==INT) {
 				{
 				{
-				setState(124);
-				dataTypeVariable();
+				setState(152);
+				match(INT);
 				}
 				}
-				setState(129);
+				setState(157);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(130);
-			match(T__6);
-			setState(131);
-			space();
-			setState(132);
-			match(T__4);
-			setState(138);
+			setState(158);
+			match(RIGHT_PAREN);
+			setState(159);
+			match(LEFT_BRACKET);
+			setState(163);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << NEWLINE) | (1L << SPACE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT) | (1L << FLOAT) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << CIRCLE) | (1L << RECTANGLE) | (1L << TRIANGLE) | (1L << SHAPE) | (1L << COLOR) | (1L << ID))) != 0)) {
 				{
-				setState(136);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
-				case 1:
-					{
-					setState(133);
-					space();
-					}
-					break;
-				case 2:
-					{
-					setState(134);
-					match(NEWLINE);
-					}
-					break;
-				case 3:
-					{
-					setState(135);
-					declaration();
-					}
-					break;
+				{
+				setState(160);
+				declaration();
 				}
 				}
-				setState(140);
+				setState(165);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(141);
-			match(T__1);
+			setState(166);
+			match(RIGHT_BRACKET);
 			}
 		}
 		catch (RecognitionException re) {
@@ -816,56 +1017,34 @@ public class SpookParser extends Parser {
 	}
 
 	public static class ReturnTypeContext extends ParserRuleContext {
-		public DataTypeContext dataType() {
-			return getRuleContext(DataTypeContext.class,0);
-		}
+		public TerminalNode VOID() { return getToken(SpookParser.VOID, 0); }
 		public ReturnTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_returnType; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterReturnType(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterReturnType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitReturnType(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitReturnType(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitReturnType(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitReturnType(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ReturnTypeContext returnType() throws RecognitionException {
 		ReturnTypeContext _localctx = new ReturnTypeContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_returnType);
+		enterRule(_localctx, 22, RULE_returnType);
 		try {
-			setState(145);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case T__7:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(143);
-				match(T__7);
-				}
-				break;
-			case T__8:
-			case T__9:
-			case T__10:
-			case T__11:
-			case T__12:
-			case T__13:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(144);
-				dataType();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(168);
+			match(VOID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -879,111 +1058,41 @@ public class SpookParser extends Parser {
 		return _localctx;
 	}
 
-	public static class DataTypeContext extends ParserRuleContext {
-		public VectorTypeContext vectorType() {
-			return getRuleContext(VectorTypeContext.class,0);
-		}
-		public DataTypeContext(ParserRuleContext parent, int invokingState) {
+	public static class ClassTypeContext extends ParserRuleContext {
+		public TerminalNode CIRCLE() { return getToken(SpookParser.CIRCLE, 0); }
+		public TerminalNode RECTANGLE() { return getToken(SpookParser.RECTANGLE, 0); }
+		public TerminalNode TRIANGLE() { return getToken(SpookParser.TRIANGLE, 0); }
+		public TerminalNode SHAPE() { return getToken(SpookParser.SHAPE, 0); }
+		public TerminalNode COLOR() { return getToken(SpookParser.COLOR, 0); }
+		public ClassTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_dataType; }
+		@Override public int getRuleIndex() { return RULE_classType; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterDataType(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterClassType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitDataType(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitClassType(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitDataType(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitClassType(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final DataTypeContext dataType() throws RecognitionException {
-		DataTypeContext _localctx = new DataTypeContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_dataType);
-		try {
-			setState(151);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case T__8:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(147);
-				match(T__8);
-				}
-				break;
-			case T__9:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(148);
-				match(T__9);
-				}
-				break;
-			case T__10:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(149);
-				match(T__10);
-				}
-				break;
-			case T__11:
-			case T__12:
-			case T__13:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(150);
-				vectorType();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class VectorTypeContext extends ParserRuleContext {
-		public VectorTypeContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_vectorType; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterVectorType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitVectorType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitVectorType(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final VectorTypeContext vectorType() throws RecognitionException {
-		VectorTypeContext _localctx = new VectorTypeContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_vectorType);
+	public final ClassTypeContext classType() throws RecognitionException {
+		ClassTypeContext _localctx = new ClassTypeContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_classType);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(153);
+			setState(170);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__11) | (1L << T__12) | (1L << T__13))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CIRCLE) | (1L << RECTANGLE) | (1L << TRIANGLE) | (1L << SHAPE) | (1L << COLOR))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1004,99 +1113,77 @@ public class SpookParser extends Parser {
 		return _localctx;
 	}
 
-	public static class VariableContext extends ParserRuleContext {
-		public List<TerminalNode> LETTER() { return getTokens(SpookParser.LETTER); }
-		public TerminalNode LETTER(int i) {
-			return getToken(SpookParser.LETTER, i);
-		}
-		public List<TerminalNode> STRING() { return getTokens(SpookParser.STRING); }
-		public TerminalNode STRING(int i) {
-			return getToken(SpookParser.STRING, i);
-		}
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
-		public List<DigitContext> digit() {
-			return getRuleContexts(DigitContext.class);
-		}
-		public DigitContext digit(int i) {
-			return getRuleContext(DigitContext.class,i);
-		}
-		public VariableContext(ParserRuleContext parent, int invokingState) {
+	public static class ObjectVariableContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
+		public ObjectVariableContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_variable; }
+		@Override public int getRuleIndex() { return RULE_objectVariable; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterVariable(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterObjectVariable(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitVariable(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitObjectVariable(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitVariable(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitObjectVariable(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final VariableContext variable() throws RecognitionException {
-		VariableContext _localctx = new VariableContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_variable);
+	public final ObjectVariableContext objectVariable() throws RecognitionException {
+		ObjectVariableContext _localctx = new ObjectVariableContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_objectVariable);
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(159); 
-			_errHandler.sync(this);
-			_alt = 1;
-			do {
-				switch (_alt) {
-				case 1:
-					{
-					setState(159);
-					_errHandler.sync(this);
-					switch (_input.LA(1)) {
-					case LETTER:
-						{
-						setState(155);
-						match(LETTER);
-						}
-						break;
-					case STRING:
-						{
-						setState(156);
-						match(STRING);
-						}
-						break;
-					case SPACE:
-						{
-						setState(157);
-						space();
-						}
-						break;
-					case DIGIT:
-						{
-						setState(158);
-						digit();
-						}
-						break;
-					default:
-						throw new NoViableAltException(this);
-					}
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				setState(161); 
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
-			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+			setState(172);
+			match(ID);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class FunctionNameContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
+		public FunctionNameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_functionName; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterFunctionName(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitFunctionName(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitFunctionName(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final FunctionNameContext functionName() throws RecognitionException {
+		FunctionNameContext _localctx = new FunctionNameContext(_ctx, getState());
+		enterRule(_localctx, 28, RULE_functionName);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(174);
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1133,60 +1220,62 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_numberDecl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterNumberDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterNumberDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitNumberDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitNumberDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitNumberDecl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitNumberDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final NumberDeclContext numberDecl() throws RecognitionException {
 		NumberDeclContext _localctx = new NumberDeclContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_numberDecl);
+		enterRule(_localctx, 30, RULE_numberDecl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(168);
+			setState(181);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
-			case 1:
+			switch (_input.LA(1)) {
+			case INT:
 				{
-				setState(163);
+				setState(176);
 				integerDecl();
 				}
 				break;
-			case 2:
+			case FLOAT:
 				{
-				setState(164);
+				setState(177);
 				floatDecl();
 				}
 				break;
-			case 3:
+			case VECTOR2:
 				{
-				setState(165);
+				setState(178);
 				vector2Decl();
 				}
 				break;
-			case 4:
+			case VECTOR3:
 				{
-				setState(166);
+				setState(179);
 				vector3Decl();
 				}
 				break;
-			case 5:
+			case VECTOR4:
 				{
-				setState(167);
+				setState(180);
 				vector4Decl();
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
-			setState(170);
+			setState(183);
 			match(SEMICOLON);
 			}
 		}
@@ -1202,15 +1291,14 @@ public class SpookParser extends Parser {
 	}
 
 	public static class IntegerDeclContext extends ParserRuleContext {
-		public DataTypeVariableContext dataTypeVariable() {
-			return getRuleContext(DataTypeVariableContext.class,0);
-		}
+		public TerminalNode INT() { return getToken(SpookParser.INT, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
+		public ArithOperationsContext arithOperations() {
+			return getRuleContext(ArithOperationsContext.class,0);
+		}
 		public DigitContext digit() {
 			return getRuleContext(DigitContext.class,0);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
 		}
 		public IntegerDeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1218,42 +1306,44 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_integerDecl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterIntegerDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterIntegerDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitIntegerDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitIntegerDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitIntegerDecl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitIntegerDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final IntegerDeclContext integerDecl() throws RecognitionException {
 		IntegerDeclContext _localctx = new IntegerDeclContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_integerDecl);
+		enterRule(_localctx, 32, RULE_integerDecl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(172);
-			dataTypeVariable();
-			setState(173);
+			setState(185);
+			match(INT);
+			setState(186);
+			match(ID);
+			setState(187);
 			match(ASSIGN);
-			setState(176);
+			setState(190);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				{
-				setState(174);
-				digit();
+				setState(188);
+				arithOperations();
 				}
 				break;
 			case 2:
 				{
-				setState(175);
-				variable();
+				setState(189);
+				digit();
 				}
 				break;
 			}
@@ -1271,12 +1361,14 @@ public class SpookParser extends Parser {
 	}
 
 	public static class FloatDeclContext extends ParserRuleContext {
-		public DataTypeVariableContext dataTypeVariable() {
-			return getRuleContext(DataTypeVariableContext.class,0);
-		}
+		public TerminalNode FLOAT() { return getToken(SpookParser.FLOAT, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
 		public ArithOperationsContext arithOperations() {
 			return getRuleContext(ArithOperationsContext.class,0);
+		}
+		public Math_functionContext math_function() {
+			return getRuleContext(Math_functionContext.class,0);
 		}
 		public Real_numberContext real_number() {
 			return getRuleContext(Real_numberContext.class,0);
@@ -1287,41 +1379,49 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_floatDecl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterFloatDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterFloatDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitFloatDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitFloatDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitFloatDecl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitFloatDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final FloatDeclContext floatDecl() throws RecognitionException {
 		FloatDeclContext _localctx = new FloatDeclContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_floatDecl);
+		enterRule(_localctx, 34, RULE_floatDecl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(178);
-			dataTypeVariable();
-			setState(179);
+			setState(192);
+			match(FLOAT);
+			setState(193);
+			match(ID);
+			setState(194);
 			match(ASSIGN);
-			setState(182);
+			setState(198);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
 			case 1:
 				{
-				setState(180);
+				setState(195);
 				arithOperations();
 				}
 				break;
 			case 2:
 				{
-				setState(181);
+				setState(196);
+				math_function();
+				}
+				break;
+			case 3:
+				{
+				setState(197);
 				real_number();
 				}
 				break;
@@ -1352,39 +1452,39 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_arithOperations; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterArithOperations(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterArithOperations(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitArithOperations(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitArithOperations(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitArithOperations(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitArithOperations(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ArithOperationsContext arithOperations() throws RecognitionException {
 		ArithOperationsContext _localctx = new ArithOperationsContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_arithOperations);
+		enterRule(_localctx, 36, RULE_arithOperations);
 		try {
-			setState(188);
+			setState(204);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(184);
+				setState(200);
 				arithOperation();
-				setState(185);
+				setState(201);
 				arithOperations();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(187);
+				setState(203);
 				arithOperation();
 				}
 				break;
@@ -1415,14 +1515,17 @@ public class SpookParser extends Parser {
 		public Math_functionContext math_function(int i) {
 			return getRuleContext(Math_functionContext.class,i);
 		}
-		public List<VariableContext> variable() {
-			return getRuleContexts(VariableContext.class);
+		public List<TerminalNode> ID() { return getTokens(SpookParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(SpookParser.ID, i);
 		}
-		public VariableContext variable(int i) {
-			return getRuleContext(VariableContext.class,i);
-		}
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
 		public ArithOperationContext arithOperation() {
 			return getRuleContext(ArithOperationContext.class,0);
+		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
+		public ArithOperationsContext arithOperations() {
+			return getRuleContext(ArithOperationsContext.class,0);
 		}
 		public ArithOperationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1430,140 +1533,147 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_arithOperation; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterArithOperation(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterArithOperation(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitArithOperation(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitArithOperation(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitArithOperation(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitArithOperation(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ArithOperationContext arithOperation() throws RecognitionException {
 		ArithOperationContext _localctx = new ArithOperationContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_arithOperation);
+		enterRule(_localctx, 38, RULE_arithOperation);
 		try {
-			setState(219);
+			setState(235);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case LETTER:
-			case STRING:
+			case ID:
 			case DIGIT:
 			case FLOAT_DIGIT:
-			case SPACE:
 			case MATH_FUNCTION:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(193);
+				setState(209);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
-				case 1:
+				switch (_input.LA(1)) {
+				case DIGIT:
+				case FLOAT_DIGIT:
 					{
-					setState(190);
+					setState(206);
 					real_number();
 					}
 					break;
-				case 2:
+				case MATH_FUNCTION:
 					{
-					setState(191);
+					setState(207);
 					math_function();
 					}
 					break;
-				case 3:
+				case ID:
 					{
-					setState(192);
-					variable();
+					setState(208);
+					match(ID);
 					}
 					break;
+				default:
+					throw new NoViableAltException(this);
 				}
-				setState(195);
+				setState(211);
 				match(OPERATOR);
-				setState(203);
+				setState(219);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
-				case 1:
+				switch (_input.LA(1)) {
+				case DIGIT:
+				case FLOAT_DIGIT:
 					{
-					setState(196);
+					setState(212);
 					real_number();
 					}
 					break;
-				case 2:
+				case MATH_FUNCTION:
 					{
-					setState(197);
+					setState(213);
 					math_function();
 					}
 					break;
-				case 3:
+				case ID:
 					{
-					setState(198);
-					variable();
+					setState(214);
+					match(ID);
 					}
 					break;
-				case 4:
+				case LEFT_PAREN:
 					{
-					setState(199);
-					match(T__5);
-					setState(200);
+					setState(215);
+					match(LEFT_PAREN);
+					setState(216);
 					arithOperation();
-					setState(201);
-					match(T__6);
+					setState(217);
+					match(RIGHT_PAREN);
 					}
 					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				}
 				break;
 			case OPERATOR:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(205);
+				setState(221);
 				match(OPERATOR);
-				setState(213);
+				setState(229);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
-				case 1:
+				switch (_input.LA(1)) {
+				case DIGIT:
+				case FLOAT_DIGIT:
 					{
-					setState(206);
+					setState(222);
 					real_number();
 					}
 					break;
-				case 2:
+				case MATH_FUNCTION:
 					{
-					setState(207);
+					setState(223);
 					math_function();
 					}
 					break;
-				case 3:
+				case ID:
 					{
-					setState(208);
-					variable();
+					setState(224);
+					match(ID);
 					}
 					break;
-				case 4:
+				case LEFT_PAREN:
 					{
-					setState(209);
-					match(T__5);
-					setState(210);
+					setState(225);
+					match(LEFT_PAREN);
+					setState(226);
 					arithOperation();
-					setState(211);
-					match(T__6);
+					setState(227);
+					match(RIGHT_PAREN);
 					}
 					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				}
 				break;
-			case T__5:
+			case LEFT_PAREN:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(215);
-				match(T__5);
-				setState(216);
-				arithOperation();
-				setState(217);
-				match(T__6);
+				setState(231);
+				match(LEFT_PAREN);
+				setState(232);
+				arithOperations();
+				setState(233);
+				match(RIGHT_PAREN);
 				}
 				break;
 			default:
@@ -1583,9 +1693,8 @@ public class SpookParser extends Parser {
 
 	public static class Math_functionContext extends ParserRuleContext {
 		public TerminalNode MATH_FUNCTION() { return getToken(SpookParser.MATH_FUNCTION, 0); }
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
 		public Real_numberContext real_number() {
 			return getRuleContext(Real_numberContext.class,0);
 		}
@@ -1605,72 +1714,75 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_math_function; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterMath_function(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterMath_function(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitMath_function(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitMath_function(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitMath_function(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitMath_function(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final Math_functionContext math_function() throws RecognitionException {
 		Math_functionContext _localctx = new Math_functionContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_math_function);
+		enterRule(_localctx, 40, RULE_math_function);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(221);
+			setState(237);
 			match(MATH_FUNCTION);
-			setState(226);
+			setState(242);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
-			case 1:
+			switch (_input.LA(1)) {
+			case ID:
 				{
-				setState(222);
-				variable();
+				setState(238);
+				match(ID);
 				}
 				break;
-			case 2:
+			case DIGIT:
+			case FLOAT_DIGIT:
 				{
-				setState(223);
+				setState(239);
 				real_number();
 				}
 				break;
-			case 3:
+			case MATH_FUNCTION:
 				{
-				setState(224);
+				setState(240);
 				math_function();
 				}
 				break;
-			case 4:
+			case UNIFORM:
 				{
-				setState(225);
+				setState(241);
 				match(UNIFORM);
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
-			setState(231);
+			setState(247);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << LETTER) | (1L << STRING) | (1L << DIGIT) | (1L << FLOAT_DIGIT) | (1L << SPACE) | (1L << OPERATOR) | (1L << MATH_FUNCTION))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << DIGIT) | (1L << FLOAT_DIGIT) | (1L << LEFT_PAREN) | (1L << OPERATOR) | (1L << MATH_FUNCTION))) != 0)) {
 				{
 				{
-				setState(228);
+				setState(244);
 				arithOperation();
 				}
 				}
-				setState(233);
+				setState(249);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(234);
-			match(T__6);
+			setState(250);
+			match(RIGHT_PAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1685,66 +1797,66 @@ public class SpookParser extends Parser {
 	}
 
 	public static class BoolDeclContext extends ParserRuleContext {
-		public DataTypeVariableContext dataTypeVariable() {
-			return getRuleContext(DataTypeVariableContext.class,0);
-		}
+		public TerminalNode BOOL() { return getToken(SpookParser.BOOL, 0); }
 		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
 		public TerminalNode SEMICOLON() { return getToken(SpookParser.SEMICOLON, 0); }
 		public BoolOperationsContext boolOperations() {
 			return getRuleContext(BoolOperationsContext.class,0);
 		}
+		public TerminalNode TRUE() { return getToken(SpookParser.TRUE, 0); }
+		public TerminalNode FALSE() { return getToken(SpookParser.FALSE, 0); }
 		public BoolDeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_boolDecl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterBoolDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterBoolDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitBoolDecl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitBoolDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitBoolDecl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitBoolDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final BoolDeclContext boolDecl() throws RecognitionException {
 		BoolDeclContext _localctx = new BoolDeclContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_boolDecl);
+		enterRule(_localctx, 42, RULE_boolDecl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(236);
-			dataTypeVariable();
-			setState(237);
+			setState(252);
+			match(BOOL);
+			setState(253);
 			match(ASSIGN);
-			setState(241);
+			setState(257);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,25,_ctx) ) {
 			case 1:
 				{
-				setState(238);
+				setState(254);
 				boolOperations();
 				}
 				break;
 			case 2:
 				{
-				setState(239);
-				match(T__14);
+				setState(255);
+				match(TRUE);
 				}
 				break;
 			case 3:
 				{
-				setState(240);
-				match(T__15);
+				setState(256);
+				match(FALSE);
 				}
 				break;
 			}
-			setState(243);
+			setState(259);
 			match(SEMICOLON);
 			}
 		}
@@ -1772,39 +1884,39 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_boolOperations; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterBoolOperations(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterBoolOperations(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitBoolOperations(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitBoolOperations(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitBoolOperations(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitBoolOperations(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final BoolOperationsContext boolOperations() throws RecognitionException {
 		BoolOperationsContext _localctx = new BoolOperationsContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_boolOperations);
+		enterRule(_localctx, 44, RULE_boolOperations);
 		try {
-			setState(249);
+			setState(265);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(245);
+				setState(261);
 				boolOperation();
-				setState(246);
+				setState(262);
 				boolOperations();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(248);
+				setState(264);
 				boolOperation();
 				}
 				break;
@@ -1823,111 +1935,97 @@ public class SpookParser extends Parser {
 
 	public static class BoolOperationContext extends ParserRuleContext {
 		public TerminalNode BOOLOPERATOR() { return getToken(SpookParser.BOOLOPERATOR, 0); }
-		public List<VariableContext> variable() {
-			return getRuleContexts(VariableContext.class);
+		public List<TerminalNode> TRUE() { return getTokens(SpookParser.TRUE); }
+		public TerminalNode TRUE(int i) {
+			return getToken(SpookParser.TRUE, i);
 		}
-		public VariableContext variable(int i) {
-			return getRuleContext(VariableContext.class,i);
+		public List<TerminalNode> FALSE() { return getTokens(SpookParser.FALSE); }
+		public TerminalNode FALSE(int i) {
+			return getToken(SpookParser.FALSE, i);
 		}
+		public List<TerminalNode> ID() { return getTokens(SpookParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(SpookParser.ID, i);
+		}
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
 		public BoolOperationContext boolOperation() {
 			return getRuleContext(BoolOperationContext.class,0);
 		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
 		public BoolOperationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_boolOperation; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterBoolOperation(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterBoolOperation(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitBoolOperation(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitBoolOperation(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitBoolOperation(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitBoolOperation(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final BoolOperationContext boolOperation() throws RecognitionException {
 		BoolOperationContext _localctx = new BoolOperationContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_boolOperation);
+		enterRule(_localctx, 46, RULE_boolOperation);
+		int _la;
 		try {
-			setState(280);
+			setState(292);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__14:
-			case T__15:
-			case LETTER:
-			case STRING:
-			case DIGIT:
-			case SPACE:
+			case ID:
+			case TRUE:
+			case FALSE:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(254);
-				_errHandler.sync(this);
-				switch (_input.LA(1)) {
-				case T__14:
-					{
-					setState(251);
-					match(T__14);
-					}
-					break;
-				case T__15:
-					{
-					setState(252);
-					match(T__15);
-					}
-					break;
-				case LETTER:
-				case STRING:
-				case DIGIT:
-				case SPACE:
-					{
-					setState(253);
-					variable();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
+				setState(267);
+				_la = _input.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << TRUE) | (1L << FALSE))) != 0)) ) {
+				_errHandler.recoverInline(this);
 				}
-				setState(256);
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				setState(268);
 				match(BOOLOPERATOR);
-				setState(264);
+				setState(276);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
-				case T__14:
+				case TRUE:
 					{
-					setState(257);
-					match(T__14);
+					setState(269);
+					match(TRUE);
 					}
 					break;
-				case T__15:
+				case FALSE:
 					{
-					setState(258);
-					match(T__15);
+					setState(270);
+					match(FALSE);
 					}
 					break;
-				case LETTER:
-				case STRING:
-				case DIGIT:
-				case SPACE:
+				case ID:
 					{
-					setState(259);
-					variable();
+					setState(271);
+					match(ID);
 					}
 					break;
-				case T__5:
+				case LEFT_PAREN:
 					{
 					{
-					setState(260);
-					match(T__5);
-					setState(261);
+					setState(272);
+					match(LEFT_PAREN);
+					setState(273);
 					boolOperation();
-					setState(262);
-					match(T__6);
+					setState(274);
+					match(RIGHT_PAREN);
 					}
 					}
 					break;
@@ -1939,41 +2037,38 @@ public class SpookParser extends Parser {
 			case BOOLOPERATOR:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(266);
+				setState(278);
 				match(BOOLOPERATOR);
-				setState(274);
+				setState(286);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
-				case T__14:
+				case TRUE:
 					{
-					setState(267);
-					match(T__14);
+					setState(279);
+					match(TRUE);
 					}
 					break;
-				case T__15:
+				case FALSE:
 					{
-					setState(268);
-					match(T__15);
+					setState(280);
+					match(FALSE);
 					}
 					break;
-				case LETTER:
-				case STRING:
-				case DIGIT:
-				case SPACE:
+				case ID:
 					{
-					setState(269);
-					variable();
+					setState(281);
+					match(ID);
 					}
 					break;
-				case T__5:
+				case LEFT_PAREN:
 					{
 					{
-					setState(270);
-					match(T__5);
-					setState(271);
+					setState(282);
+					match(LEFT_PAREN);
+					setState(283);
 					boolOperation();
-					setState(272);
-					match(T__6);
+					setState(284);
+					match(RIGHT_PAREN);
 					}
 					}
 					break;
@@ -1982,15 +2077,15 @@ public class SpookParser extends Parser {
 				}
 				}
 				break;
-			case T__5:
+			case LEFT_PAREN:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(276);
-				match(T__5);
-				setState(277);
+				setState(288);
+				match(LEFT_PAREN);
+				setState(289);
 				boolOperation();
-				setState(278);
-				match(T__6);
+				setState(290);
+				match(RIGHT_PAREN);
 				}
 				break;
 			default:
@@ -2009,94 +2104,59 @@ public class SpookParser extends Parser {
 	}
 
 	public static class Vector2DeclContext extends ParserRuleContext {
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
+		public TerminalNode VECTOR2() { return getToken(SpookParser.VECTOR2, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
 		public List<Real_numberContext> real_number() {
 			return getRuleContexts(Real_numberContext.class);
 		}
 		public Real_numberContext real_number(int i) {
 			return getRuleContext(Real_numberContext.class,i);
 		}
+		public TerminalNode COMMA() { return getToken(SpookParser.COMMA, 0); }
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
 		public Vector2DeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_vector2Decl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterVector2Decl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterVector2Decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitVector2Decl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitVector2Decl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitVector2Decl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitVector2Decl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final Vector2DeclContext vector2Decl() throws RecognitionException {
 		Vector2DeclContext _localctx = new Vector2DeclContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_vector2Decl);
-		int _la;
+		enterRule(_localctx, 48, RULE_vector2Decl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(282);
-			match(T__11);
-			setState(283);
-			space();
-			setState(284);
-			variable();
-			setState(285);
-			match(ASSIGN);
-			setState(286);
-			match(T__5);
-			setState(287);
-			real_number();
-			setState(291);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(288);
-				space();
-				}
-				}
-				setState(293);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
 			setState(294);
-			match(T__16);
+			match(VECTOR2);
+			setState(295);
+			match(ID);
+			setState(296);
+			match(ASSIGN);
+			setState(297);
+			match(LEFT_PAREN);
 			setState(298);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(295);
-				space();
-				}
-				}
-				setState(300);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(301);
 			real_number();
-			setState(302);
-			match(T__6);
+			setState(299);
+			match(COMMA);
+			setState(300);
+			real_number();
+			setState(301);
+			match(RIGHT_PAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2111,126 +2171,66 @@ public class SpookParser extends Parser {
 	}
 
 	public static class Vector3DeclContext extends ParserRuleContext {
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
+		public TerminalNode VECTOR3() { return getToken(SpookParser.VECTOR3, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
 		public List<Real_numberContext> real_number() {
 			return getRuleContexts(Real_numberContext.class);
 		}
 		public Real_numberContext real_number(int i) {
 			return getRuleContext(Real_numberContext.class,i);
 		}
+		public List<TerminalNode> COMMA() { return getTokens(SpookParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(SpookParser.COMMA, i);
+		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
 		public Vector3DeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_vector3Decl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterVector3Decl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterVector3Decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitVector3Decl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitVector3Decl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitVector3Decl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitVector3Decl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final Vector3DeclContext vector3Decl() throws RecognitionException {
 		Vector3DeclContext _localctx = new Vector3DeclContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_vector3Decl);
-		int _la;
+		enterRule(_localctx, 50, RULE_vector3Decl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
+			setState(303);
+			match(VECTOR3);
 			setState(304);
-			match(T__12);
+			match(ID);
 			setState(305);
-			space();
-			setState(306);
-			variable();
-			setState(307);
 			match(ASSIGN);
+			setState(306);
+			match(LEFT_PAREN);
+			setState(307);
+			real_number();
 			setState(308);
-			match(T__5);
+			match(COMMA);
 			setState(309);
 			real_number();
-			setState(313);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(310);
-				space();
-				}
-				}
-				setState(315);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(316);
-			match(T__16);
-			setState(320);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(317);
-				space();
-				}
-				}
-				setState(322);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(323);
+			setState(310);
+			match(COMMA);
+			setState(311);
 			real_number();
-			setState(327);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(324);
-				space();
-				}
-				}
-				setState(329);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(330);
-			match(T__16);
-			setState(334);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(331);
-				space();
-				}
-				}
-				setState(336);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(337);
-			real_number();
-			setState(338);
-			match(T__6);
+			setState(312);
+			match(RIGHT_PAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2245,254 +2245,70 @@ public class SpookParser extends Parser {
 	}
 
 	public static class Vector4DeclContext extends ParserRuleContext {
-		public List<SpaceContext> space() {
-			return getRuleContexts(SpaceContext.class);
-		}
-		public SpaceContext space(int i) {
-			return getRuleContext(SpaceContext.class,i);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
+		public TerminalNode VECTOR4() { return getToken(SpookParser.VECTOR4, 0); }
+		public TerminalNode ID() { return getToken(SpookParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(SpookParser.ASSIGN, 0); }
+		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
 		public List<Real_numberContext> real_number() {
 			return getRuleContexts(Real_numberContext.class);
 		}
 		public Real_numberContext real_number(int i) {
 			return getRuleContext(Real_numberContext.class,i);
 		}
+		public List<TerminalNode> COMMA() { return getTokens(SpookParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(SpookParser.COMMA, i);
+		}
+		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
 		public Vector4DeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_vector4Decl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterVector4Decl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterVector4Decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitVector4Decl(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitVector4Decl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitVector4Decl(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitVector4Decl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final Vector4DeclContext vector4Decl() throws RecognitionException {
 		Vector4DeclContext _localctx = new Vector4DeclContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_vector4Decl);
-		int _la;
+		enterRule(_localctx, 52, RULE_vector4Decl);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(340);
-			match(T__13);
-			setState(341);
-			space();
-			setState(342);
-			variable();
-			setState(343);
+			setState(314);
+			match(VECTOR4);
+			setState(315);
+			match(ID);
+			setState(316);
 			match(ASSIGN);
-			setState(344);
-			match(T__5);
-			setState(345);
+			setState(317);
+			match(LEFT_PAREN);
+			setState(318);
 			real_number();
-			setState(349);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(346);
-				space();
-				}
-				}
-				setState(351);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(352);
-			match(T__16);
-			setState(356);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(353);
-				space();
-				}
-				}
-				setState(358);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(359);
+			setState(319);
+			match(COMMA);
+			setState(320);
 			real_number();
-			setState(363);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(360);
-				space();
-				}
-				}
-				setState(365);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(366);
-			match(T__16);
-			setState(370);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(367);
-				space();
-				}
-				}
-				setState(372);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(373);
+			setState(321);
+			match(COMMA);
+			setState(322);
 			real_number();
-			setState(377);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(374);
-				space();
-				}
-				}
-				setState(379);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(380);
-			match(T__16);
-			setState(384);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==SPACE) {
-				{
-				{
-				setState(381);
-				space();
-				}
-				}
-				setState(386);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(387);
+			setState(323);
+			match(COMMA);
+			setState(324);
 			real_number();
-			setState(388);
-			match(T__6);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class DataTypeVariableContext extends ParserRuleContext {
-		public DataTypeContext dataType() {
-			return getRuleContext(DataTypeContext.class,0);
-		}
-		public SpaceContext space() {
-			return getRuleContext(SpaceContext.class,0);
-		}
-		public VariableContext variable() {
-			return getRuleContext(VariableContext.class,0);
-		}
-		public DataTypeVariableContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_dataTypeVariable; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterDataTypeVariable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitDataTypeVariable(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitDataTypeVariable(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final DataTypeVariableContext dataTypeVariable() throws RecognitionException {
-		DataTypeVariableContext _localctx = new DataTypeVariableContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_dataTypeVariable);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(390);
-			dataType();
-			setState(391);
-			space();
-			setState(392);
-			variable();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class SpaceContext extends ParserRuleContext {
-		public TerminalNode SPACE() { return getToken(SpookParser.SPACE, 0); }
-		public SpaceContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_space; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterSpace(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitSpace(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitSpace(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final SpaceContext space() throws RecognitionException {
-		SpaceContext _localctx = new SpaceContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_space);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(394);
-			match(SPACE);
+			setState(325);
+			match(RIGHT_PAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2519,37 +2335,37 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_real_number; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterReal_number(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterReal_number(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitReal_number(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitReal_number(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitReal_number(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitReal_number(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final Real_numberContext real_number() throws RecognitionException {
 		Real_numberContext _localctx = new Real_numberContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_real_number);
+		enterRule(_localctx, 54, RULE_real_number);
 		try {
-			setState(398);
+			setState(329);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DIGIT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(396);
+				setState(327);
 				digit();
 				}
 				break;
 			case FLOAT_DIGIT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(397);
+				setState(328);
 				float_digit();
 				}
 				break;
@@ -2576,26 +2392,26 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_digit; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterDigit(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterDigit(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitDigit(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitDigit(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitDigit(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitDigit(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final DigitContext digit() throws RecognitionException {
 		DigitContext _localctx = new DigitContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_digit);
+		enterRule(_localctx, 56, RULE_digit);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(400);
+			setState(331);
 			match(DIGIT);
 			}
 		}
@@ -2618,26 +2434,26 @@ public class SpookParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_float_digit; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).enterFloat_digit(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).enterFloat_digit(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SpookListener ) ((SpookListener)listener).exitFloat_digit(this);
+			if ( listener instanceof SpookParserListener ) ((SpookParserListener)listener).exitFloat_digit(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SpookVisitor ) return ((SpookVisitor<? extends T>)visitor).visitFloat_digit(this);
+			if ( visitor instanceof SpookParserVisitor ) return ((SpookParserVisitor<? extends T>)visitor).visitFloat_digit(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final Float_digitContext float_digit() throws RecognitionException {
 		Float_digitContext _localctx = new Float_digitContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_float_digit);
+		enterRule(_localctx, 58, RULE_float_digit);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(402);
+			setState(333);
 			match(FLOAT_DIGIT);
 			}
 		}
@@ -2653,159 +2469,125 @@ public class SpookParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3 \u0197\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3$\u0152\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\3\2\3\2\3\2\3\2\3\2\7\2@\n\2"+
-		"\f\2\16\2C\13\2\3\3\3\3\3\3\3\3\7\3I\n\3\f\3\16\3L\13\3\3\3\3\3\3\4\3"+
-		"\4\3\4\3\4\5\4T\n\4\3\5\7\5W\n\5\f\5\16\5Z\13\5\3\5\3\5\3\5\5\5_\n\5\3"+
-		"\6\3\6\3\6\3\6\3\6\7\6f\n\6\f\6\16\6i\13\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7"+
-		"\3\7\3\7\7\7t\n\7\f\7\16\7w\13\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\7\b\u0080"+
-		"\n\b\f\b\16\b\u0083\13\b\3\b\3\b\3\b\3\b\3\b\3\b\7\b\u008b\n\b\f\b\16"+
-		"\b\u008e\13\b\3\b\3\b\3\t\3\t\5\t\u0094\n\t\3\n\3\n\3\n\3\n\5\n\u009a"+
-		"\n\n\3\13\3\13\3\f\3\f\3\f\3\f\6\f\u00a2\n\f\r\f\16\f\u00a3\3\r\3\r\3"+
-		"\r\3\r\3\r\5\r\u00ab\n\r\3\r\3\r\3\16\3\16\3\16\3\16\5\16\u00b3\n\16\3"+
-		"\17\3\17\3\17\3\17\5\17\u00b9\n\17\3\20\3\20\3\20\3\20\5\20\u00bf\n\20"+
-		"\3\21\3\21\3\21\5\21\u00c4\n\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21"+
-		"\5\21\u00ce\n\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u00d8\n"+
-		"\21\3\21\3\21\3\21\3\21\5\21\u00de\n\21\3\22\3\22\3\22\3\22\3\22\5\22"+
-		"\u00e5\n\22\3\22\7\22\u00e8\n\22\f\22\16\22\u00eb\13\22\3\22\3\22\3\23"+
-		"\3\23\3\23\3\23\3\23\5\23\u00f4\n\23\3\23\3\23\3\24\3\24\3\24\3\24\5\24"+
-		"\u00fc\n\24\3\25\3\25\3\25\5\25\u0101\n\25\3\25\3\25\3\25\3\25\3\25\3"+
-		"\25\3\25\3\25\5\25\u010b\n\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
-		"\5\25\u0115\n\25\3\25\3\25\3\25\3\25\5\25\u011b\n\25\3\26\3\26\3\26\3"+
-		"\26\3\26\3\26\3\26\7\26\u0124\n\26\f\26\16\26\u0127\13\26\3\26\3\26\7"+
-		"\26\u012b\n\26\f\26\16\26\u012e\13\26\3\26\3\26\3\26\3\27\3\27\3\27\3"+
-		"\27\3\27\3\27\3\27\7\27\u013a\n\27\f\27\16\27\u013d\13\27\3\27\3\27\7"+
-		"\27\u0141\n\27\f\27\16\27\u0144\13\27\3\27\3\27\7\27\u0148\n\27\f\27\16"+
-		"\27\u014b\13\27\3\27\3\27\7\27\u014f\n\27\f\27\16\27\u0152\13\27\3\27"+
-		"\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\30\7\30\u015e\n\30\f\30\16"+
-		"\30\u0161\13\30\3\30\3\30\7\30\u0165\n\30\f\30\16\30\u0168\13\30\3\30"+
-		"\3\30\7\30\u016c\n\30\f\30\16\30\u016f\13\30\3\30\3\30\7\30\u0173\n\30"+
-		"\f\30\16\30\u0176\13\30\3\30\3\30\7\30\u017a\n\30\f\30\16\30\u017d\13"+
-		"\30\3\30\3\30\7\30\u0181\n\30\f\30\16\30\u0184\13\30\3\30\3\30\3\30\3"+
-		"\31\3\31\3\31\3\31\3\32\3\32\3\33\3\33\5\33\u0191\n\33\3\34\3\34\3\35"+
-		"\3\35\3\35\2\2\36\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62"+
-		"\64\668\2\3\3\2\16\20\2\u01c8\2:\3\2\2\2\4D\3\2\2\2\6S\3\2\2\2\bX\3\2"+
-		"\2\2\n`\3\2\2\2\fj\3\2\2\2\16z\3\2\2\2\20\u0093\3\2\2\2\22\u0099\3\2\2"+
-		"\2\24\u009b\3\2\2\2\26\u00a1\3\2\2\2\30\u00aa\3\2\2\2\32\u00ae\3\2\2\2"+
-		"\34\u00b4\3\2\2\2\36\u00be\3\2\2\2 \u00dd\3\2\2\2\"\u00df\3\2\2\2$\u00ee"+
-		"\3\2\2\2&\u00fb\3\2\2\2(\u011a\3\2\2\2*\u011c\3\2\2\2,\u0132\3\2\2\2."+
-		"\u0156\3\2\2\2\60\u0188\3\2\2\2\62\u018c\3\2\2\2\64\u0190\3\2\2\2\66\u0192"+
-		"\3\2\2\28\u0194\3\2\2\2:A\5\4\3\2;@\7\31\2\2<@\5\n\6\2=@\5\f\7\2>@\5\16"+
-		"\b\2?;\3\2\2\2?<\3\2\2\2?=\3\2\2\2?>\3\2\2\2@C\3\2\2\2A?\3\2\2\2AB\3\2"+
-		"\2\2B\3\3\2\2\2CA\3\2\2\2DJ\7\3\2\2EI\7\31\2\2FI\5\62\32\2GI\5\6\4\2H"+
-		"E\3\2\2\2HF\3\2\2\2HG\3\2\2\2IL\3\2\2\2JH\3\2\2\2JK\3\2\2\2KM\3\2\2\2"+
-		"LJ\3\2\2\2MN\7\4\2\2N\5\3\2\2\2OP\5\b\5\2PQ\5\6\4\2QT\3\2\2\2RT\5\b\5"+
-		"\2SO\3\2\2\2SR\3\2\2\2T\7\3\2\2\2UW\5\62\32\2VU\3\2\2\2WZ\3\2\2\2XV\3"+
-		"\2\2\2XY\3\2\2\2Y^\3\2\2\2ZX\3\2\2\2[_\5\n\6\2\\_\5\30\r\2]_\5$\23\2^"+
-		"[\3\2\2\2^\\\3\2\2\2^]\3\2\2\2_\t\3\2\2\2`g\7\5\2\2af\7\24\2\2bf\7\25"+
-		"\2\2cf\7\33\2\2df\5\66\34\2ea\3\2\2\2eb\3\2\2\2ec\3\2\2\2ed\3\2\2\2fi"+
-		"\3\2\2\2ge\3\2\2\2gh\3\2\2\2h\13\3\2\2\2ig\3\2\2\2jk\7\6\2\2kl\5\62\32"+
-		"\2lm\5\26\f\2mn\5\62\32\2nu\7\7\2\2ot\5\62\32\2pt\7\31\2\2qt\5\30\r\2"+
-		"rt\5\16\b\2so\3\2\2\2sp\3\2\2\2sq\3\2\2\2sr\3\2\2\2tw\3\2\2\2us\3\2\2"+
-		"\2uv\3\2\2\2vx\3\2\2\2wu\3\2\2\2xy\7\4\2\2y\r\3\2\2\2z{\5\20\t\2{|\5\62"+
-		"\32\2|}\5\26\f\2}\u0081\7\b\2\2~\u0080\5\60\31\2\177~\3\2\2\2\u0080\u0083"+
-		"\3\2\2\2\u0081\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0084\3\2\2\2\u0083"+
-		"\u0081\3\2\2\2\u0084\u0085\7\t\2\2\u0085\u0086\5\62\32\2\u0086\u008c\7"+
-		"\7\2\2\u0087\u008b\5\62\32\2\u0088\u008b\7\31\2\2\u0089\u008b\5\b\5\2"+
-		"\u008a\u0087\3\2\2\2\u008a\u0088\3\2\2\2\u008a\u0089\3\2\2\2\u008b\u008e"+
-		"\3\2\2\2\u008c\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u008f\3\2\2\2\u008e"+
-		"\u008c\3\2\2\2\u008f\u0090\7\4\2\2\u0090\17\3\2\2\2\u0091\u0094\7\n\2"+
-		"\2\u0092\u0094\5\22\n\2\u0093\u0091\3\2\2\2\u0093\u0092\3\2\2\2\u0094"+
-		"\21\3\2\2\2\u0095\u009a\7\13\2\2\u0096\u009a\7\f\2\2\u0097\u009a\7\r\2"+
-		"\2\u0098\u009a\5\24\13\2\u0099\u0095\3\2\2\2\u0099\u0096\3\2\2\2\u0099"+
-		"\u0097\3\2\2\2\u0099\u0098\3\2\2\2\u009a\23\3\2\2\2\u009b\u009c\t\2\2"+
-		"\2\u009c\25\3\2\2\2\u009d\u00a2\7\24\2\2\u009e\u00a2\7\25\2\2\u009f\u00a2"+
-		"\5\62\32\2\u00a0\u00a2\5\66\34\2\u00a1\u009d\3\2\2\2\u00a1\u009e\3\2\2"+
-		"\2\u00a1\u009f\3\2\2\2\u00a1\u00a0\3\2\2\2\u00a2\u00a3\3\2\2\2\u00a3\u00a1"+
-		"\3\2\2\2\u00a3\u00a4\3\2\2\2\u00a4\27\3\2\2\2\u00a5\u00ab\5\32\16\2\u00a6"+
-		"\u00ab\5\34\17\2\u00a7\u00ab\5*\26\2\u00a8\u00ab\5,\27\2\u00a9\u00ab\5"+
-		".\30\2\u00aa\u00a5\3\2\2\2\u00aa\u00a6\3\2\2\2\u00aa\u00a7\3\2\2\2\u00aa"+
-		"\u00a8\3\2\2\2\u00aa\u00a9\3\2\2\2\u00ab\u00ac\3\2\2\2\u00ac\u00ad\7\30"+
-		"\2\2\u00ad\31\3\2\2\2\u00ae\u00af\5\60\31\2\u00af\u00b2\7\34\2\2\u00b0"+
-		"\u00b3\5\66\34\2\u00b1\u00b3\5\26\f\2\u00b2\u00b0\3\2\2\2\u00b2\u00b1"+
-		"\3\2\2\2\u00b3\33\3\2\2\2\u00b4\u00b5\5\60\31\2\u00b5\u00b8\7\34\2\2\u00b6"+
-		"\u00b9\5\36\20\2\u00b7\u00b9\5\64\33\2\u00b8\u00b6\3\2\2\2\u00b8\u00b7"+
-		"\3\2\2\2\u00b9\35\3\2\2\2\u00ba\u00bb\5 \21\2\u00bb\u00bc\5\36\20\2\u00bc"+
-		"\u00bf\3\2\2\2\u00bd\u00bf\5 \21\2\u00be\u00ba\3\2\2\2\u00be\u00bd\3\2"+
-		"\2\2\u00bf\37\3\2\2\2\u00c0\u00c4\5\64\33\2\u00c1\u00c4\5\"\22\2\u00c2"+
-		"\u00c4\5\26\f\2\u00c3\u00c0\3\2\2\2\u00c3\u00c1\3\2\2\2\u00c3\u00c2\3"+
-		"\2\2\2\u00c4\u00c5\3\2\2\2\u00c5\u00cd\7\36\2\2\u00c6\u00ce\5\64\33\2"+
-		"\u00c7\u00ce\5\"\22\2\u00c8\u00ce\5\26\f\2\u00c9\u00ca\7\b\2\2\u00ca\u00cb"+
-		"\5 \21\2\u00cb\u00cc\7\t\2\2\u00cc\u00ce\3\2\2\2\u00cd\u00c6\3\2\2\2\u00cd"+
-		"\u00c7\3\2\2\2\u00cd\u00c8\3\2\2\2\u00cd\u00c9\3\2\2\2\u00ce\u00de\3\2"+
-		"\2\2\u00cf\u00d7\7\36\2\2\u00d0\u00d8\5\64\33\2\u00d1\u00d8\5\"\22\2\u00d2"+
-		"\u00d8\5\26\f\2\u00d3\u00d4\7\b\2\2\u00d4\u00d5\5 \21\2\u00d5\u00d6\7"+
-		"\t\2\2\u00d6\u00d8\3\2\2\2\u00d7\u00d0\3\2\2\2\u00d7\u00d1\3\2\2\2\u00d7"+
-		"\u00d2\3\2\2\2\u00d7\u00d3\3\2\2\2\u00d8\u00de\3\2\2\2\u00d9\u00da\7\b"+
-		"\2\2\u00da\u00db\5 \21\2\u00db\u00dc\7\t\2\2\u00dc\u00de\3\2\2\2\u00dd"+
-		"\u00c3\3\2\2\2\u00dd\u00cf\3\2\2\2\u00dd\u00d9\3\2\2\2\u00de!\3\2\2\2"+
-		"\u00df\u00e4\7\37\2\2\u00e0\u00e5\5\26\f\2\u00e1\u00e5\5\64\33\2\u00e2"+
-		"\u00e5\5\"\22\2\u00e3\u00e5\7 \2\2\u00e4\u00e0\3\2\2\2\u00e4\u00e1\3\2"+
-		"\2\2\u00e4\u00e2\3\2\2\2\u00e4\u00e3\3\2\2\2\u00e5\u00e9\3\2\2\2\u00e6"+
-		"\u00e8\5 \21\2\u00e7\u00e6\3\2\2\2\u00e8\u00eb\3\2\2\2\u00e9\u00e7\3\2"+
-		"\2\2\u00e9\u00ea\3\2\2\2\u00ea\u00ec\3\2\2\2\u00eb\u00e9\3\2\2\2\u00ec"+
-		"\u00ed\7\t\2\2\u00ed#\3\2\2\2\u00ee\u00ef\5\60\31\2\u00ef\u00f3\7\34\2"+
-		"\2\u00f0\u00f4\5&\24\2\u00f1\u00f4\7\21\2\2\u00f2\u00f4\7\22\2\2\u00f3"+
-		"\u00f0\3\2\2\2\u00f3\u00f1\3\2\2\2\u00f3\u00f2\3\2\2\2\u00f4\u00f5\3\2"+
-		"\2\2\u00f5\u00f6\7\30\2\2\u00f6%\3\2\2\2\u00f7\u00f8\5(\25\2\u00f8\u00f9"+
-		"\5&\24\2\u00f9\u00fc\3\2\2\2\u00fa\u00fc\5(\25\2\u00fb\u00f7\3\2\2\2\u00fb"+
-		"\u00fa\3\2\2\2\u00fc\'\3\2\2\2\u00fd\u0101\7\21\2\2\u00fe\u0101\7\22\2"+
-		"\2\u00ff\u0101\5\26\f\2\u0100\u00fd\3\2\2\2\u0100\u00fe\3\2\2\2\u0100"+
-		"\u00ff\3\2\2\2\u0101\u0102\3\2\2\2\u0102\u010a\7\35\2\2\u0103\u010b\7"+
-		"\21\2\2\u0104\u010b\7\22\2\2\u0105\u010b\5\26\f\2\u0106\u0107\7\b\2\2"+
-		"\u0107\u0108\5(\25\2\u0108\u0109\7\t\2\2\u0109\u010b\3\2\2\2\u010a\u0103"+
-		"\3\2\2\2\u010a\u0104\3\2\2\2\u010a\u0105\3\2\2\2\u010a\u0106\3\2\2\2\u010b"+
-		"\u011b\3\2\2\2\u010c\u0114\7\35\2\2\u010d\u0115\7\21\2\2\u010e\u0115\7"+
-		"\22\2\2\u010f\u0115\5\26\f\2\u0110\u0111\7\b\2\2\u0111\u0112\5(\25\2\u0112"+
-		"\u0113\7\t\2\2\u0113\u0115\3\2\2\2\u0114\u010d\3\2\2\2\u0114\u010e\3\2"+
-		"\2\2\u0114\u010f\3\2\2\2\u0114\u0110\3\2\2\2\u0115\u011b\3\2\2\2\u0116"+
-		"\u0117\7\b\2\2\u0117\u0118\5(\25\2\u0118\u0119\7\t\2\2\u0119\u011b\3\2"+
-		"\2\2\u011a\u0100\3\2\2\2\u011a\u010c\3\2\2\2\u011a\u0116\3\2\2\2\u011b"+
-		")\3\2\2\2\u011c\u011d\7\16\2\2\u011d\u011e\5\62\32\2\u011e\u011f\5\26"+
-		"\f\2\u011f\u0120\7\34\2\2\u0120\u0121\7\b\2\2\u0121\u0125\5\64\33\2\u0122"+
-		"\u0124\5\62\32\2\u0123\u0122\3\2\2\2\u0124\u0127\3\2\2\2\u0125\u0123\3"+
-		"\2\2\2\u0125\u0126\3\2\2\2\u0126\u0128\3\2\2\2\u0127\u0125\3\2\2\2\u0128"+
-		"\u012c\7\23\2\2\u0129\u012b\5\62\32\2\u012a\u0129\3\2\2\2\u012b\u012e"+
-		"\3\2\2\2\u012c\u012a\3\2\2\2\u012c\u012d\3\2\2\2\u012d\u012f\3\2\2\2\u012e"+
-		"\u012c\3\2\2\2\u012f\u0130\5\64\33\2\u0130\u0131\7\t\2\2\u0131+\3\2\2"+
-		"\2\u0132\u0133\7\17\2\2\u0133\u0134\5\62\32\2\u0134\u0135\5\26\f\2\u0135"+
-		"\u0136\7\34\2\2\u0136\u0137\7\b\2\2\u0137\u013b\5\64\33\2\u0138\u013a"+
-		"\5\62\32\2\u0139\u0138\3\2\2\2\u013a\u013d\3\2\2\2\u013b\u0139\3\2\2\2"+
-		"\u013b\u013c\3\2\2\2\u013c\u013e\3\2\2\2\u013d\u013b\3\2\2\2\u013e\u0142"+
-		"\7\23\2\2\u013f\u0141\5\62\32\2\u0140\u013f\3\2\2\2\u0141\u0144\3\2\2"+
-		"\2\u0142\u0140\3\2\2\2\u0142\u0143\3\2\2\2\u0143\u0145\3\2\2\2\u0144\u0142"+
-		"\3\2\2\2\u0145\u0149\5\64\33\2\u0146\u0148\5\62\32\2\u0147\u0146\3\2\2"+
-		"\2\u0148\u014b\3\2\2\2\u0149\u0147\3\2\2\2\u0149\u014a\3\2\2\2\u014a\u014c"+
-		"\3\2\2\2\u014b\u0149\3\2\2\2\u014c\u0150\7\23\2\2\u014d\u014f\5\62\32"+
-		"\2\u014e\u014d\3\2\2\2\u014f\u0152\3\2\2\2\u0150\u014e\3\2\2\2\u0150\u0151"+
-		"\3\2\2\2\u0151\u0153\3\2\2\2\u0152\u0150\3\2\2\2\u0153\u0154\5\64\33\2"+
-		"\u0154\u0155\7\t\2\2\u0155-\3\2\2\2\u0156\u0157\7\20\2\2\u0157\u0158\5"+
-		"\62\32\2\u0158\u0159\5\26\f\2\u0159\u015a\7\34\2\2\u015a\u015b\7\b\2\2"+
-		"\u015b\u015f\5\64\33\2\u015c\u015e\5\62\32\2\u015d\u015c\3\2\2\2\u015e"+
-		"\u0161\3\2\2\2\u015f\u015d\3\2\2\2\u015f\u0160\3\2\2\2\u0160\u0162\3\2"+
-		"\2\2\u0161\u015f\3\2\2\2\u0162\u0166\7\23\2\2\u0163\u0165\5\62\32\2\u0164"+
-		"\u0163\3\2\2\2\u0165\u0168\3\2\2\2\u0166\u0164\3\2\2\2\u0166\u0167\3\2"+
-		"\2\2\u0167\u0169\3\2\2\2\u0168\u0166\3\2\2\2\u0169\u016d\5\64\33\2\u016a"+
-		"\u016c\5\62\32\2\u016b\u016a\3\2\2\2\u016c\u016f\3\2\2\2\u016d\u016b\3"+
-		"\2\2\2\u016d\u016e\3\2\2\2\u016e\u0170\3\2\2\2\u016f\u016d\3\2\2\2\u0170"+
-		"\u0174\7\23\2\2\u0171\u0173\5\62\32\2\u0172\u0171\3\2\2\2\u0173\u0176"+
-		"\3\2\2\2\u0174\u0172\3\2\2\2\u0174\u0175\3\2\2\2\u0175\u0177\3\2\2\2\u0176"+
-		"\u0174\3\2\2\2\u0177\u017b\5\64\33\2\u0178\u017a\5\62\32\2\u0179\u0178"+
-		"\3\2\2\2\u017a\u017d\3\2\2\2\u017b\u0179\3\2\2\2\u017b\u017c\3\2\2\2\u017c"+
-		"\u017e\3\2\2\2\u017d\u017b\3\2\2\2\u017e\u0182\7\23\2\2\u017f\u0181\5"+
-		"\62\32\2\u0180\u017f\3\2\2\2\u0181\u0184\3\2\2\2\u0182\u0180\3\2\2\2\u0182"+
-		"\u0183\3\2\2\2\u0183\u0185\3\2\2\2\u0184\u0182\3\2\2\2\u0185\u0186\5\64"+
-		"\33\2\u0186\u0187\7\t\2\2\u0187/\3\2\2\2\u0188\u0189\5\22\n\2\u0189\u018a"+
-		"\5\62\32\2\u018a\u018b\5\26\f\2\u018b\61\3\2\2\2\u018c\u018d\7\33\2\2"+
-		"\u018d\63\3\2\2\2\u018e\u0191\5\66\34\2\u018f\u0191\58\35\2\u0190\u018e"+
-		"\3\2\2\2\u0190\u018f\3\2\2\2\u0191\65\3\2\2\2\u0192\u0193\7\26\2\2\u0193"+
-		"\67\3\2\2\2\u0194\u0195\7\27\2\2\u01959\3\2\2\2\61?AHJSX^egsu\u0081\u008a"+
-		"\u008c\u0093\u0099\u00a1\u00a3\u00aa\u00b2\u00b8\u00be\u00c3\u00cd\u00d7"+
-		"\u00dd\u00e4\u00e9\u00f3\u00fb\u0100\u010a\u0114\u011a\u0125\u012c\u013b"+
-		"\u0142\u0149\u0150\u015f\u0166\u016d\u0174\u017b\u0182\u0190";
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\3\2\3\2\3"+
+		"\2\3\2\7\2C\n\2\f\2\16\2F\13\2\3\3\3\3\3\3\3\3\7\3L\n\3\f\3\16\3O\13\3"+
+		"\3\3\3\3\3\4\3\4\3\4\3\4\5\4W\n\4\3\5\3\5\3\5\3\5\5\5]\n\5\3\6\3\6\3\7"+
+		"\3\7\3\7\3\7\3\7\7\7f\n\7\f\7\16\7i\13\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3"+
+		"\b\3\b\3\t\3\t\3\t\3\t\5\tx\n\t\3\n\3\n\3\n\5\n}\n\n\3\n\3\n\3\n\3\n\5"+
+		"\n\u0083\n\n\5\n\u0085\n\n\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13"+
+		"\3\13\3\13\3\13\3\13\3\13\3\13\5\13\u0096\n\13\3\f\3\f\3\f\3\f\7\f\u009c"+
+		"\n\f\f\f\16\f\u009f\13\f\3\f\3\f\3\f\7\f\u00a4\n\f\f\f\16\f\u00a7\13\f"+
+		"\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3\17\3\20\3\20\3\21\3\21\3\21\3\21\3\21"+
+		"\5\21\u00b8\n\21\3\21\3\21\3\22\3\22\3\22\3\22\3\22\5\22\u00c1\n\22\3"+
+		"\23\3\23\3\23\3\23\3\23\3\23\5\23\u00c9\n\23\3\24\3\24\3\24\3\24\5\24"+
+		"\u00cf\n\24\3\25\3\25\3\25\5\25\u00d4\n\25\3\25\3\25\3\25\3\25\3\25\3"+
+		"\25\3\25\3\25\5\25\u00de\n\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
+		"\5\25\u00e8\n\25\3\25\3\25\3\25\3\25\5\25\u00ee\n\25\3\26\3\26\3\26\3"+
+		"\26\3\26\5\26\u00f5\n\26\3\26\7\26\u00f8\n\26\f\26\16\26\u00fb\13\26\3"+
+		"\26\3\26\3\27\3\27\3\27\3\27\3\27\5\27\u0104\n\27\3\27\3\27\3\30\3\30"+
+		"\3\30\3\30\5\30\u010c\n\30\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31"+
+		"\5\31\u0117\n\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\5\31\u0121\n"+
+		"\31\3\31\3\31\3\31\3\31\5\31\u0127\n\31\3\32\3\32\3\32\3\32\3\32\3\32"+
+		"\3\32\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33"+
+		"\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\35"+
+		"\3\35\5\35\u014c\n\35\3\36\3\36\3\37\3\37\3\37\2\2 \2\4\6\b\n\f\16\20"+
+		"\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<\2\4\3\2\13\17\4\2\21\21"+
+		"\24\25\2\u0169\2>\3\2\2\2\4G\3\2\2\2\6V\3\2\2\2\b\\\3\2\2\2\n^\3\2\2\2"+
+		"\f`\3\2\2\2\16l\3\2\2\2\20w\3\2\2\2\22\u0084\3\2\2\2\24\u0095\3\2\2\2"+
+		"\26\u0097\3\2\2\2\30\u00aa\3\2\2\2\32\u00ac\3\2\2\2\34\u00ae\3\2\2\2\36"+
+		"\u00b0\3\2\2\2 \u00b7\3\2\2\2\"\u00bb\3\2\2\2$\u00c2\3\2\2\2&\u00ce\3"+
+		"\2\2\2(\u00ed\3\2\2\2*\u00ef\3\2\2\2,\u00fe\3\2\2\2.\u010b\3\2\2\2\60"+
+		"\u0126\3\2\2\2\62\u0128\3\2\2\2\64\u0131\3\2\2\2\66\u013c\3\2\2\28\u014b"+
+		"\3\2\2\2:\u014d\3\2\2\2<\u014f\3\2\2\2>D\5\4\3\2?C\5\n\6\2@C\5\f\7\2A"+
+		"C\5\26\f\2B?\3\2\2\2B@\3\2\2\2BA\3\2\2\2CF\3\2\2\2DB\3\2\2\2DE\3\2\2\2"+
+		"E\3\3\2\2\2FD\3\2\2\2GH\7\3\2\2HM\7\31\2\2IL\5\6\4\2JL\5\n\6\2KI\3\2\2"+
+		"\2KJ\3\2\2\2LO\3\2\2\2MK\3\2\2\2MN\3\2\2\2NP\3\2\2\2OM\3\2\2\2PQ\7\32"+
+		"\2\2Q\5\3\2\2\2RS\5\b\5\2ST\5\6\4\2TW\3\2\2\2UW\5\b\5\2VR\3\2\2\2VU\3"+
+		"\2\2\2W\7\3\2\2\2X]\5 \21\2Y]\5,\27\2Z]\5\16\b\2[]\5\24\13\2\\X\3\2\2"+
+		"\2\\Y\3\2\2\2\\Z\3\2\2\2\\[\3\2\2\2]\t\3\2\2\2^_\7#\2\2_\13\3\2\2\2`a"+
+		"\7\4\2\2ab\7\21\2\2bg\7\31\2\2cf\5 \21\2df\5\26\f\2ec\3\2\2\2ed\3\2\2"+
+		"\2fi\3\2\2\2ge\3\2\2\2gh\3\2\2\2hj\3\2\2\2ig\3\2\2\2jk\7\32\2\2k\r\3\2"+
+		"\2\2lm\5\32\16\2mn\7\21\2\2no\7\30\2\2op\7\33\2\2pq\5\20\t\2qr\7\34\2"+
+		"\2r\17\3\2\2\2st\5\22\n\2tu\5\20\t\2ux\3\2\2\2vx\5\22\n\2ws\3\2\2\2wv"+
+		"\3\2\2\2x\21\3\2\2\2y}\7\21\2\2z}\58\35\2{}\5(\25\2|y\3\2\2\2|z\3\2\2"+
+		"\2|{\3\2\2\2}~\3\2\2\2~\u0085\7\36\2\2\177\u0083\7\21\2\2\u0080\u0083"+
+		"\58\35\2\u0081\u0083\5(\25\2\u0082\177\3\2\2\2\u0082\u0080\3\2\2\2\u0082"+
+		"\u0081\3\2\2\2\u0083\u0085\3\2\2\2\u0084|\3\2\2\2\u0084\u0082\3\2\2\2"+
+		"\u0085\23\3\2\2\2\u0086\u0087\5\34\17\2\u0087\u0088\7\35\2\2\u0088\u0089"+
+		"\5\36\20\2\u0089\u008a\7\30\2\2\u008a\u008b\7\33\2\2\u008b\u008c\5\20"+
+		"\t\2\u008c\u008d\7\34\2\2\u008d\u0096\3\2\2\2\u008e\u008f\5\34\17\2\u008f"+
+		"\u0090\7\35\2\2\u0090\u0091\5\36\20\2\u0091\u0092\7\33\2\2\u0092\u0093"+
+		"\5\20\t\2\u0093\u0094\7\34\2\2\u0094\u0096\3\2\2\2\u0095\u0086\3\2\2\2"+
+		"\u0095\u008e\3\2\2\2\u0096\25\3\2\2\2\u0097\u0098\5\30\r\2\u0098\u0099"+
+		"\7\21\2\2\u0099\u009d\7\33\2\2\u009a\u009c\7\5\2\2\u009b\u009a\3\2\2\2"+
+		"\u009c\u009f\3\2\2\2\u009d\u009b\3\2\2\2\u009d\u009e\3\2\2\2\u009e\u00a0"+
+		"\3\2\2\2\u009f\u009d\3\2\2\2\u00a0\u00a1\7\34\2\2\u00a1\u00a5\7\31\2\2"+
+		"\u00a2\u00a4\5\b\5\2\u00a3\u00a2\3\2\2\2\u00a4\u00a7\3\2\2\2\u00a5\u00a3"+
+		"\3\2\2\2\u00a5\u00a6\3\2\2\2\u00a6\u00a8\3\2\2\2\u00a7\u00a5\3\2\2\2\u00a8"+
+		"\u00a9\7\32\2\2\u00a9\27\3\2\2\2\u00aa\u00ab\7\20\2\2\u00ab\31\3\2\2\2"+
+		"\u00ac\u00ad\t\2\2\2\u00ad\33\3\2\2\2\u00ae\u00af\7\21\2\2\u00af\35\3"+
+		"\2\2\2\u00b0\u00b1\7\21\2\2\u00b1\37\3\2\2\2\u00b2\u00b8\5\"\22\2\u00b3"+
+		"\u00b8\5$\23\2\u00b4\u00b8\5\62\32\2\u00b5\u00b8\5\64\33\2\u00b6\u00b8"+
+		"\5\66\34\2\u00b7\u00b2\3\2\2\2\u00b7\u00b3\3\2\2\2\u00b7\u00b4\3\2\2\2"+
+		"\u00b7\u00b5\3\2\2\2\u00b7\u00b6\3\2\2\2\u00b8\u00b9\3\2\2\2\u00b9\u00ba"+
+		"\7\26\2\2\u00ba!\3\2\2\2\u00bb\u00bc\7\5\2\2\u00bc\u00bd\7\21\2\2\u00bd"+
+		"\u00c0\7\30\2\2\u00be\u00c1\5&\24\2\u00bf\u00c1\5:\36\2\u00c0\u00be\3"+
+		"\2\2\2\u00c0\u00bf\3\2\2\2\u00c1#\3\2\2\2\u00c2\u00c3\7\6\2\2\u00c3\u00c4"+
+		"\7\21\2\2\u00c4\u00c8\7\30\2\2\u00c5\u00c9\5&\24\2\u00c6\u00c9\5*\26\2"+
+		"\u00c7\u00c9\58\35\2\u00c8\u00c5\3\2\2\2\u00c8\u00c6\3\2\2\2\u00c8\u00c7"+
+		"\3\2\2\2\u00c9%\3\2\2\2\u00ca\u00cb\5(\25\2\u00cb\u00cc\5&\24\2\u00cc"+
+		"\u00cf\3\2\2\2\u00cd\u00cf\5(\25\2\u00ce\u00ca\3\2\2\2\u00ce\u00cd\3\2"+
+		"\2\2\u00cf\'\3\2\2\2\u00d0\u00d4\58\35\2\u00d1\u00d4\5*\26\2\u00d2\u00d4"+
+		"\7\21\2\2\u00d3\u00d0\3\2\2\2\u00d3\u00d1\3\2\2\2\u00d3\u00d2\3\2\2\2"+
+		"\u00d4\u00d5\3\2\2\2\u00d5\u00dd\7 \2\2\u00d6\u00de\58\35\2\u00d7\u00de"+
+		"\5*\26\2\u00d8\u00de\7\21\2\2\u00d9\u00da\7\33\2\2\u00da\u00db\5(\25\2"+
+		"\u00db\u00dc\7\34\2\2\u00dc\u00de\3\2\2\2\u00dd\u00d6\3\2\2\2\u00dd\u00d7"+
+		"\3\2\2\2\u00dd\u00d8\3\2\2\2\u00dd\u00d9\3\2\2\2\u00de\u00ee\3\2\2\2\u00df"+
+		"\u00e7\7 \2\2\u00e0\u00e8\58\35\2\u00e1\u00e8\5*\26\2\u00e2\u00e8\7\21"+
+		"\2\2\u00e3\u00e4\7\33\2\2\u00e4\u00e5\5(\25\2\u00e5\u00e6\7\34\2\2\u00e6"+
+		"\u00e8\3\2\2\2\u00e7\u00e0\3\2\2\2\u00e7\u00e1\3\2\2\2\u00e7\u00e2\3\2"+
+		"\2\2\u00e7\u00e3\3\2\2\2\u00e8\u00ee\3\2\2\2\u00e9\u00ea\7\33\2\2\u00ea"+
+		"\u00eb\5&\24\2\u00eb\u00ec\7\34\2\2\u00ec\u00ee\3\2\2\2\u00ed\u00d3\3"+
+		"\2\2\2\u00ed\u00df\3\2\2\2\u00ed\u00e9\3\2\2\2\u00ee)\3\2\2\2\u00ef\u00f4"+
+		"\7!\2\2\u00f0\u00f5\7\21\2\2\u00f1\u00f5\58\35\2\u00f2\u00f5\5*\26\2\u00f3"+
+		"\u00f5\7\"\2\2\u00f4\u00f0\3\2\2\2\u00f4\u00f1\3\2\2\2\u00f4\u00f2\3\2"+
+		"\2\2\u00f4\u00f3\3\2\2\2\u00f5\u00f9\3\2\2\2\u00f6\u00f8\5(\25\2\u00f7"+
+		"\u00f6\3\2\2\2\u00f8\u00fb\3\2\2\2\u00f9\u00f7\3\2\2\2\u00f9\u00fa\3\2"+
+		"\2\2\u00fa\u00fc\3\2\2\2\u00fb\u00f9\3\2\2\2\u00fc\u00fd\7\34\2\2\u00fd"+
+		"+\3\2\2\2\u00fe\u00ff\7\7\2\2\u00ff\u0103\7\30\2\2\u0100\u0104\5.\30\2"+
+		"\u0101\u0104\7\24\2\2\u0102\u0104\7\25\2\2\u0103\u0100\3\2\2\2\u0103\u0101"+
+		"\3\2\2\2\u0103\u0102\3\2\2\2\u0104\u0105\3\2\2\2\u0105\u0106\7\26\2\2"+
+		"\u0106-\3\2\2\2\u0107\u0108\5\60\31\2\u0108\u0109\5.\30\2\u0109\u010c"+
+		"\3\2\2\2\u010a\u010c\5\60\31\2\u010b\u0107\3\2\2\2\u010b\u010a\3\2\2\2"+
+		"\u010c/\3\2\2\2\u010d\u010e\t\3\2\2\u010e\u0116\7\37\2\2\u010f\u0117\7"+
+		"\24\2\2\u0110\u0117\7\25\2\2\u0111\u0117\7\21\2\2\u0112\u0113\7\33\2\2"+
+		"\u0113\u0114\5\60\31\2\u0114\u0115\7\34\2\2\u0115\u0117\3\2\2\2\u0116"+
+		"\u010f\3\2\2\2\u0116\u0110\3\2\2\2\u0116\u0111\3\2\2\2\u0116\u0112\3\2"+
+		"\2\2\u0117\u0127\3\2\2\2\u0118\u0120\7\37\2\2\u0119\u0121\7\24\2\2\u011a"+
+		"\u0121\7\25\2\2\u011b\u0121\7\21\2\2\u011c\u011d\7\33\2\2\u011d\u011e"+
+		"\5\60\31\2\u011e\u011f\7\34\2\2\u011f\u0121\3\2\2\2\u0120\u0119\3\2\2"+
+		"\2\u0120\u011a\3\2\2\2\u0120\u011b\3\2\2\2\u0120\u011c\3\2\2\2\u0121\u0127"+
+		"\3\2\2\2\u0122\u0123\7\33\2\2\u0123\u0124\5\60\31\2\u0124\u0125\7\34\2"+
+		"\2\u0125\u0127\3\2\2\2\u0126\u010d\3\2\2\2\u0126\u0118\3\2\2\2\u0126\u0122"+
+		"\3\2\2\2\u0127\61\3\2\2\2\u0128\u0129\7\b\2\2\u0129\u012a\7\21\2\2\u012a"+
+		"\u012b\7\30\2\2\u012b\u012c\7\33\2\2\u012c\u012d\58\35\2\u012d\u012e\7"+
+		"\36\2\2\u012e\u012f\58\35\2\u012f\u0130\7\34\2\2\u0130\63\3\2\2\2\u0131"+
+		"\u0132\7\t\2\2\u0132\u0133\7\21\2\2\u0133\u0134\7\30\2\2\u0134\u0135\7"+
+		"\33\2\2\u0135\u0136\58\35\2\u0136\u0137\7\36\2\2\u0137\u0138\58\35\2\u0138"+
+		"\u0139\7\36\2\2\u0139\u013a\58\35\2\u013a\u013b\7\34\2\2\u013b\65\3\2"+
+		"\2\2\u013c\u013d\7\n\2\2\u013d\u013e\7\21\2\2\u013e\u013f\7\30\2\2\u013f"+
+		"\u0140\7\33\2\2\u0140\u0141\58\35\2\u0141\u0142\7\36\2\2\u0142\u0143\5"+
+		"8\35\2\u0143\u0144\7\36\2\2\u0144\u0145\58\35\2\u0145\u0146\7\36\2\2\u0146"+
+		"\u0147\58\35\2\u0147\u0148\7\34\2\2\u0148\67\3\2\2\2\u0149\u014c\5:\36"+
+		"\2\u014a\u014c\5<\37\2\u014b\u0149\3\2\2\2\u014b\u014a\3\2\2\2\u014c9"+
+		"\3\2\2\2\u014d\u014e\7\22\2\2\u014e;\3\2\2\2\u014f\u0150\7\23\2\2\u0150"+
+		"=\3\2\2\2!BDKMV\\egw|\u0082\u0084\u0095\u009d\u00a5\u00b7\u00c0\u00c8"+
+		"\u00ce\u00d3\u00dd\u00e7\u00ed\u00f4\u00f9\u0103\u010b\u0116\u0120\u0126"+
+		"\u014b";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
