@@ -3,20 +3,31 @@ grammar Spook;
 program: main (NEWLINE | comment | classDecl | functionDecl)*;
 
 // Classes (Optional), Functions (Optional), Shader() {} (Needed)
-main: 'Shader {' (NEWLINE | space | declarations)* '}';
+main: 'Shader {' (NEWLINE | space | declarations | comment)* '}';
 
 // One or more declarations
 declarations: declaration declarations
     | declaration;
 
 // Int/float/vector, comments
-declaration: space* (comment | numberDecl | boolDecl);
+declaration: space* (numberDecl | boolDecl | objectDecl | objectFunctionCall);
 
 // Single-line comment
 comment: COMMENT_STRING;
 
 // Class
 classDecl: 'class' space variable space '{' (space | NEWLINE | numberDecl | functionDecl)* '}';
+
+// Object
+objectDecl: classType variable ASSIGN '(' objectArgs ')';
+objectArgs: objectArg objectArgs
+    | objectArg;
+objectArg: (variable | real_number | arithOperation) ','
+    | (variable | real_number | arithOperation);
+
+// Object function calls
+objectFunctionCall: (objectVariable'.'functionName ASSIGN '(' objectArgs ')'
+    | objectVariable'.'functionName '(' objectArgs ')');
 
 // Function
 functionDecl: returnType space variable '(' (dataTypeVariable)* ')' space '{' (space | NEWLINE | declaration)* '}';
@@ -36,8 +47,17 @@ vectorType: 'vector2'
     | 'vector3'
     | 'vector4';
 
+classType
+    : 'Circle'
+    | 'Rectangle'
+    | 'Triangle'
+    | 'Shape'
+    | 'Color';
+
 // Variable name
 variable: (LETTER | STRING | space | digit)+;
+objectVariable: variable;
+functionName: variable;
 
 // Integer, float and vector declaration
 numberDecl: (integerDecl
