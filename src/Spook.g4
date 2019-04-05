@@ -13,7 +13,7 @@ declarations: declaration declarations
 declaration: space* (comment | numberDecl | boolDecl);
 
 // Single-line comment
-comment: '#' (LETTER | STRING | SPACE | digit)*;
+comment: COMMENT_STRING;
 
 // Class
 classDecl: 'class' space variable space '{' (space | NEWLINE | numberDecl | functionDecl)* '}';
@@ -63,15 +63,15 @@ arithOperation: (real_number | math_function | variable) OPERATOR (real_number |
 math_function: MATH_FUNCTION (variable | real_number | math_function | UNIFORM) arithOperation* ')';
 
 // Boolean declaration
-boolDecl: dataTypeVariable ASSIGN (boolOperations | 'true' | 'false') SEMICOLON;
+boolDecl: dataTypeVariable ASSIGN (boolOperations | boolean) SEMICOLON;
 
 // Recursive boolean operations
 boolOperations: boolOperation boolOperations
     | boolOperation;
 
 // Boolean operations
-boolOperation: ('true' | 'false' | variable) BOOLOPERATOR ('true' | 'false' | variable | ('(' boolOperation ')'))
-    | BOOLOPERATOR ('true' | 'false' | variable | ('(' boolOperation ')'))
+boolOperation: (boolean | variable) BOOLOPERATOR (boolean | variable | ('(' boolOperation ')'))
+    | BOOLOPERATOR (boolean | variable | ('(' boolOperation ')'))
     | '(' boolOperation ')';
 
 // Vector declarations
@@ -95,6 +95,7 @@ space: SPACE;
 real_number: digit | float_digit;
 digit: DIGIT;
 float_digit: FLOAT_DIGIT;
+boolean: 'true' | 'false';
 
 // Helpers
 LETTER: [A-z];
@@ -126,3 +127,5 @@ MATH_FUNCTION: 'abs('
     | 'cos('
     | 'tan(';
 UNIFORM: 'Time';
+
+COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')*;
