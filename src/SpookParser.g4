@@ -11,7 +11,7 @@ declarations: declaration declarations
     | declaration;
 
 // Int/float/vector, comments
-declaration: (numberDecl | boolDecl | objectDecl | objectFunctionCall);
+declaration: (numberDecl | boolDecl | objectDecl | objectFunctionCall) SEMICOLON;
 
 // Single-line comment
 comment: COMMENT_STRING;
@@ -20,14 +20,13 @@ comment: COMMENT_STRING;
 classDecl: CLASS ID LEFT_BRACKET (numberDecl | functionDecl)* RIGHT_BRACKET;
 
 // Object
-objectDecl: classType ID ASSIGN LEFT_PAREN objectArgs RIGHT_PAREN;
-objectArgs: objectArg objectArgs
+objectDecl: classType ID ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+objectArgs: objectArg COMMA objectArgs
     | objectArg;
-objectArg: (ID | real_number | arithOperation) COMMA
-    | (ID | real_number | arithOperation);
+objectArg: (ID | real_number | arithOperation);
 
 // Object function calls
-objectFunctionCall: (objectVariable DOT functionName ASSIGN LEFT_PAREN objectArgs RIGHT_PAREN
+objectFunctionCall: (objectVariable DOT functionName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN
     | objectVariable DOT functionName LEFT_PAREN objectArgs RIGHT_PAREN);
 
 // Function
@@ -54,7 +53,7 @@ numberDecl: (integerDecl
     | floatDecl
     | vector2Decl
     | vector3Decl
-    | vector4Decl) SEMICOLON;
+    | vector4Decl);
 
 // Integer and float declarations
 integerDecl: INT ID ASSIGN (arithOperations | digit);
@@ -73,7 +72,7 @@ arithOperation: (real_number | math_function | ID) OPERATOR (real_number | math_
 math_function: MATH_FUNCTION (ID | real_number | math_function | UNIFORM) arithOperation* RIGHT_PAREN;
 
 // Boolean declaration
-boolDecl: BOOL ASSIGN (boolOperations | TRUE | FALSE) SEMICOLON;
+boolDecl: BOOL ASSIGN (boolOperations | TRUE | FALSE);
 
 // Recursive boolean operations
 boolOperations: boolOperation boolOperations
