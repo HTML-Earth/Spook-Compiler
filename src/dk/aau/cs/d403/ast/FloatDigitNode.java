@@ -1,10 +1,10 @@
 package dk.aau.cs.d403.ast;
 
-public class DigitNode extends RealNumberNode {
+public class FloatDigitNode extends RealNumberNode {
 
-    int numberValue;
+    float numberValue;
 
-    DigitNode(int value) {
+    FloatDigitNode(float value) {
         numberValue = value;
     }
 
@@ -13,7 +13,7 @@ public class DigitNode extends RealNumberNode {
         return "" + numberValue;
     }
 
-    public int getNumberValue() {
+    public float getNumberValue() {
         return numberValue;
     }
 }
