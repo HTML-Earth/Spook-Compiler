@@ -21,9 +21,7 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
             visitFunctionDecl(functionDecl);
         }
 
-        ProgramNode programNode = new ProgramNode(mainNode);
-
-        return programNode;
+        return new ProgramNode(mainNode);
     }
 
     @Override
@@ -32,20 +30,27 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
         ArrayList<VariableDeclarationNode> declarationNodes = new ArrayList<>();
 
         for (SpookParser.DeclarationsContext declarations : ctx.declarations()) {
-            declarationNodes.add((VariableDeclarationNode)visitDeclarations(declarations));
+            declarationNodes.addAll(visitAllDeclarations(declarations));
         }
 
-        MainNode mainNode = new MainNode(declarationNodes);
-
-        return mainNode;
+        return new MainNode(declarationNodes);
     }
 
-    @Override
-    public ASTnode visitDeclarations(SpookParser.DeclarationsContext ctx) {
-        VariableDeclarationNode varDecNode = (VariableDeclarationNode) visitDeclaration(ctx.declaration());
+    public ArrayList<VariableDeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
+        ArrayList<VariableDeclarationNode> declarationNodes = new ArrayList<>();
 
-        return varDecNode;
+        declarationNodes.add((VariableDeclarationNode)visitDeclaration(ctx.declaration()));
+
+        if (ctx.declarations() != null)
+            declarationNodes.addAll(visitAllDeclarations(ctx.declarations()));
+
+        return declarationNodes;
     }
+
+    //@Override
+    //public ASTnode visitDeclarations(SpookParser.DeclarationsContext ctx) {
+    //    return null;
+    //}
 
     @Override
     public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
