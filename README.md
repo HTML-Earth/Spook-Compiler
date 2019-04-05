@@ -1,1 +1,2 @@
-# P4
+# Spook
+An object-oriented shader language.
