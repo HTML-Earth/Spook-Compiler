@@ -1,11 +1,11 @@
 package dk.aau.cs.d403.ast;
 
-import dk.aau.cs.d403.parser.SpookBaseVisitor;
+import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
 
 import java.util.ArrayList;
 
-public class AstBuilder extends SpookBaseVisitor<ASTnode> {
+public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitProgram(SpookParser.ProgramContext ctx) {
         //Main
@@ -47,11 +47,6 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
         return declarationNodes;
     }
 
-    //@Override
-    //public ASTnode visitDeclarations(SpookParser.DeclarationsContext ctx) {
-    //    return null;
-    //}
-
     @Override
     public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
         if (ctx.numberDecl() != null)
@@ -81,21 +76,6 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
     }
 
     @Override
-    public ASTnode visitDataType(SpookParser.DataTypeContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitVectorType(SpookParser.VectorTypeContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitVariable(SpookParser.VariableContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
     public ASTnode visitNumberDecl(SpookParser.NumberDeclContext ctx) {
         if (ctx.integerDecl() != null)
             return visitIntegerDecl(ctx.integerDecl());
@@ -107,7 +87,7 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitIntegerDecl(SpookParser.IntegerDeclContext ctx) {
-        String varName = ctx.dataTypeVariable().variable().getText();
+        String varName = ctx.ID().getText();
         DigitNode digit = (DigitNode)visitDigit(ctx.digit());
         int integerValue = digit.getNumberValue();
         return new IntDeclarationNode(varName, integerValue);
@@ -115,7 +95,7 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFloatDecl(SpookParser.FloatDeclContext ctx) {
-        String varName = ctx.dataTypeVariable().variable().getText();
+        String varName = ctx.ID().getText();
         FloatDigitNode digit = (FloatDigitNode)visitFloat_digit(ctx.real_number().float_digit());
         float floatValue = digit.getNumberValue();
         return new FloatDeclarationNode(varName, floatValue);
@@ -148,22 +128,12 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
     }
 
     @Override
-    public ASTnode visitDataTypeVariable(SpookParser.DataTypeVariableContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
     public ASTnode visitArithOperation(SpookParser.ArithOperationContext ctx) {
         return visitChildren(ctx);
     }
 
     @Override
     public ASTnode visitMath_function(SpookParser.Math_functionContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitSpace(SpookParser.SpaceContext ctx) {
         return visitChildren(ctx);
     }
 
