@@ -108,18 +108,23 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitIntegerDecl(SpookParser.IntegerDeclContext ctx) {
         String varName = ctx.dataTypeVariable().variable().getText();
-        int integerValue = Integer.valueOf(ctx.digit().DIGIT().getSymbol().getText());
+        DigitNode digit = (DigitNode)visitDigit(ctx.digit());
+        int integerValue = digit.getNumberValue();
         return new IntDeclarationNode(varName, integerValue);
     }
 
     @Override
     public ASTnode visitFloatDecl(SpookParser.FloatDeclContext ctx) {
-        return new FloatDeclarationNode();
+        String varName = ctx.dataTypeVariable().variable().getText();
+        FloatDigitNode digit = (FloatDigitNode)visitFloat_digit(ctx.real_number().float_digit());
+        float floatValue = digit.getNumberValue();
+        return new FloatDeclarationNode(varName, floatValue);
     }
 
     @Override
     public ASTnode visitBoolDecl(SpookParser.BoolDeclContext ctx) {
-        return new BoolDeclarationNode();
+        return null;
+        //return new BoolDeclarationNode(ctx.dataTypeVariable().variable().getText(), false);
     }
 
     @Override
@@ -175,7 +180,7 @@ public class AstBuilder extends SpookBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFloat_digit(SpookParser.Float_digitContext ctx) {
-        System.out.println(ctx);
-        return visitChildren(ctx);
+        String numberString = ctx.FLOAT_DIGIT().getSymbol().getText();
+        return new FloatDigitNode(Float.valueOf(numberString));
     }
 }

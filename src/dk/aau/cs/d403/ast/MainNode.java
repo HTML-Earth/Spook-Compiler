@@ -16,7 +16,10 @@ public class MainNode implements ASTnode {
         sb.append("Shader {\n");
 
         for (VariableDeclarationNode varDec : declarationNodes)
-            sb.append(varDec.prettyPrint());
+        {
+            if (varDec != null)
+                sb.append(varDec.prettyPrint());
+        }
 
         sb.append("\n}");
 
