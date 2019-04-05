@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitProgram(SpookParser.ProgramContext ctx) {
-        //Main
+        //Main shader function
         MainNode mainNode = (MainNode)visitMain(ctx.main());
 
         //Class declarations
@@ -56,26 +56,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
-    public ASTnode visitComment(SpookParser.CommentContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitReturnType(SpookParser.ReturnTypeContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
     public ASTnode visitNumberDecl(SpookParser.NumberDeclContext ctx) {
         if (ctx.integerDecl() != null)
             return visitIntegerDecl(ctx.integerDecl());
@@ -105,41 +85,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitBoolDecl(SpookParser.BoolDeclContext ctx) {
         return null;
         //return new BoolDeclarationNode(ctx.dataTypeVariable().variable().getText(), false);
-    }
-
-    @Override
-    public ASTnode visitBoolOperation(SpookParser.BoolOperationContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitVector2Decl(SpookParser.Vector2DeclContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitVector3Decl(SpookParser.Vector3DeclContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitVector4Decl(SpookParser.Vector4DeclContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitArithOperation(SpookParser.ArithOperationContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitMath_function(SpookParser.Math_functionContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public ASTnode visitReal_number(SpookParser.Real_numberContext ctx) {
-        return visitChildren(ctx);
     }
 
     @Override

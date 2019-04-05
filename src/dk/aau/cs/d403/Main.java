@@ -16,11 +16,9 @@ public class Main {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/BasicShader.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
-            //ParseTree tree = parser.program();
-
             AstBuilder builder = new AstBuilder();
-
             ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
+
             System.out.println(ast.prettyPrint());
         }
         catch (IOException e) {
