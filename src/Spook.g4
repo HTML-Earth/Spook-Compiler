@@ -28,7 +28,7 @@ returnType: 'void'
 // Data types
 dataType: 'int'
     | 'float'
-    | 'boolean'
+    | 'bool'
     | vectorType;
 
 // Vector types
@@ -47,8 +47,8 @@ numberDecl: (integerDecl
     | vector4Decl) SEMICOLON;
 
 // Integer and float declarations
-integerDecl: dataTypeVariable ASSIGN (digit | variable);
-floatDecl: dataTypeVariable ASSIGN (arithOperations | real_number);
+integerDecl: dataTypeVariable ASSIGN (arithOperations | digit);
+floatDecl: dataTypeVariable ASSIGN (arithOperations | math_function | real_number);
 
 // Recursive arithmetic operations
 arithOperations: arithOperation arithOperations
@@ -57,7 +57,7 @@ arithOperations: arithOperation arithOperations
 // Arithmetic operations
 arithOperation: (real_number | math_function | variable) OPERATOR (real_number | math_function | variable | '(' arithOperation ')')
     | OPERATOR (real_number | math_function | variable | '(' arithOperation ')')
-    | '(' arithOperation ')'; // Paranteser skal måske ikke håndteres her
+    | '(' arithOperations ')'; // Paranteser skal måske ikke håndteres her
 
 // Mathematical functions
 math_function: MATH_FUNCTION (variable | real_number | math_function | UNIFORM) arithOperation* ')';
@@ -105,7 +105,7 @@ DIGIT: '0'
 FLOAT_DIGIT: DIGIT'.'DIGIT+;
 
 SEMICOLON: ';';
-NEWLINE: '\n';
+NEWLINE: '\n' | '\r' | '\t';
 DOUBLE_SLASH: '//';
 SPACE: ' ';
 ASSIGN: SPACE* '=' SPACE*;
