@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -131,11 +131,11 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArithOperation(SpookParser.ArithOperationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#math_function}.
+	 * Visit a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMath_function(SpookParser.Math_functionContext ctx);
+	T visitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#boolDecl}.
 	 * @param ctx the parse tree
@@ -173,11 +173,11 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVector4Decl(SpookParser.Vector4DeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#real_number}.
+	 * Visit a parse tree produced by {@link SpookParser#realNumber}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReal_number(SpookParser.Real_numberContext ctx);
+	T visitRealNumber(SpookParser.RealNumberContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#digit}.
 	 * @param ctx the parse tree
@@ -185,9 +185,9 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDigit(SpookParser.DigitContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#float_digit}.
+	 * Visit a parse tree produced by {@link SpookParser#floatDigit}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFloat_digit(SpookParser.Float_digitContext ctx);
+	T visitFloatDigit(SpookParser.FloatDigitContext ctx);
 }

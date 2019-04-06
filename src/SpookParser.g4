@@ -23,7 +23,7 @@ classDecl: CLASS ID LEFT_BRACKET (numberDecl | functionDecl)* RIGHT_BRACKET;
 objectDecl: classType ID ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
 objectArgs: objectArg COMMA objectArgs
     | objectArg;
-objectArg: (ID | real_number | arithOperation);
+objectArg: (ID | realNumber | arithOperation);
 
 // Object function calls
 objectFunctionCall: (objectVariable DOT functionName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN
@@ -57,19 +57,19 @@ numberDecl: (integerDecl
 
 // Integer and float declarations
 integerDecl: INT ID ASSIGN (arithOperations | digit);
-floatDecl: FLOAT ID ASSIGN (arithOperations | math_function | real_number);
+floatDecl: FLOAT ID ASSIGN (arithOperations | mathFunction | realNumber);
 
 // Recursive arithmetic operations
 arithOperations: arithOperation arithOperations
     | arithOperation;
 
 // Arithmetic operations
-arithOperation: (real_number | math_function | ID) OPERATOR (real_number | math_function | ID | LEFT_PAREN arithOperation RIGHT_PAREN)
-    | OPERATOR (real_number | math_function | ID | LEFT_PAREN arithOperation RIGHT_PAREN)
+arithOperation: (realNumber | mathFunction | ID) OPERATOR (realNumber | mathFunction | ID | LEFT_PAREN arithOperation RIGHT_PAREN)
+    | OPERATOR (realNumber | mathFunction | ID | LEFT_PAREN arithOperation RIGHT_PAREN)
     | LEFT_PAREN arithOperations RIGHT_PAREN; // Paranteser skal måske ikke håndteres her
 
 // Mathematical functions
-math_function: MATH_FUNCTION (ID | real_number | math_function | UNIFORM) arithOperation* RIGHT_PAREN;
+mathFunction: MATH_FUNCTION (ID | realNumber | mathFunction | UNIFORM) arithOperation* RIGHT_PAREN;
 
 // Boolean declaration
 boolDecl: BOOL ASSIGN (boolOperations | TRUE | FALSE);
@@ -84,9 +84,9 @@ boolOperation: (TRUE | FALSE | ID) BOOLOPERATOR (TRUE | FALSE | ID | (LEFT_PAREN
     | LEFT_PAREN boolOperation RIGHT_PAREN;
 
 // Vector declarations
-vector2Decl: VECTOR2 ID ASSIGN LEFT_PAREN real_number COMMA real_number RIGHT_PAREN;
-vector3Decl: VECTOR3 ID ASSIGN LEFT_PAREN real_number COMMA real_number COMMA real_number RIGHT_PAREN;
-vector4Decl: VECTOR4 ID ASSIGN LEFT_PAREN real_number COMMA real_number COMMA real_number COMMA real_number RIGHT_PAREN;
+vector2Decl: VECTOR2 ID ASSIGN LEFT_PAREN realNumber COMMA realNumber RIGHT_PAREN;
+vector3Decl: VECTOR3 ID ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
+vector4Decl: VECTOR4 ID ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
 
 /* Overvej det her. Ulempe: Vi kan ikke sørge for at der er PRÆCIST 2, 3 eller 4 arguments.
 Måske vi kan fange den error et andet sted i compileren.
@@ -95,6 +95,6 @@ vectorArgs: real_number space* ',' space* vectorArgs
 */
 
 // Numbers
-real_number: digit | float_digit;
+realNumber: digit | floatDigit;
 digit: DIGIT;
-float_digit: FLOAT_DIGIT;
+floatDigit: FLOAT_DIGIT;

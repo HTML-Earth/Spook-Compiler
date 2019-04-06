@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -256,13 +256,13 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMath_function(SpookParser.Math_functionContext ctx) { }
+	@Override public void enterMathFunction(SpookParser.MathFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMath_function(SpookParser.Math_functionContext ctx) { }
+	@Override public void exitMathFunction(SpookParser.MathFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -340,13 +340,13 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReal_number(SpookParser.Real_numberContext ctx) { }
+	@Override public void enterRealNumber(SpookParser.RealNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReal_number(SpookParser.Real_numberContext ctx) { }
+	@Override public void exitRealNumber(SpookParser.RealNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -364,13 +364,13 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFloat_digit(SpookParser.Float_digitContext ctx) { }
+	@Override public void enterFloatDigit(SpookParser.FloatDigitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFloat_digit(SpookParser.Float_digitContext ctx) { }
+	@Override public void exitFloatDigit(SpookParser.FloatDigitContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
