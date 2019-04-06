@@ -22,7 +22,7 @@ public class SpookParser extends Parser {
 		DIGIT=16, FLOAT_DIGIT=17, TRUE=18, FALSE=19, SEMICOLON=20, DOUBLE_SLASH=21, 
 		ASSIGN=22, LEFT_BRACKET=23, RIGHT_BRACKET=24, LEFT_PAREN=25, RIGHT_PAREN=26, 
 		DOT=27, COMMA=28, BOOLOPERATOR=29, OPERATOR=30, MATH_FUNCTION=31, UNIFORM=32, 
-		COMMENT_STRING=33, WS=34;
+		COMMENT_STRING=33, WS=34, BOOL_OPERATOR=35;
 	public static final int
 		RULE_program = 0, RULE_main = 1, RULE_declarations = 2, RULE_declaration = 3, 
 		RULE_comment = 4, RULE_classDecl = 5, RULE_objectDecl = 6, RULE_objectArgs = 7, 
@@ -61,7 +61,7 @@ public class SpookParser extends Parser {
 			"ID", "DIGIT", "FLOAT_DIGIT", "TRUE", "FALSE", "SEMICOLON", "DOUBLE_SLASH", 
 			"ASSIGN", "LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_PAREN", "RIGHT_PAREN", 
 			"DOT", "COMMA", "BOOLOPERATOR", "OPERATOR", "MATH_FUNCTION", "UNIFORM", 
-			"COMMENT_STRING", "WS"
+			"COMMENT_STRING", "WS", "BOOL_OPERATOR"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -1930,7 +1930,7 @@ public class SpookParser extends Parser {
 	}
 
 	public static class BoolOperationContext extends ParserRuleContext {
-		public TerminalNode BOOLOPERATOR() { return getToken(SpookParser.BOOLOPERATOR, 0); }
+		public TerminalNode BOOL_OPERATOR() { return getToken(SpookParser.BOOL_OPERATOR, 0); }
 		public List<TerminalNode> TRUE() { return getTokens(SpookParser.TRUE); }
 		public TerminalNode TRUE(int i) {
 			return getToken(SpookParser.TRUE, i);
@@ -1991,7 +1991,7 @@ public class SpookParser extends Parser {
 					consume();
 				}
 				setState(269);
-				match(BOOLOPERATOR);
+				match(BOOL_OPERATOR);
 				setState(277);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
@@ -2030,11 +2030,11 @@ public class SpookParser extends Parser {
 				}
 				}
 				break;
-			case BOOLOPERATOR:
+			case BOOL_OPERATOR:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(279);
-				match(BOOLOPERATOR);
+				match(BOOL_OPERATOR);
 				setState(287);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
@@ -2465,7 +2465,7 @@ public class SpookParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3$\u0153\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3%\u0153\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -2560,10 +2560,10 @@ public class SpookParser extends Parser {
 		"\3\2\2\2\u0106\u0105\3\2\2\2\u0107-\3\2\2\2\u0108\u0109\5\60\31\2\u0109"+
 		"\u010a\5.\30\2\u010a\u010d\3\2\2\2\u010b\u010d\5\60\31\2\u010c\u0108\3"+
 		"\2\2\2\u010c\u010b\3\2\2\2\u010d/\3\2\2\2\u010e\u010f\t\3\2\2\u010f\u0117"+
-		"\7\37\2\2\u0110\u0118\7\24\2\2\u0111\u0118\7\25\2\2\u0112\u0118\7\21\2"+
-		"\2\u0113\u0114\7\33\2\2\u0114\u0115\5\60\31\2\u0115\u0116\7\34\2\2\u0116"+
+		"\7%\2\2\u0110\u0118\7\24\2\2\u0111\u0118\7\25\2\2\u0112\u0118\7\21\2\2"+
+		"\u0113\u0114\7\33\2\2\u0114\u0115\5\60\31\2\u0115\u0116\7\34\2\2\u0116"+
 		"\u0118\3\2\2\2\u0117\u0110\3\2\2\2\u0117\u0111\3\2\2\2\u0117\u0112\3\2"+
-		"\2\2\u0117\u0113\3\2\2\2\u0118\u0128\3\2\2\2\u0119\u0121\7\37\2\2\u011a"+
+		"\2\2\u0117\u0113\3\2\2\2\u0118\u0128\3\2\2\2\u0119\u0121\7%\2\2\u011a"+
 		"\u0122\7\24\2\2\u011b\u0122\7\25\2\2\u011c\u0122\7\21\2\2\u011d\u011e"+
 		"\7\33\2\2\u011e\u011f\5\60\31\2\u011f\u0120\7\34\2\2\u0120\u0122\3\2\2"+
 		"\2\u0121\u011a\3\2\2\2\u0121\u011b\3\2\2\2\u0121\u011c\3\2\2\2\u0121\u011d"+
