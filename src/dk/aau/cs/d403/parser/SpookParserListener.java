@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -208,15 +208,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitArithOperation(SpookParser.ArithOperationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#math_function}.
+	 * Enter a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree
 	 */
-	void enterMath_function(SpookParser.Math_functionContext ctx);
+	void enterMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#math_function}.
+	 * Exit a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree
 	 */
-	void exitMath_function(SpookParser.Math_functionContext ctx);
+	void exitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolDecl}.
 	 * @param ctx the parse tree
@@ -278,15 +278,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitVector4Decl(SpookParser.Vector4DeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#real_number}.
+	 * Enter a parse tree produced by {@link SpookParser#realNumber}.
 	 * @param ctx the parse tree
 	 */
-	void enterReal_number(SpookParser.Real_numberContext ctx);
+	void enterRealNumber(SpookParser.RealNumberContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#real_number}.
+	 * Exit a parse tree produced by {@link SpookParser#realNumber}.
 	 * @param ctx the parse tree
 	 */
-	void exitReal_number(SpookParser.Real_numberContext ctx);
+	void exitRealNumber(SpookParser.RealNumberContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#digit}.
 	 * @param ctx the parse tree
@@ -298,13 +298,13 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitDigit(SpookParser.DigitContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#float_digit}.
+	 * Enter a parse tree produced by {@link SpookParser#floatDigit}.
 	 * @param ctx the parse tree
 	 */
-	void enterFloat_digit(SpookParser.Float_digitContext ctx);
+	void enterFloatDigit(SpookParser.FloatDigitContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#float_digit}.
+	 * Exit a parse tree produced by {@link SpookParser#floatDigit}.
 	 * @param ctx the parse tree
 	 */
-	void exitFloat_digit(SpookParser.Float_digitContext ctx);
+	void exitFloatDigit(SpookParser.FloatDigitContext ctx);
 }

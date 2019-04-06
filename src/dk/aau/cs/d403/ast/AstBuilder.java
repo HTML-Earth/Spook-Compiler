@@ -76,7 +76,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitFloatDecl(SpookParser.FloatDeclContext ctx) {
         String varName = ctx.ID().getText();
-        FloatDigitNode digit = (FloatDigitNode)visitFloat_digit(ctx.real_number().float_digit());
+        FloatDigitNode digit = (FloatDigitNode)visitFloatDigit(ctx.realNumber().floatDigit());
         float floatValue = digit.getNumberValue();
         return new FloatDeclarationNode(varName, floatValue);
     }
@@ -94,7 +94,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
-    public ASTnode visitFloat_digit(SpookParser.Float_digitContext ctx) {
+    public ASTnode visitFloatDigit(SpookParser.FloatDigitContext ctx) {
         String numberString = ctx.FLOAT_DIGIT().getSymbol().getText();
         return new FloatDigitNode(Float.valueOf(numberString));
     }
