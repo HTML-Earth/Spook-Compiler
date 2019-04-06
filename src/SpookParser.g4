@@ -79,8 +79,8 @@ boolOperations: boolOperation boolOperations
     | boolOperation;
 
 // Boolean operations
-boolOperation: (TRUE | FALSE | ID) BOOLOPERATOR (TRUE | FALSE | ID | (LEFT_PAREN boolOperation RIGHT_PAREN))
-    | BOOLOPERATOR (TRUE | FALSE | ID | (LEFT_PAREN boolOperation RIGHT_PAREN))
+boolOperation: (TRUE | FALSE | ID) BOOL_OPERATOR (TRUE | FALSE | ID | (LEFT_PAREN boolOperation RIGHT_PAREN))
+    | BOOL_OPERATOR (TRUE | FALSE | ID | (LEFT_PAREN boolOperation RIGHT_PAREN))
     | LEFT_PAREN boolOperation RIGHT_PAREN;
 
 // Vector declarations

@@ -42,7 +42,7 @@ RIGHT_PAREN: ')';
 DOT: '.';
 COMMA: ',';
 
-BOOLOPERATOR: ('=='
+BOOL_OPERATOR: ('=='
     | '||'
     | '&&'
     | '!='
