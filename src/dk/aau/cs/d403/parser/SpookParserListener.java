@@ -108,6 +108,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#colorFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#colorFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#functionDecl}.
 	 * @param ctx the parse tree
 	 */
@@ -247,6 +257,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRealNumber(SpookParser.RealNumberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#colorFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterColorFunction(SpookParser.ColorFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#colorFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitColorFunction(SpookParser.ColorFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#operator}.
 	 * @param ctx the parse tree

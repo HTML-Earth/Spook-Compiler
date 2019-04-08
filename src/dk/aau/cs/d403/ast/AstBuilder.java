@@ -56,8 +56,32 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
+    public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
+        if (ctx.classType().RECTANGLE() != null) {
+            String rectName = ctx.ID().getText();
+            float rectWidth = getRealNumberValue(ctx.objectArgs(0).objectArg().realNumber());
+            float rectHeight = getRealNumberValue(ctx.objectArgs(0).objectArgs().objectArg().realNumber());
+            float rectColorR = 0;
+            float rectColorG = 0;
+            float rectColorB = 0;
+            float rectColorA = 0;
+
+            return new RectangleDeclarationNode(rectName, rectWidth, rectHeight, rectColorR, rectColorG, rectColorB, rectColorA);
+        }
+        else if (ctx.classType().CIRCLE() != null)
+            return null;
+        else
+            throw new RuntimeException("Object is of unknown type");
+    }
+
+    @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
         return new FunctionDeclarationNode(ctx.ID(0).toString(), ctx.returnType().getText());
+    }
+
+    @Override
+    public ASTnode visitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx) {
+        return new ObjectFunctionCallNode();
     }
 
     @Override
@@ -66,8 +90,13 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return visitNumberDecl(ctx.numberDecl());
         else if (ctx.boolDecl() != null)
             return visitBoolDecl(ctx.boolDecl());
-        else
-            return null;
+        else if (ctx.objectDecl() != null)
+            return visitObjectDecl(ctx.objectDecl());
+        else if (ctx.objectFunctionCall() != null)
+            return visitObjectFunctionCall(ctx.objectFunctionCall());
+        else {
+            throw new RuntimeException("Declaration is of unknown type");
+        }
     }
 
     @Override
@@ -148,7 +177,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         else if (ctx.DIGIT() != null)
             value = Float.valueOf(ctx.DIGIT().getSymbol().getText());
         else
-            value = 0;
+            throw new RuntimeException("Real number is not a digit or float digit");
 
         return value;
     }
@@ -169,8 +198,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return false;
         }
         else {
-            System.out.println("unexpected bool literal value");
-            return false;
+            throw new RuntimeException("unexpected bool literal value");
         }
     }
 }
