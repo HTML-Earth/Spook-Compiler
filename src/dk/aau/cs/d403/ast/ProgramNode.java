@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class ProgramNode implements ASTnode{
 
-    MainNode mainNode;
-    ArrayList<ClassDeclarationNode> classDeclarationNodes;
-    ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
+    private MainNode mainNode;
+    private ArrayList<ClassDeclarationNode> classDeclarationNodes;
+    private ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
 
     public ProgramNode(MainNode mainNode, ArrayList<ClassDeclarationNode> classDeclarationNodes, ArrayList<FunctionDeclarationNode> functionDeclarationNodes) {
         this.mainNode = mainNode;

@@ -1,8 +1,8 @@
 package dk.aau.cs.d403.ast;
 
 public class BoolDeclarationNode extends VariableDeclarationNode {
-    String variableName;
-    boolean value;
+    private String variableName;
+    private boolean value;
 
     BoolDeclarationNode(String variableName, boolean value) {
         this.variableName = variableName;
@@ -10,6 +10,6 @@ public class BoolDeclarationNode extends VariableDeclarationNode {
     }
     @Override
     public String prettyPrint() {
-        return null;
+        return "bool " + variableName + " = " + value + ";";
     }
 }

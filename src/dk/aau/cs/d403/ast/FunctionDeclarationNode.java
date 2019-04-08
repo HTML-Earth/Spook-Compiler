@@ -1,8 +1,8 @@
 package dk.aau.cs.d403.ast;
 
 public class FunctionDeclarationNode implements ASTnode {
-    String returnType;
-    String functionName;
+    private String returnType;
+    private String functionName;
 
     public FunctionDeclarationNode(String functionName, String returnType) {
         this.functionName = functionName;
