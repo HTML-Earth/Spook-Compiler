@@ -8,10 +8,14 @@ Shader {
     float jumpHeight   = 150;
 
     float xPos = 150;
+
+    int test = 4;
+    vector2 two = (0.1, 2);
+    vector3 three = (323.0, 2.0003, 12345);
 }
 
-class CustomShape extends Shape {
-    int sides = 4;
+class CustomShape {
+    int sides = 4
 }
 
 float GiveMeTen(int irrelevant) {

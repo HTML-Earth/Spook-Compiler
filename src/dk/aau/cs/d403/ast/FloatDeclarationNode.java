@@ -11,6 +11,6 @@ public class FloatDeclarationNode extends VariableDeclarationNode {
 
     @Override
     public String prettyPrint() {
-        return null;
+        return "float " + variableName + " = " + value + ";\n";
     }
 }
