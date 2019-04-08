@@ -15,7 +15,7 @@ Shader {
 }
 
 class CustomShape {
-    int sides = 4
+    int sides = 4;
 }
 
 float GiveMeTen(int irrelevant) {
