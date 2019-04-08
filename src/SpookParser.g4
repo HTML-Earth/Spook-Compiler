@@ -15,7 +15,7 @@ declarations
     : declaration declarations
     | declaration;
 
-// Int/float/vector, comments
+// Int/float/vector, booleans, object declarations and object function calls
 declaration
     : (numberDecl
     | boolDecl
@@ -28,7 +28,7 @@ comment
 
 /* Class declaration */
 classDecl
-    : CLASS ID LEFT_BRACKET (numberDecl | functionDecl)* RIGHT_BRACKET;
+    : CLASS ID ((EXTENDS | IMPLEMENTS) classType)? LEFT_BRACKET declarations? functionDecl* RIGHT_BRACKET;
 
 /* Object */
 objectDecl
@@ -44,12 +44,12 @@ objectArg
 // Object function calls
 objectFunctionCall
     : (objectVariable DOT functionName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN
-    | objectVariable DOT functionName LEFT_PAREN objectArgs RIGHT_PAREN);
+    | objectVariable DOT functionName LEFT_PAREN objectArgs* RIGHT_PAREN);
 
 
 /* Function declaration */
 functionDecl
-    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET (declaration)* RIGHT_BRACKET;
+    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
 
 
 /* Integer, float and vector declaration */
