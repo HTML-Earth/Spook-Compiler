@@ -17,6 +17,6 @@ public class Vector4DeclarationNode extends VariableDeclarationNode {
 
     @Override
     public String prettyPrint() {
-        return "vector4 " + variableName + " = (" + value0 + ", " + value1 + ", " + value2 + ", " + value3 + ");\n";
+        return "vector4 " + variableName + " = (" + value0 + ", " + value1 + ", " + value2 + ", " + value3 + ");";
     }
 }

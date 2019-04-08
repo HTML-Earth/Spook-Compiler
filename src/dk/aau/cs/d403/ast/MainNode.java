@@ -13,12 +13,14 @@ public class MainNode implements ASTnode {
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Shader {\n");
+        sb.append("Shader {");
 
         for (VariableDeclarationNode varDec : declarationNodes)
         {
-            if (varDec != null)
+            if (varDec != null) {
+                sb.append("\n\t");
                 sb.append(varDec.prettyPrint());
+            }
         }
 
         sb.append("\n}");
