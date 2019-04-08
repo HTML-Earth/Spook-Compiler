@@ -72,7 +72,7 @@ arithOperation: (realNumber | mathFunction | ID) OPERATOR (realNumber | mathFunc
 mathFunction: MATH_FUNCTION (ID | realNumber | mathFunction | UNIFORM) arithOperation* RIGHT_PAREN;
 
 // Boolean declaration
-boolDecl: BOOL ASSIGN (boolOperations | TRUE | FALSE);
+boolDecl: BOOL ID ASSIGN (boolOperations | TRUE | FALSE);
 
 // Recursive boolean operations
 boolOperations: boolOperation boolOperations
