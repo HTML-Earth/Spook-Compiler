@@ -9,6 +9,10 @@ public class MainNode implements ASTnode {
         this.declarationNodes = declarationNodes;
     }
 
+    public ArrayList<VariableDeclarationNode> getDeclarationNodes() {
+        return declarationNodes;
+    }
+
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();

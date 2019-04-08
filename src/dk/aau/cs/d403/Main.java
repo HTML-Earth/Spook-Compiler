@@ -2,6 +2,7 @@ package dk.aau.cs.d403;
 
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.ProgramNode;
+import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import org.antlr.v4.runtime.CharStreams;
@@ -16,10 +17,16 @@ public class Main {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/TestShader.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
+            System.out.println("Building AST...\n");
             AstBuilder builder = new AstBuilder();
             ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
 
+            System.out.println("Pretty Print:");
             System.out.println(ast.prettyPrint());
+
+            System.out.println("Generated GLSL:");
+            CodeGenerator codeGenerator = new CodeGenerator();
+            System.out.println(codeGenerator.GenerateGLSL(ast));
         }
         catch (IOException e) {
             e.printStackTrace();
