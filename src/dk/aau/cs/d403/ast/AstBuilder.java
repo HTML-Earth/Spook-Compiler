@@ -89,7 +89,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitIntegerDecl(SpookParser.IntegerDeclContext ctx) {
         String varName = ctx.ID().getText();
-        int integerValue = Integer.valueOf(ctx.DIGIT().getSymbol().getText());
+        int integerValue = getNaturalNumberValue(ctx.naturalNumber());
+
         return new IntDeclarationNode(varName, integerValue);
     }
 
@@ -145,8 +146,23 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         if (ctx.FLOAT_DIGIT() != null)
             value = Float.valueOf(ctx.FLOAT_DIGIT().getSymbol().getText());
-        else if (ctx.DIGIT() != null)
-            value = Float.valueOf(ctx.DIGIT().getSymbol().getText());
+        else if (ctx.DIGIT_NON() != null)
+            value = Integer.valueOf(ctx.DIGIT_NON().getSymbol().getText());
+        else if (ctx.DIGIT_NEGATIVE() != null)
+            value = Integer.valueOf(ctx.DIGIT_NEGATIVE().getSymbol().getText());
+        else
+            value = 0;
+
+        return value;
+    }
+
+    private int getNaturalNumberValue(SpookParser.NaturalNumberContext ctx) {
+        int value;
+
+        if (ctx.DIGIT_NON() != null)
+            value = Integer.valueOf(ctx.DIGIT_NON().getSymbol().getText());
+        else if (ctx.DIGIT_NEGATIVE() != null)
+            value = Integer.valueOf(ctx.DIGIT_NEGATIVE().getSymbol().getText());
         else
             value = 0;
 
