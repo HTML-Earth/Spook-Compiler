@@ -83,6 +83,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolDecl(SpookParser.BoolDeclContext ctx) {
+        String varName = ctx.ID().getText();
+        BooleanNode bool;
         return null;
         //return new BoolDeclarationNode(ctx.dataTypeVariable().variable().getText(), false);
     }
