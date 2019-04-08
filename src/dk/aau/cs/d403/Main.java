@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/TestShader.spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ShapeTest.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             System.out.println("Building AST...\n");
