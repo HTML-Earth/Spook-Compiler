@@ -1,7 +1,5 @@
 package dk.aau.cs.d403.ast;
 
-import com.sun.jdi.FloatValue;
-import com.sun.jdi.IntegerValue;
 import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
