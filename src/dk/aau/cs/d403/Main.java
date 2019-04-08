@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/BasicShader.spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/TestShader.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder builder = new AstBuilder();

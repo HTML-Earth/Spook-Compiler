@@ -10,18 +10,20 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitProgram(SpookParser.ProgramContext ctx) {
         //Main shader function
         MainNode mainNode = (MainNode)visitMain(ctx.main());
+        ArrayList<ClassDeclarationNode> classDeclarationNodes = new ArrayList<>();
+        ArrayList<FunctionDeclarationNode> functionDeclarationNodes = new ArrayList<>();
 
         //Class declarations
         for (SpookParser.ClassDeclContext classDecl : ctx.classDecl()) {
-            visitClassDecl(classDecl);
+            classDeclarationNodes.add((ClassDeclarationNode)visitClassDecl(classDecl));
         }
 
         //Function declarations
         for (SpookParser.FunctionDeclContext functionDecl : ctx.functionDecl()) {
-            visitFunctionDecl(functionDecl);
+            functionDeclarationNodes.add((FunctionDeclarationNode)visitFunctionDecl(functionDecl));
         }
 
-        return new ProgramNode(mainNode);
+        return new ProgramNode(mainNode, classDeclarationNodes, functionDeclarationNodes);
     }
 
     @Override
@@ -48,11 +50,23 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
+    public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
+        return new ClassDeclarationNode(ctx.ID().getText());
+    }
+
+    @Override
+    public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
+        return new FunctionDeclarationNode(ctx.ID().getText(), ctx.returnType().getText());
+    }
+
+    @Override
     public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
         if (ctx.numberDecl() != null)
             return visitNumberDecl(ctx.numberDecl());
-        else
+        else if (ctx.boolDecl() != null)
             return visitBoolDecl(ctx.boolDecl());
+        else
+            return null;
     }
 
     @Override
@@ -61,6 +75,12 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return visitIntegerDecl(ctx.integerDecl());
         else if (ctx.floatDecl() != null)
             return visitFloatDecl(ctx.floatDecl());
+        else if (ctx.vector2Decl() != null)
+            return visitVector2Decl(ctx.vector2Decl());
+        else if (ctx.vector3Decl() != null)
+            return visitVector3Decl(ctx.vector3Decl());
+        else if (ctx.vector4Decl() != null)
+            return visitVector4Decl(ctx.vector4Decl());
         else
             return null;
     }
@@ -76,17 +96,91 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitFloatDecl(SpookParser.FloatDeclContext ctx) {
         String varName = ctx.ID().getText();
-        FloatDigitNode digit = (FloatDigitNode)visitFloatDigit(ctx.realNumber().floatDigit());
-        float floatValue = digit.getNumberValue();
-        return new FloatDeclarationNode(varName, floatValue);
+        if (ctx.realNumber().floatDigit() != null) {
+            FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber().floatDigit());
+            return new FloatDeclarationNode(varName, floatDigit.getNumberValue());
+        }
+        else if (ctx.realNumber().digit() != null) {
+            DigitNode digit = (DigitNode) visitDigit(ctx.realNumber().digit());
+            return new FloatDeclarationNode(varName, digit.getNumberValue());
+        }
+        else
+            return new FloatDeclarationNode(varName, -1);
+    }
+
+    @Override
+    public ASTnode visitVector2Decl(SpookParser.Vector2DeclContext ctx) {
+        String varName = ctx.ID().getText();
+
+        float[] values = new float[2];
+
+        for (int i = 0; i < 2; i++) {
+            if (ctx.realNumber(i).floatDigit() != null) {
+                FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber(i).floatDigit());
+                values[i] = floatDigit.getNumberValue();
+            }
+            else if (ctx.realNumber(i).digit() != null) {
+                DigitNode digit = (DigitNode) visitDigit(ctx.realNumber(i).digit());
+                values[i] = digit.getNumberValue();
+            }
+        }
+
+        return new Vector2DeclarationNode(varName, values[0], values[1]);
+    }
+
+    @Override
+    public ASTnode visitVector3Decl(SpookParser.Vector3DeclContext ctx) {
+        String varName = ctx.ID().getText();
+
+        float[] values = new float[3];
+
+        for (int i = 0; i < 3; i++) {
+            if (ctx.realNumber(i).floatDigit() != null) {
+                FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber(i).floatDigit());
+                values[i] = floatDigit.getNumberValue();
+            }
+            else if (ctx.realNumber(i).digit() != null) {
+                DigitNode digit = (DigitNode) visitDigit(ctx.realNumber(i).digit());
+                values[i] = digit.getNumberValue();
+            }
+        }
+
+        return new Vector3DeclarationNode(varName, values[0], values[1], values[2]);
+    }
+
+    @Override
+    public ASTnode visitVector4Decl(SpookParser.Vector4DeclContext ctx) {
+        String varName = ctx.ID().getText();
+
+        float[] values = new float[4];
+
+        for (int i = 0; i < 4; i++) {
+            if (ctx.realNumber(i).floatDigit() != null) {
+                FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber(i).floatDigit());
+                values[i] = floatDigit.getNumberValue();
+            }
+            else if (ctx.realNumber(i).digit() != null) {
+                DigitNode digit = (DigitNode) visitDigit(ctx.realNumber(i).digit());
+                values[i] = digit.getNumberValue();
+            }
+        }
+
+        return new Vector4DeclarationNode(varName, values[0], values[1], values[2], values[3]);
     }
 
     @Override
     public ASTnode visitBoolDecl(SpookParser.BoolDeclContext ctx) {
         String varName = ctx.ID().getText();
-        BooleanNode bool;
-        return null;
-        //return new BoolDeclarationNode(ctx.dataTypeVariable().variable().getText(), false);
+
+        if (ctx.TRUE() != null) {
+            return new BoolDeclarationNode(varName, true);
+        }
+        else if (ctx.FALSE() != null) {
+            return new BoolDeclarationNode(varName, false);
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
