@@ -99,7 +99,7 @@ vectorArgs: real_number space* ',' space* vectorArgs
 
 /* Boolean declaration */
 boolDecl
-    : BOOL ASSIGN (boolOperations | BOOL_LITERAL);
+    : BOOL ID ASSIGN (boolOperations | BOOL_LITERAL);
 
 // Recursive boolean operations
 boolOperations
