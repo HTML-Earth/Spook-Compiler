@@ -39,7 +39,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return new MainNode(declarationNodes);
     }
 
-    public ArrayList<VariableDeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
+    private ArrayList<VariableDeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
         ArrayList<VariableDeclarationNode> declarationNodes = new ArrayList<>();
 
         declarationNodes.add((VariableDeclarationNode)visitDeclaration(ctx.declaration()));
@@ -140,7 +140,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return new Vector4DeclarationNode(varName, values[0], values[1], values[2], values[3]);
     }
 
-    float getRealNumberValue(SpookParser.RealNumberContext ctx) {
+    private float getRealNumberValue(SpookParser.RealNumberContext ctx) {
         float value;
 
         if (ctx.FLOAT_DIGIT() != null)
@@ -161,7 +161,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return new BoolDeclarationNode(varName, value);
     }
 
-    boolean getBoolLiteralValue(TerminalNode boolLiteral) {
+    private boolean getBoolLiteralValue(TerminalNode boolLiteral) {
         if (boolLiteral.toString().equals("true")) {
             return true;
         }
