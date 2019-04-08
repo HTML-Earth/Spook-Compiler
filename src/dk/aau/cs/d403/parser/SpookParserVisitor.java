@@ -71,6 +71,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#colorFunctionCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#functionDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -154,6 +160,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRealNumber(SpookParser.RealNumberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#colorFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorFunction(SpookParser.ColorFunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#operator}.
 	 * @param ctx the parse tree
