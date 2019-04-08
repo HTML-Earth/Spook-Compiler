@@ -19,6 +19,5 @@ class CustomShape {
 }
 
 float GiveMeTen(int irrelevant) {
-    #function comment
     float result = 10;
 }

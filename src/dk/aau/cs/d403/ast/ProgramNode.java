@@ -20,13 +20,13 @@ public class ProgramNode implements ASTnode{
 
         sb.append(mainNode.prettyPrint());
 
-        sb.append("\n");
+        sb.append("\n\n");
 
         for (ClassDeclarationNode classDec : classDeclarationNodes) {
             sb.append(classDec.prettyPrint());
         }
 
-        sb.append("\n");
+        sb.append("\n\n");
 
         for (FunctionDeclarationNode funcDec : functionDeclarationNodes) {
             sb.append(funcDec.prettyPrint());
