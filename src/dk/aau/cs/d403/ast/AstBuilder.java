@@ -1,7 +1,10 @@
 package dk.aau.cs.d403.ast;
 
+import com.sun.jdi.FloatValue;
+import com.sun.jdi.IntegerValue;
 import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 
@@ -56,7 +59,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
-        return new FunctionDeclarationNode(ctx.ID().getText(), ctx.returnType().getText());
+        return new FunctionDeclarationNode(ctx.ID(0).toString(), ctx.returnType().getText());
     }
 
     @Override
@@ -88,24 +91,16 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitIntegerDecl(SpookParser.IntegerDeclContext ctx) {
         String varName = ctx.ID().getText();
-        DigitNode digit = (DigitNode)visitDigit(ctx.digit());
-        int integerValue = digit.getNumberValue();
+        int integerValue = Integer.valueOf(ctx.DIGIT().getSymbol().getText());
         return new IntDeclarationNode(varName, integerValue);
     }
 
     @Override
     public ASTnode visitFloatDecl(SpookParser.FloatDeclContext ctx) {
         String varName = ctx.ID().getText();
-        if (ctx.realNumber().floatDigit() != null) {
-            FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber().floatDigit());
-            return new FloatDeclarationNode(varName, floatDigit.getNumberValue());
-        }
-        else if (ctx.realNumber().digit() != null) {
-            DigitNode digit = (DigitNode) visitDigit(ctx.realNumber().digit());
-            return new FloatDeclarationNode(varName, digit.getNumberValue());
-        }
-        else
-            return new FloatDeclarationNode(varName, -1);
+        float value = getRealNumberValue(ctx.realNumber());
+
+        return new FloatDeclarationNode(varName, value);
     }
 
     @Override
@@ -115,14 +110,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         float[] values = new float[2];
 
         for (int i = 0; i < 2; i++) {
-            if (ctx.realNumber(i).floatDigit() != null) {
-                FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber(i).floatDigit());
-                values[i] = floatDigit.getNumberValue();
-            }
-            else if (ctx.realNumber(i).digit() != null) {
-                DigitNode digit = (DigitNode) visitDigit(ctx.realNumber(i).digit());
-                values[i] = digit.getNumberValue();
-            }
+            values[i] = getRealNumberValue(ctx.realNumber(i));
         }
 
         return new Vector2DeclarationNode(varName, values[0], values[1]);
@@ -135,14 +123,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         float[] values = new float[3];
 
         for (int i = 0; i < 3; i++) {
-            if (ctx.realNumber(i).floatDigit() != null) {
-                FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber(i).floatDigit());
-                values[i] = floatDigit.getNumberValue();
-            }
-            else if (ctx.realNumber(i).digit() != null) {
-                DigitNode digit = (DigitNode) visitDigit(ctx.realNumber(i).digit());
-                values[i] = digit.getNumberValue();
-            }
+            values[i] = getRealNumberValue(ctx.realNumber(i));
         }
 
         return new Vector3DeclarationNode(varName, values[0], values[1], values[2]);
@@ -155,43 +136,43 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         float[] values = new float[4];
 
         for (int i = 0; i < 4; i++) {
-            if (ctx.realNumber(i).floatDigit() != null) {
-                FloatDigitNode floatDigit = (FloatDigitNode)visitFloatDigit(ctx.realNumber(i).floatDigit());
-                values[i] = floatDigit.getNumberValue();
-            }
-            else if (ctx.realNumber(i).digit() != null) {
-                DigitNode digit = (DigitNode) visitDigit(ctx.realNumber(i).digit());
-                values[i] = digit.getNumberValue();
-            }
+            values[i] = getRealNumberValue(ctx.realNumber(i));
         }
 
         return new Vector4DeclarationNode(varName, values[0], values[1], values[2], values[3]);
     }
 
+    float getRealNumberValue(SpookParser.RealNumberContext ctx) {
+        float value;
+
+        if (ctx.FLOAT_DIGIT() != null)
+            value = Float.valueOf(ctx.FLOAT_DIGIT().getSymbol().getText());
+        else if (ctx.DIGIT() != null)
+            value = Float.valueOf(ctx.DIGIT().getSymbol().getText());
+        else
+            value = 0;
+
+        return value;
+    }
+
     @Override
     public ASTnode visitBoolDecl(SpookParser.BoolDeclContext ctx) {
         String varName = ctx.ID().getText();
+        boolean value = getBoolLiteralValue(ctx.BOOL_LITERAL());
 
-        if (ctx.TRUE() != null) {
-            return new BoolDeclarationNode(varName, true);
+        return new BoolDeclarationNode(varName, value);
+    }
+
+    boolean getBoolLiteralValue(TerminalNode boolLiteral) {
+        if (boolLiteral.toString().equals("true")) {
+            return true;
         }
-        else if (ctx.FALSE() != null) {
-            return new BoolDeclarationNode(varName, false);
+        else if (boolLiteral.toString().equals("false")) {
+            return false;
         }
         else {
-            return null;
+            System.out.println("unexpected bool literal value");
+            return false;
         }
-    }
-
-    @Override
-    public ASTnode visitDigit(SpookParser.DigitContext ctx) {
-        String numberString = ctx.DIGIT().getSymbol().getText();
-        return new DigitNode(Integer.valueOf(numberString));
-    }
-
-    @Override
-    public ASTnode visitFloatDigit(SpookParser.FloatDigitContext ctx) {
-        String numberString = ctx.FLOAT_DIGIT().getSymbol().getText();
-        return new FloatDigitNode(Float.valueOf(numberString));
     }
 }

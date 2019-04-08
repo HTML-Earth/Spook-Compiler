@@ -77,30 +77,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionDecl(SpookParser.FunctionDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#returnType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReturnType(SpookParser.ReturnTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#classType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitClassType(SpookParser.ClassTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#objectVariable}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitObjectVariable(SpookParser.ObjectVariableContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#functionName}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionName(SpookParser.FunctionNameContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#numberDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -137,24 +113,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#boolDecl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolDecl(SpookParser.BoolDeclContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#boolOperations}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolOperations(SpookParser.BoolOperationsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#boolOperation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolOperation(SpookParser.BoolOperationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#vector2Decl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -173,21 +131,75 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVector4Decl(SpookParser.Vector4DeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#boolDecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolDecl(SpookParser.BoolDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#boolOperations}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolOperations(SpookParser.BoolOperationsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#boolOperation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolOperation(SpookParser.BoolOperationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#realNumber}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitRealNumber(SpookParser.RealNumberContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#digit}.
+	 * Visit a parse tree produced by {@link SpookParser#operator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDigit(SpookParser.DigitContext ctx);
+	T visitOperator(SpookParser.OperatorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#floatDigit}.
+	 * Visit a parse tree produced by {@link SpookParser#boolOperator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFloatDigit(SpookParser.FloatDigitContext ctx);
+	T visitBoolOperator(SpookParser.BoolOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#function}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction(SpookParser.FunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#returnType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnType(SpookParser.ReturnTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#classType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitClassType(SpookParser.ClassTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#dataType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDataType(SpookParser.DataTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#objectVariable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectVariable(SpookParser.ObjectVariableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#functionName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionName(SpookParser.FunctionNameContext ctx);
 }
