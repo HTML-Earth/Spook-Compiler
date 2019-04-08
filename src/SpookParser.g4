@@ -67,7 +67,7 @@ numberDecl
 
 // Integer and float declarations
 integerDecl
-    : INT ID ASSIGN (arithOperations | mathFunction | naturalNumber);
+    : INT ID ASSIGN (arithOperations | mathFunction | DIGIT_LITERAL);
 floatDecl
     : FLOAT ID ASSIGN (arithOperations | mathFunction | realNumber);
 
@@ -119,8 +119,7 @@ boolOperation
 
 
 // Numbers
-realNumber: DIGIT_NON | DIGIT_NEGATIVE | FLOAT_DIGIT;
-naturalNumber: DIGIT_NON | DIGIT_NEGATIVE;
+realNumber: DIGIT_LITERAL | FLOAT_DIGIT;
 
 // Pre-defined colors
 colorFunction

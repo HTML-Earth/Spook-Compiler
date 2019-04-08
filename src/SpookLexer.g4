@@ -36,9 +36,10 @@ ELSE: 'else';
 
 // Numbers and bool
 DIGIT_NON: DIGIT;
-DIGIT_NEGATIVE: DIGIT_NEGATIVE_RULE;
+DIGIT_LITERAL: DIGIT | DIGIT_NEGATIVE;
 
-FLOAT_DIGIT: DIGIT'.'DIGIT+;
+FLOAT_DIGIT
+    : DIGIT'.'DIGIT+;
 
 BOOL_LITERAL
     : 'true'
@@ -84,7 +85,7 @@ fragment LETTER: [A-z];
 
 fragment DIGIT: '0'
     | '1'..'9' '0'..'9'*;
-fragment DIGIT_NEGATIVE_RULE: '(-'('1'..'9') ('0'..'9')*')';
+fragment DIGIT_NEGATIVE: '(-'('1'..'9') ('0'..'9')*')';
 
 // MISC
 COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')*;
