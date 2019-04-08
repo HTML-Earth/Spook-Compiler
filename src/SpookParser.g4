@@ -39,12 +39,17 @@ objectArgs
 objectArg
     : ID
     | realNumber
-    | arithOperation;
+    | arithOperation
+    | colorFunctionCall;
 
 // Object function calls
 objectFunctionCall
-    : (objectVariable DOT functionName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN
+    : (objectVariable DOT functionName ASSIGN (objectArg? | LEFT_PAREN objectArgs* RIGHT_PAREN)
     | objectVariable DOT functionName LEFT_PAREN objectArgs* RIGHT_PAREN);
+
+// Color function call
+colorFunctionCall
+    : COLOR DOT colorFunction;
 
 
 /* Function declaration */
@@ -115,6 +120,14 @@ boolOperation
 
 // Numbers
 realNumber: DIGIT | FLOAT_DIGIT;
+
+// Pre-defined colors
+colorFunction
+    : BLACK
+    | WHITE
+    | RED
+    | GREEN
+    | BLUE;
 
 // Arithmetic operators
 operator

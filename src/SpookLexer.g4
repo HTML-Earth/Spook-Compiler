@@ -18,6 +18,13 @@ TRIANGLE: 'Triangle';
 SHAPE: 'Shape';
 COLOR: 'Color';
 
+// Pre-defined colors
+BLACK: 'Black';
+WHITE: 'White';
+RED: 'Red';
+GREEN: 'Green';
+BLUE: 'Blue';
+
 // Keywords
 MAIN: 'Shader';
 CLASS: 'class';
@@ -72,7 +79,7 @@ TAN: 'tan(';
 UNIFORM: 'Time';
 
 // Identifier
-ID: LETTER+;
+ID: (LETTER | DIGIT)+;
 fragment LETTER: [A-z];
 
 // MISC
