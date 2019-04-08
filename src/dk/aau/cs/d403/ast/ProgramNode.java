@@ -14,6 +14,18 @@ public class ProgramNode implements ASTnode{
         this.functionDeclarationNodes = functionDeclarationNodes;
     }
 
+    public MainNode getMainNode() {
+        return mainNode;
+    }
+
+    public ArrayList<ClassDeclarationNode> getClassDeclarationNodes() {
+        return classDeclarationNodes;
+    }
+
+    public ArrayList<FunctionDeclarationNode> getFunctionDeclarationNodes() {
+        return functionDeclarationNodes;
+    }
+
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
@@ -31,6 +43,8 @@ public class ProgramNode implements ASTnode{
         for (FunctionDeclarationNode funcDec : functionDeclarationNodes) {
             sb.append(funcDec.prettyPrint());
         }
+
+        sb.append("\n");
 
         return sb.toString();
     }
