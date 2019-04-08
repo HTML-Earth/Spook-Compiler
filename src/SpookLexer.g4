@@ -35,8 +35,8 @@ IF: 'if';
 ELSE: 'else';
 
 // Numbers and bool
-DIGIT_NON: DIGIT;
-DIGIT_LITERAL: DIGIT | DIGIT_NEGATIVE;
+DIGIT: DIGIT_RULE;
+DIGIT_NEGATIVE: DIGIT_NEGATIVE_RULE;
 
 FLOAT_DIGIT
     : DIGIT'.'DIGIT+;
@@ -78,14 +78,14 @@ TAN: 'tan(';
 UNIFORM: 'Time';
 
 // Identifier - chars and non-negative digits
-ID: (LETTER | DIGIT_NON)+;
+ID: (LETTER | DIGIT)+;
 
 // Fragment rules
 fragment LETTER: [A-z];
 
-fragment DIGIT: '0'
+fragment DIGIT_RULE: '0'
     | '1'..'9' '0'..'9'*;
-fragment DIGIT_NEGATIVE: '(-'('1'..'9') ('0'..'9')*')';
+fragment DIGIT_NEGATIVE_RULE: '(-'('1'..'9') ('0'..'9')*')';
 
 // MISC
 COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')*;

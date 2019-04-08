@@ -118,7 +118,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitIntegerDecl(SpookParser.IntegerDeclContext ctx) {
         String varName = ctx.ID().getText();
-        int integerValue = Integer.valueOf(ctx.DIGIT_LITERAL().getSymbol().getText());
+        int integerValue = getNaturalNumberValue(ctx.naturalNumber());
         return new IntDeclarationNode(varName, integerValue);
     }
 
@@ -174,10 +174,23 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         if (ctx.FLOAT_DIGIT() != null)
             value = Float.valueOf(ctx.FLOAT_DIGIT().getSymbol().getText());
-        else if (ctx.DIGIT_LITERAL() != null)
-            value = Float.valueOf(ctx.DIGIT_LITERAL().getSymbol().getText());
+        else if (ctx.naturalNumber() != null)
+            value = getNaturalNumberValue(ctx.naturalNumber());
         else
             throw new RuntimeException("Real number is not a digit or float digit");
+
+        return value;
+    }
+
+    private int getNaturalNumberValue(SpookParser.NaturalNumberContext ctx) {
+        int value;
+
+        if (ctx.DIGIT() != null)
+            value = Integer.valueOf(ctx.DIGIT().getSymbol().getText());
+        else if (ctx.DIGIT_NEGATIVE() != null)
+            value = Integer.valueOf(ctx.DIGIT_NEGATIVE().getSymbol().getText());
+        else
+            value = 0;
 
         return value;
     }
