@@ -1,8 +1,8 @@
 package dk.aau.cs.d403.ast;
 
 public class FloatDeclarationNode extends VariableDeclarationNode {
-    String variableName;
-    float value;
+    private String variableName;
+    private float value;
 
     FloatDeclarationNode(String variableName, float value) {
         this.variableName = variableName;

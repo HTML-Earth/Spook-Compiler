@@ -1,7 +1,7 @@
 package dk.aau.cs.d403.ast;
 
 public class ClassDeclarationNode implements ASTnode {
-    String className;
+    private String className;
 
     ClassDeclarationNode(String className) {
         this.className = className;

@@ -1,11 +1,11 @@
 package dk.aau.cs.d403.ast;
 
 public class Vector4DeclarationNode extends VariableDeclarationNode {
-    String variableName;
-    float value0;
-    float value1;
-    float value2;
-    float value3;
+    private String variableName;
+    private float value0;
+    private float value1;
+    private float value2;
+    private float value3;
 
     Vector4DeclarationNode(String variableName, float value0, float value1, float value2, float value3) {
         this.variableName = variableName;

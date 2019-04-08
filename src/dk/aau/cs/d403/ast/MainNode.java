@@ -3,7 +3,7 @@ package dk.aau.cs.d403.ast;
 import java.util.ArrayList;
 
 public class MainNode implements ASTnode {
-    public ArrayList<VariableDeclarationNode> declarationNodes;
+    private ArrayList<VariableDeclarationNode> declarationNodes;
 
     MainNode(ArrayList<VariableDeclarationNode> declarationNodes) {
         this.declarationNodes = declarationNodes;
