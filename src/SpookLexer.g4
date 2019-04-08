@@ -1,8 +1,5 @@
 lexer grammar SpookLexer;
 
-MAIN: 'Shader';
-CLASS: 'class';
-
 // Data types
 INT: 'int';
 FLOAT: 'float';
@@ -21,8 +18,14 @@ TRIANGLE: 'Triangle';
 SHAPE: 'Shape';
 COLOR: 'Color';
 
-// Identifier
-ID: [A-z]+;
+// Keywords
+MAIN: 'Shader';
+CLASS: 'class';
+EXTENDS: 'extends';
+IMPLEMENTS: 'implements';
+RETURN: 'return';
+IF: 'if';
+ELSE: 'else';
 
 // Numbers and bool
 DIGIT
@@ -31,6 +34,7 @@ DIGIT
     | '(-'('1'..'9') ('0'..'9')*')';
 FLOAT_DIGIT
     : DIGIT'.'DIGIT+;
+
 BOOL_LITERAL
     : 'true'
     | 'false';
@@ -66,6 +70,10 @@ TAN: 'tan(';
 
 // Uniforms
 UNIFORM: 'Time';
+
+// Identifier
+ID: LETTER+;
+fragment LETTER: [A-z];
 
 // MISC
 COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')*;
