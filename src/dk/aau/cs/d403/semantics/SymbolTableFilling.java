@@ -115,7 +115,13 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     public void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
-        //
+        String functionName = functionDeclarationNode.getFunctionName();
+
+        // If a function with this name doesn't exist
+        if(retrieveSymbol(functionName) != null) {
+            enterSymbol(this.scopeLevel, new NodeObject(functionName, this.scopeLevel));
+        }
+        // Throw error if function already exist?
     }
 }
 

@@ -9,6 +9,14 @@ public class FunctionDeclarationNode implements ASTnode {
         this.returnType = returnType;
     }
 
+    public String getReturnType() {
+        return returnType;
+    }
+
+    public String getFunctionName() {
+        return functionName;
+    }
+
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
