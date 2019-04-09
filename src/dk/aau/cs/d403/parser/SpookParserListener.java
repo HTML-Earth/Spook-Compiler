@@ -48,6 +48,156 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitDeclaration(SpookParser.DeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#statements}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatements(SpookParser.StatementsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#statements}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatements(SpookParser.StatementsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(SpookParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(SpookParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(SpookParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(SpookParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#classBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassBlock(SpookParser.ClassBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#classBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassBlock(SpookParser.ClassBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignment(SpookParser.AssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignment(SpookParser.AssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression(SpookParser.ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression(SpookParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#integerExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntegerExpression(SpookParser.IntegerExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#integerExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntegerExpression(SpookParser.IntegerExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#floatExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatExpression(SpookParser.FloatExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#floatExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatExpression(SpookParser.FloatExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#vector2Expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterVector2Expression(SpookParser.Vector2ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#vector2Expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitVector2Expression(SpookParser.Vector2ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#vector3Expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterVector3Expression(SpookParser.Vector3ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#vector3Expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitVector3Expression(SpookParser.Vector3ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#vector4Expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterVector4Expression(SpookParser.Vector4ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#vector4Expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitVector4Expression(SpookParser.Vector4ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExpression(SpookParser.BoolExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExpression(SpookParser.BoolExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#conditionalStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionalStatement(SpookParser.ConditionalStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#conditionalStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionalStatement(SpookParser.ConditionalStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#ifElseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfElseStatement(SpookParser.IfElseStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#ifElseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfElseStatement(SpookParser.IfElseStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#ternaryOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterTernaryOperator(SpookParser.TernaryOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#ternaryOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitTernaryOperator(SpookParser.TernaryOperatorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#comment}.
 	 * @param ctx the parse tree
 	 */
@@ -108,15 +258,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorFunctionCall}.
+	 * Enter a parse tree produced by {@link SpookParser#classProperty}.
 	 * @param ctx the parse tree
 	 */
-	void enterColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
+	void enterClassProperty(SpookParser.ClassPropertyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorFunctionCall}.
+	 * Exit a parse tree produced by {@link SpookParser#classProperty}.
 	 * @param ctx the parse tree
 	 */
-	void exitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
+	void exitClassProperty(SpookParser.ClassPropertyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#functionDecl}.
 	 * @param ctx the parse tree
@@ -128,35 +278,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitFunctionDecl(SpookParser.FunctionDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#numberDecl}.
+	 * Enter a parse tree produced by {@link SpookParser#variableDecl}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberDecl(SpookParser.NumberDeclContext ctx);
+	void enterVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#numberDecl}.
+	 * Exit a parse tree produced by {@link SpookParser#variableDecl}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberDecl(SpookParser.NumberDeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#integerDecl}.
-	 * @param ctx the parse tree
-	 */
-	void enterIntegerDecl(SpookParser.IntegerDeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#integerDecl}.
-	 * @param ctx the parse tree
-	 */
-	void exitIntegerDecl(SpookParser.IntegerDeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#floatDecl}.
-	 * @param ctx the parse tree
-	 */
-	void enterFloatDecl(SpookParser.FloatDeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#floatDecl}.
-	 * @param ctx the parse tree
-	 */
-	void exitFloatDecl(SpookParser.FloatDeclContext ctx);
+	void exitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#arithOperations}.
 	 * @param ctx the parse tree
@@ -187,46 +317,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#vector2Decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterVector2Decl(SpookParser.Vector2DeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#vector2Decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitVector2Decl(SpookParser.Vector2DeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#vector3Decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterVector3Decl(SpookParser.Vector3DeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#vector3Decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitVector3Decl(SpookParser.Vector3DeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#vector4Decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterVector4Decl(SpookParser.Vector4DeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#vector4Decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitVector4Decl(SpookParser.Vector4DeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#boolDecl}.
-	 * @param ctx the parse tree
-	 */
-	void enterBoolDecl(SpookParser.BoolDeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#boolDecl}.
-	 * @param ctx the parse tree
-	 */
-	void exitBoolDecl(SpookParser.BoolDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolOperations}.
 	 * @param ctx the parse tree
@@ -267,16 +357,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNaturalNumber(SpookParser.NaturalNumberContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorFunction}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorFunction(SpookParser.ColorFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorFunction}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorFunction(SpookParser.ColorFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#operator}.
 	 * @param ctx the parse tree
@@ -338,15 +418,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitDataType(SpookParser.DataTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#objectVariable}.
+	 * Enter a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree
 	 */
-	void enterObjectVariable(SpookParser.ObjectVariableContext ctx);
+	void enterObjectVariableName(SpookParser.ObjectVariableNameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#objectVariable}.
+	 * Exit a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree
 	 */
-	void exitObjectVariable(SpookParser.ObjectVariableContext ctx);
+	void exitObjectVariableName(SpookParser.ObjectVariableNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#functionName}.
 	 * @param ctx the parse tree
@@ -357,4 +437,24 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionName(SpookParser.FunctionNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#variableName}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableName(SpookParser.VariableNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#variableName}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableName(SpookParser.VariableNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#className}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassName(SpookParser.ClassNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#className}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassName(SpookParser.ClassNameContext ctx);
 }
