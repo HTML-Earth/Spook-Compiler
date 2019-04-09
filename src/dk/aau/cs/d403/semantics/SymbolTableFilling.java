@@ -2,6 +2,7 @@ package dk.aau.cs.d403.semantics;
 
 import dk.aau.cs.d403.ast.*;
 import java.util.HashMap;
+import dk.aau.cs.d403.ast.VariableDeclarationNode.DataType;
 
 public class SymbolTableFilling implements SymbolTable{
 
@@ -49,24 +50,31 @@ public class SymbolTableFilling implements SymbolTable{
         if (statementNode instanceof VariableDeclarationNode)
             visitVariableDeclaration((VariableDeclarationNode) statementNode);
         else if (statementNode instanceof AssignmentNode)
-            visitAssignment((AssignmentNode) statementNode, (VariableDeclarationNode) statementNode);
+            visitAssignment((AssignmentNode) statementNode);
     }
 
     public void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
-        if(retrieveSymbol(variableDeclarationNode.getVariableName()) == null) {
-            enterSymbol(this.id, new NodeObject(variableDeclarationNode.getDataType(), variableDeclarationNode.getVariableName()));
+        String variableName = variableDeclarationNode.getVariableName();
+
+        if(retrieveSymbol(variableName) == null) {
+            DataType declarationType = variableDeclarationNode.getDataType();
+
+            enterSymbol(this.id, new NodeObject(declarationType, variableName));
         }
         else {
             throw new Error("ERROR: Variable name is already in use.");
         }
     }
 
-    public void visitAssignment(AssignmentNode assignmentNode, VariableDeclarationNode variableDeclarationNode) {
-        if(retrieveSymbol(assignmentNode.getVariableName()) == null) {
-            throw new Error("ERROR: Variable is not declared in this scope.");
+    public void visitAssignment(AssignmentNode assignmentNode) {
+        String variableName = assignmentNode.getVariableName();
+        if(retrieveSymbol(variableName) != null) {
+            DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
+
+            enterSymbol(this.id, new NodeObject(assignmentType, variableName));
         }
         else {
-            enterSymbol(this.id, new NodeObject(variableDeclarationNode.getDataType(), assignmentNode.getVariableName()));
+            throw new Error("ERROR: Variable is not declared in this scope.");
         }
     }
 
