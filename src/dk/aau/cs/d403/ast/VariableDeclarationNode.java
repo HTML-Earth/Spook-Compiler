@@ -13,10 +13,17 @@ public class VariableDeclarationNode extends StatementNode {
 
     private DataType dataType;
     private String variableName;
+    private AssignmentNode assignmentNode;
 
     public VariableDeclarationNode(DataType dataType, String variableName) {
         this.dataType = dataType;
         this.variableName = variableName;
+    }
+
+    public VariableDeclarationNode(DataType dataType, AssignmentNode assignmentNode) {
+        this.dataType = dataType;
+        this.variableName = assignmentNode.getVariableName();
+        this.assignmentNode = assignmentNode;
     }
 
     public DataType getDataType() {
@@ -27,8 +34,15 @@ public class VariableDeclarationNode extends StatementNode {
         return variableName;
     }
 
+    public AssignmentNode getAssignmentNode() {
+        return assignmentNode;
+    }
+
     @Override
     public String prettyPrint() {
-        return dataType.toString() + " " + variableName + " = ???;";
+        if (assignmentNode != null)
+            return dataType.toString() + " " + assignmentNode.prettyPrint();
+        else
+            return dataType.toString() + " " + variableName + ";";
     }
 }
