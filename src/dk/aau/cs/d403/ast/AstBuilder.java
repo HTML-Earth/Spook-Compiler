@@ -106,23 +106,20 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         else
             throw new RuntimeException("DataType is unknown");
 
-        String variableName = "";
-
         if (ctx.assignment() != null) {
-            //do assignment
-            variableName = ctx.assignment().variableName().getText();
+            return new VariableDeclarationNode(dataType, (AssignmentNode)visitAssignment(ctx.assignment()));
         }
         else if (ctx.variableName() != null) {
-            //do variableName
-            variableName = ctx.variableName().getText();
+            return new VariableDeclarationNode(dataType, ctx.variableName().getText());
         }
         else {
             throw new RuntimeException("Expected variable name or assignment in declaration");
         }
+    }
 
-        VariableDeclarationNode varDecl = new VariableDeclarationNode(dataType, variableName);
-
-        return varDecl;
+    @Override
+    public ASTnode visitAssignment(SpookParser.AssignmentContext ctx) {
+        return new AssignmentNode(ctx.variableName().getText());
     }
 
     @Override
