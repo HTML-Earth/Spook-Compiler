@@ -50,12 +50,12 @@ expression
     | ternaryOperator;
 
 // Expressions
-integerExpression: arithOperations | mathFunction | naturalNumber;
-floatExpression: arithOperations | mathFunction | realNumber;
-vector2Expression: LEFT_PAREN realNumber COMMA realNumber RIGHT_PAREN;
-vector3Expression: LEFT_PAREN realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
-vector4Expression: LEFT_PAREN realNumber COMMA realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
-boolExpression: boolOperations | BOOL_LITERAL;
+integerExpression: naturalNumber | arithOperations | mathFunction;
+floatExpression: realNumber | arithOperations | mathFunction;
+vector2Expression: LEFT_PAREN floatExpression COMMA floatExpression RIGHT_PAREN;
+vector3Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
+vector4Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
+boolExpression: BOOL_LITERAL | boolOperations;
 
 // Conditional statements
 conditionalStatement
@@ -104,7 +104,7 @@ functionDecl
 
 /* Integer, float and vector declaration */
 variableDecl
-    : dataType (assignment | variableName);
+    : dataType (variableName | assignment);
 
 
 // Recursive arithmetic operations
