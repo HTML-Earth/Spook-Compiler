@@ -5,7 +5,7 @@ import dk.aau.cs.d403.ast.ASTnode;
 public class RealNumberNode implements ASTnode {
     private float number;
 
-    public RealNumberNode(int number) {
+    public RealNumberNode(float number) {
         this.number = number;
     }
 
