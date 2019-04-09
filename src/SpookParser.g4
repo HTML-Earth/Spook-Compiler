@@ -54,7 +54,8 @@ colorFunctionCall
 
 /* Function declaration */
 functionDecl
-    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
+    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RETURN returnType SEMICOLON RIGHT_BRACKET
+    | VOID ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
 
 
 /* Integer, float and vector declaration */
@@ -118,8 +119,12 @@ boolOperation
     | LEFT_PAREN boolOperation RIGHT_PAREN;
 
 
+
+
+
+
 // Numbers
-realNumber: naturalNumber | FLOAT_DIGIT;
+realNumber: naturalNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
 naturalNumber: DIGIT | DIGIT_NEGATIVE;
 
 // Pre-defined colors
