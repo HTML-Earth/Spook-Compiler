@@ -11,6 +11,6 @@ public class IntDeclarationNode extends VariableDeclarationNode {
 
     @Override
     public String prettyPrint() {
-        return "int " + variableName + " = " + value + ";";
+        return "Int " + variableName + " = " + value + ";";
     }
 }
