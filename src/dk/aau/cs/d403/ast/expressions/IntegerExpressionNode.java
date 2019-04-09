@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class IntegerExpressionNode extends ExpressionNode {
     private ArrayList<ArithOperationNode> arithOperationNodes;
-    private MathFunctionCall mathFunctionCall;
+    private MathFunctionCallNode mathFunctionCallNode;
     private NaturalNumberNode naturalNumberNode;
 
     public IntegerExpressionNode(ArrayList<ArithOperationNode> arithOperationNodes) {
         this.arithOperationNodes = arithOperationNodes;
     }
 
-    public IntegerExpressionNode(MathFunctionCall mathFunctionCall) {
-        this.mathFunctionCall = mathFunctionCall;
+    public IntegerExpressionNode(MathFunctionCallNode mathFunctionCallNode) {
+        this.mathFunctionCallNode = mathFunctionCallNode;
     }
 
     public IntegerExpressionNode(NaturalNumberNode naturalNumberNode) {
@@ -23,8 +23,8 @@ public class IntegerExpressionNode extends ExpressionNode {
         return arithOperationNodes;
     }
 
-    public MathFunctionCall getMathFunctionCall() {
-        return mathFunctionCall;
+    public MathFunctionCallNode getMathFunctionCallNode() {
+        return mathFunctionCallNode;
     }
 
     public NaturalNumberNode getNaturalNumberNode() {
@@ -35,8 +35,8 @@ public class IntegerExpressionNode extends ExpressionNode {
     public String prettyPrint() {
         if (arithOperationNodes != null)
             return "arith";
-        else if (mathFunctionCall != null)
-            return mathFunctionCall.prettyPrint();
+        else if (mathFunctionCallNode != null)
+            return mathFunctionCallNode.prettyPrint();
         else if (naturalNumberNode != null)
             return naturalNumberNode.prettyPrint();
         else
