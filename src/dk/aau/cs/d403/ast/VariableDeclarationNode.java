@@ -11,12 +11,20 @@ public class VariableDeclarationNode extends StatementNode {
         VEC4
     }
 
-    public DataType dataType;
-    public String variableName;
+    private DataType dataType;
+    private String variableName;
 
     public VariableDeclarationNode(DataType dataType, String variableName) {
         this.dataType = dataType;
         this.variableName = variableName;
+    }
+
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public String getVariableName() {
+        return variableName;
     }
 
     @Override
