@@ -6,13 +6,13 @@ import dk.aau.cs.d403.ast.VariableDeclarationNode.DataType;
 
 public class SymbolTableFilling implements SymbolTable{
 
-    public HashMap<String, NodeObject> SymbolTable;
-    public String id;
+    public HashMap<String, NodeObject> symbolTable;
+    public String scopeLevel;
     private int level = 1;
 
     @Override
     public void openScope() {
-        this.id = "Scope" + level;
+        this.scopeLevel = "Scope" + level;
     }
 
     @Override
@@ -21,13 +21,17 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     @Override
-    public void enterSymbol(String name, NodeObject object) {
-        SymbolTable.put(name, object);
+    public void enterSymbol(String scopeLevel, NodeObject object) {
+        symbolTable.put(scopeLevel, object);
     }
 
     @Override
     public NodeObject retrieveSymbol(String name) {
-        return SymbolTable.get(name);
+        return symbolTable.get(name);
+    }
+
+    public int declaredLocally(String name) {
+        return 1;
     }
 
     public void visitProgram(ProgramNode programNode) {
@@ -56,11 +60,19 @@ public class SymbolTableFilling implements SymbolTable{
     public void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
         String variableName = variableDeclarationNode.getVariableName();
 
+        // If a variable doesn't exist
         if(retrieveSymbol(variableName) == null) {
             DataType declarationType = variableDeclarationNode.getDataType();
 
-            enterSymbol(this.id, new NodeObject(declarationType, variableName));
+            enterSymbol(this.scopeLevel, new NodeObject(declarationType, variableName, this.scopeLevel));
         }
+        // If a variable already existed but not in the same scope
+        else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
+            DataType declarationType = variableDeclarationNode.getDataType();
+
+            enterSymbol(this.scopeLevel, new NodeObject(declarationType, variableName, this.scopeLevel));
+        }
+        // If a variable already existed in the same scope
         else {
             throw new Error("ERROR: Variable name is already in use.");
         }
@@ -68,10 +80,15 @@ public class SymbolTableFilling implements SymbolTable{
 
     public void visitAssignment(AssignmentNode assignmentNode) {
         String variableName = assignmentNode.getVariableName();
-        if(retrieveSymbol(variableName) != null) {
-            DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
-            enterSymbol(this.id, new NodeObject(assignmentType, variableName));
+        // If a variable exists
+        if(retrieveSymbol(variableName) != null) {
+            // If the variable has the same scope level as the Node
+            if(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel)) {
+                DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
+
+                enterSymbol(this.scopeLevel, new NodeObject(assignmentType, variableName, this.scopeLevel));
+            }
         }
         else {
             throw new Error("ERROR: Variable is not declared in this scope.");
