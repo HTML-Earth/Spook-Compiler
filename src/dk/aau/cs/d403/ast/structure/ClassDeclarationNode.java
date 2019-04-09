@@ -9,6 +9,10 @@ public class ClassDeclarationNode implements ASTnode {
         this.className = className;
     }
 
+    public String getClassName() {
+        return this.className;
+    }
+
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();

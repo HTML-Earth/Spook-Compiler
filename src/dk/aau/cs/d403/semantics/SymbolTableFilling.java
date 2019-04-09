@@ -35,12 +35,16 @@ public class SymbolTableFilling implements SymbolTable{
         return symbolTable.get(name);
     }
 
-    public int declaredLocally(String name) {
-        return 1;
-    }
-
     public void visitProgram(ProgramNode programNode) {
         visitMain(programNode.getMainNode());
+
+        for (ClassDeclarationNode classDecl : programNode.getClassDeclarationNodes()) {
+            visitClassDeclaration(classDecl);
+        }
+
+        for (FunctionDeclarationNode functionDecl : programNode.getFunctionDeclarationNodes()) {
+            visitFunctionDeclaration(functionDecl);
+        }
     }
 
     public void visitMain(MainNode mainNode) {
@@ -101,7 +105,14 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     public void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
-        //
+        String className = classDeclarationNode.getClassName();
+
+        // If a class with this name doesn't exist
+        if(retrieveSymbol(className) != null) {
+            enterSymbol(this.scopeLevel, new NodeObject(className, this.scopeLevel));
+        }
+        else
+            throw new Error("ERROR: Class name is already in use.");
     }
 
     public void visitRectangleDeclaration(RectangleDeclarationNode rectangleDeclarationNode) {
