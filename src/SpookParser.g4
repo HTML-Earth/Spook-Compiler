@@ -17,8 +17,7 @@ declarations
 
 // Int/float/vector, booleans, object declarations and object function calls
 declaration
-    : numberDecl
-    | boolDecl
+    : variableDecl
     | objectDecl;
 
 statements
@@ -39,25 +38,33 @@ classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
 
 // Assignment
 assignment
-    : integerAssign
-    | floatAssign
-    | vector2Assign
-    | vector3Assign
-    | vector4Assign;
+    : variableName ASSIGN expression;
 
-// Assignment: Data types
-integerAssign: variableName ASSIGN (arithOperations | mathFunction | naturalNumber);
-floatAssign: variableName ASSIGN (arithOperations | mathFunction | realNumber);
-vector2Assign: variableName ASSIGN LEFT_PAREN realNumber COMMA realNumber RIGHT_PAREN;
-vector3Assign: variableName ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
-vector4Assign: variableName ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
-boolAssign: variableName ASSIGN (boolOperations | BOOL_LITERAL);
+expression
+    : integerExpression
+    | floatExpression
+    | vector2Expression
+    | vector3Expression
+    | vector4Expression
+    | boolExpression
+    | ternaryOperator;
+
+// Expressions
+integerExpression: arithOperations | mathFunction | naturalNumber;
+floatExpression: arithOperations | mathFunction | realNumber;
+vector2Expression: LEFT_PAREN realNumber COMMA realNumber RIGHT_PAREN;
+vector3Expression: LEFT_PAREN realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
+vector4Expression: LEFT_PAREN realNumber COMMA realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
+boolExpression: boolOperations | BOOL_LITERAL;
 
 // Conditional statements
 conditionalStatement
-    : IF boolExpression block (ELSE_IF boolExpression block)* (ELSE block)?;
+    : ifElseStatement
+    | ternaryOperator;
 
-boolExpression: LEFT_PAREN (boolOperations | BOOL_LITERAL) RIGHT_PAREN;
+// If-else if-else
+ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN block (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN block)* (ELSE block)?;
+ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 // Single-line comment
 comment
@@ -96,18 +103,9 @@ functionDecl
 
 
 /* Integer, float and vector declaration */
-numberDecl
-    : integerDecl
-    | floatDecl
-    | vector2Decl
-    | vector3Decl
-    | vector4Decl;
+variableDecl
+    : dataType (assignment | variableName);
 
-// Integer and float declarations
-integerDecl
-    : INT (integerAssign | variableName);
-floatDecl
-    : FLOAT (floatAssign | variableName);
 
 // Recursive arithmetic operations
 arithOperations
@@ -124,19 +122,6 @@ arithOperation
 mathFunction
     : function (variableName | realNumber | mathFunction | UNIFORM) arithOperation* RIGHT_PAREN;
 
-
-/* Vector declarations */
-vector2Decl
-    : VECTOR2 (vector2Assign | variableName);
-vector3Decl
-    : VECTOR3 (vector3Assign | variableName);
-vector4Decl
-    : VECTOR4 (vector4Assign | variableName);
-
-
-/* Boolean declaration */
-boolDecl
-    : BOOL (boolAssign | variableName);
 
 // Recursive boolean operations
 boolOperations
