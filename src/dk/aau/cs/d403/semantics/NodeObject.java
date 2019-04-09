@@ -1,5 +1,5 @@
 package dk.aau.cs.d403.semantics;
-import dk.aau.cs.d403.ast.VariableDeclarationNode.DataType;
+import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
 
 public class NodeObject {
     private DataType type;

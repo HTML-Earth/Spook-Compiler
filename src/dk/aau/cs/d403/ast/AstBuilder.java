@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.ast;
 
+import dk.aau.cs.d403.ast.statements.*;
+import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
 

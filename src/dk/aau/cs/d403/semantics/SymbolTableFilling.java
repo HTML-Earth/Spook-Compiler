@@ -1,8 +1,13 @@
 package dk.aau.cs.d403.semantics;
 
-import dk.aau.cs.d403.ast.*;
 import java.util.HashMap;
-import dk.aau.cs.d403.ast.VariableDeclarationNode.DataType;
+
+import dk.aau.cs.d403.ast.statements.RectangleDeclarationNode;
+import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
+import dk.aau.cs.d403.ast.statements.AssignmentNode;
+import dk.aau.cs.d403.ast.statements.StatementNode;
+import dk.aau.cs.d403.ast.structure.*;
 
 public class SymbolTableFilling implements SymbolTable{
 

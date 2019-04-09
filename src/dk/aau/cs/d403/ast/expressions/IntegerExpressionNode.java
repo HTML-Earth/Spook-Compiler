@@ -1,22 +1,22 @@
-package dk.aau.cs.d403.ast;
+package dk.aau.cs.d403.ast.expressions;
 
 import java.util.ArrayList;
 
-public class FloatExpressionNode extends ExpressionNode {
+public class IntegerExpressionNode extends ExpressionNode {
     private ArrayList<ArithOperationNode> arithOperationNodes;
     private MathFunctionCall mathFunctionCall;
-    private RealNumberNode realNumberNode;
+    private NaturalNumberNode naturalNumberNode;
 
-    public FloatExpressionNode(ArrayList<ArithOperationNode> arithOperationNodes) {
+    public IntegerExpressionNode(ArrayList<ArithOperationNode> arithOperationNodes) {
         this.arithOperationNodes = arithOperationNodes;
     }
 
-    public FloatExpressionNode(MathFunctionCall mathFunctionCall) {
+    public IntegerExpressionNode(MathFunctionCall mathFunctionCall) {
         this.mathFunctionCall = mathFunctionCall;
     }
 
-    public FloatExpressionNode(RealNumberNode realNumberNode) {
-        this.realNumberNode = realNumberNode;
+    public IntegerExpressionNode(NaturalNumberNode naturalNumberNode) {
+        this.naturalNumberNode = naturalNumberNode;
     }
 
     public ArrayList<ArithOperationNode> getArithOperationNodes() {
@@ -27,8 +27,8 @@ public class FloatExpressionNode extends ExpressionNode {
         return mathFunctionCall;
     }
 
-    public RealNumberNode getRealNumberNode() {
-        return realNumberNode;
+    public NaturalNumberNode getNaturalNumberNode() {
+        return naturalNumberNode;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class FloatExpressionNode extends ExpressionNode {
             return "arith";
         else if (mathFunctionCall != null)
             return mathFunctionCall.prettyPrint();
-        else if (realNumberNode != null)
-            return realNumberNode.prettyPrint();
+        else if (naturalNumberNode != null)
+            return naturalNumberNode.prettyPrint();
         else
             return "Invalid integer expression";
     }

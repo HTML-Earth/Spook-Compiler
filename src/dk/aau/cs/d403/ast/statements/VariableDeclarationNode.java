@@ -1,4 +1,4 @@
-package dk.aau.cs.d403.ast;
+package dk.aau.cs.d403.ast.statements;
 
 public class VariableDeclarationNode extends StatementNode {
 

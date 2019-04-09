@@ -1,4 +1,6 @@
-package dk.aau.cs.d403.ast;
+package dk.aau.cs.d403.ast.expressions;
+
+import dk.aau.cs.d403.ast.ASTnode;
 
 public class MathFunctionCall implements ASTnode {
     @Override
