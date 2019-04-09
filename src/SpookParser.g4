@@ -8,19 +8,56 @@ program
 
 // Shader() {} (Needed), Declarations (Optional), Comments (Optional)
 main
-    : MAIN LEFT_BRACKET (declarations | comment)* RIGHT_BRACKET;
+    : MAIN block;
 
 // One or more declarations
 declarations
-    : declaration declarations
-    | declaration;
+    : declaration SEMICOLON declarations
+    | declaration SEMICOLON;
 
 // Int/float/vector, booleans, object declarations and object function calls
 declaration
-    : (numberDecl
+    : numberDecl
     | boolDecl
-    | objectDecl
-    | objectFunctionCall) SEMICOLON;
+    | objectDecl;
+
+statements
+    : statement statements
+    | statement;
+
+statement
+    : declaration SEMICOLON
+    | assignment SEMICOLON
+    | objectFunctionCall SEMICOLON
+    | conditionalStatement
+    //| iterativeStatement
+    | RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON;
+
+/* Blocks */
+block: LEFT_BRACKET (statements | comment)* RIGHT_BRACKET;
+classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
+
+// Assignment
+assignment
+    : integerAssign
+    | floatAssign
+    | vector2Assign
+    | vector3Assign
+    | vector4Assign;
+
+// Assignment: Data types
+integerAssign: variableName ASSIGN (arithOperations | mathFunction | naturalNumber);
+floatAssign: variableName ASSIGN (arithOperations | mathFunction | realNumber);
+vector2Assign: variableName ASSIGN LEFT_PAREN realNumber COMMA realNumber RIGHT_PAREN;
+vector3Assign: variableName ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
+vector4Assign: variableName ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
+boolAssign: variableName ASSIGN (boolOperations | BOOL_LITERAL);
+
+// Conditional statements
+conditionalStatement
+    : IF boolExpression block (ELSE_IF boolExpression block)* (ELSE block)?;
+
+boolExpression: LEFT_PAREN (boolOperations | BOOL_LITERAL) RIGHT_PAREN;
 
 // Single-line comment
 comment
@@ -28,7 +65,7 @@ comment
 
 /* Class declaration */
 classDecl
-    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? LEFT_BRACKET declarations? functionDecl* RIGHT_BRACKET;
+    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
 
 /* Object */
 objectDecl
@@ -49,13 +86,13 @@ objectFunctionCall
 
 // Color function call
 classProperty
-    : classType DOT ID;
+    : classType DOT variableName;
 
 
 /* Function declaration */
 functionDecl
-    : returnType functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN LEFT_BRACKET declarations? RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON RIGHT_BRACKET
-    | VOID functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
+    : returnType functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN block
+    | VOID functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN block;
 
 
 /* Integer, float and vector declaration */
@@ -68,9 +105,9 @@ numberDecl
 
 // Integer and float declarations
 integerDecl
-    : INT variableName ASSIGN (arithOperations | mathFunction | naturalNumber);
+    : INT (integerAssign | variableName);
 floatDecl
-    : FLOAT variableName ASSIGN (arithOperations | mathFunction | realNumber);
+    : FLOAT (floatAssign | variableName);
 
 // Recursive arithmetic operations
 arithOperations
@@ -90,22 +127,16 @@ mathFunction
 
 /* Vector declarations */
 vector2Decl
-    : VECTOR2 ID ASSIGN LEFT_PAREN realNumber COMMA realNumber RIGHT_PAREN;
+    : VECTOR2 (vector2Assign | variableName);
 vector3Decl
-    : VECTOR3 ID ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
+    : VECTOR3 (vector3Assign | variableName);
 vector4Decl
-    : VECTOR4 ID ASSIGN LEFT_PAREN realNumber COMMA realNumber COMMA realNumber COMMA realNumber RIGHT_PAREN;
-
-/* Overvej det her. Ulempe: Vi kan ikke sørge for at der er PRÆCIST 2, 3 eller 4 arguments.
-Måske vi kan fange den error et andet sted i compileren.
-vectorArgs: real_number space* ',' space* vectorArgs
-    | real_number;
-*/
+    : VECTOR4 (vector4Assign | variableName);
 
 
 /* Boolean declaration */
 boolDecl
-    : BOOL variableName ASSIGN (boolOperations | BOOL_LITERAL);
+    : BOOL (boolAssign | variableName);
 
 // Recursive boolean operations
 boolOperations
@@ -126,14 +157,6 @@ boolOperation
 // Numbers
 realNumber: naturalNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
 naturalNumber: DIGIT | DIGIT_NEGATIVE;
-
-// Pre-defined colors
-colorFunction
-    : BLACK
-    | WHITE
-    | RED
-    | GREEN
-    | BLUE;
 
 // Arithmetic operators
 operator
