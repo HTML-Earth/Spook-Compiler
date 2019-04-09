@@ -54,7 +54,7 @@ colorFunctionCall
 
 /* Function declaration */
 functionDecl
-    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RETURN returnType SEMICOLON RIGHT_BRACKET
+    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RETURN (ID | realNumber | BOOL_LITERAL) SEMICOLON RIGHT_BRACKET
     | VOID ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
 
 
