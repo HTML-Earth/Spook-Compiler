@@ -38,8 +38,8 @@ ELSE: 'else';
 DIGIT: DIGIT_RULE;
 DIGIT_NEGATIVE: DIGIT_NEGATIVE_RULE;
 
-FLOAT_DIGIT
-    : DIGIT'.'DIGIT+;
+FLOAT_DIGIT: DIGIT'.'DIGIT+;
+FLOAT_DIGIT_NEGATIVE: DIGIT_NEGATIVE'.'DIGIT+;
 
 BOOL_LITERAL
     : 'true'
@@ -83,7 +83,8 @@ ID: (LETTER | DIGIT)+;
 // Fragment rules
 fragment LETTER: [A-z];
 
-fragment DIGIT_RULE: '0'
+fragment DIGIT_RULE
+    : '0'
     | '1'..'9' '0'..'9'*;
 fragment DIGIT_NEGATIVE_RULE: '(-'('1'..'9') ('0'..'9')*')';
 
