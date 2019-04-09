@@ -32,16 +32,20 @@ public class ProgramNode implements ASTnode{
 
         sb.append(mainNode.prettyPrint());
 
-        sb.append("\n\n");
+        if (classDeclarationNodes.size() > 0) {
+            sb.append("\n\n");
 
-        for (ClassDeclarationNode classDec : classDeclarationNodes) {
-            sb.append(classDec.prettyPrint());
+            for (ClassDeclarationNode classDec : classDeclarationNodes) {
+                sb.append(classDec.prettyPrint());
+            }
         }
 
-        sb.append("\n\n");
+        if (functionDeclarationNodes.size() > 0) {
+            sb.append("\n\n");
 
-        for (FunctionDeclarationNode funcDec : functionDeclarationNodes) {
-            sb.append(funcDec.prettyPrint());
+            for (FunctionDeclarationNode funcDec : functionDeclarationNodes) {
+                sb.append(funcDec.prettyPrint());
+            }
         }
 
         sb.append("\n");
