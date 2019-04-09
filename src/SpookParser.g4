@@ -28,24 +28,24 @@ comment
 
 /* Class declaration */
 classDecl
-    : CLASS ID ((EXTENDS | IMPLEMENTS) classType)? LEFT_BRACKET declarations? functionDecl* RIGHT_BRACKET;
+    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? LEFT_BRACKET declarations? functionDecl* RIGHT_BRACKET;
 
 /* Object */
 objectDecl
-    : classType ID ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+    : classType objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
 objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
 objectArg
-    : ID
+    : variableName
     | realNumber
     | arithOperation
     | classProperty;
 
 // Object function calls
 objectFunctionCall
-    : (objectVariable DOT functionName ASSIGN (objectArg? | LEFT_PAREN objectArgs* RIGHT_PAREN)
-    | objectVariable DOT functionName LEFT_PAREN objectArgs* RIGHT_PAREN);
+    : (objectVariableName DOT functionName ASSIGN (objectArg? | LEFT_PAREN objectArgs* RIGHT_PAREN)
+    | objectVariableName DOT functionName LEFT_PAREN objectArgs* RIGHT_PAREN);
 
 // Color function call
 classProperty
@@ -54,8 +54,8 @@ classProperty
 
 /* Function declaration */
 functionDecl
-    : returnType ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RETURN (ID | realNumber | BOOL_LITERAL) SEMICOLON RIGHT_BRACKET
-    | VOID ID LEFT_PAREN (dataType ID)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
+    : returnType functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN LEFT_BRACKET declarations? RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON RIGHT_BRACKET
+    | VOID functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN LEFT_BRACKET declarations? RIGHT_BRACKET;
 
 
 /* Integer, float and vector declaration */
@@ -68,9 +68,9 @@ numberDecl
 
 // Integer and float declarations
 integerDecl
-    : INT ID ASSIGN (arithOperations | mathFunction | naturalNumber);
+    : INT variableName ASSIGN (arithOperations | mathFunction | naturalNumber);
 floatDecl
-    : FLOAT ID ASSIGN (arithOperations | mathFunction | realNumber);
+    : FLOAT variableName ASSIGN (arithOperations | mathFunction | realNumber);
 
 // Recursive arithmetic operations
 arithOperations
@@ -79,13 +79,13 @@ arithOperations
 
 // Arithmetic operations
 arithOperation
-    : (realNumber | mathFunction | ID) operator (realNumber | mathFunction | ID | LEFT_PAREN arithOperation RIGHT_PAREN)
-    | operator (realNumber | mathFunction | ID | LEFT_PAREN arithOperation RIGHT_PAREN)
+    : (realNumber | mathFunction | variableName) operator (realNumber | mathFunction | variableName | LEFT_PAREN arithOperation RIGHT_PAREN)
+    | operator (realNumber | mathFunction | variableName | LEFT_PAREN arithOperation RIGHT_PAREN)
     | LEFT_PAREN arithOperations RIGHT_PAREN;
 
 // Mathematical functions
 mathFunction
-    : function (ID | realNumber | mathFunction | UNIFORM) arithOperation* RIGHT_PAREN;
+    : function (variableName | realNumber | mathFunction | UNIFORM) arithOperation* RIGHT_PAREN;
 
 
 /* Vector declarations */
@@ -105,7 +105,7 @@ vectorArgs: real_number space* ',' space* vectorArgs
 
 /* Boolean declaration */
 boolDecl
-    : BOOL ID ASSIGN (boolOperations | BOOL_LITERAL);
+    : BOOL variableName ASSIGN (boolOperations | BOOL_LITERAL);
 
 // Recursive boolean operations
 boolOperations
@@ -114,8 +114,8 @@ boolOperations
 
 // Boolean operations
 boolOperation
-    : (BOOL_LITERAL | ID) boolOperator (BOOL_LITERAL | ID | (LEFT_PAREN boolOperation RIGHT_PAREN))
-    | boolOperator (BOOL_LITERAL | ID | (LEFT_PAREN boolOperation RIGHT_PAREN))
+    : (BOOL_LITERAL | variableName) boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
+    | boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
     | LEFT_PAREN boolOperation RIGHT_PAREN;
 
 
@@ -180,7 +180,11 @@ dataType
     | VECTOR4;
 
 // Variable name
-objectVariable
+objectVariableName
     : ID;
 functionName
+    : ID;
+variableName
+    : ID;
+className
     : ID;
