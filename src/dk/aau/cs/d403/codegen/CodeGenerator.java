@@ -1,7 +1,7 @@
 package dk.aau.cs.d403.codegen;
 
 import dk.aau.cs.d403.ast.ProgramNode;
-import dk.aau.cs.d403.ast.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.StatementNode;
 
 public class CodeGenerator {
 
@@ -10,9 +10,9 @@ public class CodeGenerator {
 
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {");
 
-        for (VariableDeclarationNode varDec : ast.getMainNode().getDeclarationNodes()) {
+        for (StatementNode stmnt: ast.getMainNode().getBlockNode().getStatementNodes()) {
             sb.append("\n\t");
-            sb.append(varDec.prettyPrint());
+            sb.append(stmnt.prettyPrint());
         }
 
         sb.append("\n}");

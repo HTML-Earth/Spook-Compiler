@@ -2,7 +2,6 @@ package dk.aau.cs.d403.ast;
 
 import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 
@@ -29,36 +28,112 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitMain(SpookParser.MainContext ctx) {
+        BlockNode blockNode = (BlockNode)visitBlock(ctx.block());
 
-        ArrayList<VariableDeclarationNode> declarationNodes = new ArrayList<>();
-
-        for (SpookParser.DeclarationsContext declarations : ctx.declarations()) {
-            declarationNodes.addAll(visitAllDeclarations(declarations));
-        }
-
-        return new MainNode(declarationNodes);
+        return new MainNode(blockNode);
     }
 
-    private ArrayList<VariableDeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
-        ArrayList<VariableDeclarationNode> declarationNodes = new ArrayList<>();
+    @Override
+    public ASTnode visitBlock(SpookParser.BlockContext ctx) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
-        declarationNodes.add((VariableDeclarationNode)visitDeclaration(ctx.declaration()));
+        for (SpookParser.StatementsContext statements: ctx.statements()) {
+            statementNodes.addAll(visitAllStatements(statements));
+        }
 
-        if (ctx.declarations() != null)
-            declarationNodes.addAll(visitAllDeclarations(ctx.declarations()));
+        BlockNode blockNode = new BlockNode(statementNodes);
 
-        return declarationNodes;
+        return blockNode;
+    }
+
+    private ArrayList<StatementNode> visitAllStatements(SpookParser.StatementsContext ctx) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
+        statementNodes.add((StatementNode) visitStatement(ctx.statement()));
+
+        if (ctx.statements() != null)
+            statementNodes.addAll(visitAllStatements(ctx.statements()));
+
+        return statementNodes;
+    }
+
+    @Override
+    public ASTnode visitStatement(SpookParser.StatementContext ctx) {
+        if (ctx.declaration() != null)
+            return visitDeclaration(ctx.declaration());
+        else if (ctx.assignment() != null)
+            return visitAssignment(ctx.assignment());
+        else if (ctx.objectFunctionCall() != null)
+            return visitObjectFunctionCall(ctx.objectFunctionCall());
+        else if (ctx.conditionalStatement() != null)
+            return visitConditionalStatement(ctx.conditionalStatement());
+        else if (ctx.RETURN() != null) {
+            //do Return stuff
+            return null;
+        }
+        else {
+            throw new RuntimeException("Statement is of unknown type");
+        }
+    }
+
+    @Override
+    public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
+        if (ctx.variableDecl() != null)
+            return visitVariableDecl(ctx.variableDecl());
+        else if (ctx.objectDecl() != null)
+            return visitObjectDecl(ctx.objectDecl());
+        else
+            throw new RuntimeException("Declaration is of unknown type");
+    }
+
+    @Override
+    public ASTnode visitVariableDecl(SpookParser.VariableDeclContext ctx) {
+
+        VariableDeclarationNode.DataType dataType;
+
+        if (ctx.dataType().INT() != null)
+            dataType = VariableDeclarationNode.DataType.INT;
+        else if (ctx.dataType().FLOAT() != null)
+            dataType = VariableDeclarationNode.DataType.FLOAT;
+        else if (ctx.dataType().BOOL() != null)
+            dataType = VariableDeclarationNode.DataType.BOOL;
+        else if (ctx.dataType().VECTOR2() != null)
+            dataType = VariableDeclarationNode.DataType.VEC2;
+        else if (ctx.dataType().VECTOR3() != null)
+            dataType = VariableDeclarationNode.DataType.VEC3;
+        else if (ctx.dataType().VECTOR4() != null)
+            dataType = VariableDeclarationNode.DataType.VEC4;
+        else
+            throw new RuntimeException("DataType is unknown");
+
+        String variableName = "";
+
+        if (ctx.assignment() != null) {
+            //do assignment
+            variableName = ctx.assignment().variableName().getText();
+        }
+        else if (ctx.variableName() != null) {
+            //do variableName
+            variableName = ctx.variableName().getText();
+        }
+        else {
+            throw new RuntimeException("Expected variable name or assignment in declaration");
+        }
+
+        VariableDeclarationNode varDecl = new VariableDeclarationNode(dataType, variableName);
+
+        return varDecl;
     }
 
     @Override
     public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
-        return new ClassDeclarationNode(ctx.ID().getText());
+        return new ClassDeclarationNode(ctx.className().getText());
     }
 
     @Override
     public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
         if (ctx.classType().RECTANGLE() != null) {
-            String rectName = ctx.ID().getText();
+            String rectName = ctx.objectVariableName().getText();
             float rectWidth = getRealNumberValue(ctx.objectArgs(0).objectArg().realNumber());
             float rectHeight = getRealNumberValue(ctx.objectArgs(0).objectArgs().objectArg().realNumber());
             float rectColorR = 0;
@@ -76,97 +151,12 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
-        return new FunctionDeclarationNode(ctx.ID(0).toString(), ctx.returnType().getText());
+        return new FunctionDeclarationNode(ctx.functionName().getText(), ctx.returnType().getText());
     }
 
     @Override
     public ASTnode visitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx) {
         return new ObjectFunctionCallNode();
-    }
-
-    @Override
-    public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
-        if (ctx.numberDecl() != null)
-            return visitNumberDecl(ctx.numberDecl());
-        else if (ctx.boolDecl() != null)
-            return visitBoolDecl(ctx.boolDecl());
-        else if (ctx.objectDecl() != null)
-            return visitObjectDecl(ctx.objectDecl());
-        else if (ctx.objectFunctionCall() != null)
-            return visitObjectFunctionCall(ctx.objectFunctionCall());
-        else {
-            throw new RuntimeException("Declaration is of unknown type");
-        }
-    }
-
-    @Override
-    public ASTnode visitNumberDecl(SpookParser.NumberDeclContext ctx) {
-        if (ctx.integerDecl() != null)
-            return visitIntegerDecl(ctx.integerDecl());
-        else if (ctx.floatDecl() != null)
-            return visitFloatDecl(ctx.floatDecl());
-        else if (ctx.vector2Decl() != null)
-            return visitVector2Decl(ctx.vector2Decl());
-        else if (ctx.vector3Decl() != null)
-            return visitVector3Decl(ctx.vector3Decl());
-        else if (ctx.vector4Decl() != null)
-            return visitVector4Decl(ctx.vector4Decl());
-        else
-            return null;
-    }
-
-    @Override
-    public ASTnode visitIntegerDecl(SpookParser.IntegerDeclContext ctx) {
-        String varName = ctx.ID().getText();
-        int integerValue = getNaturalNumberValue(ctx.naturalNumber());
-        return new IntDeclarationNode(varName, integerValue);
-    }
-
-    @Override
-    public ASTnode visitFloatDecl(SpookParser.FloatDeclContext ctx) {
-        String varName = ctx.ID().getText();
-        float value = getRealNumberValue(ctx.realNumber());
-
-        return new FloatDeclarationNode(varName, value);
-    }
-
-    @Override
-    public ASTnode visitVector2Decl(SpookParser.Vector2DeclContext ctx) {
-        String varName = ctx.ID().getText();
-
-        float[] values = new float[2];
-
-        for (int i = 0; i < 2; i++) {
-            values[i] = getRealNumberValue(ctx.realNumber(i));
-        }
-
-        return new Vector2DeclarationNode(varName, values[0], values[1]);
-    }
-
-    @Override
-    public ASTnode visitVector3Decl(SpookParser.Vector3DeclContext ctx) {
-        String varName = ctx.ID().getText();
-
-        float[] values = new float[3];
-
-        for (int i = 0; i < 3; i++) {
-            values[i] = getRealNumberValue(ctx.realNumber(i));
-        }
-
-        return new Vector3DeclarationNode(varName, values[0], values[1], values[2]);
-    }
-
-    @Override
-    public ASTnode visitVector4Decl(SpookParser.Vector4DeclContext ctx) {
-        String varName = ctx.ID().getText();
-
-        float[] values = new float[4];
-
-        for (int i = 0; i < 4; i++) {
-            values[i] = getRealNumberValue(ctx.realNumber(i));
-        }
-
-        return new Vector4DeclarationNode(varName, values[0], values[1], values[2], values[3]);
     }
 
     private float getRealNumberValue(SpookParser.RealNumberContext ctx) {
@@ -193,25 +183,5 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             value = 0;
 
         return value;
-    }
-
-    @Override
-    public ASTnode visitBoolDecl(SpookParser.BoolDeclContext ctx) {
-        String varName = ctx.ID().getText();
-        boolean value = getBoolLiteralValue(ctx.BOOL_LITERAL());
-
-        return new BoolDeclarationNode(varName, value);
-    }
-
-    private boolean getBoolLiteralValue(TerminalNode boolLiteral) {
-        if (boolLiteral.toString().equals("true")) {
-            return true;
-        }
-        else if (boolLiteral.toString().equals("false")) {
-            return false;
-        }
-        else {
-            throw new RuntimeException("unexpected bool literal value");
-        }
     }
 }
