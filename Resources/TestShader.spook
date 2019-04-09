@@ -1,23 +1,23 @@
 Shader {
     #Ball values
-    float ballSize = 64;
-    vector4 ballColor = (0.6, 0, 0, 1);
+    Float ballSize = 64;
+    Vect4 ballColor = (0.6, 0, 0, 1);
 
     #Position and size values
-    float groundHeight = 100;
-    float jumpHeight   = 150;
+    Float groundHeight = 100;
+    Float jumpHeight   = 150;
 
-    float xPos = 150;
+    Float xPos = 150;
 
-    int test = 4;
-    vector2 two = (0.1, 2);
-    vector3 three = (323.0, 2.0003, 12345);
+    Int test = 4;
+    Vec2 two = (0.1, 2);
+    Vec3 three = (323.0, 2.0003, 12345);
 }
 
 class CustomShape {
-    int sides = 4;
+    Int sides = 4;
 }
 
 float GiveMeTen(int irrelevant) {
-    float result = 10;
+    Float result = 10;
 }
