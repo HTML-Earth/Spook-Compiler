@@ -40,7 +40,7 @@ objectArg
     : ID
     | realNumber
     | arithOperation
-    | colorFunctionCall;
+    | classProperty;
 
 // Object function calls
 objectFunctionCall
@@ -48,8 +48,8 @@ objectFunctionCall
     | objectVariable DOT functionName LEFT_PAREN objectArgs* RIGHT_PAREN);
 
 // Color function call
-colorFunctionCall
-    : COLOR DOT colorFunction;
+classProperty
+    : classType DOT ID;
 
 
 /* Function declaration */
