@@ -1,7 +1,7 @@
 package dk.aau.cs.d403.codegen;
 
-import dk.aau.cs.d403.ast.ProgramNode;
-import dk.aau.cs.d403.ast.StatementNode;
+import dk.aau.cs.d403.ast.structure.ProgramNode;
+import dk.aau.cs.d403.ast.statements.StatementNode;
 
 public class CodeGenerator {
 

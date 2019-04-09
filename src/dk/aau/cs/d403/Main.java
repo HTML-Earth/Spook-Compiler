@@ -1,7 +1,7 @@
 package dk.aau.cs.d403;
 
 import dk.aau.cs.d403.ast.AstBuilder;
-import dk.aau.cs.d403.ast.ProgramNode;
+import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
