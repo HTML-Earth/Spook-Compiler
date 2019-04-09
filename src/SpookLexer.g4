@@ -32,6 +32,7 @@ EXTENDS: 'extends';
 IMPLEMENTS: 'implements';
 RETURN: 'return';
 IF: 'if';
+ELSE_IF: 'else if';
 ELSE: 'else';
 
 // Numbers and bool
