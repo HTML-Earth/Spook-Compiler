@@ -160,8 +160,7 @@ function
 
 // Return types
 returnType
-    : VOID
-    | dataType;
+    : dataType;
 
 // Pre-defined classes
 classType
