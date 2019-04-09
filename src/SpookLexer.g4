@@ -54,6 +54,8 @@ RIGHT_PAREN: ')';
 DOT: '.';
 COMMA: ',';
 SEMICOLON: ';';
+QUESTION: '?';
+COLON: ':';
 
 // Operators
 ASSIGN: '=';
