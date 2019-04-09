@@ -1,12 +1,12 @@
 lexer grammar SpookLexer;
 
 // Data types
-INT: 'int';
-FLOAT: 'float';
-BOOL: 'bool';
-VECTOR2: 'vector2';
-VECTOR3: 'vector3';
-VECTOR4: 'vector4';
+INT: 'Int';
+FLOAT: 'Float';
+BOOL: 'Bool';
+VECTOR2: 'Vec2';
+VECTOR3: 'Vec3';
+VECTOR4: 'Vec4';
 
 // Return types (without data types)
 VOID: 'void';
