@@ -1,7 +1,7 @@
 Shader {
     #Ball values
     Float ballSize = 64;
-    Vect4 ballColor = (0.6, 0, 0, 1);
+    Vec4 ballColor = (0.6, 0, 0, 1);
 
     #Position and size values
     Float groundHeight = 100;
