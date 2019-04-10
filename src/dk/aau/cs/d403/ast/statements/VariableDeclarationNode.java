@@ -33,8 +33,8 @@ public class VariableDeclarationNode extends DeclarationNode {
     @Override
     public String prettyPrint() {
         if (assignmentNode != null)
-            return dataType.toString() + " " + assignmentNode.prettyPrint();
+            return Enums.dataTypeToStringSpook(dataType) + " " + assignmentNode.prettyPrint();
         else
-            return dataType.toString() + " " + variableName + ";";
+            return Enums.dataTypeToStringSpook(dataType) + " " + variableName + ";";
     }
 }
