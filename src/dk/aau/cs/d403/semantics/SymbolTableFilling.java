@@ -2,11 +2,8 @@ package dk.aau.cs.d403.semantics;
 
 import java.util.HashMap;
 
-import dk.aau.cs.d403.ast.statements.RectangleDeclarationNode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
-import dk.aau.cs.d403.ast.statements.AssignmentNode;
-import dk.aau.cs.d403.ast.statements.StatementNode;
 import dk.aau.cs.d403.ast.structure.*;
 
 public class SymbolTableFilling implements SymbolTable{
@@ -122,11 +119,28 @@ public class SymbolTableFilling implements SymbolTable{
     public void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
 
+        StringBuilder sb = new StringBuilder();
+        String attributes;
+
+        // Find the function parameters and turn them into a string
+        for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
+            sb.append(functionArgNode.getDataType());
+            sb.append(" ");
+            sb.append(functionArgNode.getDataType());
+        }
+        attributes = sb.toString();
+
         // If a function with this name doesn't exist
         if(retrieveSymbol(functionName) != null) {
-            enterSymbol(this.scopeLevel, new NodeObject(functionName, this.scopeLevel));
+            enterSymbol(this.scopeLevel, new NodeObject(functionName, this.scopeLevel, attributes));
         }
-        // Throw error if function already exist?
+        // If a function with the same name exists but doesn't have the same parameters
+        else if (!(retrieveSymbol(functionName).getAttributes().equals(attributes))) {
+            enterSymbol(this.scopeLevel, new NodeObject(functionName, this.scopeLevel, attributes));
+        }
+        else {
+            throw new Error("ERROR: Function already exist with the same parameters");
+        }
     }
 }
 
