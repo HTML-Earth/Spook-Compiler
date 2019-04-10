@@ -1,4 +1,4 @@
-// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -277,6 +277,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionDecl(SpookParser.FunctionDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#functionArgs}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionArgs(SpookParser.FunctionArgsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#functionArgs}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionArgs(SpookParser.FunctionArgsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#functionArg}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionArg(SpookParser.FunctionArgContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#functionArg}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionArg(SpookParser.FunctionArgContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#variableDecl}.
 	 * @param ctx the parse tree
