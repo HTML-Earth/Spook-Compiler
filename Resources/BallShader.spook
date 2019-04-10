@@ -15,22 +15,22 @@ Shader {
 
     #Shadow color
     Float shadowBrightness = (1 - 1 * shadowSize * 0.01) - 0.3;
-    Vec4 shadowColor = (0,0,0,0);
+    Vec4 shadowColor = shadowBrightness.xxxx;
 
     Float shadowDarkness = shadowSize * 0.005;
-    Vec4 shadowColor = (0,0,0,0);
+    Vec4 shadowColor = bgColor - shadowDarkness.xxxx;
 
     #Objects
     Circle ball   = (ballSize, ballColor);
     Circle shadow = (shadowSize, shadowColor);
 
     #Shiny ball gradient
-    Circle shiny = (Color.white, ballSize/2);
+    CircleGradient shiny = (Color.white, ballSize/2);
     shiny.position = (ballSize/2, ballSize/2);
     ball.Add(shiny);
 
     #Object positions
-    ball.position   = (xPos, ((jumpTime + 1) * jumpHeight));
+    ball.position   = (xPos, (jumpTime + 1) * jumpHeight);
     shadow.position = (xPos, groundHeight);
 
     #Setup scene
@@ -38,13 +38,4 @@ Shader {
 
     Scene.add(shadow);
     Scene.add(ball);
-}
-
-
-class CustomShape {
-    Int sides = 4;
-}
-
-float GiveMeTen(int irrelevant) {
-    Float result = 10;
 }
