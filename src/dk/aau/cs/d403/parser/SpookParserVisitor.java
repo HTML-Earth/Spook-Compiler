@@ -1,4 +1,4 @@
-// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -172,6 +172,18 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionDecl(SpookParser.FunctionDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#functionArgs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionArgs(SpookParser.FunctionArgsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#functionArg}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionArg(SpookParser.FunctionArgContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#variableDecl}.
 	 * @param ctx the parse tree
