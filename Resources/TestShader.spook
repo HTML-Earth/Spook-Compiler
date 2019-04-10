@@ -9,10 +9,37 @@ Shader {
 
     Float xPos = 150;
 
-    Int test = 4;
-    Vec2 two = (0.1, 2);
-    Vec3 three = (323.0, 2.0003, 12345);
+    #Animation
+    Float jumpTime   = abs(sin(Time * 3));
+    Float shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
+
+    #Shadow color
+    Float shadowBrightness = (1 - 1 * shadowSize * 0.01) - 0.3;
+    Vec4 shadowColor = (0,0,0,0);
+
+    Float shadowDarkness = shadowSize * 0.005;
+    Vec4 shadowColor = (0,0,0,0);
+
+    #Objects
+    Circle ball   = (ballSize, ballColor);
+    Circle shadow = (shadowSize, shadowColor);
+
+    #Shiny ball gradient
+    Circle shiny = (Color.white, ballSize/2);
+    shiny.position = (ballSize/2, ballSize/2);
+    ball.Add(shiny);
+
+    #Object positions
+    ball.position   = (xPos, ((jumpTime + 1) * jumpHeight));
+    shadow.position = (xPos, groundHeight);
+
+    #Setup scene
+    Scene.color = Color.gray;
+
+    Scene.add(shadow);
+    Scene.add(ball);
 }
+
 
 class CustomShape {
     Int sides = 4;
