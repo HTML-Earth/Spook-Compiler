@@ -1,4 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -168,6 +168,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitBoolExpression(SpookParser.BoolExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#ternaryOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterTernaryOperator(SpookParser.TernaryOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#ternaryOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitTernaryOperator(SpookParser.TernaryOperatorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#conditionalStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -187,16 +197,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIfElseStatement(SpookParser.IfElseStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#ternaryOperator}.
-	 * @param ctx the parse tree
-	 */
-	void enterTernaryOperator(SpookParser.TernaryOperatorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#ternaryOperator}.
-	 * @param ctx the parse tree
-	 */
-	void exitTernaryOperator(SpookParser.TernaryOperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#comment}.
 	 * @param ctx the parse tree
