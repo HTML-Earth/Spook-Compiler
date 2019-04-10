@@ -217,12 +217,18 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
+        Enums.ReturnType returnType = Enums.ReturnType.VOID;
+        if (ctx.returnType() != null)
+        {
+            returnType = getReturnType(ctx.returnType());
+        }
+
         if (ctx.functionArgs() != null) {
             ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
-            return new FunctionDeclarationNode(ctx.functionName().getText(), ctx.returnType().getText(), functionArgNodes);
+            return new FunctionDeclarationNode(returnType, ctx.functionName().getText(), functionArgNodes, (BlockNode)visitBlock(ctx.block()));
         }
         else {
-            return new FunctionDeclarationNode(ctx.functionName().getText(), ctx.returnType().getText());
+            return new FunctionDeclarationNode(returnType, ctx.functionName().getText(), (BlockNode)visitBlock(ctx.block()));
         }
     }
 
@@ -305,5 +311,26 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new RuntimeException("DataType is unknown");
 
         return dataType;
+    }
+
+    private Enums.ReturnType getReturnType(SpookParser.ReturnTypeContext ctx) {
+        Enums.ReturnType returnType;
+
+        if (ctx.dataType().INT() != null)
+            returnType = Enums.ReturnType.INT;
+        else if (ctx.dataType().FLOAT() != null)
+            returnType = Enums.ReturnType.FLOAT;
+        else if (ctx.dataType().BOOL() != null)
+            returnType = Enums.ReturnType.BOOL;
+        else if (ctx.dataType().VECTOR2() != null)
+            returnType = Enums.ReturnType.VEC2;
+        else if (ctx.dataType().VECTOR3() != null)
+            returnType = Enums.ReturnType.VEC3;
+        else if (ctx.dataType().VECTOR4() != null)
+            returnType = Enums.ReturnType.VEC4;
+        else
+            throw new RuntimeException("ReturnType is unknown");
+
+        return returnType;
     }
 }
