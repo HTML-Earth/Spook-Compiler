@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -327,6 +327,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArithOperation(SpookParser.ArithOperationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#arithOperand}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithOperand(SpookParser.ArithOperandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#arithOperand}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithOperand(SpookParser.ArithOperandContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree
