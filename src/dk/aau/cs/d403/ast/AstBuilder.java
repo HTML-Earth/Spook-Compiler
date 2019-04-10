@@ -80,6 +80,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         }
     }
 
+    private ArrayList<DeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
+        ArrayList<DeclarationNode> declarationNodes = new ArrayList<>();
+
+        declarationNodes.add((DeclarationNode) visitDeclaration(ctx.declaration()));
+
+        if (ctx.declarations() != null)
+            declarationNodes.addAll(visitAllDeclarations(ctx.declarations()));
+
+        return declarationNodes;
+    }
+
     @Override
     public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
         if (ctx.variableDecl() != null)
@@ -193,7 +204,27 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
-        return new ClassDeclarationNode(ctx.className().getText());
+        ClassBlockNode classBlockNode = (ClassBlockNode) visitClassBlock(ctx.classBlock());
+
+        return new ClassDeclarationNode(ctx.className().getText(), classBlockNode);
+    }
+
+    @Override
+    public ASTnode visitClassBlock(SpookParser.ClassBlockContext ctx) {
+        ArrayList<DeclarationNode> declarationNodes = new ArrayList<>();
+        ArrayList<FunctionDeclarationNode> functionDeclarationNodes = new ArrayList<>();
+
+        // Declarations
+        for (SpookParser.DeclarationsContext declarations: ctx.declarations()) {
+            declarationNodes.addAll(visitAllDeclarations(declarations));
+        }
+
+        //Function declarations
+        for (SpookParser.FunctionDeclContext functionDecl : ctx.functionDecl()) {
+            functionDeclarationNodes.add((FunctionDeclarationNode)visitFunctionDecl(functionDecl));
+        }
+
+        return new ClassBlockNode(declarationNodes, functionDeclarationNodes);
     }
 
     @Override
