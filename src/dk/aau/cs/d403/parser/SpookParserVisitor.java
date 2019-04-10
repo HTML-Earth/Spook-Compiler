@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -202,6 +202,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArithOperation(SpookParser.ArithOperationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#arithOperand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithOperand(SpookParser.ArithOperandContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree
