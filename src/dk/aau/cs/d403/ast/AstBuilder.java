@@ -6,6 +6,7 @@ import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
 
 import java.util.ArrayList;
 
@@ -93,28 +94,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitVariableDecl(SpookParser.VariableDeclContext ctx) {
 
-        VariableDeclarationNode.DataType dataType;
-
-        if (ctx.dataType().INT() != null)
-            dataType = VariableDeclarationNode.DataType.INT;
-        else if (ctx.dataType().FLOAT() != null)
-            dataType = VariableDeclarationNode.DataType.FLOAT;
-        else if (ctx.dataType().BOOL() != null)
-            dataType = VariableDeclarationNode.DataType.BOOL;
-        else if (ctx.dataType().VECTOR2() != null)
-            dataType = VariableDeclarationNode.DataType.VEC2;
-        else if (ctx.dataType().VECTOR3() != null)
-            dataType = VariableDeclarationNode.DataType.VEC3;
-        else if (ctx.dataType().VECTOR4() != null)
-            dataType = VariableDeclarationNode.DataType.VEC4;
-        else
-            throw new RuntimeException("DataType is unknown");
-
         if (ctx.assignment() != null) {
-            return new VariableDeclarationNode(dataType, (AssignmentNode)visitAssignment(ctx.assignment()));
+            return new VariableDeclarationNode(getDataType(ctx.dataType()), (AssignmentNode)visitAssignment(ctx.assignment()));
         }
         else if (ctx.variableName() != null) {
-            return new VariableDeclarationNode(dataType, ctx.variableName().getText());
+            return new VariableDeclarationNode(getDataType(ctx.dataType()), ctx.variableName().getText());
         }
         else {
             throw new RuntimeException("Expected variable name or assignment in declaration");
@@ -234,7 +218,29 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
-        return new FunctionDeclarationNode(ctx.functionName().getText(), ctx.returnType().getText());
+        if (ctx.functionArgs() != null) {
+            ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
+            return new FunctionDeclarationNode(ctx.functionName().getText(), ctx.returnType().getText(), functionArgNodes);
+        }
+        else {
+            return new FunctionDeclarationNode(ctx.functionName().getText(), ctx.returnType().getText());
+        }
+    }
+
+    public ArrayList<FunctionArgNode> visitAllFunctionArgs(SpookParser.FunctionArgsContext ctx) {
+        ArrayList<FunctionArgNode> functionArgNodes = new ArrayList<>();
+
+        functionArgNodes.add((FunctionArgNode) visitFunctionArg(ctx.functionArg()));
+
+        if (ctx.functionArgs() != null)
+            functionArgNodes.addAll(visitAllFunctionArgs(ctx.functionArgs()));
+
+        return functionArgNodes;
+    }
+
+    @Override
+    public ASTnode visitFunctionArg(SpookParser.FunctionArgContext ctx) {
+        return new FunctionArgNode(getDataType(ctx.dataType()), ctx.variableName().getText());
     }
 
     @Override
@@ -279,5 +285,26 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new RuntimeException("Boolean value not 'true' or 'false'");
 
         return value;
+    }
+
+    private DataType getDataType(SpookParser.DataTypeContext ctx) {
+        DataType dataType;
+
+        if (ctx.INT() != null)
+            dataType = VariableDeclarationNode.DataType.INT;
+        else if (ctx.FLOAT() != null)
+            dataType = VariableDeclarationNode.DataType.FLOAT;
+        else if (ctx.BOOL() != null)
+            dataType = VariableDeclarationNode.DataType.BOOL;
+        else if (ctx.VECTOR2() != null)
+            dataType = VariableDeclarationNode.DataType.VEC2;
+        else if (ctx.VECTOR3() != null)
+            dataType = VariableDeclarationNode.DataType.VEC3;
+        else if (ctx.VECTOR4() != null)
+            dataType = VariableDeclarationNode.DataType.VEC4;
+        else
+            throw new RuntimeException("DataType is unknown");
+
+        return dataType;
     }
 }
