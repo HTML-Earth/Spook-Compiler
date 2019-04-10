@@ -107,4 +107,46 @@ public class Enums {
         SHAPE,
         COLOR
     }
+
+    public static String classTypeToString(ClassType classType) {
+        switch (classType) {
+            case CIRCLE:
+                return "Circle";
+            case RECTANGLE:
+                return "Rectangle";
+            case TRIANGLE:
+                return "Triangle";
+            case SHAPE:
+                return "Shape";
+            case COLOR:
+                return "Color";
+            default:
+                return "InvalidClassType";
+        }
+    }
+
+    public enum Operator {
+        ADD,
+        SUB,
+        MOD,
+        DIV,
+        MUL
+    }
+
+    public static String operatorToString(Operator operator) {
+        switch (operator) {
+            case ADD:
+                return "+";
+            case SUB:
+                return "-";
+            case MOD:
+                return "%";
+            case DIV:
+                return "/";
+            case MUL:
+                return "*";
+            default:
+                return "InvalidOperator";
+        }
+    }
 }
