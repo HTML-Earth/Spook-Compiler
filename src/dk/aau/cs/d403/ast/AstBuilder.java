@@ -193,7 +193,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
-        return new ClassDeclarationNode(ctx.className().getText());
+        return new ClassDeclarationNode(ctx.className().getText(), (ClassBlockNode)visitClassBlock(ctx.classBlock()));
     }
 
     @Override
