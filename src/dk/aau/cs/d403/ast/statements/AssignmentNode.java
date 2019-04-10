@@ -21,6 +21,6 @@ public class AssignmentNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return variableName + " = " + "expr" + ";";
+        return variableName + " = " + expressionNode.prettyPrint() + ";";
     }
 }
