@@ -6,7 +6,6 @@ import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
 
 import java.util.ArrayList;
 
@@ -287,21 +286,21 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return value;
     }
 
-    private DataType getDataType(SpookParser.DataTypeContext ctx) {
-        DataType dataType;
+    private Enums.DataType getDataType(SpookParser.DataTypeContext ctx) {
+        Enums.DataType dataType;
 
         if (ctx.INT() != null)
-            dataType = VariableDeclarationNode.DataType.INT;
+            dataType = Enums.DataType.INT;
         else if (ctx.FLOAT() != null)
-            dataType = VariableDeclarationNode.DataType.FLOAT;
+            dataType = Enums.DataType.FLOAT;
         else if (ctx.BOOL() != null)
-            dataType = VariableDeclarationNode.DataType.BOOL;
+            dataType = Enums.DataType.BOOL;
         else if (ctx.VECTOR2() != null)
-            dataType = VariableDeclarationNode.DataType.VEC2;
+            dataType = Enums.DataType.VEC2;
         else if (ctx.VECTOR3() != null)
-            dataType = VariableDeclarationNode.DataType.VEC3;
+            dataType = Enums.DataType.VEC3;
         else if (ctx.VECTOR4() != null)
-            dataType = VariableDeclarationNode.DataType.VEC4;
+            dataType = Enums.DataType.VEC4;
         else
             throw new RuntimeException("DataType is unknown");
 
