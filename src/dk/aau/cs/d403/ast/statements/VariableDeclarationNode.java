@@ -1,32 +1,24 @@
 package dk.aau.cs.d403.ast.statements;
 
+import dk.aau.cs.d403.ast.Enums;
+
 public class VariableDeclarationNode extends DeclarationNode {
-
-    public enum DataType {
-        INT,
-        FLOAT,
-        BOOL,
-        VEC2,
-        VEC3,
-        VEC4
-    }
-
-    private DataType dataType;
+    private Enums.DataType dataType;
     private String variableName;
     private AssignmentNode assignmentNode;
 
-    public VariableDeclarationNode(DataType dataType, String variableName) {
+    public VariableDeclarationNode(Enums.DataType dataType, String variableName) {
         this.dataType = dataType;
         this.variableName = variableName;
     }
 
-    public VariableDeclarationNode(DataType dataType, AssignmentNode assignmentNode) {
+    public VariableDeclarationNode(Enums.DataType dataType, AssignmentNode assignmentNode) {
         this.dataType = dataType;
         this.variableName = assignmentNode.getVariableName();
         this.assignmentNode = assignmentNode;
     }
 
-    public DataType getDataType() {
+    public Enums.DataType getDataType() {
         return dataType;
     }
 
