@@ -88,8 +88,8 @@ objectArg
 
 // Object function calls
 objectFunctionCall
-    : (objectVariableName DOT functionName ASSIGN (objectArg? | LEFT_PAREN objectArgs* RIGHT_PAREN)
-    | objectVariableName DOT functionName LEFT_PAREN objectArgs* RIGHT_PAREN);
+    : (objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
+    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN);
 
 // Color function call
 classProperty
@@ -98,9 +98,14 @@ classProperty
 
 /* Function declaration */
 functionDecl
-    : returnType functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN block
-    | VOID functionName LEFT_PAREN (dataType variableName)* RIGHT_PAREN block;
+    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
+    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
 
+functionArgs
+    : functionArg COMMA functionArgs
+    | functionArg;
+functionArg
+    : dataType variableName;
 
 /* Integer, float and vector declaration */
 variableDecl
