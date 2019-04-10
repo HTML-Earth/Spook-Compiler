@@ -56,15 +56,14 @@ vector2Expression: LEFT_PAREN floatExpression COMMA floatExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
 boolExpression: BOOL_LITERAL | boolOperations;
+ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 // Conditional statements
 conditionalStatement
-    : ifElseStatement
-    | ternaryOperator;
+    : ifElseStatement;
 
 // If-else if-else
 ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN block (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN block)* (ELSE block)?;
-ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 // Single-line comment
 comment
