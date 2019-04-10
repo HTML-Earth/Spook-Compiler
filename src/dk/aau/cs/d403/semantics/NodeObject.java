@@ -5,11 +5,18 @@ public class NodeObject {
     private DataType type;
     private String name;
     private String scopeLevel;
+    private String attributes;
 
     public NodeObject(DataType type, String name, String scopeLevel) {
         this.type = type;
         this.name = name;
         this.scopeLevel = scopeLevel;
+    }
+
+    public NodeObject(String name, String scopeLevel, String attributes) {
+        this.name = name;
+        this.scopeLevel = scopeLevel;
+        this.attributes = attributes;
     }
 
     public NodeObject(String name, String scopeLevel) {
@@ -27,5 +34,9 @@ public class NodeObject {
 
     public String getScopeLevel() {
         return scopeLevel;
+    }
+
+    public String getAttributes() {
+        return attributes;
     }
 }
