@@ -1,18 +1,18 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.ASTnode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
+import dk.aau.cs.d403.ast.Enums;
 
 public class FunctionArgNode implements ASTnode {
-    private DataType dataType;
+    private Enums.DataType dataType;
     private String variableName;
 
-    public FunctionArgNode(DataType dataType, String variableName) {
+    public FunctionArgNode(Enums.DataType dataType, String variableName) {
         this.dataType = dataType;
         this.variableName = variableName;
     }
 
-    public DataType getDataType() {
+    public Enums.DataType getDataType() {
         return dataType;
     }
 
