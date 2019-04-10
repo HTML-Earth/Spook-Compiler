@@ -1,32 +1,40 @@
 package dk.aau.cs.d403.ast.structure;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.statements.FunctionArgNode;
 
 import java.util.ArrayList;
 
 public class FunctionDeclarationNode implements ASTnode {
-    private String returnType;
+    private Enums.ReturnType returnType;
     private String functionName;
     private ArrayList<FunctionArgNode> functionArgNodes;
+    private BlockNode blockNode;
 
-    public FunctionDeclarationNode(String functionName, String returnType) {
-        this.functionName = functionName;
+    public FunctionDeclarationNode(Enums.ReturnType returnType, String functionName, BlockNode blockNode) {
         this.returnType = returnType;
+        this.functionName = functionName;
+        this.blockNode = blockNode;
     }
 
-    public FunctionDeclarationNode(String returnType, String functionName, ArrayList<FunctionArgNode> functionArgNodes) {
+    public FunctionDeclarationNode(Enums.ReturnType returnType, String functionName, ArrayList<FunctionArgNode> functionArgNodes, BlockNode blockNode) {
         this.returnType = returnType;
         this.functionName = functionName;
         this.functionArgNodes = functionArgNodes;
+        this.blockNode = blockNode;
     }
 
-    public String getReturnType() {
+    public Enums.ReturnType getReturnType() {
         return returnType;
     }
 
     public String getFunctionName() {
         return functionName;
+    }
+
+    public BlockNode getBlockNode() {
+        return blockNode;
     }
 
     public ArrayList<FunctionArgNode> getFunctionArgNodes() {
@@ -37,7 +45,7 @@ public class FunctionDeclarationNode implements ASTnode {
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(returnType);
+        sb.append(Enums.returnTypeToStringSpook(returnType));
         sb.append(" ");
         sb.append(functionName);
         sb.append("() {\n");
