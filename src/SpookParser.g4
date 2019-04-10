@@ -118,9 +118,12 @@ arithOperations
 
 // Arithmetic operations
 arithOperation
-    : (realNumber | mathFunction | variableName) operator (realNumber | mathFunction | variableName | LEFT_PAREN arithOperation RIGHT_PAREN)
-    | operator (realNumber | mathFunction | variableName | LEFT_PAREN arithOperation RIGHT_PAREN)
+    : arithOperand operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
+    | operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
     | LEFT_PAREN arithOperations RIGHT_PAREN;
+
+arithOperand
+    : realNumber | mathFunction | variableName;
 
 // Mathematical functions
 mathFunction
