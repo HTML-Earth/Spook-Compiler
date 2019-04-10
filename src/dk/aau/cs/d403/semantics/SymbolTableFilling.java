@@ -2,8 +2,11 @@ package dk.aau.cs.d403.semantics;
 
 import java.util.HashMap;
 
-import dk.aau.cs.d403.ast.statements.*;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
+import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.statements.RectangleDeclarationNode;
+import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.statements.AssignmentNode;
+import dk.aau.cs.d403.ast.statements.StatementNode;
 import dk.aau.cs.d403.ast.structure.*;
 
 public class SymbolTableFilling implements SymbolTable{
@@ -68,13 +71,13 @@ public class SymbolTableFilling implements SymbolTable{
 
         // If a variable doesn't exist
         if(retrieveSymbol(variableName) == null) {
-            DataType declarationType = variableDeclarationNode.getDataType();
+            Enums.DataType declarationType = variableDeclarationNode.getDataType();
 
             enterSymbol(this.scopeLevel, new NodeObject(declarationType, variableName, this.scopeLevel));
         }
         // If a variable already existed but not in the same scope
         else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
-            DataType declarationType = variableDeclarationNode.getDataType();
+            Enums.DataType declarationType = variableDeclarationNode.getDataType();
 
             enterSymbol(this.scopeLevel, new NodeObject(declarationType, variableName, this.scopeLevel));
         }
@@ -91,7 +94,7 @@ public class SymbolTableFilling implements SymbolTable{
         if(retrieveSymbol(variableName) != null) {
             // If the variable has the same scope level as the Node
             if(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel)) {
-                DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
+                Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
                 enterSymbol(this.scopeLevel, new NodeObject(assignmentType, variableName, this.scopeLevel));
             }

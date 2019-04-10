@@ -1,13 +1,14 @@
 package dk.aau.cs.d403.semantics;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode.DataType;
+
+import dk.aau.cs.d403.ast.Enums;
 
 public class NodeObject {
-    private DataType type;
+    private Enums.DataType type;
     private String name;
     private String scopeLevel;
     private String attributes;
 
-    public NodeObject(DataType type, String name, String scopeLevel) {
+    public NodeObject(Enums.DataType type, String name, String scopeLevel) {
         this.type = type;
         this.name = name;
         this.scopeLevel = scopeLevel;
@@ -24,7 +25,7 @@ public class NodeObject {
         this.scopeLevel = scopeLevel;
     }
 
-    public DataType getType() {
+    public Enums.DataType getType() {
         return type;
     }
 
