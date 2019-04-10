@@ -48,6 +48,58 @@ public class Enums {
         }
     }
 
+    public enum ReturnType {
+        VOID,
+        INT,
+        FLOAT,
+        BOOL,
+        VEC2,
+        VEC3,
+        VEC4
+    }
+
+    public static String returnTypeToStringSpook(ReturnType returnType) {
+        switch (returnType) {
+            case INT:
+                return dataTypeToStringSpook(DataType.INT);
+            case FLOAT:
+                return dataTypeToStringSpook(DataType.FLOAT);
+            case BOOL:
+                return dataTypeToStringSpook(DataType.BOOL);
+            case VEC2:
+                return dataTypeToStringSpook(DataType.VEC2);
+            case VEC3:
+                return dataTypeToStringSpook(DataType.VEC3);
+            case VEC4:
+                return dataTypeToStringSpook(DataType.VEC4);
+            case VOID:
+                return "Void";
+            default:
+                return "InvalidType";
+        }
+    }
+
+    public static String returnTypeToStringGLSL(ReturnType returnType) {
+        switch (returnType) {
+            case INT:
+                return dataTypeToStringGLSL(DataType.INT);
+            case FLOAT:
+                return dataTypeToStringGLSL(DataType.FLOAT);
+            case BOOL:
+                return dataTypeToStringGLSL(DataType.BOOL);
+            case VEC2:
+                return dataTypeToStringGLSL(DataType.VEC2);
+            case VEC3:
+                return dataTypeToStringGLSL(DataType.VEC3);
+            case VEC4:
+                return dataTypeToStringGLSL(DataType.VEC4);
+            case VOID:
+                return "void";
+            default:
+                return "InvalidType";
+        }
+    }
+
     public enum ClassType {
         CIRCLE,
         RECTANGLE,
