@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.ast.statements;
 
-public class VariableDeclarationNode extends StatementNode {
+public class VariableDeclarationNode extends DeclarationNode {
 
     public enum DataType {
         INT,
