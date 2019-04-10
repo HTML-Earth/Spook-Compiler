@@ -4,13 +4,19 @@ import dk.aau.cs.d403.ast.ASTnode;
 
 public class ClassDeclarationNode implements ASTnode {
     private String className;
+    private ClassBlockNode classBlockNode;
 
-    public ClassDeclarationNode(String className) {
+    public ClassDeclarationNode(String className, ClassBlockNode classBlockNode) {
         this.className = className;
+        this.classBlockNode = classBlockNode;
     }
 
     public String getClassName() {
         return this.className;
+    }
+
+    public ClassBlockNode getClassBlockNode() {
+        return classBlockNode;
     }
 
     @Override
