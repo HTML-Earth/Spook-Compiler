@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.ast.statements;
 
-public abstract class ObjectDeclarationNode extends StatementNode {
+public class ObjectDeclarationNode extends DeclarationNode {
 
 
     @Override
