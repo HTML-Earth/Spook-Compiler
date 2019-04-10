@@ -281,7 +281,112 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx) {
-        return new ObjectFunctionCallNode();
+        String objectName = ctx.objectVariableName().getText();
+        String functionName = ctx.functionName().getText();
+        if (ctx.objectArgs() != null) {
+            ArrayList<ObjectArgumentNode> argumentNodes = visitAllObjectArguments(ctx.objectArgs());
+            return new ObjectFunctionCallNode(objectName, functionName, argumentNodes);
+        }
+        else {
+            return new ObjectFunctionCallNode(objectName, functionName);
+        }
+    }
+
+    public ArrayList<ObjectArgumentNode> visitAllObjectArguments(SpookParser.ObjectArgsContext ctx) {
+        ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
+
+        objectArgumentNodes.add((ObjectArgumentNode) visitObjectArg(ctx.objectArg()));
+
+        if (ctx.objectArgs() != null)
+            objectArgumentNodes.addAll(visitAllObjectArguments(ctx.objectArgs()));
+
+        return objectArgumentNodes;
+    }
+
+    @Override
+    public ASTnode visitObjectArg(SpookParser.ObjectArgContext ctx) {
+        if (ctx.variableName() != null)
+            return new ObjectArgumentNode(ctx.variableName().getText());
+        else if (ctx.realNumber() != null)
+            return new ObjectArgumentNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+        else if (ctx.arithOperation() != null)
+            return new ObjectArgumentNode((ArithOperationNode)visitArithOperation(ctx.arithOperation()));
+        else if (ctx.classProperty() != null)
+            return new ObjectArgumentNode((ClassPropertyNode)visitClassProperty(ctx.classProperty()));
+        else
+            throw new RuntimeException("Invalid Object Function Call Argument");
+    }
+
+    @Override
+    public ASTnode visitArithOperation(SpookParser.ArithOperationContext ctx) {
+        switch (ctx.arithOperand().size()) {
+            case 0:
+                // operator ( operation )
+                if (ctx.operator() != null && ctx.arithOperation() != null) {
+                    Enums.Operator operator = getOperator(ctx.operator());
+                    ArithOperationNode operationNode = (ArithOperationNode)visitArithOperation(ctx.arithOperation());
+                    return new ArithOperationNode(operator, operationNode);
+                }
+                // ( operations )
+                else if (ctx.arithOperations() != null) {
+                    return new ArithOperationNode(visitAllArithOperations(ctx.arithOperations()));
+                }
+                else throw new RuntimeException("Expected 'operator (operation)' or '(operations)'");
+            case 1:
+                // operand operator ( operation )
+                if (ctx.arithOperand(0) != null && ctx.operator() != null && ctx.arithOperation() != null) {
+                    ArithOperandNode operandNode = (ArithOperandNode)visitArithOperand(ctx.arithOperand(0));
+                    Enums.Operator operator = getOperator(ctx.operator());
+                    ArithOperationNode operationNode = (ArithOperationNode)visitArithOperation(ctx.arithOperation());
+                    return new ArithOperationNode(operandNode, operator, operationNode);
+                }
+                // operator operand
+                else if (ctx.operator() != null && ctx.arithOperand(0) != null) {
+                    Enums.Operator operator = getOperator(ctx.operator());
+                    ArithOperandNode operandNode = (ArithOperandNode)visitArithOperand(ctx.arithOperand(0));
+                    return new ArithOperationNode(operator, operandNode);
+                }
+                else throw new RuntimeException("Expected 'operand operator (operation)' or 'operator operand'");
+            case 2:
+                // operand operator operand
+                if (ctx.arithOperand(0) != null && ctx.operator() != null && ctx.arithOperand(1) != null) {
+                    ArithOperandNode leftOperand = (ArithOperandNode)visitArithOperand(ctx.arithOperand(0));
+                    Enums.Operator operator = getOperator(ctx.operator());
+                    ArithOperandNode rightOperand = (ArithOperandNode)visitArithOperand(ctx.arithOperand(1));
+                    return new ArithOperationNode(leftOperand, operator, rightOperand);
+                }
+                else throw new RuntimeException("Expected 'operand operator operand'");
+            default:
+                throw new RuntimeException("INVALID");
+        }
+    }
+
+    public ArrayList<ArithOperationNode> visitAllArithOperations(SpookParser.ArithOperationsContext ctx) {
+        ArrayList<ArithOperationNode> arithOperationNodes = new ArrayList<>();
+
+        arithOperationNodes.add((ArithOperationNode) visitArithOperation(ctx.arithOperation()));
+
+        if (ctx.arithOperations() != null)
+            arithOperationNodes.addAll(visitAllArithOperations(ctx.arithOperations()));
+
+        return arithOperationNodes;
+    }
+
+    @Override
+    public ASTnode visitArithOperand(SpookParser.ArithOperandContext ctx) {
+        if (ctx.realNumber() != null)
+            return new ArithOperandNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+        else if (ctx.mathFunction() != null)
+            return new ArithOperandNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
+        else if (ctx.variableName() != null)
+            return new ArithOperandNode(ctx.variableName().getText());
+        else
+            throw new RuntimeException("Invalid Operand");
+    }
+
+    @Override
+    public ASTnode visitClassProperty(SpookParser.ClassPropertyContext ctx) {
+        return new ClassPropertyNode(getClassType(ctx.classType()), ctx.variableName().getText());
     }
 
     private float getRealNumberValue(SpookParser.RealNumberContext ctx) {
@@ -363,5 +468,43 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new RuntimeException("ReturnType is unknown");
 
         return returnType;
+    }
+
+    private Enums.ClassType getClassType(SpookParser.ClassTypeContext ctx) {
+        Enums.ClassType classType;
+
+        if (ctx.CIRCLE() != null)
+            classType = Enums.ClassType.CIRCLE;
+        else if (ctx.RECTANGLE() != null)
+            classType = Enums.ClassType.RECTANGLE;
+        else if (ctx.TRIANGLE() != null)
+            classType = Enums.ClassType.TRIANGLE;
+        else if (ctx.SHAPE() != null)
+            classType = Enums.ClassType.SHAPE;
+        else if (ctx.COLOR() != null)
+            classType = Enums.ClassType.COLOR;
+        else
+            throw new RuntimeException("ClassType is unknown");
+
+        return classType;
+    }
+
+    private Enums.Operator getOperator(SpookParser.OperatorContext ctx) {
+        Enums.Operator operator;
+
+        if (ctx.ADD() != null)
+            operator = Enums.Operator.ADD;
+        else if (ctx.SUB() != null)
+            operator = Enums.Operator.SUB;
+        else if (ctx.MOD() != null)
+            operator = Enums.Operator.MOD;
+        else if (ctx.DIV() != null)
+            operator = Enums.Operator.DIV;
+        else if (ctx.MUL() != null)
+            operator = Enums.Operator.MUL;
+        else
+            throw new RuntimeException("Operator is unknown");
+
+        return operator;
     }
 }
