@@ -1,6 +1,6 @@
-package dk.aau.cs.d403.ast;
+package dk.aau.cs.d403.ast.statements;
 
-public class RectangleDeclarationNode extends ObjectDeclarationNode{
+public class RectangleDeclarationNode extends ObjectDeclarationNode {
     private String objName;
 
     private float width;

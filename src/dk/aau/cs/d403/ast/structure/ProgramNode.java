@@ -1,8 +1,10 @@
-package dk.aau.cs.d403.ast;
+package dk.aau.cs.d403.ast.structure;
+
+import dk.aau.cs.d403.ast.ASTnode;
 
 import java.util.ArrayList;
 
-public class ProgramNode implements ASTnode{
+public class ProgramNode implements ASTnode {
 
     private MainNode mainNode;
     private ArrayList<ClassDeclarationNode> classDeclarationNodes;
