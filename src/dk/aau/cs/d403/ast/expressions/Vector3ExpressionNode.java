@@ -14,9 +14,9 @@ public class Vector3ExpressionNode extends Vector2ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "( " + floatExpressionNode1.prettyPrint()
-                + " , " + floatExpressionNode2.prettyPrint()
-                + " , " + floatExpressionNode3.prettyPrint()
-                + " )";
+        return "(" + floatExpressionNode1.prettyPrint()
+                + ", " + floatExpressionNode2.prettyPrint()
+                + ", " + floatExpressionNode3.prettyPrint()
+                + ")";
     }
 }

@@ -146,7 +146,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         if (ctx.naturalNumber() != null)
             return new IntegerExpressionNode(new NaturalNumberNode(getNaturalNumberValue(ctx.naturalNumber())));
         else if (ctx.arithOperations() != null)
-            return new IntegerExpressionNode(new ArrayList<ArithOperationNode>());
+            return new IntegerExpressionNode(visitAllArithOperations(ctx.arithOperations()));
         else if (ctx.mathFunction() != null)
             return new IntegerExpressionNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
         else
@@ -158,7 +158,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         if (ctx.realNumber() != null)
             return new FloatExpressionNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
         else if (ctx.arithOperations() != null)
-            return new FloatExpressionNode(new ArrayList<ArithOperationNode>());
+            return new FloatExpressionNode(visitAllArithOperations(ctx.arithOperations()));
         else if (ctx.mathFunction() != null)
             return new FloatExpressionNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
         else

@@ -72,17 +72,37 @@ public class ArithOperationNode implements ASTnode {
                     + arithOperationNode.prettyPrint();
         }
         else if (operator != null && rightOperand != null) {
-            return Enums.operatorToString(operator) + " "
+            return " " + Enums.operatorToString(operator) + " "
                     + rightOperand.prettyPrint();
         }
         else if (operator != null && arithOperationNode != null) {
-            return Enums.operatorToString(operator) + " "
+            return " " + Enums.operatorToString(operator) + " "
                     + arithOperationNode.prettyPrint();
         }
         else if (arithOperationNodes != null) {
-            return "multiple arithOperations";
+            StringBuilder sb = new StringBuilder();
+            for (ArithOperationNode operationNode: arithOperationNodes) {
+                sb.append(operationNode.prettyPrint());
+            }
+            return sb.toString();
         }
         else
             return "Invalid Arithmetic Operation";
+    }
+
+    public static String prettyPrintOperations(ArrayList<ArithOperationNode> operationNodes) {
+        if (operationNodes != null) {
+            StringBuilder sb = new StringBuilder();
+            boolean firstOp = true;
+            for (ArithOperationNode operationNode: operationNodes) {
+                if (!firstOp)
+                    sb.append(" ");
+                else
+                    firstOp = false;
+                sb.append(operationNode.prettyPrint());
+            }
+            return sb.toString();
+        }
+        else return "Missing ArithOperations";
     }
 }

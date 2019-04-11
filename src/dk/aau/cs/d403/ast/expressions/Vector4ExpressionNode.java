@@ -14,10 +14,10 @@ public class Vector4ExpressionNode extends Vector3ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "( " + floatExpressionNode1.prettyPrint()
-                + " , " + floatExpressionNode2.prettyPrint()
-                + " , " + floatExpressionNode3.prettyPrint()
-                + " , " + floatExpressionNode4.prettyPrint()
-                + " )";
+        return "(" + floatExpressionNode1.prettyPrint()
+                + ", " + floatExpressionNode2.prettyPrint()
+                + ", " + floatExpressionNode3.prettyPrint()
+                + ", " + floatExpressionNode4.prettyPrint()
+                + ")";
     }
 }

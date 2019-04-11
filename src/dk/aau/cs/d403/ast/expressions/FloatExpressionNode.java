@@ -33,8 +33,9 @@ public class FloatExpressionNode extends ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        if (arithOperationNodes != null)
-            return "arith";
+        if (arithOperationNodes != null) {
+            return ArithOperationNode.prettyPrintOperations(arithOperationNodes);
+        }
         else if (mathFunctionCallNode != null)
             return mathFunctionCallNode.prettyPrint();
         else if (realNumberNode != null)
