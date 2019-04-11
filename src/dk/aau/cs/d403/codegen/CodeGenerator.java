@@ -33,7 +33,7 @@ public class CodeGenerator implements ASTvisitor {
     public BlockNode visitBlock(BlockNode blockNode) {
         sb.append("{");
         for (StatementNode statement : blockNode.getStatementNodes()) {
-            sb.append("\n");
+            sb.append("\n\t");
             visitStatement(statement);
             sb.append(";");
         }
