@@ -1,11 +1,14 @@
-package dk.aau.cs.d403.ast;
+package dk.aau.cs.d403.ast.structure;
+
+import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.statements.StatementNode;
 
 import java.util.ArrayList;
 
 public class BlockNode implements ASTnode {
     private ArrayList<StatementNode> statementNodes;
 
-    BlockNode(ArrayList<StatementNode> statementNodes) {
+    public BlockNode(ArrayList<StatementNode> statementNodes) {
         this.statementNodes = statementNodes;
     }
 
