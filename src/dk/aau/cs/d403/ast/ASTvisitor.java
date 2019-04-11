@@ -24,7 +24,6 @@ public interface ASTvisitor {
     IfElseStatementNode visitIfElseStatement(IfElseStatementNode ifElseStatementNode);
     ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode);
     FunctionArgNode visitFunctionArg(FunctionArgNode functionArgNode);
-    RectangleDeclarationNode visitRectangleDeclaration(RectangleDeclarationNode rectangleDeclarationNode);
     ReturnNode visitReturn(ReturnNode returnNode);
 
     //Expressions

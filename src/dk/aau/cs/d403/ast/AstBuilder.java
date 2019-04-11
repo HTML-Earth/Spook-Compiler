@@ -252,21 +252,15 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
-        if (ctx.classType().RECTANGLE() != null) {
-            String rectName = ctx.objectVariableName().getText();
-            float rectWidth = getRealNumberValue(ctx.objectArgs(0).objectArg().realNumber());
-            float rectHeight = getRealNumberValue(ctx.objectArgs(0).objectArgs().objectArg().realNumber());
-            float rectColorR = 0;
-            float rectColorG = 0;
-            float rectColorB = 0;
-            float rectColorA = 0;
-
-            return new RectangleDeclarationNode(rectName, rectWidth, rectHeight, rectColorR, rectColorG, rectColorB, rectColorA);
+        Enums.ClassType classType = getClassType(ctx.classType());
+        String objectName = ctx.objectVariableName().getText();
+        if (ctx.objectArgs() != null) {
+            ArrayList<ObjectArgumentNode> objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs(0));
+            return new ObjectDeclarationNode(classType, objectName, objectArgumentNodes);
         }
-        else if (ctx.classType().CIRCLE() != null)
-            return null;
-        else
-            throw new RuntimeException("Object is of unknown type");
+        else {
+            return new ObjectDeclarationNode(classType, objectName);
+        }
     }
 
     @Override
