@@ -72,10 +72,10 @@ NOT: '!';
 
 // Mathematical functions
 // abs, sin, cos, tan makes conflicts if not ended with a parenthesis
-ABS: 'abs(';
-SIN: 'sin(';
-COS: 'cos(';
-TAN: 'tan(';
+ABS: 'abs';
+SIN: 'sin';
+COS: 'cos';
+TAN: 'tan';
 
 // Uniforms
 UNIFORM: 'Time';
