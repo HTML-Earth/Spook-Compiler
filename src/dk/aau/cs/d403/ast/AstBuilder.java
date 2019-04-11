@@ -53,7 +53,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private ArrayList<StatementNode> visitAllStatements(SpookParser.StatementsContext ctx) {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
-        statementNodes.add((StatementNode) visitStatement(ctx.statement()));
+        StatementNode statementNode = (StatementNode) visitStatement(ctx.statement());
+
+        if (statementNode != null)
+            statementNodes.add(statementNode);
 
         if (ctx.statements() != null)
             statementNodes.addAll(visitAllStatements(ctx.statements()));
@@ -83,7 +86,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private ArrayList<DeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
         ArrayList<DeclarationNode> declarationNodes = new ArrayList<>();
 
-        declarationNodes.add((DeclarationNode) visitDeclaration(ctx.declaration()));
+        DeclarationNode declarationNode = (DeclarationNode) visitDeclaration(ctx.declaration());
+
+        if (declarationNode != null)
+            declarationNodes.add(declarationNode);
 
         if (ctx.declarations() != null)
             declarationNodes.addAll(visitAllDeclarations(ctx.declarations()));
@@ -277,7 +283,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ArrayList<FunctionArgNode> visitAllFunctionArgs(SpookParser.FunctionArgsContext ctx) {
         ArrayList<FunctionArgNode> functionArgNodes = new ArrayList<>();
 
-        functionArgNodes.add((FunctionArgNode) visitFunctionArg(ctx.functionArg()));
+        FunctionArgNode functionArgNode = (FunctionArgNode) visitFunctionArg(ctx.functionArg());
+
+        if (functionArgNode != null)
+            functionArgNodes.add(functionArgNode);
 
         if (ctx.functionArgs() != null)
             functionArgNodes.addAll(visitAllFunctionArgs(ctx.functionArgs()));
@@ -306,7 +315,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ArrayList<ObjectArgumentNode> visitAllObjectArguments(SpookParser.ObjectArgsContext ctx) {
         ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
 
-        objectArgumentNodes.add((ObjectArgumentNode) visitObjectArg(ctx.objectArg()));
+        ObjectArgumentNode objectArgumentNode = (ObjectArgumentNode) visitObjectArg(ctx.objectArg());
+
+        if (objectArgumentNode != null)
+            objectArgumentNodes.add(objectArgumentNode);
 
         if (ctx.objectArgs() != null)
             objectArgumentNodes.addAll(visitAllObjectArguments(ctx.objectArgs()));
@@ -375,7 +387,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ArrayList<ArithOperationNode> visitAllArithOperations(SpookParser.ArithOperationsContext ctx) {
         ArrayList<ArithOperationNode> arithOperationNodes = new ArrayList<>();
 
-        arithOperationNodes.add((ArithOperationNode) visitArithOperation(ctx.arithOperation()));
+        ArithOperationNode arithOperationNode = (ArithOperationNode) visitArithOperation(ctx.arithOperation());
+
+        if (arithOperationNode != null)
+            arithOperationNodes.add(arithOperationNode);
 
         if (ctx.arithOperations() != null)
             arithOperationNodes.addAll(visitAllArithOperations(ctx.arithOperations()));
