@@ -123,11 +123,11 @@ arithOperation
     | LEFT_PAREN arithOperations RIGHT_PAREN;
 
 arithOperand
-    : realNumber | mathFunction | variableName;
+    : realNumber | mathFunction | variableName | UNIFORM;
 
 // Mathematical functions
 mathFunction
-    : function (variableName | realNumber | mathFunction | UNIFORM) arithOperation* RIGHT_PAREN;
+    : function LEFT_PAREN (arithOperand | arithOperations) RIGHT_PAREN;
 
 
 // Recursive boolean operations
