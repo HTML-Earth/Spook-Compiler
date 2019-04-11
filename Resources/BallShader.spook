@@ -14,9 +14,6 @@ Shader {
     Float shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
 
     #Shadow color
-    Float shadowBrightness = (1 - 1 * shadowSize * 0.01) - 0.3;
-    Vec4 shadowColor = shadowBrightness.xxxx;
-
     Float shadowDarkness = shadowSize * 0.005;
     Vec4 shadowColor = bgColor - shadowDarkness.xxxx;
 
