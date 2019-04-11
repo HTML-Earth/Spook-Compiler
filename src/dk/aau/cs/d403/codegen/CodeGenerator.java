@@ -1,7 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
 import dk.aau.cs.d403.ast.ASTvisitor;
-import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -66,8 +65,12 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public DeclarationNode visitDeclaration(DeclarationNode declarationNode) {
-        sb.append("DECLARATION");
-        return declarationNode;
+        if (declarationNode instanceof VariableDeclarationNode)
+            return visitVariableDeclaration((VariableDeclarationNode)declarationNode);
+        else if (declarationNode instanceof ObjectDeclarationNode)
+            return visitObjectDeclaration((ObjectDeclarationNode)declarationNode);
+        else
+            throw new RuntimeException("Declaration is of unknown type");
     }
 
     @Override
@@ -116,12 +119,6 @@ public class CodeGenerator implements ASTvisitor {
     public FunctionArgNode visitFunctionArg(FunctionArgNode functionArgNode) {
         sb.append("FUNCTION ARG");
         return functionArgNode;
-    }
-
-    @Override
-    public RectangleDeclarationNode visitRectangleDeclaration(RectangleDeclarationNode rectangleDeclarationNode) {
-        sb.append("RECTANGLE DECLARATION");
-        return rectangleDeclarationNode;
     }
 
     @Override
