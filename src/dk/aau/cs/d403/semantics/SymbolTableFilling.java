@@ -3,10 +3,7 @@ package dk.aau.cs.d403.semantics;
 import java.util.*;
 
 import dk.aau.cs.d403.ast.Enums;
-import dk.aau.cs.d403.ast.statements.RectangleDeclarationNode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
-import dk.aau.cs.d403.ast.statements.AssignmentNode;
-import dk.aau.cs.d403.ast.statements.StatementNode;
+import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 
 public class SymbolTableFilling implements SymbolTable{
