@@ -3,6 +3,7 @@ package dk.aau.cs.d403.semantics;
 import java.util.*;
 
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 
@@ -88,17 +89,18 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
         String variableName = variableDeclarationNode.getVariableName();
+        Enums.DataType declarationType = variableDeclarationNode.getDataType();
 
-        // If a variable doesn't exist
+        // SCOPE CHECK: If a variable doesn't exist
         if(retrieveSymbol(variableName) == null) {
-            Enums.DataType declarationType = variableDeclarationNode.getDataType();
-
             enterSymbol(new NodeObject(declarationType, variableName, this.scopeLevel), this.scopeLevel);
         }
-        // If a variable already existed but not in the same scope
+        // SCOPE CHECK: If a variable already existed but not of the same type
+        else if (!(retrieveSymbol(variableName).getType().equals(declarationType))) {
+            enterSymbol(new NodeObject(declarationType, variableName, this.scopeLevel), this.scopeLevel);
+        }
+        // SCOPE CHECK: If a variable already existed but not in the same scope
         else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
-            Enums.DataType declarationType = variableDeclarationNode.getDataType();
-
             enterSymbol(new NodeObject(declarationType, variableName, this.scopeLevel), this.scopeLevel);
         }
         // If a variable already existed in the same scope
@@ -109,11 +111,18 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitAssignment(AssignmentNode assignmentNode) {
         String variableName = assignmentNode.getVariableName();
+        NodeObject nodeObject = retrieveSymbol(variableName);
 
-        // If a variable exists
-        if(retrieveSymbol(variableName) != null) {
-            // If the variable has the same scope level as the Node
-            if(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel)) {
+        // SCOPE CHECK: If a variable exists
+        if(nodeObject != null) {
+
+            // TYPE CHECK: If the type of the variable does not match the type of the assignment
+            if(!(nodeObject.getType().equals(getExpressionNodeType(assignmentNode)))) {
+                throw new RuntimeException("ERROR: Variable type does not match the type of the expression.");
+            }
+
+            // SCOPE CHECK: If the variable has the same scope level as the Node
+            if(nodeObject.getScopeLevel().equals(this.scopeLevel)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
                 enterSymbol(new NodeObject(assignmentType, variableName, this.scopeLevel, assignmentNode.prettyPrint()), this.scopeLevel);
@@ -129,7 +138,7 @@ public class SymbolTableFilling implements SymbolTable{
     private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
         String className = classDeclarationNode.getClassName();
 
-        // If a class with this name doesn't exist
+        // SCOPE CHECK: If a class with this name doesn't exist
         if(retrieveSymbol(className) == null) {
             enterSymbol(new NodeObject(className, this.scopeLevel), this.scopeLevel);
         }
@@ -172,11 +181,11 @@ public class SymbolTableFilling implements SymbolTable{
             attributes = sb.toString();
         }
 
-        // If a function with this name doesn't exist
+        // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
             enterSymbol(new NodeObject(dataType, functionName, this.scopeLevel, attributes), this.scopeLevel);
         }
-        // If a function with the same name exists but doesn't have the same parameters
+        // SCOPE CHECK: If a function with the same name exists but doesn't have the same parameters
         else if (!(retrieveSymbol(functionName).getAttributes().equals(attributes))) {
             enterSymbol(new NodeObject(dataType, functionName, this.scopeLevel, attributes), this.scopeLevel);
         }
@@ -185,6 +194,25 @@ public class SymbolTableFilling implements SymbolTable{
         }
 
         visitBlock(functionDeclarationNode.getBlockNode());
+    }
+
+    private Enums.DataType getExpressionNodeType(AssignmentNode assignmentNode) {
+        ExpressionNode expressionNode = assignmentNode.getExpressionNode();
+
+        if(expressionNode instanceof IntegerExpressionNode)
+            return Enums.DataType.INT;
+        else if(expressionNode instanceof FloatExpressionNode)
+            return Enums.DataType.FLOAT;
+        else if(expressionNode instanceof BoolExpressionNode)
+            return Enums.DataType.BOOL;
+        else if(expressionNode instanceof Vector2ExpressionNode)
+            return Enums.DataType.VEC2;
+        else if(expressionNode instanceof Vector3ExpressionNode)
+            return Enums.DataType.VEC3;
+        else if(expressionNode instanceof Vector4ExpressionNode)
+            return Enums.DataType.VEC4;
+        else
+            throw new RuntimeException("Assignment expression is unknown");
     }
 }
 

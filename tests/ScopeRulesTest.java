@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ScopeRulesTest {
-    private ArrayList<StatementNode> statementNodes;
-    private ArrayList<ClassDeclarationNode> classDeclarationNodes;
-    private ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
+    ArrayList<StatementNode> statementNodes;
+    ArrayList<ClassDeclarationNode> classDeclarationNodes;
+    ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
 
-    private ProgramNode programNode;
+    ProgramNode programNode;
 
-    private SymbolTableFilling symbolTableFilling;
+    SymbolTableFilling symbolTableFilling;
 
     @BeforeEach
     void setup() {
@@ -78,11 +78,28 @@ public class ScopeRulesTest {
         });
     }
 
+    // Tests if the compiler
+    // allows when a variable is declared with
+    // the same name but different type in the same scope.
+    @Test
+    void scopeRuleDeclarationTest03() {
+        // Main
+        StatementNode statementNode = new VariableDeclarationNode(Enums.DataType.INT, "var1");
+        StatementNode statementNode1 = new VariableDeclarationNode(Enums.DataType.FLOAT, "var1");
+        statementNodes.add(statementNode);
+        statementNodes.add(statementNode1);
+
+        setupNodes();
+
+
+        symbolTableFilling.visitProgram(programNode);
+    }
+
     // Tests if the compiler allows
     // the declaration of variables with
     // the same name in main scope and function scope.
     @Test
-    void scopeRuleDeclarationTest03() {
+    void scopeRuleDeclarationTest04() {
         // Main
         StatementNode statementNode1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
         statementNodes.add(statementNode1);
@@ -105,7 +122,7 @@ public class ScopeRulesTest {
     // the declaration of variables with
     // the same name in main scope and class scope.
     @Test
-    void scopeRuleDeclarationTest04() {
+    void scopeRuleDeclarationTest05() {
         // Main
         StatementNode statementNode1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
         statementNodes.add(statementNode1);
@@ -127,7 +144,7 @@ public class ScopeRulesTest {
     // the declaration of variables with
     // the same name in main scope, function scope and function scope within class scope.
     @Test
-    void scopeRuleDeclarationTest05() {
+    void scopeRuleDeclarationTest06() {
         // Main
         StatementNode statementNode1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
         statementNodes.add(statementNode1);
@@ -260,5 +277,13 @@ public class ScopeRulesTest {
         assertThrows(RuntimeException.class, ()->{
             symbolTableFilling.visitProgram(programNode);
         });
+    }
+
+    // Tests if the compiler allows
+    // declaration of a function with the same name as a variable
+    // in the same scope. (Class block)
+    @Test
+    void scopeRuleFunctionDeclarationTest01() {
+
     }
 }
