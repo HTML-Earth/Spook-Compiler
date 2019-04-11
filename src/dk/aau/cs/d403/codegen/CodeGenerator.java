@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.codegen;
 
 import dk.aau.cs.d403.ast.ASTvisitor;
+import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -83,8 +84,20 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public StatementNode visitStatement(StatementNode statementNode) {
-        sb.append("STATEMENT");
-        return statementNode;
+        if (statementNode instanceof AssignmentNode)
+            return visitAssignment((AssignmentNode)statementNode);
+        else if (statementNode instanceof DeclarationNode)
+            return visitDeclaration((DeclarationNode)statementNode);
+        else if (statementNode instanceof IfElseStatementNode)
+            return visitIfElseStatement((IfElseStatementNode)statementNode);
+        else if (statementNode instanceof ObjectFunctionCallNode)
+            return visitObjectFunctionCall((ObjectFunctionCallNode)statementNode);
+        else if (statementNode instanceof ReturnNode)
+            return visitReturn((ReturnNode)statementNode);
+        else {
+            System.out.println(statementNode.prettyPrint());
+            throw new RuntimeException("Statement is of unknown type");
+        }
     }
 
     @Override
