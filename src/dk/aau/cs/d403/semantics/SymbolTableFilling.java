@@ -46,14 +46,12 @@ public class SymbolTableFilling implements SymbolTable{
         System.out.println("Size of symbol table: " + symbolTable.size());
 
         System.out.println("Symbol table:\n----------------------------------");
-        System.out.println(String.format("%5s, %5s, %5s, %5s, %5s", "Data type", "Return type", "Variable name", "Attributes", "Scopelevel"));
+        System.out.println(String.format("%5s, %5s, %5s %5s, %5s, %5s", "Data type", "Class type", "Return type", "Variable name", "Attributes", "Scopelevel"));
         for (Map.Entry entry : symbolTable.entrySet()) {
             System.out.println(entry);
         }
         System.out.println("----------------------------------");
     }
-
-
 
 
     public void visitProgram(ProgramNode programNode) {
@@ -83,8 +81,12 @@ public class SymbolTableFilling implements SymbolTable{
     private void visitStatement(StatementNode statementNode) {
         if (statementNode instanceof VariableDeclarationNode)
             visitVariableDeclaration((VariableDeclarationNode) statementNode);
+        else if (statementNode instanceof ObjectDeclarationNode)
+            visitObjectDeclaration((ObjectDeclarationNode) statementNode);
         else if (statementNode instanceof AssignmentNode)
             visitAssignment((AssignmentNode) statementNode);
+        /*else if (statementNode instanceof ObjectFunctionCallNode)
+            visitObjectFunctionCall((ObjectFunctionCallNode) statementNode);*/
     }
 
     private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
@@ -109,15 +111,38 @@ public class SymbolTableFilling implements SymbolTable{
         }
     }
 
+    private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
+        String variableName = objectDeclarationNode.getVariableName();
+        Enums.ClassType objectType = objectDeclarationNode.getClassType();
+        ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectArguments();
+
+        // SCOPE CHECK: If a variable doesn't exist
+        if (retrieveSymbol(variableName) == null) {
+            enterSymbol(new NodeObject(objectType, variableName, this.scopeLevel, objectArguments), this.scopeLevel);
+        }
+        // SCOPE CHECK: If a variable already existed but not of the same type
+        else if (!(retrieveSymbol(variableName).getClassType().equals(objectType))) {
+            enterSymbol(new NodeObject(objectType, variableName, this.scopeLevel, objectArguments), this.scopeLevel);
+        }
+        // SCOPE CHECK: If a variable already existed but not in the same scope
+        else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
+            enterSymbol(new NodeObject(objectType, variableName, this.scopeLevel, objectArguments), this.scopeLevel);
+        }
+        else {
+            throw new RuntimeException("ERROR: Variable name is already in use for that type");
+        }
+    }
+
     private void visitAssignment(AssignmentNode assignmentNode) {
         String variableName = assignmentNode.getVariableName();
         NodeObject nodeObject = retrieveSymbol(variableName);
+        ExpressionNode expression = assignmentNode.getExpressionNode();
 
         // SCOPE CHECK: If a variable exists
         if(nodeObject != null) {
 
             // TYPE CHECK: If the type of the variable does not match the type of the assignment
-            if(!(nodeObject.getType().equals(getExpressionNodeType(assignmentNode)))) {
+            if(!(nodeObject.getType().equals(getExpressionNodeType(expression)))) {
                 throw new RuntimeException("ERROR: Variable type does not match the type of the expression.");
             }
 
@@ -125,7 +150,7 @@ public class SymbolTableFilling implements SymbolTable{
             if(nodeObject.getScopeLevel().equals(this.scopeLevel)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
-                enterSymbol(new NodeObject(assignmentType, variableName, this.scopeLevel, assignmentNode.prettyPrint()), this.scopeLevel);
+                enterSymbol(new NodeObject(assignmentType, variableName, this.scopeLevel, expression), this.scopeLevel);
             }
             else
                 throw new RuntimeException("ERROR: Variable is not declared in this scope.");
@@ -150,44 +175,30 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitClassBlock(ClassBlockNode classBlockNode) {
         openScope();
-        for(FunctionDeclarationNode funcNode : classBlockNode.getFunctionDeclarationNodes())
-            visitFunctionDeclaration(funcNode);
-
         for(DeclarationNode declNode : classBlockNode.getDeclarationNodes())
             visitVariableDeclaration((VariableDeclarationNode) declNode);
         closeScope();
+        for(FunctionDeclarationNode funcNode : classBlockNode.getFunctionDeclarationNodes())
+            visitFunctionDeclaration(funcNode);
+        closeScope();
     }
-
-    /*
-    private void visitRectangleDeclaration(RectangleDeclarationNode rectangleDeclarationNode) {
-        //
-    }
-    */
 
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
-        Enums.ReturnType dataType = functionDeclarationNode.getReturnType();
-
-        StringBuilder sb = new StringBuilder();
-        String attributes = null;
-
-        // Find the function parameters and turn them into a string
-        if (functionDeclarationNode.getFunctionArgNodes() != null) {
-            for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
-                sb.append(functionArgNode.getDataType());
-                sb.append(" ");
-                sb.append(functionArgNode.getVariableName());
-            }
-            attributes = sb.toString();
-        }
+        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
+        ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
 
         // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
-            enterSymbol(new NodeObject(dataType, functionName, this.scopeLevel, attributes), this.scopeLevel);
+            enterSymbol(new NodeObject(returnType, functionName, this.scopeLevel, functionArgs), this.scopeLevel);
         }
-        // SCOPE CHECK: If a function with the same name exists but doesn't have the same parameters
-        else if (!(retrieveSymbol(functionName).getAttributes().equals(attributes))) {
-            enterSymbol(new NodeObject(dataType, functionName, this.scopeLevel, attributes), this.scopeLevel);
+        // SCOPE CHECK: If a function with the same name exists but is in a different scope
+        else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
+            enterSymbol(new NodeObject(returnType, functionName, this.scopeLevel, functionArgs), this.scopeLevel);
+        }
+        // SCOPE CHECK: If a function with the same name exists but the arguments are different
+        else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
+            enterSymbol(new NodeObject(returnType, functionName, this.scopeLevel, functionArgs), this.scopeLevel);
         }
         else {
             throw new RuntimeException("ERROR: Function already exist with the same parameters");
@@ -196,8 +207,7 @@ public class SymbolTableFilling implements SymbolTable{
         visitBlock(functionDeclarationNode.getBlockNode());
     }
 
-    private Enums.DataType getExpressionNodeType(AssignmentNode assignmentNode) {
-        ExpressionNode expressionNode = assignmentNode.getExpressionNode();
+    private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
 
         if(expressionNode instanceof IntegerExpressionNode)
             return Enums.DataType.INT;
@@ -205,11 +215,11 @@ public class SymbolTableFilling implements SymbolTable{
             return Enums.DataType.FLOAT;
         else if(expressionNode instanceof BoolExpressionNode)
             return Enums.DataType.BOOL;
-        else if(expressionNode instanceof Vector2ExpressionNode)
+        else if(expressionNode instanceof Vector4ExpressionNode)
             return Enums.DataType.VEC2;
         else if(expressionNode instanceof Vector3ExpressionNode)
             return Enums.DataType.VEC3;
-        else if(expressionNode instanceof Vector4ExpressionNode)
+        else if(expressionNode instanceof Vector2ExpressionNode)
             return Enums.DataType.VEC4;
         else
             throw new RuntimeException("Assignment expression is unknown");
