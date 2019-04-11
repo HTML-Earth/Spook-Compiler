@@ -31,9 +31,6 @@ public class ClassDeclarationNode implements ASTnode {
         return classBlockNode;
     }
 
-    public String getClassName() {
-        return this.className;
-    }
 
     @Override
     public String prettyPrint() {
