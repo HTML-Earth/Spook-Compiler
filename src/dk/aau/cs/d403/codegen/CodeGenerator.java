@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.codegen;
 
 import dk.aau.cs.d403.ast.ASTvisitor;
+import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -34,6 +35,7 @@ public class CodeGenerator implements ASTvisitor {
         for (StatementNode statement : blockNode.getStatementNodes()) {
             sb.append("\n");
             visitStatement(statement);
+            sb.append(";");
         }
         sb.append("\n}");
         return blockNode;
@@ -59,7 +61,9 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
-        sb.append("ASSIGNMENT");
+        sb.append(assignmentNode.getVariableName());
+        sb.append(" = ");
+        visitExpressionNode(assignmentNode.getExpressionNode());
         return assignmentNode;
     }
 
@@ -81,7 +85,9 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public VariableDeclarationNode visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
-        sb.append("VARIABLE DECLARATION");
+        sb.append(Enums.dataTypeToStringGLSL(variableDeclarationNode.getDataType()));
+        sb.append(" ");
+        visitAssignment(variableDeclarationNode.getAssignmentNode());
         return variableDeclarationNode;
     }
 
