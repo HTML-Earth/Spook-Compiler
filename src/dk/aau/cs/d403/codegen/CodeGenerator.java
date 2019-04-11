@@ -7,171 +7,209 @@ import dk.aau.cs.d403.ast.structure.*;
 
 public class CodeGenerator implements ASTvisitor {
 
-    public String GenerateGLSL(ProgramNode ast) {
-        StringBuilder sb = new StringBuilder();
+    StringBuilder sb;
 
-        sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
-        sb.append(ast.getMainNode().getBlockNode().prettyPrint());
+    public String GenerateGLSL(ProgramNode ast) {
+        sb = new StringBuilder();
+        visitProgram(ast);
         return sb.toString();
     }
 
     @Override
     public ProgramNode visitProgram(ProgramNode programNode) {
-        return null;
+        sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) ");
+        visitMain(programNode.getMainNode());
+        return programNode;
     }
 
     @Override
     public MainNode visitMain(MainNode mainNode) {
-        return null;
+        visitBlock(mainNode.getBlockNode());
+        return mainNode;
     }
 
     @Override
     public BlockNode visitBlock(BlockNode blockNode) {
-        return null;
+        sb.append("{");
+        for (StatementNode statement : blockNode.getStatementNodes()) {
+            sb.append("\n");
+            visitStatement(statement);
+        }
+        sb.append("\n}");
+        return blockNode;
     }
 
     @Override
     public ClassDeclarationNode visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
-        return null;
+        sb.append("CLASS DECLARATION");
+        return classDeclarationNode;
     }
 
     @Override
     public ClassBlockNode visitClassBlock(ClassBlockNode classBlockNode) {
-        return null;
+        sb.append("CLASS BLOCK");
+        return classBlockNode;
     }
 
     @Override
     public FunctionDeclarationNode visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
-        return null;
+        sb.append("FUNCTION DECLARATION");
+        return functionDeclarationNode;
     }
 
     @Override
     public AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
-        return null;
+        sb.append("ASSIGNMENT");
+        return assignmentNode;
     }
 
     @Override
     public DeclarationNode visitDeclaration(DeclarationNode declarationNode) {
-        return null;
+        sb.append("DECLARATION");
+        return declarationNode;
     }
 
     @Override
     public ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
-        return null;
+        sb.append("OBJECT DECLARATION");
+        return objectDeclarationNode;
     }
 
     @Override
     public VariableDeclarationNode visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
-        return null;
+        sb.append("VARIABLE DECLARATION");
+        return variableDeclarationNode;
     }
 
     @Override
     public StatementNode visitStatement(StatementNode statementNode) {
-        return null;
+        sb.append("STATEMENT");
+        return statementNode;
     }
 
     @Override
     public IfElseStatementNode visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
-        return null;
+        sb.append("IF ELSE STATEMENT");
+        return ifElseStatementNode;
     }
 
     @Override
     public ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
-        return null;
+        sb.append("OBJECT FUNCTION CALL");
+        return objectFunctionCallNode;
     }
 
     @Override
     public FunctionArgNode visitFunctionArg(FunctionArgNode functionArgNode) {
-        return null;
+        sb.append("FUNCTION ARG");
+        return functionArgNode;
     }
 
     @Override
     public RectangleDeclarationNode visitRectangleDeclaration(RectangleDeclarationNode rectangleDeclarationNode) {
-        return null;
+        sb.append("RECTANGLE DECLARATION");
+        return rectangleDeclarationNode;
     }
 
     @Override
     public ReturnNode visitReturn(ReturnNode returnNode) {
-        return null;
+        sb.append("RETURN");
+        return returnNode;
     }
 
     @Override
     public TernaryOperatorNode visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
-        return null;
+        sb.append("TERNARY OPERATOR");
+        return ternaryOperatorNode;
     }
 
     @Override
     public ClassPropertyNode visitClassProperty(ClassPropertyNode classPropertyNode) {
-        return null;
+        sb.append("CLASS PROPERTY");
+        return classPropertyNode;
     }
 
     @Override
     public ArithOperandNode visitArithOperand(ArithOperandNode arithOperandNode) {
-        return null;
+        sb.append("ARITH OPERAND");
+        return arithOperandNode;
     }
 
     @Override
     public ArithOperationNode visitArithOperation(ArithOperationNode arithOperationNode) {
-        return null;
+        sb.append("ARITH OPERATION");
+        return arithOperationNode;
     }
 
     @Override
     public BoolOperationNode visitBoolOperation(BoolOperationNode boolOperationNode) {
-        return null;
+        sb.append("BOOL OPERATION");
+        return boolOperationNode;
     }
 
     @Override
     public MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
-        return null;
+        sb.append("MATH FUNCTION CALL");
+        return mathFunctionCallNode;
     }
 
     @Override
     public ObjectArgumentNode visitObjectArgument(ObjectArgumentNode objectArgumentNode) {
-        return null;
+        sb.append("OBJECT ARGUMENT");
+        return objectArgumentNode;
     }
 
     @Override
     public ExpressionNode visitExpressionNode(ExpressionNode expressionNode) {
-        return null;
+        sb.append("EXPRESSION");
+        return expressionNode;
     }
 
     @Override
     public BoolExpressionNode visitBoolExpression(BoolExpressionNode boolExpressionNode) {
-        return null;
+        sb.append("BOOL EXPRESSION");
+        return boolExpressionNode;
     }
 
     @Override
     public IntegerExpressionNode visitIntegerExpression(IntegerExpressionNode integerExpressionNode) {
-        return null;
+        sb.append("INTEGER EXPRESSION");
+        return integerExpressionNode;
     }
 
     @Override
     public FloatExpressionNode visitFloatExpression(FloatExpressionNode floatExpressionNode) {
-        return null;
+        sb.append("FLOAT EXPRESSION");
+        return floatExpressionNode;
     }
 
     @Override
     public Vector2ExpressionNode visitVector2Expression(Vector2ExpressionNode vector2ExpressionNode) {
-        return null;
+        sb.append("VECTOR2 EXPRESSION");
+        return vector2ExpressionNode;
     }
 
     @Override
     public Vector3ExpressionNode visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode) {
-        return null;
+        sb.append("VECTOR3 EXPRESSION");
+        return vector3ExpressionNode;
     }
 
     @Override
     public Vector4ExpressionNode visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
-        return null;
+        sb.append("VECTOR4 EXPRESSION");
+        return vector4ExpressionNode;
     }
 
     @Override
     public NaturalNumberNode visitNaturalNumber(NaturalNumberNode naturalNumberNode) {
-        return null;
+        sb.append("NATURAL NUMBER");
+        return naturalNumberNode;
     }
 
     @Override
     public RealNumberNode visitRealNumber(RealNumberNode realNumberNode) {
-        return null;
+        sb.append("REAL NUMBER");
+        return realNumberNode;
     }
 }
