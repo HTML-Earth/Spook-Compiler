@@ -1,3 +1,7 @@
+import dk.aau.cs.d403.ast.expressions.ExpressionNode;
+import dk.aau.cs.d403.ast.expressions.IntegerExpressionNode;
+import dk.aau.cs.d403.ast.expressions.NaturalNumberNode;
+import dk.aau.cs.d403.ast.statements.AssignmentNode;
 import dk.aau.cs.d403.ast.statements.DeclarationNode;
 import dk.aau.cs.d403.ast.statements.StatementNode;
 import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
@@ -149,6 +153,107 @@ public class ScopeRulesTest {
         ClassBlockNode classBlockNode = new ClassBlockNode(declarationNodes, functionNodes);
         ClassDeclarationNode classNode = new ClassDeclarationNode("class1", classBlockNode);
         classDeclarationNodes.add(classNode);
+
+        setupNodes();
+
+        assertThrows(RuntimeException.class, ()->{
+            symbolTableFilling.visitProgram(programNode);
+        });
+    }
+
+
+    // Tests if the compiler
+    // throws an error when a variable is assigned before it is declared
+    // in the same scope.
+    @Test
+    void scopeRuleAssignmentTest01() {
+        // Main
+            // Assignment
+        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
+        StatementNode statement1 = new AssignmentNode("var1", expression1);
+        statementNodes.add(statement1);
+
+            // Variable declaration
+        StatementNode declaration1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
+        statementNodes.add(declaration1);
+        setupNodes();
+
+
+        assertThrows(RuntimeException.class, ()->{
+            symbolTableFilling.visitProgram(programNode);
+        });
+    }
+
+
+    // Tests if the compiler allows
+    // assignment of variable to a declared variable
+    // in the same scope.
+    @Test
+    void scopeRuleAssignmentTest02() {
+        // Main
+
+            // Variable declaration
+        StatementNode declaration1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
+        statementNodes.add(declaration1);
+
+            // Assignment
+        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
+        StatementNode statement1 = new AssignmentNode("var1", expression1);
+        statementNodes.add(statement1);
+
+        setupNodes();
+        symbolTableFilling.visitProgram(programNode);
+    }
+
+
+    // Tests if the compiler allows
+    // assignment of variable to a declared variable with a different name
+    // in the same scope.
+    @Test
+    void scopeRuleAssignmentTest03() {
+        // Main
+
+            // Variable declaration
+        StatementNode declaration1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
+        statementNodes.add(declaration1);
+
+            // Assignment
+        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
+        StatementNode statement1 = new AssignmentNode("var2", expression1);
+        statementNodes.add(statement1);
+
+        setupNodes();
+
+        assertThrows(RuntimeException.class, ()->{
+            symbolTableFilling.visitProgram(programNode);
+        });
+    }
+
+    // Tests if the compiler allows
+    // assignment of variable to a declared variable with the same name
+    // in different scopes.
+    @Test
+    void scopeRuleAssignmentTest04() {
+        // Main
+            // Variable declaration
+        StatementNode declaration1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
+        statementNodes.add(declaration1);
+
+        // Function
+        // New function
+        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
+
+        ArrayList<StatementNode> funcStatementNodes = new ArrayList<>();
+        StatementNode statementNode2 = new AssignmentNode("var1", expression1);
+        funcStatementNodes.add(statementNode2);
+
+        BlockNode funcBlockNode = new BlockNode(funcStatementNodes);
+        FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(Enums.ReturnType.INT, "func1", funcBlockNode);
+        functionDeclarationNodes.add(functionDeclarationNode);
 
         setupNodes();
 
