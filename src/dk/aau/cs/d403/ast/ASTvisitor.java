@@ -1,11 +1,51 @@
 package dk.aau.cs.d403.ast;
 
-public interface ASTvisitor<T> {
-    T visit(ASTnode var1);
+import dk.aau.cs.d403.ast.expressions.*;
+import dk.aau.cs.d403.ast.statements.*;
+import dk.aau.cs.d403.ast.structure.*;
 
-    T visitChildren(ASTnode var1);
+public interface ASTvisitor {
+    //Structure
+    ProgramNode visitProgram(ProgramNode programNode);
+    MainNode visitMain(MainNode mainNode);
+    BlockNode visitBlock(BlockNode blockNode);
+    ClassDeclarationNode visitClassDeclaration(ClassDeclarationNode classDeclarationNode);
+    ClassBlockNode visitClassBlock(ClassBlockNode classBlockNode);
+    FunctionDeclarationNode visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode);
 
-    T visitTerminal(ASTnode var1);
+    //Statements
+    AssignmentNode visitAssignment(AssignmentNode assignmentNode);
 
-    T visitErrorNode(ASTnode var1);
+    DeclarationNode visitDeclaration(DeclarationNode declarationNode);
+    ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode);
+    VariableDeclarationNode visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode);
+
+    StatementNode visitStatement(StatementNode statementNode);
+    IfElseStatementNode visitIfElseStatement(IfElseStatementNode ifElseStatementNode);
+    ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode);
+    FunctionArgNode visitFunctionArg(FunctionArgNode functionArgNode);
+    RectangleDeclarationNode visitRectangleDeclaration(RectangleDeclarationNode rectangleDeclarationNode);
+    ReturnNode visitReturn(ReturnNode returnNode);
+
+    //Expressions
+    TernaryOperatorNode visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode);
+    ClassPropertyNode visitClassProperty(ClassPropertyNode classPropertyNode);
+
+    ArithOperandNode visitArithOperand(ArithOperandNode arithOperandNode);
+    ArithOperationNode visitArithOperation(ArithOperationNode arithOperationNode);
+    BoolOperationNode visitBoolOperation(BoolOperationNode boolOperationNode);
+
+    MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode);
+    ObjectArgumentNode visitObjectArgument(ObjectArgumentNode objectArgumentNode);
+
+    ExpressionNode visitExpressionNode(ExpressionNode expressionNode);
+    BoolExpressionNode visitBoolExpression(BoolExpressionNode boolExpressionNode);
+    IntegerExpressionNode visitIntegerExpression(IntegerExpressionNode integerExpressionNode);
+    FloatExpressionNode visitFloatExpression(FloatExpressionNode floatExpressionNode);
+    Vector2ExpressionNode visitVector2Expression(Vector2ExpressionNode vector2ExpressionNode);
+    Vector3ExpressionNode visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode);
+    Vector4ExpressionNode visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode);
+
+    NaturalNumberNode visitNaturalNumber(NaturalNumberNode naturalNumberNode);
+    RealNumberNode visitRealNumber(RealNumberNode realNumberNode);
 }
