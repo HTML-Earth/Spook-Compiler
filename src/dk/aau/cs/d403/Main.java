@@ -6,6 +6,7 @@ import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.Checker;
+import dk.aau.cs.d403.semantics.SymbolTableFilling;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -26,8 +27,8 @@ public class Main {
             System.out.println(ast.prettyPrint());
 
             System.out.println("Contextual Analysis...\n");
-            Checker checker = new Checker();
-            checker.visitProgram();
+            SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
+            symbolTableFilling.visitProgram(ast);
 
             System.out.println("Generated GLSL:");
             CodeGenerator codeGenerator = new CodeGenerator();
