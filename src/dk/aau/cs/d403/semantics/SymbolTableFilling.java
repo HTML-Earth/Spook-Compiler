@@ -116,11 +116,13 @@ public class SymbolTableFilling implements SymbolTable{
             if(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
-                enterSymbol(new NodeObject(assignmentType, variableName, this.scopeLevel), this.scopeLevel);
+                enterSymbol(new NodeObject(assignmentType, variableName, this.scopeLevel, assignmentNode.prettyPrint()), this.scopeLevel);
             }
+            else
+                throw new RuntimeException("ERROR: Variable is not declared in this scope.");
         }
         else {
-            throw new RuntimeException("ERROR: Variable is not declared in this scope.");
+            throw new RuntimeException("ERROR: Variable is not declared.");
         }
     }
 

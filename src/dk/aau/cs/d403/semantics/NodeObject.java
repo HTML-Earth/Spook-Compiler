@@ -21,6 +21,16 @@ public class NodeObject {
         this.name = name;
         this.scopeLevel = scopeLevel;
         if (attributes == null)
+            this.attributes = "Assignment";
+        else
+            this.attributes = attributes;
+    }
+
+    public NodeObject(Enums.DataType type, String name, String scopeLevel, String attributes) {
+        this.type = type;
+        this.name = name;
+        this.scopeLevel = scopeLevel;
+        if (attributes == null)
             this.attributes = "Function";
         else
             this.attributes = attributes;
