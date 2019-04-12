@@ -2,11 +2,13 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 
+import java.util.ArrayList;
+
 public class ObjectArgumentNode implements ASTnode {
 
     private String variableName;
     private RealNumberNode realNumberNode;
-    private ArithOperationNode arithOperationNode;
+    private ArrayList<ArithOperationNode> arithOperationNodes;
     private ClassPropertyNode classPropertyNode;
 
     public ObjectArgumentNode(String variableName) {
@@ -17,8 +19,8 @@ public class ObjectArgumentNode implements ASTnode {
         this.realNumberNode = realNumberNode;
     }
 
-    public ObjectArgumentNode(ArithOperationNode arithOperationNode) {
-        this.arithOperationNode = arithOperationNode;
+    public ObjectArgumentNode(ArrayList<ArithOperationNode> arithOperationNodes) {
+        this.arithOperationNodes = arithOperationNodes;
     }
 
     public ObjectArgumentNode(ClassPropertyNode classPropertyNode) {
@@ -33,8 +35,8 @@ public class ObjectArgumentNode implements ASTnode {
         return realNumberNode;
     }
 
-    public ArithOperationNode getArithOperationNode() {
-        return arithOperationNode;
+    public ArrayList<ArithOperationNode> getArithOperationNodes() {
+        return arithOperationNodes;
     }
 
     public ClassPropertyNode getClassPropertyNode() {
@@ -47,8 +49,13 @@ public class ObjectArgumentNode implements ASTnode {
             return variableName;
         else if (realNumberNode != null)
             return realNumberNode.prettyPrint();
-        else if (arithOperationNode != null)
-            return arithOperationNode.prettyPrint();
+        else if (arithOperationNodes != null) {
+            StringBuilder sb = new StringBuilder();
+            for (ArithOperationNode arithOperationNode : arithOperationNodes) {
+                sb.append(arithOperationNode.prettyPrint());
+            }
+            return sb.toString();
+        }
         else if (classPropertyNode != null)
             return classPropertyNode.prettyPrint();
         else
