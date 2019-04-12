@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
+import dk.aau.cs.d403.ast.CodePosition;
+
 import java.util.ArrayList;
 
 public class BoolExpressionNode extends ExpressionNode {
@@ -33,5 +35,17 @@ public class BoolExpressionNode extends ExpressionNode {
         }
         else
             return "" + boolLiteral;
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

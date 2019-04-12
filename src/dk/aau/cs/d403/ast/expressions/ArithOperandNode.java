@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.CodePosition;
 
 public class ArithOperandNode implements ASTnode {
     private RealNumberNode realNumberNode;
@@ -44,5 +45,17 @@ public class ArithOperandNode implements ASTnode {
         }
         else
             return "Invalid Operand";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

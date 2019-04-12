@@ -10,4 +10,7 @@ public interface ASTnode {
     //<T> T accept(ASTvisitor<? extends T> var1);
 
     String prettyPrint();
+
+    void setCodePosition(CodePosition codePosition);
+    CodePosition getCodePosition();
 }

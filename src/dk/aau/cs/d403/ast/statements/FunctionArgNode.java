@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
 public class FunctionArgNode implements ASTnode {
@@ -28,5 +29,18 @@ public class FunctionArgNode implements ASTnode {
     @Override
     public String toString() {
         return getDataType() + " " + getVariableName() + ", ";
+    }
+
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

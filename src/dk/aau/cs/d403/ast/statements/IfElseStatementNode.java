@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.ast.statements;
 
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.ast.structure.BlockNode;
 
@@ -69,5 +70,17 @@ public class IfElseStatementNode extends StatementNode {
     @Override
     public String prettyPrint() {
         return "If else statement";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

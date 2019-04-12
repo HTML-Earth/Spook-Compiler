@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
+import dk.aau.cs.d403.ast.CodePosition;
+
 public class TernaryOperatorNode extends ExpressionNode {
     private BoolExpressionNode boolExpressionNode;
     private ExpressionNode expressionNode1;
@@ -26,5 +28,17 @@ public class TernaryOperatorNode extends ExpressionNode {
     @Override
     public String prettyPrint() {
         return "Ternary operator";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

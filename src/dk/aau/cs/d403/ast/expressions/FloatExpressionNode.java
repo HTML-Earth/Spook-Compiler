@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
+import dk.aau.cs.d403.ast.CodePosition;
+
 import java.util.ArrayList;
 
 public class FloatExpressionNode extends ExpressionNode {
@@ -42,5 +44,17 @@ public class FloatExpressionNode extends ExpressionNode {
             return realNumberNode.prettyPrint();
         else
             return "Invalid float expression";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }
