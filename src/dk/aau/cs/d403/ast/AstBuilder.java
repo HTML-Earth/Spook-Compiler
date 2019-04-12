@@ -75,8 +75,14 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         else if (ctx.conditionalStatement() != null)
             return visitConditionalStatement(ctx.conditionalStatement());
         else if (ctx.RETURN() != null) {
-            //do Return stuff
-            return null;
+            if (ctx.variableName() != null)
+                return new ReturnNode(ctx.variableName().getText());
+            else if (ctx.realNumber() != null)
+                return new ReturnNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+            else if (ctx.BOOL_LITERAL() != null)
+                return new ReturnNode(getBooleanValue(ctx.BOOL_LITERAL()));
+            else
+                throw new RuntimeException("Invalid return statement");
         }
         else {
             throw new RuntimeException("Statement is of unknown type");
