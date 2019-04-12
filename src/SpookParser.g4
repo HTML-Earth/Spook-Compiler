@@ -27,9 +27,10 @@ statements
 statement
     : declaration SEMICOLON
     | assignment SEMICOLON
-    | objectFunctionCall SEMICOLON
+    | functionCall SEMICOLON
+    | objectVariableAssign SEMICOLON
     | conditionalStatement
-    //| iterativeStatement
+    | iterativeStatement
     | RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON;
 
 /* Blocks */
@@ -63,7 +64,7 @@ conditionalStatement
     : ifElseStatement;
 
 // If-else if-else
-ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN block (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN block)* (ELSE block)?;
+ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
 
 // Single-line comment
 comment
@@ -82,8 +83,22 @@ objectArgs
 objectArg
     : variableName
     | realNumber
-    | arithOperation
-    | classProperty;
+    | arithOperations
+    | classProperty
+    | functionCall;
+
+//Function calls
+functionCall
+    : nonObjectFunctionCall
+    | objectFunctionCall;
+
+//Non-object funtion calls
+nonObjectFunctionCall
+    :functionName LEFT_PAREN objectArgs RIGHT_PAREN;
+
+//Object variable assignment
+objectVariableAssign
+    : objectVariableName DOT variableName ASSIGN (mathFunction | objectArg);
 
 // Object function calls
 objectFunctionCall
@@ -92,7 +107,7 @@ objectFunctionCall
 
 // Color function call
 classProperty
-    : classType DOT variableName;
+    : classType DOT (variableName | functionName | predefinedFunctionName);
 
 
 /* Function declaration */
@@ -110,7 +125,6 @@ functionArg
 variableDecl
     : dataType (variableName | assignment);
 
-
 // Recursive arithmetic operations
 arithOperations
     : arithOperation arithOperations
@@ -118,7 +132,7 @@ arithOperations
 
 // Arithmetic operations
 arithOperation
-    : arithOperand operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
+    : arithOperand operator (arithOperand | LEFT_PAREN arithOperations RIGHT_PAREN)
     | operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
     | LEFT_PAREN arithOperations RIGHT_PAREN;
 
@@ -129,6 +143,12 @@ arithOperand
 mathFunction
     : function LEFT_PAREN (arithOperand | arithOperations) RIGHT_PAREN;
 
+//Loops
+iterativeStatement
+    : forStatement;
+
+forStatement
+    : FOR LEFT_PAREN (DIGIT | variableDecl | variableName | assignment) TO DIGIT RIGHT_PAREN (block | statement);
 
 // Recursive boolean operations
 boolOperations
@@ -183,7 +203,8 @@ classType
     | RECTANGLE
     | TRIANGLE
     | SHAPE
-    | COLOR;
+    | COLOR
+    | className;
 
 // Data types
 dataType
@@ -195,6 +216,10 @@ dataType
     | VECTOR4;
 
 // Variable name
+predefinedFunctionName
+    : colorName;
+colorName
+    : BLACK | WHITE | RED | GREEN | BLUE;
 objectVariableName
     : ID;
 functionName

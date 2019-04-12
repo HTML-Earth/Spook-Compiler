@@ -70,8 +70,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return visitDeclaration(ctx.declaration());
         else if (ctx.assignment() != null)
             return visitAssignment(ctx.assignment());
-        else if (ctx.objectFunctionCall() != null)
-            return visitObjectFunctionCall(ctx.objectFunctionCall());
+        else if (ctx.functionCall() != null)
+            return visitFunctionCall(ctx.functionCall());
         else if (ctx.conditionalStatement() != null)
             return visitConditionalStatement(ctx.conditionalStatement());
         else if (ctx.RETURN() != null) {
@@ -300,6 +300,28 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
+    public ASTnode visitFunctionCall(SpookParser.FunctionCallContext ctx) {
+        if (ctx.objectFunctionCall() != null)
+            return visitObjectFunctionCall(ctx.objectFunctionCall());
+        else if (ctx.nonObjectFunctionCall() != null)
+            return visitNonObjectFunctionCall(ctx.nonObjectFunctionCall());
+        else
+            throw new RuntimeException("Invalid function call");
+    }
+
+    @Override
+    public ASTnode visitNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx) {
+        String functionName = ctx.functionName().getText();
+        if (ctx.objectArgs() != null) {
+            ArrayList<ObjectArgumentNode> argumentNodes = visitAllObjectArguments(ctx.objectArgs());
+            return new NonObjectFunctionCallNode(functionName, argumentNodes);
+        }
+        else {
+            return new NonObjectFunctionCallNode(functionName);
+        }
+    }
+
+    @Override
     public ASTnode visitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx) {
         String objectName = ctx.objectVariableName().getText();
         String functionName = ctx.functionName().getText();
@@ -332,8 +354,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return new ObjectArgumentNode(ctx.variableName().getText());
         else if (ctx.realNumber() != null)
             return new ObjectArgumentNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
-        else if (ctx.arithOperation() != null)
-            return new ObjectArgumentNode((ArithOperationNode)visitArithOperation(ctx.arithOperation()));
+        else if (ctx.arithOperations() != null)
+            return new ObjectArgumentNode(visitAllArithOperations(ctx.arithOperations()));
         else if (ctx.classProperty() != null)
             return new ObjectArgumentNode((ClassPropertyNode)visitClassProperty(ctx.classProperty()));
         else
