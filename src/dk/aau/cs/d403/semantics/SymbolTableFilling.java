@@ -113,8 +113,8 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         String variableName = objectDeclarationNode.getVariableName();
-        Enums.ClassType objectType = objectDeclarationNode.getClassType();
-        ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectArguments();
+        Enums.ClassType objectType = objectDeclarationNode.getObjectType();
+        ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectArgumentNodes();
 
         // SCOPE CHECK: If a variable doesn't exist
         if (retrieveSymbol(variableName) == null) {
