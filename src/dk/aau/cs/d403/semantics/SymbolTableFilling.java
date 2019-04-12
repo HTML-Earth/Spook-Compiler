@@ -55,6 +55,8 @@ public class SymbolTableFilling implements SymbolTable{
 
 
     public void visitProgram(ProgramNode programNode) {
+        openScope();
+
         visitMain(programNode.getMainNode());
 
         for (ClassDeclarationNode classDecl : programNode.getClassDeclarationNodes()) {
@@ -64,6 +66,8 @@ public class SymbolTableFilling implements SymbolTable{
         for (FunctionDeclarationNode functionDecl : programNode.getFunctionDeclarationNodes()) {
             visitFunctionDeclaration(functionDecl);
         }
+
+        closeScope();
     }
 
     private void visitMain(MainNode mainNode) {
@@ -225,5 +229,6 @@ public class SymbolTableFilling implements SymbolTable{
             throw new RuntimeException("Assignment expression is unknown");
     }
 }
+
 
 
