@@ -27,7 +27,8 @@ statements
 statement
     : declaration SEMICOLON
     | assignment SEMICOLON
-    | objectFunctionCall SEMICOLON
+    | functioncall SEMICOLON
+    | objectVariableAssign SEMICOLON
     | conditionalStatement
     | iterativeStatement
     | RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON;
@@ -82,8 +83,22 @@ objectArgs
 objectArg
     : variableName
     | realNumber
-    | arithOperation
-    | classProperty;
+    | arithOperations
+    | classProperty
+    | functioncall;
+
+//Function calls TODO: sæt ind hvor objectFunctionCall bliver brugt
+functioncall
+    : nonobjectfunctioncall
+    | objectFunctionCall;
+
+//Non-object funtion calls
+nonobjectfunctioncall
+    :functionName LEFT_PAREN objectArgs RIGHT_PAREN;
+
+//Object variable assignment
+objectVariableAssign
+    : objectVariableName DOT variableName ASSIGN (mathFunction | objectArg);
 
 // Object function calls
 objectFunctionCall
@@ -92,7 +107,7 @@ objectFunctionCall
 
 // Color function call
 classProperty
-    : classType DOT variableName;
+    : classType DOT (variableName | functionName | predefinedFunctionName);
 
 
 /* Function declaration */
@@ -137,7 +152,7 @@ iterativeStatement
     : forStatement;
 
 forStatement
-    : FOR LEFT_PAREN DIGIT TO DIGIT RIGHT_PAREN (block | statement);
+    : FOR LEFT_PAREN (DIGIT | variableDecl | variableDeclVarNameOrAss) TO DIGIT RIGHT_PAREN (block | statement);
 
 // Recursive boolean operations
 boolOperations
@@ -192,7 +207,8 @@ classType
     | RECTANGLE
     | TRIANGLE
     | SHAPE
-    | COLOR;
+    | COLOR
+    | className;
 
 // Data types
 dataType
@@ -204,6 +220,10 @@ dataType
     | VECTOR4;
 
 // Variable name
+predefinedFunctionName
+    : colorName;
+colorName
+    : BLACK | WHITE | RED | GREEN | BLUE;
 objectVariableName
     : ID;
 functionName

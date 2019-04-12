@@ -1,14 +1,19 @@
 Shader{
   #Declarations
   Int i = 0, radius, height = 100, length = 100;
+  Int d;
+
+  #Unused for
+  for(d = 0 to 1){}
 
   #Increment i by 4, i = 4
-  for (0 : 4) {
-    i++;
+  for (0 to 4) {
+    i = i + 1;
   }
 
-  for(i = 0 to 4)
-    i++;
+  #Forget previous for-loop, this one does even require a block
+  for (Int i = 0 to 4)
+    i = 4;
 
   #Shape movement
   Float jumptime = abs(sin(iTime * i));
@@ -16,8 +21,7 @@ Shader{
 
   #Get in Shape
   Rectangle red = (height, length, Color.Green);
-  Bulletbill billy = billy.new(height, length, Color.Blue);
-
+  Bulletbill billy = billy.new(height, length, Color.Blue); #billy.new does not work with current new instantiation of objects
   if (true) {
     radius = 46 + 100 / 2 + 4; #Det 100
   } else

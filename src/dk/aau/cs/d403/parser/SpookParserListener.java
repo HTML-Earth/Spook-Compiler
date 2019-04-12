@@ -248,6 +248,36 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitObjectArg(SpookParser.ObjectArgContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#functioncall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctioncall(SpookParser.FunctioncallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#functioncall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctioncall(SpookParser.FunctioncallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#nonobjectfunctioncall}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#nonobjectfunctioncall}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#objectVariableAssign}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#objectVariableAssign}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectFunctionCall}.
 	 * @param ctx the parse tree
 	 */
@@ -477,6 +507,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataType(SpookParser.DataTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#predefinedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#predefinedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#colorName}.
+	 * @param ctx the parse tree
+	 */
+	void enterColorName(SpookParser.ColorNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#colorName}.
+	 * @param ctx the parse tree
+	 */
+	void exitColorName(SpookParser.ColorNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree
