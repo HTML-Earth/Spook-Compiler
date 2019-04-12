@@ -137,6 +137,6 @@ public class NodeObject {
 
     @Override
     public String toString() {
-        return String.format("%5s, %12s, %10s, %13s, %12s, %8s", getType(), getClassType(), getReturnType(), getName(), getAttributes(), getScopeLevel());
+        return String.format("%5s, %10s, %10s, %15s, %10s", getType(), getClassType(), getReturnType(), getAttributes(), getScopeLevel());
     }
 }
