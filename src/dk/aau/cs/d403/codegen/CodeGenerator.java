@@ -6,6 +6,8 @@ import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 
+import java.util.ArrayList;
+
 public class CodeGenerator implements ASTvisitor {
 
     StringBuilder sb;
@@ -147,13 +149,64 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public ArithOperandNode visitArithOperand(ArithOperandNode arithOperandNode) {
-        sb.append("ARITH OPERAND");
+        RealNumberNode realNumberNode = arithOperandNode.getRealNumberNode();
+        MathFunctionCallNode mathFunctionCallNode = arithOperandNode.getMathFunctionCallNode();
+        String variableName = arithOperandNode.getVariableName();
+
+        if (realNumberNode != null) {
+            visitRealNumber(realNumberNode);
+        }
+        else if (mathFunctionCallNode != null) {
+            visitMathFunctionCall(mathFunctionCallNode);
+        }
+        else if (variableName != null) {
+            sb.append(variableName);
+        }
+        else throw new RuntimeException("Invalid arith operand");
+
         return arithOperandNode;
     }
 
     @Override
     public ArithOperationNode visitArithOperation(ArithOperationNode arithOperationNode) {
-        sb.append("ARITH OPERATION");
+        ArithOperandNode leftOperand = arithOperationNode.getLeftOperand();
+        Enums.Operator operator = arithOperationNode.getOperator();
+        ArithOperandNode rightOperand = arithOperationNode.getRightOperand();
+        ArithOperationNode subOperation = arithOperationNode.getArithOperationNode();
+        ArrayList<ArithOperationNode> arithOperationNodes = arithOperationNode.getArithOperationNodes();
+
+        if (leftOperand != null && operator != null && rightOperand != null) {
+            visitArithOperand(leftOperand);
+            sb.append(" ");
+            sb.append(Enums.operatorToString(operator));
+            sb.append(" ");
+            visitArithOperand(rightOperand);
+        }
+        else if (leftOperand != null && operator != null && subOperation != null) {
+            visitArithOperand(leftOperand);
+            sb.append(" ");
+            sb.append(Enums.operatorToString(operator));
+            visitArithOperation(subOperation);
+        }
+        else if (operator != null && rightOperand != null) {
+            sb.append(" ");
+            sb.append(Enums.operatorToString(operator));
+            sb.append(" ");
+            visitArithOperand(rightOperand);
+        }
+        else if (operator != null && subOperation != null) {
+            sb.append(Enums.operatorToString(operator));
+            sb.append(" ");
+            visitArithOperation(subOperation);
+        }
+        else if (arithOperationNodes != null) {
+            for (ArithOperationNode operationNode: arithOperationNodes) {
+                visitArithOperation(operationNode);
+            }
+        }
+        else
+            throw new RuntimeException("Invalid Arithmetic Operation");
+
         return arithOperationNode;
     }
 
@@ -165,7 +218,21 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
-        sb.append("MATH FUNCTION CALL");
+        sb.append(Enums.mathFunctionToString(mathFunctionCallNode.getFunctionName()));
+        sb.append("(");
+        ArithOperandNode arithOperandNode = mathFunctionCallNode.getOperandNode();
+        ArrayList<ArithOperationNode> arithOperationNodes = mathFunctionCallNode.getOperationNodes();
+        if (arithOperandNode != null) {
+            visitArithOperand(arithOperandNode);
+        }
+        else if (arithOperationNodes != null) {
+            for (ArithOperationNode operationNode : arithOperationNodes) {
+                visitArithOperation(operationNode);
+            }
+        }
+        else throw new RuntimeException("Invalid math function call");
+        sb.append(")");
+
         return mathFunctionCallNode;
     }
 
@@ -177,8 +244,29 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public ExpressionNode visitExpressionNode(ExpressionNode expressionNode) {
-        sb.append("EXPRESSION");
-        return expressionNode;
+        if (expressionNode instanceof IntegerExpressionNode) {
+            return visitIntegerExpression((IntegerExpressionNode)expressionNode);
+        }
+        else if (expressionNode instanceof FloatExpressionNode) {
+            return visitFloatExpression((FloatExpressionNode)expressionNode);
+        }
+        else if (expressionNode instanceof Vector4ExpressionNode) {
+            return visitVector4Expression((Vector4ExpressionNode)expressionNode);
+        }
+        else if (expressionNode instanceof Vector3ExpressionNode) {
+            return visitVector3Expression((Vector3ExpressionNode)expressionNode);
+        }
+        else if (expressionNode instanceof Vector2ExpressionNode) {
+            return visitVector2Expression((Vector2ExpressionNode)expressionNode);
+        }
+        else if (expressionNode instanceof BoolExpressionNode) {
+            return visitBoolExpression((BoolExpressionNode)expressionNode);
+        }
+        else if (expressionNode instanceof TernaryOperatorNode) {
+            return visitTernaryOperator((TernaryOperatorNode)expressionNode);
+        }
+        else
+            throw new RuntimeException("Invalid expression");
     }
 
     @Override
@@ -189,43 +277,101 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public IntegerExpressionNode visitIntegerExpression(IntegerExpressionNode integerExpressionNode) {
-        sb.append("INTEGER EXPRESSION");
+        NaturalNumberNode naturalNumberNode = integerExpressionNode.getNaturalNumberNode();
+        ArrayList<ArithOperationNode> arithOperationNodes = integerExpressionNode.getArithOperationNodes();
+        MathFunctionCallNode mathFunctionCallNode = integerExpressionNode.getMathFunctionCallNode();
+        if (naturalNumberNode != null) {
+            visitNaturalNumber(naturalNumberNode);
+        }
+        else if (arithOperationNodes != null) {
+            boolean firstOp = true;
+            for (ArithOperationNode arithOperationNode : arithOperationNodes) {
+                if (!firstOp)
+                    sb.append(" ");
+                firstOp = false;
+                visitArithOperation(arithOperationNode);
+            }
+        }
+        else if (mathFunctionCallNode != null) {
+            visitMathFunctionCall(mathFunctionCallNode);
+        }
+        else
+            throw new RuntimeException("Invalid integer expression");
+
         return integerExpressionNode;
     }
 
     @Override
     public FloatExpressionNode visitFloatExpression(FloatExpressionNode floatExpressionNode) {
-        sb.append("FLOAT EXPRESSION");
+        RealNumberNode realNumberNode = floatExpressionNode.getRealNumberNode();
+        ArrayList<ArithOperationNode> arithOperationNodes = floatExpressionNode.getArithOperationNodes();
+        MathFunctionCallNode mathFunctionCallNode = floatExpressionNode.getMathFunctionCallNode();
+        if (realNumberNode != null) {
+            visitRealNumber(realNumberNode);
+        }
+        else if (arithOperationNodes != null) {
+            boolean firstOp = true;
+            for (ArithOperationNode arithOperationNode : arithOperationNodes) {
+                if (!firstOp)
+                    sb.append(" ");
+                firstOp = false;
+                visitArithOperation(arithOperationNode);
+            }
+        }
+        else if (mathFunctionCallNode != null) {
+            visitMathFunctionCall(mathFunctionCallNode);
+        }
+        else
+            throw new RuntimeException("Invalid float expression");
+
         return floatExpressionNode;
     }
 
     @Override
     public Vector2ExpressionNode visitVector2Expression(Vector2ExpressionNode vector2ExpressionNode) {
-        sb.append("VECTOR2 EXPRESSION");
+        sb.append("(");
+        visitFloatExpression(vector2ExpressionNode.getFloatExpressionNode1());
+        sb.append(", ");
+        visitFloatExpression(vector2ExpressionNode.getFloatExpressionNode2());
+        sb.append(")");
         return vector2ExpressionNode;
     }
 
     @Override
     public Vector3ExpressionNode visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode) {
-        sb.append("VECTOR3 EXPRESSION");
+        sb.append("(");
+        visitFloatExpression(vector3ExpressionNode.getFloatExpressionNode1());
+        sb.append(", ");
+        visitFloatExpression(vector3ExpressionNode.getFloatExpressionNode2());
+        sb.append(", ");
+        visitFloatExpression(vector3ExpressionNode.getFloatExpressionNode3());
+        sb.append(")");
         return vector3ExpressionNode;
     }
 
     @Override
     public Vector4ExpressionNode visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
-        sb.append("VECTOR4 EXPRESSION");
+        sb.append("(");
+        visitFloatExpression(vector4ExpressionNode.getFloatExpressionNode1());
+        sb.append(", ");
+        visitFloatExpression(vector4ExpressionNode.getFloatExpressionNode2());
+        sb.append(", ");
+        visitFloatExpression(vector4ExpressionNode.getFloatExpressionNode3());
+        sb.append(", ");
+        visitFloatExpression(vector4ExpressionNode.getFloatExpressionNode4());
+        sb.append(")");
         return vector4ExpressionNode;
     }
 
     @Override
     public NaturalNumberNode visitNaturalNumber(NaturalNumberNode naturalNumberNode) {
-        sb.append("NATURAL NUMBER");
+        sb.append(naturalNumberNode.prettyPrint());
         return naturalNumberNode;
     }
 
     @Override
     public RealNumberNode visitRealNumber(RealNumberNode realNumberNode) {
-        sb.append("REAL NUMBER");
+        sb.append(realNumberNode.prettyPrint());
         return realNumberNode;
     }
 }
