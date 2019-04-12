@@ -9,7 +9,7 @@ import dk.aau.cs.d403.ast.structure.*;
 
 public class SymbolTableFilling implements SymbolTable{
 
-    private HashMap<NodeObject, String> symbolTable;
+    private HashMap<String, NodeObject> symbolTable;
     private String scopeLevel;
     private int level = 1;
 
@@ -28,27 +28,22 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     @Override
-    public void enterSymbol(NodeObject object, String scopeLevel) {
-        symbolTable.put(object, scopeLevel);
+    public void enterSymbol(String name, NodeObject object) {
+        symbolTable.put(name, object);
     }
 
     @Override
     public NodeObject retrieveSymbol(String name) {
-        for (NodeObject object : symbolTable.keySet()) {
-            if (object.getName().equals(name)) {
-                return object;
-            }
-        }
-        return null;
+        return symbolTable.get(name);
     }
 
     public void printSymbolTable() {
         System.out.println("Size of symbol table: " + symbolTable.size());
 
         System.out.println("Symbol table:\n----------------------------------");
-        System.out.println(String.format("%5s, %5s, %5s %5s, %5s, %5s", "Data type", "Class type", "Return type", "Variable name", "Attributes", "Scopelevel"));
+        System.out.println(String.format("%5s, %5s, %5s %5s, %5s, %5s", "Name", "Data type", "Class type", "Return type", "Attributes", "Scopelevel"));
         for (Map.Entry entry : symbolTable.entrySet()) {
-            System.out.println(entry);
+            System.out.println(String.format("%5s, %5s", entry.getKey(), entry.getValue()));
         }
         System.out.println("----------------------------------");
     }
@@ -95,15 +90,15 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a variable doesn't exist
         if(retrieveSymbol(variableName) == null) {
-            enterSymbol(new NodeObject(declarationType, variableName, this.scopeLevel), this.scopeLevel);
+            enterSymbol(variableName, new NodeObject(declarationType, variableName, this.scopeLevel));
         }
         // SCOPE CHECK: If a variable already existed but not of the same type
         else if (!(retrieveSymbol(variableName).getType().equals(declarationType))) {
-            enterSymbol(new NodeObject(declarationType, variableName, this.scopeLevel), this.scopeLevel);
+            enterSymbol(variableName, new NodeObject(declarationType, variableName, this.scopeLevel));
         }
         // SCOPE CHECK: If a variable already existed but not in the same scope
         else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
-            enterSymbol(new NodeObject(declarationType, variableName, this.scopeLevel), this.scopeLevel);
+            enterSymbol(variableName, new NodeObject(declarationType, variableName, this.scopeLevel));
         }
         // If a variable already existed in the same scope
         else {
@@ -118,15 +113,15 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a variable doesn't exist
         if (retrieveSymbol(variableName) == null) {
-            enterSymbol(new NodeObject(objectType, variableName, this.scopeLevel, objectArguments), this.scopeLevel);
+            enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
         }
         // SCOPE CHECK: If a variable already existed but not of the same type
         else if (!(retrieveSymbol(variableName).getClassType().equals(objectType))) {
-            enterSymbol(new NodeObject(objectType, variableName, this.scopeLevel, objectArguments), this.scopeLevel);
+            enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
         }
         // SCOPE CHECK: If a variable already existed but not in the same scope
         else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
-            enterSymbol(new NodeObject(objectType, variableName, this.scopeLevel, objectArguments), this.scopeLevel);
+            enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
         }
         else {
             throw new RuntimeException("ERROR: Variable name is already in use for that type");
@@ -150,7 +145,7 @@ public class SymbolTableFilling implements SymbolTable{
             if(nodeObject.getScopeLevel().equals(this.scopeLevel)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
-                enterSymbol(new NodeObject(assignmentType, variableName, this.scopeLevel, expression), this.scopeLevel);
+                enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
             }
             else
                 throw new RuntimeException("ERROR: Variable is not declared in this scope.");
@@ -167,7 +162,7 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a variable with the same name did not exist
         if(retrieveSymbol(objectVariableName) == null) {
-            enterSymbol(new NodeObject(objectVariableName, functionName, this.scopeLevel, objectArgumentNodes), this.scopeLevel);
+            enterSymbol(objectVariableName, new NodeObject(objectVariableName, functionName, this.scopeLevel, objectArgumentNodes));
         }
         else
             throw new RuntimeException("ERROR: Object is not declared.");
@@ -178,7 +173,7 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a class with this name doesn't exist
         if(retrieveSymbol(className) == null) {
-            enterSymbol(new NodeObject(className, this.scopeLevel), this.scopeLevel);
+            enterSymbol(className, new NodeObject(className, this.scopeLevel));
         }
         else
             throw new RuntimeException("ERROR: Class name is already in use.");
@@ -203,15 +198,15 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
-            enterSymbol(new NodeObject(returnType, functionName, this.scopeLevel, functionArgs), this.scopeLevel);
+            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but is in a different scope
         else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
-            enterSymbol(new NodeObject(returnType, functionName, this.scopeLevel, functionArgs), this.scopeLevel);
+            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but the arguments are different
         else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
-            enterSymbol(new NodeObject(returnType, functionName, this.scopeLevel, functionArgs), this.scopeLevel);
+            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         else {
             throw new RuntimeException("ERROR: Function already exist with the same parameters");
