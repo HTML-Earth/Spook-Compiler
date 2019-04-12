@@ -34,6 +34,8 @@ RETURN: 'return';
 IF: 'if';
 ELSE_IF: 'else if';
 ELSE: 'else';
+FOR: 'for';
+TO: 'to';
 
 // Numbers and bool
 DIGIT: DIGIT_RULE;

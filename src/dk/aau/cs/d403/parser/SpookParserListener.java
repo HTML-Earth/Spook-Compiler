@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -308,6 +308,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#variableDeclVarNameOrAss}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDeclVarNameOrAss(SpookParser.VariableDeclVarNameOrAssContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#variableDeclVarNameOrAss}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDeclVarNameOrAss(SpookParser.VariableDeclVarNameOrAssContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#arithOperations}.
 	 * @param ctx the parse tree
 	 */
@@ -347,6 +357,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMathFunction(SpookParser.MathFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#iterativeStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIterativeStatement(SpookParser.IterativeStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#iterativeStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIterativeStatement(SpookParser.IterativeStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#forStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterForStatement(SpookParser.ForStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#forStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitForStatement(SpookParser.ForStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolOperations}.
 	 * @param ctx the parse tree
