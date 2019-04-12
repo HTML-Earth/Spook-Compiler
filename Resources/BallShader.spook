@@ -24,7 +24,7 @@ Shader {
     #Shiny ball gradient
     CircleGradient shiny = (Color.white, ballSize/2);
     shiny.position = (ballSize/2, ballSize/2);
-    ball.Add(shiny);
+    ball.add(shiny);
 
     #Object positions
     ball.position   = (xPos, (jumpTime + 1) * jumpHeight);
