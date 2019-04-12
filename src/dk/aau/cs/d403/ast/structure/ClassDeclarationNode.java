@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.structure;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
 public class ClassDeclarationNode implements ASTnode {
@@ -31,7 +32,6 @@ public class ClassDeclarationNode implements ASTnode {
         return classBlockNode;
     }
 
-
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
@@ -51,5 +51,17 @@ public class ClassDeclarationNode implements ASTnode {
         sb.append("\n}");
 
         return sb.toString();
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

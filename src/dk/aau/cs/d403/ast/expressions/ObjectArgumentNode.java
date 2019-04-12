@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.CodePosition;
 
 public class ObjectArgumentNode implements ASTnode {
 
@@ -53,5 +54,17 @@ public class ObjectArgumentNode implements ASTnode {
             return classPropertyNode.prettyPrint();
         else
             return "Invalid Object Argument";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

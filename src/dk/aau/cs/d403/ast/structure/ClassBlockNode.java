@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.structure;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.statements.DeclarationNode;
 import dk.aau.cs.d403.ast.statements.StatementNode;
 
@@ -48,5 +49,18 @@ public class ClassBlockNode implements ASTnode {
         sb.append("\n}");
 
         return sb.toString();
+    }
+
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

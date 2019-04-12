@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.ast.statements;
 
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 
@@ -37,5 +38,17 @@ public class ObjectDeclarationNode extends DeclarationNode {
     @Override
     public String prettyPrint() {
         return "Object Declaration";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

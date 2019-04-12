@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.ast.statements;
 
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
 public class VariableDeclarationNode extends DeclarationNode {
@@ -36,5 +37,17 @@ public class VariableDeclarationNode extends DeclarationNode {
             return Enums.dataTypeToStringSpook(dataType) + " " + assignmentNode.prettyPrint();
         else
             return Enums.dataTypeToStringSpook(dataType) + " " + variableName + ";";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

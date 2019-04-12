@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
+import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
 import java.util.ArrayList;
@@ -53,5 +54,17 @@ public class MathFunctionCallNode implements ASTnode {
         sb.append(")");
 
         return sb.toString();
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }

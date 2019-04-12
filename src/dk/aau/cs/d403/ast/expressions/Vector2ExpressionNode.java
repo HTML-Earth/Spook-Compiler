@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
+import dk.aau.cs.d403.ast.CodePosition;
+
 public class Vector2ExpressionNode extends ExpressionNode {
     protected FloatExpressionNode floatExpressionNode1;
     protected FloatExpressionNode floatExpressionNode2;
@@ -22,5 +24,17 @@ public class Vector2ExpressionNode extends ExpressionNode {
         return "(" + floatExpressionNode1.prettyPrint()
                 + ", " + floatExpressionNode2.prettyPrint()
                 + ")";
+    }
+
+    private CodePosition codePosition;
+
+    @Override
+    public void setCodePosition(CodePosition codePosition) {
+        this.codePosition = codePosition;
+    }
+
+    @Override
+    public CodePosition getCodePosition() {
+        return codePosition;
     }
 }
