@@ -1,10 +1,8 @@
 import dk.aau.cs.d403.ast.expressions.ExpressionNode;
 import dk.aau.cs.d403.ast.expressions.IntegerExpressionNode;
 import dk.aau.cs.d403.ast.expressions.NaturalNumberNode;
-import dk.aau.cs.d403.ast.statements.AssignmentNode;
-import dk.aau.cs.d403.ast.statements.DeclarationNode;
-import dk.aau.cs.d403.ast.statements.StatementNode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
+import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.semantics.SymbolTableFilling;
@@ -172,10 +170,7 @@ public class ScopeRulesTest {
         classDeclarationNodes.add(classNode);
 
         setupNodes();
-
-        assertThrows(RuntimeException.class, ()->{
-            symbolTableFilling.visitProgram(programNode);
-        });
+        symbolTableFilling.visitProgram(programNode);
     }
 
 
@@ -284,6 +279,25 @@ public class ScopeRulesTest {
     // in the same scope. (Class block)
     @Test
     void scopeRuleFunctionDeclarationTest01() {
+        ArrayList<StatementNode> functionStatementNodes = new ArrayList<>();
 
+        ArrayList<FunctionArgNode> functionArgs1 = new ArrayList<>();
+        FunctionArgNode functionArg1 = new FunctionArgNode(Enums.DataType.INT, "arg1");
+        functionArgs1.add(functionArg1);
+
+        ArrayList<FunctionArgNode> functionArgs2 = new ArrayList<>();
+        FunctionArgNode functionArg2 = new FunctionArgNode(Enums.DataType.INT, "arg2");
+        functionArgs2.add(functionArg2);
+
+        BlockNode funcBlock1 = new BlockNode(functionStatementNodes);
+        BlockNode funcBlock2 = new BlockNode(functionStatementNodes);
+
+        FunctionDeclarationNode function1 = new FunctionDeclarationNode(Enums.ReturnType.INT, "func1", functionArgs1, funcBlock1);
+        FunctionDeclarationNode function2 = new FunctionDeclarationNode(Enums.ReturnType.INT, "func1", functionArgs2, funcBlock2);
+        functionDeclarationNodes.add(function1);
+        functionDeclarationNodes.add(function2);
+
+        setupNodes();
+        symbolTableFilling.visitProgram(programNode);
     }
 }

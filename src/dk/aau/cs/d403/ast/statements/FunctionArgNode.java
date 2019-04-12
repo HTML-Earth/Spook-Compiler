@@ -24,4 +24,9 @@ public class FunctionArgNode implements ASTnode {
     public String prettyPrint() {
         return "Function args";
     }
+
+    @Override
+    public String toString() {
+        return getDataType() + " " + getVariableName() + ", ";
+    }
 }
