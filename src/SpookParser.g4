@@ -29,7 +29,7 @@ statement
     | assignment SEMICOLON
     | objectFunctionCall SEMICOLON
     | conditionalStatement
-    //| iterativeStatement
+    | iterativeStatement
     | RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON;
 
 /* Blocks */
@@ -63,7 +63,7 @@ conditionalStatement
     : ifElseStatement;
 
 // If-else if-else
-ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN block (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN block)* (ELSE block)?;
+ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
 
 // Single-line comment
 comment
@@ -108,8 +108,11 @@ functionArg
 
 /* Integer, float and vector declaration */
 variableDecl
-    : dataType (variableName | assignment);
+    : dataType variableDeclVarNameOrAss (COMMA variableDeclVarNameOrAss)*;
 
+variableDeclVarNameOrAss
+    : variableName
+    | assignment;
 
 // Recursive arithmetic operations
 arithOperations
@@ -118,7 +121,7 @@ arithOperations
 
 // Arithmetic operations
 arithOperation
-    : arithOperand operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
+    : arithOperand operator (arithOperand | LEFT_PAREN arithOperations RIGHT_PAREN)
     | operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
     | LEFT_PAREN arithOperations RIGHT_PAREN;
 
@@ -129,6 +132,12 @@ arithOperand
 mathFunction
     : function LEFT_PAREN (arithOperand | arithOperations) RIGHT_PAREN;
 
+//Loops
+iterativeStatement
+    : forStatement;
+
+forStatement
+    : FOR LEFT_PAREN DIGIT TO DIGIT RIGHT_PAREN (block | statement);
 
 // Recursive boolean operations
 boolOperations
