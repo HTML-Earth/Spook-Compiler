@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -304,25 +304,25 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctioncall(SpookParser.FunctioncallContext ctx) { }
+	@Override public void enterFunctionCall(SpookParser.FunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctioncall(SpookParser.FunctioncallContext ctx) { }
+	@Override public void exitFunctionCall(SpookParser.FunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx) { }
+	@Override public void enterNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx) { }
+	@Override public void exitNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -407,18 +407,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVariableDecl(SpookParser.VariableDeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVariableDeclVarNameOrAss(SpookParser.VariableDeclVarNameOrAssContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVariableDeclVarNameOrAss(SpookParser.VariableDeclVarNameOrAssContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

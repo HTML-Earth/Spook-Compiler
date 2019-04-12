@@ -27,7 +27,7 @@ statements
 statement
     : declaration SEMICOLON
     | assignment SEMICOLON
-    | functioncall SEMICOLON
+    | functionCall SEMICOLON
     | objectVariableAssign SEMICOLON
     | conditionalStatement
     | iterativeStatement
@@ -85,15 +85,15 @@ objectArg
     | realNumber
     | arithOperations
     | classProperty
-    | functioncall;
+    | functionCall;
 
-//Function calls TODO: sæt ind hvor objectFunctionCall bliver brugt
-functioncall
-    : nonobjectfunctioncall
+//Function calls
+functionCall
+    : nonObjectFunctionCall
     | objectFunctionCall;
 
 //Non-object funtion calls
-nonobjectfunctioncall
+nonObjectFunctionCall
     :functionName LEFT_PAREN objectArgs RIGHT_PAREN;
 
 //Object variable assignment
@@ -123,11 +123,7 @@ functionArg
 
 /* Integer, float and vector declaration */
 variableDecl
-    : dataType variableDeclVarNameOrAss (COMMA variableDeclVarNameOrAss)*;
-
-variableDeclVarNameOrAss
-    : variableName
-    | assignment;
+    : dataType (variableName | assignment);
 
 // Recursive arithmetic operations
 arithOperations
@@ -152,7 +148,7 @@ iterativeStatement
     : forStatement;
 
 forStatement
-    : FOR LEFT_PAREN (DIGIT | variableDecl | variableDeclVarNameOrAss) TO DIGIT RIGHT_PAREN (block | statement);
+    : FOR LEFT_PAREN (DIGIT | variableDecl | variableName | assignment) TO DIGIT RIGHT_PAREN (block | statement);
 
 // Recursive boolean operations
 boolOperations

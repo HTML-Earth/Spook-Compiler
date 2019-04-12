@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -248,25 +248,25 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitObjectArg(SpookParser.ObjectArgContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#functioncall}.
+	 * Enter a parse tree produced by {@link SpookParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunctioncall(SpookParser.FunctioncallContext ctx);
+	void enterFunctionCall(SpookParser.FunctionCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#functioncall}.
+	 * Exit a parse tree produced by {@link SpookParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunctioncall(SpookParser.FunctioncallContext ctx);
+	void exitFunctionCall(SpookParser.FunctionCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#nonobjectfunctioncall}.
+	 * Enter a parse tree produced by {@link SpookParser#nonObjectFunctionCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx);
+	void enterNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#nonobjectfunctioncall}.
+	 * Exit a parse tree produced by {@link SpookParser#nonObjectFunctionCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx);
+	void exitNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectVariableAssign}.
 	 * @param ctx the parse tree
@@ -337,16 +337,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVariableDecl(SpookParser.VariableDeclContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#variableDeclVarNameOrAss}.
-	 * @param ctx the parse tree
-	 */
-	void enterVariableDeclVarNameOrAss(SpookParser.VariableDeclVarNameOrAssContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#variableDeclVarNameOrAss}.
-	 * @param ctx the parse tree
-	 */
-	void exitVariableDeclVarNameOrAss(SpookParser.VariableDeclVarNameOrAssContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#arithOperations}.
 	 * @param ctx the parse tree
