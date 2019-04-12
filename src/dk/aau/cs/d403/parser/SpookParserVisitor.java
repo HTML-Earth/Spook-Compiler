@@ -155,6 +155,24 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitObjectArg(SpookParser.ObjectArgContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#functioncall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctioncall(SpookParser.FunctioncallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#nonobjectfunctioncall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNonobjectfunctioncall(SpookParser.NonobjectfunctioncallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#objectVariableAssign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#objectFunctionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -292,6 +310,18 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDataType(SpookParser.DataTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#predefinedFunctionName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#colorName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorName(SpookParser.ColorNameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree
