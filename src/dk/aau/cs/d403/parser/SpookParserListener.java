@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -248,6 +248,36 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitObjectArg(SpookParser.ObjectArgContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCall(SpookParser.FunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCall(SpookParser.FunctionCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#nonObjectFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#nonObjectFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#objectVariableAssign}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#objectVariableAssign}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectFunctionCall}.
 	 * @param ctx the parse tree
 	 */
@@ -348,6 +378,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#iterativeStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIterativeStatement(SpookParser.IterativeStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#iterativeStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIterativeStatement(SpookParser.IterativeStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#forStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterForStatement(SpookParser.ForStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#forStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitForStatement(SpookParser.ForStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolOperations}.
 	 * @param ctx the parse tree
 	 */
@@ -447,6 +497,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataType(SpookParser.DataTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#predefinedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#predefinedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#colorName}.
+	 * @param ctx the parse tree
+	 */
+	void enterColorName(SpookParser.ColorNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#colorName}.
+	 * @param ctx the parse tree
+	 */
+	void exitColorName(SpookParser.ColorNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree

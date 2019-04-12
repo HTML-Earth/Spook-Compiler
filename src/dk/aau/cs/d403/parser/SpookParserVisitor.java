@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from D:/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -155,6 +155,24 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitObjectArg(SpookParser.ObjectArgContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#functionCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCall(SpookParser.FunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#nonObjectFunctionCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#objectVariableAssign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#objectFunctionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -215,6 +233,18 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#iterativeStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIterativeStatement(SpookParser.IterativeStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#forStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForStatement(SpookParser.ForStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#boolOperations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -274,6 +304,18 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDataType(SpookParser.DataTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#predefinedFunctionName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#colorName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorName(SpookParser.ColorNameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree
