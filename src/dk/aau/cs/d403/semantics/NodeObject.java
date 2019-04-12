@@ -12,12 +12,14 @@ public class NodeObject {
     private Enums.ClassType classType;
     private Enums.ReturnType returnType;
     private String name;
+    private String functionName;
     private String scopeLevel;
     private String attributes;
     private ArrayList<ObjectArgumentNode> objectArguments;
     private ArrayList<FunctionArgNode> functionArguments;
     private ExpressionNode expression;
 
+    // Constructor for Variable declarations
     public NodeObject(Enums.DataType type, String name, String scopeLevel) {
         this.type = type;
         this.name = name;
@@ -25,6 +27,7 @@ public class NodeObject {
         this.attributes = "Variable";
     }
 
+    // Constructor for Object declarations
     public NodeObject(Enums.ClassType type, String name, String scopeLevel, ArrayList<ObjectArgumentNode> objectArguments) {
         this.classType = type;
         this.name = name;
@@ -33,12 +36,28 @@ public class NodeObject {
 
         StringBuilder sb = new StringBuilder();
         for(ObjectArgumentNode objectArg : objectArguments) {
-             sb.append(objectArg.prettyPrint());
-             sb.append(",");
+            sb.append(objectArg.prettyPrint());
+            sb.append(",");
         }
         this.attributes = sb.toString();
     }
 
+    // Constructor for Object function calls
+    public NodeObject(String name, String functionName, String scopeLevel, ArrayList<ObjectArgumentNode> objectArguments) {
+        this.name = name;
+        this.functionName = functionName;
+        this.scopeLevel = scopeLevel;
+        this.objectArguments = objectArguments;
+
+        StringBuilder sb = new StringBuilder();
+        for(ObjectArgumentNode objectArg : objectArguments) {
+            sb.append(objectArg.prettyPrint());
+            sb.append(",");
+        }
+        this.attributes = sb.toString();
+    }
+
+    // Constructor for Assignments
     public NodeObject(Enums.DataType type, String name, String scopeLevel, ExpressionNode expression) {
         this.type = type;
         this.name = name;
@@ -47,6 +66,7 @@ public class NodeObject {
         this.attributes = expression.prettyPrint();
     }
 
+    // Constructor for Function declarations
     public NodeObject(Enums.ReturnType returnType, String name, String scopeLevel, ArrayList<FunctionArgNode> functionArguments) {
         this.returnType = returnType;
         this.name = name;
@@ -67,11 +87,13 @@ public class NodeObject {
 
     }
 
+    // Constructor for Classes
     public NodeObject(String name, String scopeLevel) {
         this.name = name;
         this.scopeLevel = scopeLevel;
         this.attributes = "Class";
     }
+
 
     public Enums.DataType getType() {
         return type;
@@ -83,6 +105,10 @@ public class NodeObject {
 
     public String getName() {
         return name;
+    }
+
+    public String getFunctionName() {
+        return functionName;
     }
 
     public String getScopeLevel() {

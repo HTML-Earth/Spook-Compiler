@@ -85,8 +85,8 @@ public class SymbolTableFilling implements SymbolTable{
             visitObjectDeclaration((ObjectDeclarationNode) statementNode);
         else if (statementNode instanceof AssignmentNode)
             visitAssignment((AssignmentNode) statementNode);
-        /*else if (statementNode instanceof ObjectFunctionCallNode)
-            visitObjectFunctionCall((ObjectFunctionCallNode) statementNode);*/
+        else if (statementNode instanceof ObjectFunctionCallNode)
+            visitObjectFunctionCall((ObjectFunctionCallNode) statementNode);
     }
 
     private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
@@ -158,6 +158,19 @@ public class SymbolTableFilling implements SymbolTable{
         else {
             throw new RuntimeException("ERROR: Variable is not declared.");
         }
+    }
+
+    private void visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
+        String objectVariableName = objectFunctionCallNode.getObjectVariableName();
+        String functionName = objectFunctionCallNode.getFunctionName();
+        ArrayList<ObjectArgumentNode> objectArgumentNodes = objectFunctionCallNode.getObjectArguments();
+
+        // SCOPE CHECK: If a variable with the same name did not exist
+        if(retrieveSymbol(objectVariableName) == null) {
+            enterSymbol(new NodeObject(objectVariableName, functionName, this.scopeLevel, objectArgumentNodes), this.scopeLevel);
+        }
+        else
+            throw new RuntimeException("ERROR: Object is not declared.");
     }
 
     private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
