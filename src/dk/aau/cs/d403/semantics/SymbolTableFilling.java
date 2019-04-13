@@ -48,8 +48,66 @@ public class SymbolTableFilling implements SymbolTable{
         System.out.println("----------------------------------");
     }
 
+    private void setupPredefinedElements(ProgramNode programNode) {
+        // Lists
+        ArrayList<FunctionDeclarationNode> shapeFunctions = new ArrayList<>();
+        ArrayList<DeclarationNode> shapeDeclarations = new ArrayList<>();
+        ArrayList<StatementNode> setPositionStatements = new ArrayList<>();
+        ArrayList<FunctionArgNode> positionFunctionArgs = new ArrayList<>();
+
+        // Variable Declarations
+        VariableDeclarationNode positionXDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionX");
+        VariableDeclarationNode positionYDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionY");
+        shapeDeclarations.add(positionXDecl);
+        shapeDeclarations.add(positionYDecl);
+
+        // Function Blocks
+        ArithOperandNode arithOperandPosX = new ArithOperandNode("positionX");
+        ArithOperandNode arithOperandPosY = new ArithOperandNode("positionY");
+
+        ExpressionNode positionXExpression = new IntegerExpressionNode(arithOperandPosX);
+        ExpressionNode positionYExpression = new IntegerExpressionNode(arithOperandPosY);
+
+        StatementNode setPositionXAssign = new AssignmentNode("positionX", positionXExpression);
+        StatementNode setPositionYAssign = new AssignmentNode("positionY", positionYExpression);
+
+        setPositionStatements.add(setPositionXAssign);
+        setPositionStatements.add(setPositionYAssign);
+        BlockNode positionBlockNode = new BlockNode(setPositionStatements);
+
+        // Position function arguments
+        FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "positionX");
+        FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "positionY");
+        positionFunctionArgs.add(positionXArg);
+        positionFunctionArgs.add(positionYArg);
+
+        // Function Declarations
+        FunctionDeclarationNode positionFunction = new FunctionDeclarationNode(Enums.ReturnType.VOID, "position", positionFunctionArgs, positionBlockNode);
+        shapeFunctions.add(positionFunction);
+
+        // Predefined Class Block Nodes
+        ClassBlockNode shapeBlockNode = new ClassBlockNode(shapeDeclarations, shapeFunctions);
+        ClassBlockNode colorBlockNode = new ClassBlockNode(null, null);
+
+        // Predefined Classes
+        ClassDeclarationNode shapeClass = new ClassDeclarationNode("Shape", shapeBlockNode);
+        ClassDeclarationNode circleClass = new ClassDeclarationNode("Circle", shapeBlockNode);
+        ClassDeclarationNode rectangleClass = new ClassDeclarationNode("Rectangle", shapeBlockNode);
+        ClassDeclarationNode triangleClass = new ClassDeclarationNode("Triangle", shapeBlockNode);
+        ClassDeclarationNode colorClass = new ClassDeclarationNode("Color", colorBlockNode);
+
+
+        // Enter classes into the program node
+        programNode.getClassDeclarationNodes().add(shapeClass);
+        programNode.getClassDeclarationNodes().add(circleClass);
+        programNode.getClassDeclarationNodes().add(rectangleClass);
+        programNode.getClassDeclarationNodes().add(triangleClass);
+        programNode.getClassDeclarationNodes().add(colorClass);
+    }
+
 
     public void visitProgram(ProgramNode programNode) {
+        setupPredefinedElements(programNode);
         openScope();
 
         visitMain(programNode.getMainNode());
@@ -202,14 +260,26 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
+            // Enter function arguments into the symbol table
+            for(FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but is in a different scope
         else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
+            // Enter function arguments into the symbol table
+            for(FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but the arguments are different
         else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
+            // Enter function arguments into the symbol table
+            for(FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         else {
