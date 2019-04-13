@@ -62,22 +62,17 @@ public class SymbolTableFilling implements SymbolTable{
         shapeDeclarations.add(positionYDecl);
 
         // Function Blocks
-        ArithOperandNode arithOperandPosX = new ArithOperandNode("positionX");
-        ArithOperandNode arithOperandPosY = new ArithOperandNode("positionY");
 
-        ExpressionNode positionXExpression = new IntegerExpressionNode(arithOperandPosX);
-        ExpressionNode positionYExpression = new IntegerExpressionNode(arithOperandPosY);
+        //StatementNode setPositionXAssign = new AssignmentNode("positionX", "funcPositionX");
+        //StatementNode setPositionYAssign = new AssignmentNode("positionY", "funcPositionY");
 
-        StatementNode setPositionXAssign = new AssignmentNode("positionX", positionXExpression);
-        StatementNode setPositionYAssign = new AssignmentNode("positionY", positionYExpression);
-
-        setPositionStatements.add(setPositionXAssign);
-        setPositionStatements.add(setPositionYAssign);
+        //setPositionStatements.add(setPositionXAssign);
+        //setPositionStatements.add(setPositionYAssign);
         BlockNode positionBlockNode = new BlockNode(setPositionStatements);
 
         // Position function arguments
-        FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "positionX");
-        FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "positionY");
+        FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionX");
+        FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionY");
         positionFunctionArgs.add(positionXArg);
         positionFunctionArgs.add(positionYArg);
 
@@ -107,7 +102,7 @@ public class SymbolTableFilling implements SymbolTable{
 
 
     public void visitProgram(ProgramNode programNode) {
-        setupPredefinedElements(programNode);
+        //setupPredefinedElements(programNode);
         openScope();
 
         visitMain(programNode.getMainNode());
