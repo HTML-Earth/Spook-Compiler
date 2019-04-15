@@ -29,7 +29,13 @@ public class SymbolTableFilling implements SymbolTable{
 
     @Override
     public void enterSymbol(String name, NodeObject object) {
-        symbolTable.put(name, object);
+        if(retrieveSymbol(name) != null) {
+            String varNumber = "0";
+            varNumber += name;
+            symbolTable.put(varNumber, object);
+        }
+        else
+            symbolTable.put(name, object);
     }
 
     @Override
@@ -255,26 +261,14 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
-            // Enter function arguments into the symbol table
-            for(FunctionArgNode functionArg : functionArgs) {
-                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
-            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but is in a different scope
         else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
-            // Enter function arguments into the symbol table
-            for(FunctionArgNode functionArg : functionArgs) {
-                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
-            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but the arguments are different
         else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
-            // Enter function arguments into the symbol table
-            for(FunctionArgNode functionArg : functionArgs) {
-                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
-            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         else {
