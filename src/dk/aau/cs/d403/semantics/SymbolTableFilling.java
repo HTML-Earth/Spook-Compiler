@@ -22,7 +22,7 @@ public class SymbolTableFilling implements SymbolTable{
 
     // Counters so the variable-, function, class function names
     // don't overlap and stay unique
-    private Integer variableCounter = 0;
+    private Integer variableCounter = 1;
     private int functionCounter = 1;
     private int classFunctionCounter = 1;
 
@@ -66,13 +66,21 @@ public class SymbolTableFilling implements SymbolTable{
         return symbolTable.get(name);
     }
 
+    public NodeObject retrieveSymbols(String name, String scopeLevel) {
+        for(NodeObject object : symbolTable.values()) {
+            if(object.getName().equals(name) && object.getScopeLevel().equals(scopeLevel))
+                return object;
+        }
+        return symbolTable.get(name);
+    }
+
     public void printSymbolTable() {
         System.out.println("Size of symbol table: " + symbolTable.size());
 
         System.out.println("Symbol table:\n----------------------------------");
-        System.out.println(String.format("%5s, %5s, %5s %5s, %5s, %5s", "Name", "Data type", "Class type", "Return type", "Attributes", "Scopelevel"));
+        System.out.println(String.format("%15s, %15s, %15s %15s, %15s, %15s", "Name", "Data type", "Class type", "Return type", "Attributes", "Scopelevel"));
         for (Map.Entry entry : symbolTable.entrySet()) {
-            System.out.println(String.format("%5s, %5s", entry.getKey(), entry.getValue()));
+            System.out.println(String.format("%15s, %5s", entry.getKey(), entry.getValue()));
         }
         System.out.println("----------------------------------");
     }
@@ -192,28 +200,43 @@ public class SymbolTableFilling implements SymbolTable{
         String variableName = assignmentNode.getVariableName();
         ExpressionNode expression = assignmentNode.getExpressionNode();
 
-        NodeObject nodeObject = retrieveSymbol(variableName);
+        NodeObject nodeObject;
+        // Check if a variable was found within this class
+        if(retrieveSymbols(variableName, this.insideClass) != null)
+            nodeObject = retrieveSymbols(variableName, this.insideClass);
+        // else just return the variable found somewhere else and do type- and scope check on it
+        else
+            nodeObject = retrieveSymbol(variableName);
+
         // SCOPE CHECK: If a variable exists
         if(nodeObject != null) {
 
-            // TYPE CHECK: If the type of the variable does not match the type of the assignment
-            if(!(nodeObject.getType().equals(getExpressionNodeType(expression)))) {
-                throw new RuntimeException("ERROR: Variable type does not match the type of the expression.");
+            if(expression != null) {
+                // TYPE CHECK: If the type of the variable does not match the type of the assignment
+                if(!(nodeObject.getType().equals(getExpressionNodeType(expression)))) {
+                    throw new RuntimeException("ERROR: Variable type does not match the type of the expression.");
+                }
             }
 
             // SCOPE CHECK: If the variable has the same scope level as the Node
             if(nodeObject.getScopeLevel().equals(this.scopeLevel)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
-                enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
+                if (expression != null) {
+                    enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
+                }
+                else
+                    enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel));
             }
             // SCOPE CHECK: If the variable is defined within a class and
             // the assignment is within a function in the class
             else if(nodeObject.getInsideClass().equals(this.insideClass)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
-
-                enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
-
+                if (expression != null) {
+                    enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
+                }
+                else
+                    enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel));
             }
             else
                 throw new RuntimeException("ERROR: Variable is not declared in this scope.");
@@ -282,14 +305,23 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
+            for(FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but is in a different scope
         else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
+            for(FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but the arguments are different
         else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
+            for(FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         else {
