@@ -72,4 +72,20 @@ public class SymbolTableTextFileTest {
             e.printStackTrace();
         }
     }
+
+    // Testing if a Class setter can access a different Class scope variable.
+    @Test
+    void scopeRuleClassSetter04() {
+        try {
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ClassSetterFunction04.spook"));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+
+            AstBuilder astBuilder = new AstBuilder();
+            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+
+            symbolTableFilling.visitProgram(programNode);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
