@@ -2,7 +2,13 @@ package dk.aau.cs.d403.spook;
 
 import dk.aau.cs.d403.spook.color.Colorable;
 
+import java.util.ArrayList;
+
 public class Scene extends SpookObject implements Colorable {
+    public Scene() {
+        children = new ArrayList<>();
+    }
+
     public Vector2 getPosition() {
         return new Vector2(0,0);
     }
@@ -21,5 +27,10 @@ public class Scene extends SpookObject implements Colorable {
 
     public SpookObject getParent() {
         return null;
+    }
+
+    @Override
+    public String getDeclaration() {
+        throw new RuntimeException("Scene should not be declared");
     }
 }

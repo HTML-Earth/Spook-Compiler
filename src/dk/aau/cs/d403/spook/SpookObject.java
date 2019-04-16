@@ -3,11 +3,20 @@ package dk.aau.cs.d403.spook;
 import java.util.ArrayList;
 
 public abstract class SpookObject {
-    private Vector2 position;
-    private float rotation;
+    protected String name;
+    protected Vector2 position;
+    protected float rotation;
 
-    private SpookObject parent;
-    private ArrayList<SpookObject> children;
+    protected SpookObject parent;
+    protected ArrayList<SpookObject> children;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Vector2 getPosition() {
         return position;
@@ -36,4 +45,6 @@ public abstract class SpookObject {
     public void add(SpookObject spookObject) {
         children.add(spookObject);
     }
+
+    public abstract String getDeclaration();
 }
