@@ -590,7 +590,19 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitClassProperty(SpookParser.ClassPropertyContext ctx) {
-        ClassPropertyNode classPropertyNode = new ClassPropertyNode(getClassType(ctx.classType()), ctx.variableName().getText());
+        Enums.ClassType classType = getClassType(ctx.classType());
+        String variableName;
+
+        if (ctx.variableName() != null)
+            variableName = ctx.variableName().getText();
+        else if (ctx.functionName() != null)
+            variableName = ctx.functionName().getText();
+        else if (ctx.predefinedFunctionName() != null)
+            variableName = ctx.predefinedFunctionName().getText();
+        else
+            throw new CompilerException("Invalid class property", getCodePosition(ctx));
+
+        ClassPropertyNode classPropertyNode = new ClassPropertyNode(classType, variableName);
         classPropertyNode.setCodePosition(getCodePosition(ctx));
 
         return classPropertyNode;
