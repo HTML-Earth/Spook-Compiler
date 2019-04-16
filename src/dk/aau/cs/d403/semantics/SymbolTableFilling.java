@@ -17,6 +17,9 @@ public class SymbolTableFilling implements SymbolTable{
     // Unique string describing the scope
     private String scopeLevel;
 
+    // Current Class name
+    private String insideClass;
+
     // Counters so the variable-, function, class function names
     // don't overlap and stay unique
     private Integer variableCounter = 0;
@@ -82,9 +85,13 @@ public class SymbolTableFilling implements SymbolTable{
         visitMain(programNode.getMainNode());
 
         for (ClassDeclarationNode classDecl : programNode.getClassDeclarationNodes()) {
+            this.insideClass = classDecl.getClassName();
             visitClassDeclaration(classDecl);
             openScope("Global");
         }
+        // Set the current class to null so functions have no chance of interfering
+        // Probably not necessary.
+        this.insideClass = null;
 
 
         for (FunctionDeclarationNode functionDecl : programNode.getFunctionDeclarationNodes()) {
@@ -137,6 +144,28 @@ public class SymbolTableFilling implements SymbolTable{
         }
     }
 
+    private void visitClassVariableDeclaration(VariableDeclarationNode variableDeclarationNode, String className) {
+        String variableName = variableDeclarationNode.getVariableName();
+        Enums.DataType declarationType = variableDeclarationNode.getDataType();
+
+        // SCOPE CHECK: If a variable doesn't exist
+        if(retrieveSymbol(variableName) == null) {
+            enterSymbol(variableName, new NodeObject(declarationType, variableName, className, this.scopeLevel));
+        }
+        // SCOPE CHECK: If a variable already existed but not of the same type
+        else if (!(retrieveSymbol(variableName).getType().equals(declarationType))) {
+            enterSymbol(variableName, new NodeObject(declarationType, variableName, className, this.scopeLevel));
+        }
+        // SCOPE CHECK: If a variable already existed but not in the same scope
+        else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
+            enterSymbol(variableName, new NodeObject(declarationType, variableName, className, this.scopeLevel));
+        }
+        // If a variable already existed in the same scope
+        else {
+            throw new RuntimeException("ERROR: Variable name is already in use.");
+        }
+    }
+
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         String variableName = objectDeclarationNode.getVariableName();
         Enums.ClassType objectType = objectDeclarationNode.getClassType();
@@ -161,9 +190,9 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitAssignment(AssignmentNode assignmentNode) {
         String variableName = assignmentNode.getVariableName();
-        NodeObject nodeObject = retrieveSymbol(variableName);
         ExpressionNode expression = assignmentNode.getExpressionNode();
 
+        NodeObject nodeObject = retrieveSymbol(variableName);
         // SCOPE CHECK: If a variable exists
         if(nodeObject != null) {
 
@@ -178,15 +207,14 @@ public class SymbolTableFilling implements SymbolTable{
 
                 enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
             }
-            // SCOPE CHECK: If the variable is declared within a function within a class
-            /*
-            else if() {
+            // SCOPE CHECK: If the variable is defined within a class and
+            // the assignment is within a function in the class
+            else if(nodeObject.getInsideClass().equals(this.insideClass)) {
                 Enums.DataType assignmentType = retrieveSymbol(assignmentNode.getVariableName()).getType();
 
                 enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
 
             }
-            */
             else
                 throw new RuntimeException("ERROR: Variable is not declared in this scope.");
         }
@@ -224,7 +252,7 @@ public class SymbolTableFilling implements SymbolTable{
     private void visitClassBlock(ClassBlockNode classBlockNode, String className) {
         openScope(className);
         for(DeclarationNode declNode : classBlockNode.getDeclarationNodes())
-            visitVariableDeclaration((VariableDeclarationNode) declNode);
+            visitClassVariableDeclaration((VariableDeclarationNode) declNode, className);
         for(FunctionDeclarationNode funcNode : classBlockNode.getFunctionDeclarationNodes())
             visitClassFunctionDeclaration(funcNode, className);
     }

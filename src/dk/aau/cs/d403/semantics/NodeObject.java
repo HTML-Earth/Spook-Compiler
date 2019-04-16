@@ -13,6 +13,7 @@ public class NodeObject {
     private Enums.ReturnType returnType;
     private String name;
     private String functionName;
+    private String insideClass;
     private String scopeLevel;
     private String attributes;
     private ArrayList<ObjectArgumentNode> objectArguments;
@@ -23,6 +24,17 @@ public class NodeObject {
     public NodeObject(Enums.DataType type, String name, String scopeLevel) {
         this.type = type;
         this.name = name;
+        this.scopeLevel = scopeLevel;
+        this.attributes = "Variable";
+
+        this.insideClass = null;
+    }
+
+    // Constructor for Variable declarations in classes
+    public NodeObject(Enums.DataType type, String name, String insideClass, String scopeLevel) {
+        this.type = type;
+        this.name = name;
+        this.insideClass = insideClass;
         this.scopeLevel = scopeLevel;
         this.attributes = "Variable";
     }
@@ -113,6 +125,10 @@ public class NodeObject {
 
     public String getScopeLevel() {
         return scopeLevel;
+    }
+
+    public String getInsideClass() {
+        return insideClass;
     }
 
     public String getAttributes() {
