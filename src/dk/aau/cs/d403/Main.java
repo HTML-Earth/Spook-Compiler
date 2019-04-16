@@ -10,32 +10,124 @@ import dk.aau.cs.d403.semantics.SymbolTableFilling;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
+    // spook [options] [source files] -o output file
     public static void main(String[] args) {
+        // Arguments
+        String inputFile = null;
+        File outputFile = null;
+        boolean prettyPrint = false;
+        boolean print = false;
+        boolean copy = false;
 
+        String generatedCode = null;
+
+        // Parsing arguments
+        boolean nextArgIsOutputFile = false;
+        for (String arg : args) {
+            if (arg.length() > 0) {
+                if (arg.charAt(0) == '-') {
+                    if (nextArgIsOutputFile)
+                        throw new IllegalArgumentException("Expected output file, got: " + arg);
+
+                    switch (arg.substring(1)) {
+                        case "pp": case "prettyprint":
+                            prettyPrint = true;
+                        case "p": case "print": case "sout":
+                            print = true;
+                            break;
+                        case "c": case "copy": case "clipboard": case "pasta":
+                            copy = true;
+                            break;
+                        case "o":
+                            nextArgIsOutputFile = true;
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Invalid argument: " + arg);
+                    }
+                }
+                else {
+                    if (nextArgIsOutputFile) {
+                        if (outputFile != null)
+                            System.out.println("Overriding output file");
+                        outputFile = new File(arg);
+                        nextArgIsOutputFile = false;
+                    }
+                    else {
+                        if (outputFile != null)
+                            System.out.println("Overriding input file"); //TODO: allow multiple input files
+                        inputFile = arg;
+                    }
+                }
+            }
+        }
+
+        if (inputFile == null)
+            throw new RuntimeException("No input file specified");
+
+
+        // LEXER / PARSER
+        SpookParser parser = null;
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/TestShader.spook"));
-            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
-
-            System.out.println("Building AST...\n");
-            AstBuilder builder = new AstBuilder();
-            ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
-
-            System.out.println("Pretty Print:");
-            System.out.println(ast.prettyPrint());
-
-            System.out.println("Contextual Analysis...\n");
-            SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
-            symbolTableFilling.visitProgram(ast);
-
-            System.out.println("Generated GLSL:");
-            CodeGenerator codeGenerator = new CodeGenerator();
-            System.out.println(codeGenerator.GenerateGLSL(ast));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName(inputFile));
+            parser = new SpookParser(new CommonTokenStream(lexer));
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (parser == null)
+            throw new RuntimeException("Parser failed.");
+
+
+        // AST
+        AstBuilder builder = new AstBuilder();
+        ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
+
+        // CONTEXT ANALYSIS
+        SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
+        symbolTableFilling.visitProgram(ast);
+
+        // CODE GENERATION
+        CodeGenerator codeGenerator = new CodeGenerator();
+        generatedCode = codeGenerator.GenerateGLSL(ast);
+
+        // Pretty printing
+        if (prettyPrint) {
+            System.out.println("Pretty Print:");
+            System.out.println(ast.prettyPrint());
+        }
+
+        // Print the code to the terminal
+        if (print) {
+            System.out.println("Generated GLSL:");
+            System.out.println(generatedCode);
+        }
+
+        // Copy the code into the clipboard
+        if (copy) {
+            StringSelection selection = new StringSelection(generatedCode);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(selection, selection);
+        }
+
+        // Write the code to the output file
+        if (outputFile != null) {
+            try {
+                FileWriter writer = new FileWriter(outputFile);
+                writer.write(generatedCode);
+                writer.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
