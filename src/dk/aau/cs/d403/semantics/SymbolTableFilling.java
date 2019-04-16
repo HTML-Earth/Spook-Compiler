@@ -11,6 +11,7 @@ public class SymbolTableFilling implements SymbolTable{
 
     private HashMap<String, NodeObject> symbolTable;
     private String scopeLevel;
+    private Integer varNumber = 0;
     private int level = 1;
 
     public SymbolTableFilling() {
@@ -30,9 +31,9 @@ public class SymbolTableFilling implements SymbolTable{
     @Override
     public void enterSymbol(String name, NodeObject object) {
         if(retrieveSymbol(name) != null) {
-            String varNumber = "0";
-            varNumber += name;
-            symbolTable.put(varNumber, object);
+            String varName = varNumber.toString() + name;
+            symbolTable.put(varName, object);
+            this.varNumber += 1;
         }
         else
             symbolTable.put(name, object);
