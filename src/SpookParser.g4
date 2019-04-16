@@ -107,7 +107,7 @@ objectFunctionCall
 
 // Color function call
 classProperty
-    : classType DOT (variableName | functionName | predefinedFunctionName);
+    : classType DOT (variableName | predefinedFunctionName);
 
 
 /* Function declaration */
