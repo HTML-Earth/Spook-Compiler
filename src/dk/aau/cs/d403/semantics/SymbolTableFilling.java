@@ -9,10 +9,17 @@ import dk.aau.cs.d403.ast.structure.*;
 
 public class SymbolTableFilling implements SymbolTable{
 
+    // The Symbol table itself represented as a HashMap
+        // The String is the name of variables, functions, classes
+        // The NodeObject is an object representing all the different AST nodes
     private HashMap<String, NodeObject> symbolTable;
+
+    // Unique string describing the scope
     private String scopeLevel;
-    private Integer varNumber = 0;
-    private int level = 1;
+
+    // Counters so the variable-, function, class function names
+    // don't overlap and stay unique
+    private Integer variableCounter = 0;
     private int functionCounter = 1;
     private int classFunctionCounter = 1;
 
@@ -20,37 +27,37 @@ public class SymbolTableFilling implements SymbolTable{
         this.symbolTable = new HashMap<>();
     }
 
-  //  @Override
+    // Set the scope string
+    @Override
     public void openScope(String scope) {
         this.scopeLevel = scope;
     }
 
-    public void openClassFunctionScope(String className) {
+    // Set the scope string for a function in a class
+    private void openClassFunctionScope(String className) {
         this.scopeLevel = className + "func" + classFunctionCounter;
         classFunctionCounter++;
     }
 
-    public void  openFunctionScope() {
+    // Set the scope string for a function in the Global scope
+    private void openFunctionScope() {
         this.scopeLevel = "func" + functionCounter;
         functionCounter++;
     }
 
-  //  @Override
-    public void closeScope() {
-        this.level += 1;
-    }
-
+    // Enter a symbol into the symbol table
     @Override
     public void enterSymbol(String name, NodeObject object) {
         if(retrieveSymbol(name) != null) {
-            String varName = varNumber.toString() + name;
+            String varName = variableCounter.toString() + name;
             symbolTable.put(varName, object);
-            this.varNumber += 1;
+            this.variableCounter += 1;
         }
         else
             symbolTable.put(name, object);
     }
 
+    // Retrieve NodeObject based on the name of the object
     @Override
     public NodeObject retrieveSymbol(String name) {
         return symbolTable.get(name);
@@ -67,62 +74,10 @@ public class SymbolTableFilling implements SymbolTable{
         System.out.println("----------------------------------");
     }
 
-    private void setupPredefinedElements(ProgramNode programNode) {
-        // Lists
-        ArrayList<FunctionDeclarationNode> shapeFunctions = new ArrayList<>();
-        ArrayList<DeclarationNode> shapeDeclarations = new ArrayList<>();
-        ArrayList<StatementNode> setPositionStatements = new ArrayList<>();
-        ArrayList<FunctionArgNode> positionFunctionArgs = new ArrayList<>();
-
-        // Variable Declarations
-        VariableDeclarationNode positionXDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionX");
-        VariableDeclarationNode positionYDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionY");
-        shapeDeclarations.add(positionXDecl);
-        shapeDeclarations.add(positionYDecl);
-
-        // Function Blocks
-
-        //StatementNode setPositionXAssign = new AssignmentNode("positionX", "funcPositionX");
-        //StatementNode setPositionYAssign = new AssignmentNode("positionY", "funcPositionY");
-
-        //setPositionStatements.add(setPositionXAssign);
-        //setPositionStatements.add(setPositionYAssign);
-        BlockNode positionBlockNode = new BlockNode(setPositionStatements);
-
-        // Position function arguments
-        FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionX");
-        FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionY");
-        positionFunctionArgs.add(positionXArg);
-        positionFunctionArgs.add(positionYArg);
-
-        // Function Declarations
-        FunctionDeclarationNode positionFunction = new FunctionDeclarationNode(Enums.ReturnType.VOID, "position", positionFunctionArgs, positionBlockNode);
-        shapeFunctions.add(positionFunction);
-
-        // Predefined Class Block Nodes
-        ClassBlockNode shapeBlockNode = new ClassBlockNode(shapeDeclarations, shapeFunctions);
-        ClassBlockNode colorBlockNode = new ClassBlockNode(null, null);
-
-        // Predefined Classes
-        ClassDeclarationNode shapeClass = new ClassDeclarationNode("Shape", shapeBlockNode);
-        ClassDeclarationNode circleClass = new ClassDeclarationNode("Circle", shapeBlockNode);
-        ClassDeclarationNode rectangleClass = new ClassDeclarationNode("Rectangle", shapeBlockNode);
-        ClassDeclarationNode triangleClass = new ClassDeclarationNode("Triangle", shapeBlockNode);
-        ClassDeclarationNode colorClass = new ClassDeclarationNode("Color", colorBlockNode);
-
-
-        // Enter classes into the program node
-        programNode.getClassDeclarationNodes().add(shapeClass);
-        programNode.getClassDeclarationNodes().add(circleClass);
-        programNode.getClassDeclarationNodes().add(rectangleClass);
-        programNode.getClassDeclarationNodes().add(triangleClass);
-        programNode.getClassDeclarationNodes().add(colorClass);
-    }
-
 
     public void visitProgram(ProgramNode programNode) {
         //setupPredefinedElements(programNode);
-        this.scopeLevel = "Global";
+        openScope("Global");
 
         visitMain(programNode.getMainNode());
 
@@ -135,8 +90,6 @@ public class SymbolTableFilling implements SymbolTable{
         for (FunctionDeclarationNode functionDecl : programNode.getFunctionDeclarationNodes()) {
             visitFunctionDeclaration(functionDecl);
         }
-
-        closeScope();
     }
 
     private void visitMain(MainNode mainNode) {
@@ -284,30 +237,16 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     private void visitClassFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, String className) {
-        String functionName = functionDeclarationNode.getFunctionName();
-        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
-        ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
-
-        // SCOPE CHECK: If a function with this name doesn't exist
-        if(retrieveSymbol(functionName) == null) {
-            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
-        }
-        // SCOPE CHECK: If a function with the same name exists but is in a different scope
-        else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
-            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
-        }
-        // SCOPE CHECK: If a function with the same name exists but the arguments are different
-        else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
-            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
-        }
-        else {
-            throw new RuntimeException("ERROR: Function already exist with the same parameters");
-        }
-
+        enterFunctionDeclaration(functionDeclarationNode);
         visitClassFunctionBlock(functionDeclarationNode.getBlockNode(), className);
     }
 
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
+        enterFunctionDeclaration(functionDeclarationNode);
+        visitFunctionBlock(functionDeclarationNode.getBlockNode());
+    }
+
+    private void enterFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
@@ -327,8 +266,6 @@ public class SymbolTableFilling implements SymbolTable{
         else {
             throw new RuntimeException("ERROR: Function already exist with the same parameters");
         }
-
-        visitFunctionBlock(functionDeclarationNode.getBlockNode());
     }
 
     private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
@@ -348,7 +285,70 @@ public class SymbolTableFilling implements SymbolTable{
         else
             throw new RuntimeException("Assignment expression is unknown");
     }
+
+
+
+
+
+
+
+    // NOT CURRENTLY USED BUT IS TOO BIG TO LET GO JUST YET
+
+    private void setupPredefinedElements(ProgramNode programNode) {
+        // Lists
+        ArrayList<FunctionDeclarationNode> shapeFunctions = new ArrayList<>();
+        ArrayList<DeclarationNode> shapeDeclarations = new ArrayList<>();
+        ArrayList<StatementNode> setPositionStatements = new ArrayList<>();
+        ArrayList<FunctionArgNode> positionFunctionArgs = new ArrayList<>();
+
+        // Variable Declarations
+        VariableDeclarationNode positionXDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionX");
+        VariableDeclarationNode positionYDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionY");
+        shapeDeclarations.add(positionXDecl);
+        shapeDeclarations.add(positionYDecl);
+
+        // Function Blocks
+
+        //StatementNode setPositionXAssign = new AssignmentNode("positionX", "funcPositionX");
+        //StatementNode setPositionYAssign = new AssignmentNode("positionY", "funcPositionY");
+
+        //setPositionStatements.add(setPositionXAssign);
+        //setPositionStatements.add(setPositionYAssign);
+        BlockNode positionBlockNode = new BlockNode(setPositionStatements);
+
+        // Position function arguments
+        FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionX");
+        FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionY");
+        positionFunctionArgs.add(positionXArg);
+        positionFunctionArgs.add(positionYArg);
+
+        // Function Declarations
+        FunctionDeclarationNode positionFunction = new FunctionDeclarationNode(Enums.ReturnType.VOID, "position", positionFunctionArgs, positionBlockNode);
+        shapeFunctions.add(positionFunction);
+
+        // Predefined Class Block Nodes
+        ClassBlockNode shapeBlockNode = new ClassBlockNode(shapeDeclarations, shapeFunctions);
+        ClassBlockNode colorBlockNode = new ClassBlockNode(null, null);
+
+        // Predefined Classes
+        ClassDeclarationNode shapeClass = new ClassDeclarationNode("Shape", shapeBlockNode);
+        ClassDeclarationNode circleClass = new ClassDeclarationNode("Circle", shapeBlockNode);
+        ClassDeclarationNode rectangleClass = new ClassDeclarationNode("Rectangle", shapeBlockNode);
+        ClassDeclarationNode triangleClass = new ClassDeclarationNode("Triangle", shapeBlockNode);
+        ClassDeclarationNode colorClass = new ClassDeclarationNode("Color", colorBlockNode);
+
+
+        // Enter classes into the program node
+        programNode.getClassDeclarationNodes().add(shapeClass);
+        programNode.getClassDeclarationNodes().add(circleClass);
+        programNode.getClassDeclarationNodes().add(rectangleClass);
+        programNode.getClassDeclarationNodes().add(triangleClass);
+        programNode.getClassDeclarationNodes().add(colorClass);
+    }
 }
+
+
+
 
 
 
