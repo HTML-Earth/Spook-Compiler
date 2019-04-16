@@ -10,7 +10,7 @@ public class ObjectDeclarationNode extends DeclarationNode {
     private Enums.ClassType objectType;
     private String variableName;
 
-    ArrayList<ObjectArgumentNode> objectArgumentNodes;
+    private ArrayList<ObjectArgumentNode> objectArgumentNodes;
 
     public ObjectDeclarationNode(Enums.ClassType objectType, String variableName) {
         this.objectType = objectType;
@@ -37,7 +37,23 @@ public class ObjectDeclarationNode extends DeclarationNode {
 
     @Override
     public String prettyPrint() {
-        return "Object Declaration";
+        StringBuilder sb = new StringBuilder();
+        sb.append(Enums.classTypeToString(objectType));
+        sb.append(" ");
+        sb.append(variableName);
+        sb.append(" = (");
+
+        boolean first = true;
+        for (ObjectArgumentNode argNode : objectArgumentNodes) {
+            if (!first)
+                sb.append(", ");
+            first = false;
+            sb.append(argNode.prettyPrint());
+        }
+
+        sb.append(")");
+
+        return sb.toString();
     }
 
     private CodePosition codePosition;
