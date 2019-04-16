@@ -13,17 +13,29 @@ public class SymbolTableFilling implements SymbolTable{
     private String scopeLevel;
     private Integer varNumber = 0;
     private int level = 1;
+    private int functionCounter = 1;
+    private int classFunctionCounter = 1;
 
     public SymbolTableFilling() {
         this.symbolTable = new HashMap<>();
     }
 
-    @Override
-    public void openScope() {
-        this.scopeLevel = "Scope" + level;
+  //  @Override
+    public void openScope(String scope) {
+        this.scopeLevel = scope;
     }
 
-    @Override
+    public void openClassFunctionScope(String className) {
+        this.scopeLevel = className + "func" + classFunctionCounter;
+        classFunctionCounter++;
+    }
+
+    public void  openFunctionScope() {
+        this.scopeLevel = "func" + functionCounter;
+        functionCounter++;
+    }
+
+  //  @Override
     public void closeScope() {
         this.level += 1;
     }
@@ -110,13 +122,15 @@ public class SymbolTableFilling implements SymbolTable{
 
     public void visitProgram(ProgramNode programNode) {
         //setupPredefinedElements(programNode);
-        openScope();
+        this.scopeLevel = "Global";
 
         visitMain(programNode.getMainNode());
 
         for (ClassDeclarationNode classDecl : programNode.getClassDeclarationNodes()) {
             visitClassDeclaration(classDecl);
+            openScope("Global");
         }
+
 
         for (FunctionDeclarationNode functionDecl : programNode.getFunctionDeclarationNodes()) {
             visitFunctionDeclaration(functionDecl);
@@ -126,15 +140,31 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     private void visitMain(MainNode mainNode) {
-        visitBlock(mainNode.getBlockNode());
+        visitMainBlock(mainNode.getBlockNode());
     }
 
-    private void visitBlock(BlockNode blockNode) {
-        openScope();
+    private void visitFunctionBlock(BlockNode blockNode) {
+        openFunctionScope();
         for (StatementNode statementNode: blockNode.getStatementNodes()) {
             visitStatement(statementNode);
         }
-        closeScope();
+        openScope("Global");
+    }
+
+    private void visitMainBlock(BlockNode blockNode) {
+        openScope("Main");
+        for (StatementNode statementNode: blockNode.getStatementNodes()) {
+            visitStatement(statementNode);
+        }
+        openScope("Global");
+    }
+
+    private void visitClassFunctionBlock(BlockNode blockNode, String className) {
+        openClassFunctionScope(className);
+        for (StatementNode statementNode: blockNode.getStatementNodes()) {
+            visitStatement(statementNode);
+        }
+        openScope(className);
     }
 
     private void visitStatement(StatementNode statementNode) {
@@ -242,17 +272,39 @@ public class SymbolTableFilling implements SymbolTable{
         else
             throw new RuntimeException("ERROR: Class name is already in use.");
 
-        visitClassBlock(classDeclarationNode.getClassBlockNode());
+        visitClassBlock(classDeclarationNode.getClassBlockNode(), className);
     }
 
-    private void visitClassBlock(ClassBlockNode classBlockNode) {
-        openScope();
+    private void visitClassBlock(ClassBlockNode classBlockNode, String className) {
+        openScope(className);
         for(DeclarationNode declNode : classBlockNode.getDeclarationNodes())
             visitVariableDeclaration((VariableDeclarationNode) declNode);
-        closeScope();
         for(FunctionDeclarationNode funcNode : classBlockNode.getFunctionDeclarationNodes())
-            visitFunctionDeclaration(funcNode);
-        closeScope();
+            visitClassFunctionDeclaration(funcNode, className);
+    }
+
+    private void visitClassFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, String className) {
+        String functionName = functionDeclarationNode.getFunctionName();
+        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
+        ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
+
+        // SCOPE CHECK: If a function with this name doesn't exist
+        if(retrieveSymbol(functionName) == null) {
+            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
+        }
+        // SCOPE CHECK: If a function with the same name exists but is in a different scope
+        else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
+            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
+        }
+        // SCOPE CHECK: If a function with the same name exists but the arguments are different
+        else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
+            enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
+        }
+        else {
+            throw new RuntimeException("ERROR: Function already exist with the same parameters");
+        }
+
+        visitClassFunctionBlock(functionDeclarationNode.getBlockNode(), className);
     }
 
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
@@ -276,7 +328,7 @@ public class SymbolTableFilling implements SymbolTable{
             throw new RuntimeException("ERROR: Function already exist with the same parameters");
         }
 
-        visitBlock(functionDeclarationNode.getBlockNode());
+        visitFunctionBlock(functionDeclarationNode.getBlockNode());
     }
 
     private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
