@@ -8,6 +8,7 @@ import dk.aau.cs.d403.parser.SpookParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
@@ -117,8 +118,16 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitAssignment(SpookParser.AssignmentContext ctx) {
-        ExpressionNode expressionNode = (ExpressionNode)visitExpression(ctx.expression());
-        return new AssignmentNode(ctx.variableName().getText(), expressionNode);
+        if (ctx.expression() != null) {
+            ExpressionNode expressionNode = (ExpressionNode) visitExpression(ctx.expression());
+            return new AssignmentNode(ctx.variableName().getText(), expressionNode);
+        }
+        else if (ctx.variableName() != null) {
+            return new AssignmentNode(ctx.variableName().getText(), ctx.assignedVariableName().getText());
+        }
+        else {
+            throw new RuntimeException("Expected expression or variable name in assignment");
+        }
     }
 
     @Override
