@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/TestShader.spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ShapeTest.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             System.out.println("Building AST...\n");
@@ -32,7 +32,7 @@ public class Main {
 
             System.out.println("Generated GLSL:");
             CodeGenerator codeGenerator = new CodeGenerator();
-            System.out.println(codeGenerator.GenerateGLSL(ast));
+            System.out.println(codeGenerator.GenerateGLSL(ast, symbolTableFilling.getSymbolTable()));
         }
         catch (IOException e) {
             e.printStackTrace();

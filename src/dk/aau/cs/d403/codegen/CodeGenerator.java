@@ -5,16 +5,26 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
+import dk.aau.cs.d403.semantics.NodeObject;
+import dk.aau.cs.d403.spook.Scene;
+import dk.aau.cs.d403.spook.shapes.Rectangle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CodeGenerator implements ASTvisitor {
 
-    StringBuilder sb;
+    private StringBuilder sb;
+    private Scene scene;
+    private HashMap<NodeObject, String> symbolTable;
 
-    public String GenerateGLSL(ProgramNode ast) {
+    public String GenerateGLSL(ProgramNode ast, HashMap<NodeObject, String> symbolTable) {
+        this.symbolTable = symbolTable;
         sb = new StringBuilder();
+        scene = new Scene();
+
         visitProgram(ast);
+
         return sb.toString();
     }
 
@@ -82,6 +92,28 @@ public class CodeGenerator implements ASTvisitor {
     @Override
     public ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         sb.append("OBJECT DECLARATION");
+
+        ArrayList<ObjectArgumentNode> argumentNodes = objectDeclarationNode.getObjectArgumentNodes();
+
+        switch (objectDeclarationNode.getObjectType()) {
+            case CIRCLE:
+                break;
+            case RECTANGLE:
+                if (argumentNodes.size() == 3) {
+                    float width = argumentNodes.get(0).getRealNumberNode().getNumber();
+                    float height = argumentNodes.get(1).getRealNumberNode().getNumber();
+
+                    Rectangle rectangle = new Rectangle(width, height);
+                }
+                break;
+            case TRIANGLE:
+                break;
+            case SHAPE:
+                break;
+            case COLOR:
+                break;
+        }
+
         return objectDeclarationNode;
     }
 
