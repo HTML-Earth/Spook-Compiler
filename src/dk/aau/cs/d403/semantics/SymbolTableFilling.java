@@ -42,6 +42,10 @@ public class SymbolTableFilling implements SymbolTable{
         return null;
     }
 
+    public HashMap<NodeObject, String> getSymbolTable() {
+        return symbolTable;
+    }
+
     public void printSymbolTable() {
         System.out.println("Size of symbol table: " + symbolTable.size());
 
