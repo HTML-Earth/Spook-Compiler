@@ -595,8 +595,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         if (ctx.variableName() != null)
             variableName = ctx.variableName().getText();
-        else if (ctx.functionName() != null)
-            variableName = ctx.functionName().getText();
         else if (ctx.predefinedFunctionName() != null)
             variableName = ctx.predefinedFunctionName().getText();
         else
