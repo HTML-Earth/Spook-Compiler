@@ -153,6 +153,6 @@ public class NodeObject {
 
     @Override
     public String toString() {
-        return String.format("%5s, %10s, %10s, %15s, %10s", getType(), getClassType(), getReturnType(), getAttributes(), getScopeLevel());
+        return String.format("%15s, %15s, %15s, %15s, %15s", getType(), getClassType(), getReturnType(), getAttributes(), getScopeLevel());
     }
 }
