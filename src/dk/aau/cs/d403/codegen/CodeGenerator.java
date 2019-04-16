@@ -5,9 +5,10 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
-import dk.aau.cs.d403.semantics.NodeObject;
 import dk.aau.cs.d403.spook.Scene;
+import dk.aau.cs.d403.spook.SpookObject;
 import dk.aau.cs.d403.spook.shapes.Rectangle;
+import dk.aau.cs.d403.spook.shapes.Shape;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,21 +17,48 @@ public class CodeGenerator implements ASTvisitor {
 
     private StringBuilder sb;
     private Scene scene;
-    private HashMap<NodeObject, String> symbolTable;
 
-    public String GenerateGLSL(ProgramNode ast, HashMap<NodeObject, String> symbolTable) {
-        this.symbolTable = symbolTable;
+    private HashMap<String, SpookObject> spookObjects;
+
+    public String GenerateGLSL(ProgramNode ast) {
         sb = new StringBuilder();
         scene = new Scene();
+        spookObjects = new HashMap<>();
 
         visitProgram(ast);
+        sb = new StringBuilder(); //hacky hack
+
+        sb.append("\n");
+        sb.append(Shape.getStruct(Enums.ClassType.RECTANGLE));
+        sb.append("\n\n");
+        sb.append(Shape.getCheckFunctionSignature(Enums.ClassType.RECTANGLE));
+        sb.append(";");
+        sb.append("\n\n");
+        sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
+        for (SpookObject object : scene.getChildren()) {
+            sb.append("\t");
+            sb.append(object.getDeclaration());
+            sb.append("\n");
+        }
+        sb.append("\n");
+        for (SpookObject object : scene.getChildren()) {
+            sb.append("\t");
+            sb.append(Shape.getCheckCall(Enums.ClassType.RECTANGLE, object.getName()));
+            sb.append("\n\n");
+        }
+        sb.append("\tfragColor = vec4(1, 0, 1, 1);\n");
+        sb.append("}");
+        sb.append("\n\n");
+        sb.append(Shape.getCheckFunctionSignature(Enums.ClassType.RECTANGLE));
+        sb.append("{\n\t");
+        sb.append(Shape.getCheckFunctionBody(Enums.ClassType.RECTANGLE));
+        sb.append("\n}");
 
         return sb.toString();
     }
 
     @Override
     public ProgramNode visitProgram(ProgramNode programNode) {
-        sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) ");
         visitMain(programNode.getMainNode());
         return programNode;
     }
@@ -103,7 +131,8 @@ public class CodeGenerator implements ASTvisitor {
                     float width = argumentNodes.get(0).getRealNumberNode().getNumber();
                     float height = argumentNodes.get(1).getRealNumberNode().getNumber();
 
-                    Rectangle rectangle = new Rectangle(width, height);
+                    Rectangle rectangle = new Rectangle(objectDeclarationNode.getVariableName(), width, height);
+                    spookObjects.put(objectDeclarationNode.getVariableName(), rectangle);
                 }
                 break;
             case TRIANGLE:
@@ -152,6 +181,14 @@ public class CodeGenerator implements ASTvisitor {
     @Override
     public ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
         sb.append("OBJECT FUNCTION CALL");
+        if (objectFunctionCallNode.getObjectVariableName().equals("Scene")) {
+            if (objectFunctionCallNode.getFunctionName().equals("add")) {
+                String objectName = objectFunctionCallNode.getArgumentNodes().get(0).getVariableName();
+                SpookObject object = spookObjects.get(objectName);
+                if (object != null)
+                    scene.add(object);
+            }
+        }
         return objectFunctionCallNode;
     }
 

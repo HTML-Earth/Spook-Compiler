@@ -32,7 +32,7 @@ public class Main {
 
             System.out.println("Generated GLSL:");
             CodeGenerator codeGenerator = new CodeGenerator();
-            System.out.println(codeGenerator.GenerateGLSL(ast, symbolTableFilling.getSymbolTable()));
+            System.out.println(codeGenerator.GenerateGLSL(ast));
         }
         catch (IOException e) {
             e.printStackTrace();
