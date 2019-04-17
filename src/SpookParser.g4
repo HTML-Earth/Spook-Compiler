@@ -143,7 +143,7 @@ atomPrecedence
 
 // Mathematical functions
 mathFunction
-    : function LEFT_PAREN (arithOperand | lowPrecedence) RIGHT_PAREN;
+    : function LEFT_PAREN lowPrecedence RIGHT_PAREN;
 
 //Loops
 iterativeStatement
