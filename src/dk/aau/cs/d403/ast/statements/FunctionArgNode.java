@@ -22,7 +22,7 @@ public class FunctionArgNode implements ASTnode {
 
     @Override
     public String prettyPrint() {
-        return "Function args";
+        return getDataType() + " " + getVariableName();
     }
 
     @Override
