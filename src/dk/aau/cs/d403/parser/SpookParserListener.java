@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -447,16 +447,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNaturalNumber(SpookParser.NaturalNumberContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#operator}.
-	 * @param ctx the parse tree
-	 */
-	void enterOperator(SpookParser.OperatorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#operator}.
-	 * @param ctx the parse tree
-	 */
-	void exitOperator(SpookParser.OperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#boolOperator}.
 	 * @param ctx the parse tree

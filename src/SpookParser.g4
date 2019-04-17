@@ -195,7 +195,8 @@ classType
     | TRIANGLE
     | SHAPE
     | COLOR
-    | className;
+    | CIRCLEGRADIENT
+    | LINEGRADIENT;
 
 // Data types
 dataType
