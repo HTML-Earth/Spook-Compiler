@@ -64,7 +64,7 @@ public class CodeGenerator implements ASTvisitor {
             sb.append(Shape.getCheckFunctionSignature(type));
             sb.append("{\n\t");
             sb.append(Shape.getCheckFunctionBody(type));
-            sb.append(";\n");
+            sb.append("\n");
         }
 
         sb.append("\n}");
