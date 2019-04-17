@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -338,26 +338,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#arithOperations}.
-	 * @param ctx the parse tree
-	 */
-	void enterArithOperations(SpookParser.ArithOperationsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#arithOperations}.
-	 * @param ctx the parse tree
-	 */
-	void exitArithOperations(SpookParser.ArithOperationsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#arithOperation}.
-	 * @param ctx the parse tree
-	 */
-	void enterArithOperation(SpookParser.ArithOperationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#arithOperation}.
-	 * @param ctx the parse tree
-	 */
-	void exitArithOperation(SpookParser.ArithOperationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SpookParser#arithOperand}.
 	 * @param ctx the parse tree
 	 */
@@ -367,6 +347,36 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArithOperand(SpookParser.ArithOperandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#lowPrecedence}.
+	 * @param ctx the parse tree
+	 */
+	void enterLowPrecedence(SpookParser.LowPrecedenceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#lowPrecedence}.
+	 * @param ctx the parse tree
+	 */
+	void exitLowPrecedence(SpookParser.LowPrecedenceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#highPrecedence}.
+	 * @param ctx the parse tree
+	 */
+	void enterHighPrecedence(SpookParser.HighPrecedenceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#highPrecedence}.
+	 * @param ctx the parse tree
+	 */
+	void exitHighPrecedence(SpookParser.HighPrecedenceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#atomPrecedence}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtomPrecedence(SpookParser.AtomPrecedenceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#atomPrecedence}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree

@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -209,23 +209,29 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#arithOperations}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithOperations(SpookParser.ArithOperationsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#arithOperation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithOperation(SpookParser.ArithOperationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#arithOperand}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArithOperand(SpookParser.ArithOperandContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#lowPrecedence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLowPrecedence(SpookParser.LowPrecedenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#highPrecedence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHighPrecedence(SpookParser.HighPrecedenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#atomPrecedence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree

@@ -51,8 +51,8 @@ expression
     | ternaryOperator;
 
 // Expressions
-integerExpression: naturalNumber | arithOperations | mathFunction;
-floatExpression: realNumber | arithOperations | mathFunction;
+integerExpression: naturalNumber | lowPrecedence | mathFunction;
+floatExpression: realNumber | lowPrecedence | mathFunction;
 vector2Expression: LEFT_PAREN floatExpression COMMA floatExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
@@ -83,7 +83,7 @@ objectArgs
 objectArg
     : variableName
     | realNumber
-    | arithOperations
+    | lowPrecedence
     | classProperty
     | functionCall;
 
@@ -125,23 +125,22 @@ functionArg
 variableDecl
     : dataType (variableName | assignment);
 
-// Recursive arithmetic operations
-arithOperations
-    : arithOperation arithOperations
-    | arithOperation;
-
-// Arithmetic operations
-arithOperation
-    : arithOperand operator (arithOperand | LEFT_PAREN arithOperations RIGHT_PAREN)
-    | operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
-    | LEFT_PAREN arithOperations RIGHT_PAREN;
-
 arithOperand
     : realNumber | mathFunction | variableName | UNIFORM;
 
+//Precedence, goes through low to high, ends at atom
+lowPrecedence
+    : highPrecedence ((ADD | SUB) highPrecedence)*;
+highPrecedence
+    : atomPrecedence ((MUL | MOD | DIV) atomPrecedence)*;
+atomPrecedence
+    : SUB? arithOperand
+    | LEFT_PAREN lowPrecedence RIGHT_PAREN;
+
+
 // Mathematical functions
 mathFunction
-    : function LEFT_PAREN (arithOperand | arithOperations) RIGHT_PAREN;
+    : function LEFT_PAREN (arithOperand | lowPrecedence) RIGHT_PAREN;
 
 //Loops
 iterativeStatement
@@ -169,14 +168,6 @@ boolOperation
 // Numbers
 realNumber: naturalNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
 naturalNumber: DIGIT | DIGIT_NEGATIVE;
-
-// Arithmetic operators
-operator
-    : ADD
-    | SUB
-    | MOD
-    | DIV
-    | MUL;
 
 // Boolean operators
 boolOperator
