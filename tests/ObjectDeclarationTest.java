@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SymbolTableTextFileTest {
+public class ObjectDeclarationTest {
 
     private SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
 
@@ -21,11 +21,11 @@ public class SymbolTableTextFileTest {
         symbolTableFilling.printSymbolTable();
     }
 
-    // Testing basic Class setter.
+    // Testing basic object declaration from a predefined class.
     @Test
-    void scopeRuleClassSetter01() {
+    void objectDeclaration01() {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ClassSetterFunction01.spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/ObjectDeclaration01.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -37,53 +37,35 @@ public class SymbolTableTextFileTest {
         }
     }
 
-    // Testing if a Class setter can access Main scope variables.
+    // Testing basic object declaration from a custom class.
     @Test
-    void scopeRuleClassSetter02() {
+    void objectDeclaration02() {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ClassSetterFunction02.spook"));
-            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
-
-            AstBuilder astBuilder = new AstBuilder();
-            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
-
-            assertThrows(RuntimeException.class, ()->{
-                symbolTableFilling.visitProgram(programNode);
-            });
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Testing if a Class setter can access a different Class scope variable.
-    @Test
-    void scopeRuleClassSetter03() {
-        try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ClassSetterFunction03.spook"));
-            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
-
-            AstBuilder astBuilder = new AstBuilder();
-            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
-
-            assertThrows(RuntimeException.class, ()->{
-                symbolTableFilling.visitProgram(programNode);
-            });
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Testing if a Class setter can access a different Class scope variable.
-    @Test
-    void scopeRuleClassSetter04() {
-        try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ClassSetterFunction04.spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/ObjectDeclaration02.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
 
             symbolTableFilling.visitProgram(programNode);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Testing basic object declaration but without the class.
+    @Test
+    void objectDeclaration03() {
+        try {
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/ObjectDeclaration03.spook"));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+
+            AstBuilder astBuilder = new AstBuilder();
+            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+
+            assertThrows(RuntimeException.class, ()->{
+                symbolTableFilling.visitProgram(programNode);
+            });
         }catch (IOException e) {
             e.printStackTrace();
         }
