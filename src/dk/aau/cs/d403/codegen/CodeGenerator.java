@@ -238,13 +238,13 @@ public class CodeGenerator implements ASTvisitor {
         if (objectFunctionCallNode.getObjectVariableName().equals("Scene")) {
             switch (objectFunctionCallNode.getFunctionName()) {
                 case "add":
-                    String objectName = objectFunctionCallNode.getArgumentNodes().get(0).getVariableName();
+                    String objectName = objectFunctionCallNode.getObjectArguments().get(0).getVariableName();
                     SpookObject object = spookObjects.get(objectName);
                     if (object != null)
                         scene.add(object);
                     break;
                 case "color":
-                    scene.setColor(Color.getColorProperty(objectFunctionCallNode.getArgumentNodes().get(0).getClassPropertyNode()));
+                    scene.setColor(Color.getColorProperty(objectFunctionCallNode.getObjectArguments().get(0).getClassPropertyNode()));
                     break;
                 default:
                     throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
@@ -259,8 +259,8 @@ public class CodeGenerator implements ASTvisitor {
 
             switch (objectFunctionCallNode.getFunctionName()) {
                 case "position":
-                    float x = objectFunctionCallNode.getArgumentNodes().get(0).getRealNumberNode().getNumber();
-                    float y = objectFunctionCallNode.getArgumentNodes().get(1).getRealNumberNode().getNumber();
+                    float x = objectFunctionCallNode.getObjectArguments().get(0).getRealNumberNode().getNumber();
+                    float y = objectFunctionCallNode.getObjectArguments().get(1).getRealNumberNode().getNumber();
                     object.setPosition(new Vector2(x,y));
                     break;
                 default:

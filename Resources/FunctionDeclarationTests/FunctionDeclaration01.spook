@@ -1,0 +1,7 @@
+Shader{}
+
+void func1(Int positionX) {}
+
+void func2(Int positionX) {}
+
+void func2(Int positionY) {}

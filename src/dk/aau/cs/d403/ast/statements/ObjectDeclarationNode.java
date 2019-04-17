@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class ObjectDeclarationNode extends DeclarationNode {
     private Enums.ClassType objectType;
+    private String customClassType;
     private String variableName;
 
     private ArrayList<ObjectArgumentNode> objectArgumentNodes;
@@ -23,6 +24,17 @@ public class ObjectDeclarationNode extends DeclarationNode {
         this.objectArgumentNodes = objectArgumentNodes;
     }
 
+    public ObjectDeclarationNode(String customClassType, String variableName) {
+        this.customClassType = customClassType;
+        this.variableName = variableName;
+    }
+
+    public ObjectDeclarationNode(String customClassType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+        this.customClassType = customClassType;
+        this.variableName = variableName;
+        this.objectArgumentNodes = objectArgumentNodes;
+    }
+
     public Enums.ClassType getObjectType() {
         return objectType;
     }
@@ -33,6 +45,10 @@ public class ObjectDeclarationNode extends DeclarationNode {
 
     public ArrayList<ObjectArgumentNode> getObjectArgumentNodes() {
         return objectArgumentNodes;
+    }
+
+    public String getCustomClassType() {
+        return customClassType;
     }
 
     @Override

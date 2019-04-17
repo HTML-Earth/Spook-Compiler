@@ -1,0 +1,7 @@
+Shader{
+CustomShape shape1 = ();
+}
+
+class CustomShape {
+
+}

@@ -39,7 +39,7 @@ classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
 
 // Assignment
 assignment
-    : variableName ASSIGN expression;
+    : variableName ASSIGN (expression | assignedVariableName);
 
 expression
     : integerExpression
@@ -76,7 +76,7 @@ classDecl
 
 /* Object */
 objectDecl
-    : classType objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+    : (classType | customClassType) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
 objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
@@ -206,6 +206,9 @@ classType
     | COLOR
     | className;
 
+customClassType
+    : ID;
+
 // Data types
 dataType
     : INT
@@ -227,4 +230,6 @@ functionName
 variableName
     : ID;
 className
+    : ID;
+assignedVariableName
     : ID;

@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
@@ -147,11 +148,20 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitAssignment(SpookParser.AssignmentContext ctx) {
-        ExpressionNode expressionNode = (ExpressionNode)visitExpression(ctx.expression());
-        AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), expressionNode);
-        assignmentNode.setCodePosition(getCodePosition(ctx));
-
-        return assignmentNode;
+        if (ctx.expression() != null) {
+            ExpressionNode expressionNode = (ExpressionNode) visitExpression(ctx.expression());
+            AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), expressionNode);
+            assignmentNode.setCodePosition(getCodePosition(ctx));
+            return assignmentNode;
+        }
+        else if (ctx.variableName() != null) {
+            AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), ctx.assignedVariableName().getText());
+            assignmentNode.setCodePosition(getCodePosition(ctx));
+            return assignmentNode;
+        }
+        else {
+            throw new RuntimeException("Expected expression or variable name in assignment");
+        }
     }
 
     @Override
@@ -326,22 +336,33 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
-        Enums.ClassType classType = getClassType(ctx.classType());
+        ObjectDeclarationNode objectDeclarationNode;
+
         String objectName = ctx.objectVariableName().getText();
-        if (ctx.objectArgs() != null) {
-            ArrayList<ObjectArgumentNode> objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs(0));
+        ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
 
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(classType, objectName, objectArgumentNodes);
+        if (ctx.objectArgs() != null)
+            objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs(0));
+
+        if(ctx.classType() != null) {
+            Enums.ClassType classType = getClassType(ctx.classType());
+
+            if (objectArgumentNodes.size() > 0)
+                objectDeclarationNode = new ObjectDeclarationNode(classType, objectName, objectArgumentNodes);
+            else
+                objectDeclarationNode = new ObjectDeclarationNode(classType, objectName);
+
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
-
             return objectDeclarationNode;
         }
-        else {
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(classType, objectName);
-            objectDeclarationNode.setCodePosition(getCodePosition(ctx));
+        else if(ctx.customClassType() != null) {
+            objectDeclarationNode = new ObjectDeclarationNode(ctx.customClassType().getText(), ctx.objectVariableName().getText(), objectArgumentNodes);
 
+            objectDeclarationNode.setCodePosition(getCodePosition(ctx));
             return objectDeclarationNode;
         }
+        else
+            throw new RuntimeException("Expected a class type or a custom class type");
     }
 
     @Override
