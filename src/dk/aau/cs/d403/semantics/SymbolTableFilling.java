@@ -26,8 +26,16 @@ public class SymbolTableFilling implements SymbolTable{
     private int functionCounter = 1;
     private int classFunctionCounter = 1;
 
+    // Predefined elements
+    ArrayList<String> listOfPredefinedClasses = new ArrayList<>();
+
     public SymbolTableFilling() {
         this.symbolTable = new HashMap<>();
+        listOfPredefinedClasses.add("Circle");
+        listOfPredefinedClasses.add("Rectangle");
+        listOfPredefinedClasses.add("Triangle");
+        listOfPredefinedClasses.add("Color");
+        listOfPredefinedClasses.add("Shape");
     }
 
     // Set the scope string
@@ -204,16 +212,23 @@ public class SymbolTableFilling implements SymbolTable{
         if(retrieveSymbol(customClassType) != null)
             customClassTypeExisting = true;
 
+        // Check if there are arguments
         ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectArgumentNodes();
 
         // SCOPE CHECK: If a variable doesn't exist
         if (retrieveSymbol(variableName) == null) {
             if(objectType != null)
-                enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
+                if(objectArguments != null)
+                    enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
+                else
+                    enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, new ArrayList<>()));
 
             if(customClassType != null && customClassTypeExisting)
-                enterSymbol(variableName, new NodeObject(customClassType, variableName, this.scopeLevel, objectArguments));
-            else
+                if(objectArguments != null)
+                    enterSymbol(variableName, new NodeObject(customClassType, variableName, this.scopeLevel, objectArguments));
+                else
+                    enterSymbol(variableName, new NodeObject(customClassType, variableName, this.scopeLevel, new ArrayList<>()));
+            else if(customClassType != null)
                 throw new RuntimeException("ERROR: Custom class type does not exist");
         }
         // SCOPE CHECK: If a variable already existed but not of the same type
@@ -294,6 +309,9 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
         String className = classDeclarationNode.getClassName();
+
+        if(listOfPredefinedClasses.contains(className))
+            throw new RuntimeException("ERROR: Class is on the list of predefined classes.");
 
         // SCOPE CHECK: If a class with this name doesn't exist
         if(retrieveSymbol(className) == null) {

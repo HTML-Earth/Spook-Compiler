@@ -203,8 +203,7 @@ classType
     | RECTANGLE
     | TRIANGLE
     | SHAPE
-    | COLOR
-    | className;
+    | COLOR;
 
 customClassType
     : ID;
