@@ -31,7 +31,7 @@ Shader{
   Scene.color = Color.Black;
   Scene.Add(circleFactory(radius, Color.Red));
   Scene.Add(rec, 100, yPos);
-  Scene.Add(billy.setShadow);
+  Scene.Add(billy.setShadow());
   Scene.Add(billy);
 }
 
