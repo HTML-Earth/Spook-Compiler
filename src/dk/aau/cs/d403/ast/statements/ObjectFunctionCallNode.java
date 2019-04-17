@@ -9,17 +9,17 @@ public class ObjectFunctionCallNode extends StatementNode {
     private String objectVariableName;
     private String functionName;
 
-    private ArrayList<ObjectArgumentNode> argumentNodes;
+    private ArrayList<ObjectArgumentNode> objectArguments;
 
     public ObjectFunctionCallNode(String objectVariableName, String functionName) {
         this.objectVariableName = objectVariableName;
         this.functionName = functionName;
     }
 
-    public ObjectFunctionCallNode(String objectVariableName, String functionName, ArrayList<ObjectArgumentNode> argumentNodes) {
+    public ObjectFunctionCallNode(String objectVariableName, String functionName, ArrayList<ObjectArgumentNode> objectArguments) {
         this.objectVariableName = objectVariableName;
         this.functionName = functionName;
-        this.argumentNodes = argumentNodes;
+        this.objectArguments = objectArguments;
     }
 
     public String getObjectVariableName() {
@@ -30,8 +30,8 @@ public class ObjectFunctionCallNode extends StatementNode {
         return functionName;
     }
 
-    public ArrayList<ObjectArgumentNode> getArgumentNodes() {
-        return argumentNodes;
+    public ArrayList<ObjectArgumentNode> getObjectArguments() {
+        return objectArguments;
     }
 
     @Override
@@ -43,10 +43,10 @@ public class ObjectFunctionCallNode extends StatementNode {
         sb.append(functionName);
         sb.append("(");
 
-        if (argumentNodes != null) {
+        if (objectArguments != null) {
             //Print ',' before each arg except the first
             boolean firstArg = true;
-            for (ObjectArgumentNode arg : argumentNodes) {
+            for (ObjectArgumentNode arg : objectArguments) {
                 if (!firstArg)
                     sb.append(", ");
                 else

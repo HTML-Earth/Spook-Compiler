@@ -488,6 +488,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitClassType(SpookParser.ClassTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#customClassType}.
+	 * @param ctx the parse tree
+	 */
+	void enterCustomClassType(SpookParser.CustomClassTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#customClassType}.
+	 * @param ctx the parse tree
+	 */
+	void exitCustomClassType(SpookParser.CustomClassTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#dataType}.
 	 * @param ctx the parse tree
 	 */
@@ -557,4 +567,14 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitClassName(SpookParser.ClassNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#assignedVariableName}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#assignedVariableName}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
 }
