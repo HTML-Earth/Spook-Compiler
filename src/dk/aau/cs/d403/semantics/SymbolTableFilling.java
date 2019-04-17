@@ -90,8 +90,6 @@ public class SymbolTableFilling implements SymbolTable{
         //setupPredefinedElements(programNode);
         openScope("Global");
 
-        visitMain(programNode.getMainNode());
-
         for (ClassDeclarationNode classDecl : programNode.getClassDeclarationNodes()) {
             this.insideClass = classDecl.getClassName();
             visitClassDeclaration(classDecl);
@@ -104,7 +102,10 @@ public class SymbolTableFilling implements SymbolTable{
 
         for (FunctionDeclarationNode functionDecl : programNode.getFunctionDeclarationNodes()) {
             visitFunctionDeclaration(functionDecl);
+            openScope("Global");
         }
+
+        visitMain(programNode.getMainNode());
     }
 
     private void visitMain(MainNode mainNode) {
@@ -176,19 +177,38 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         String variableName = objectDeclarationNode.getVariableName();
-        Enums.ClassType objectType = objectDeclarationNode.getClassType();
+
+        /* Check if the object is of a predefined class or a custom class */
+        Enums.ClassType objectType = null;
+        String customClassType = null;
+        if(objectDeclarationNode.getClassType() != null)
+            objectType = objectDeclarationNode.getClassType();
+        else if(objectDeclarationNode.getCustomClassType() != null)
+            customClassType = objectDeclarationNode.getCustomClassType();
+
+        // Check if the custom class exists
+        boolean customClassTypeExisting = false;
+        if(retrieveSymbol(customClassType) != null)
+            customClassTypeExisting = true;
+
         ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectArguments();
 
         // SCOPE CHECK: If a variable doesn't exist
         if (retrieveSymbol(variableName) == null) {
-            enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
+            if(objectType != null)
+                enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
+
+            if(customClassType != null && customClassTypeExisting)
+                enterSymbol(variableName, new NodeObject(customClassType, variableName, this.scopeLevel, objectArguments));
+            else
+                throw new RuntimeException("ERROR: Custom class type does not exist");
         }
         // SCOPE CHECK: If a variable already existed but not of the same type
-        else if (!(retrieveSymbol(variableName).getClassType().equals(objectType))) {
+        else if (!retrieveSymbol(variableName).getClassType().equals(objectType) && !retrieveSymbol(variableName).getClassType().equals(customClassType)) {
             enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
         }
         // SCOPE CHECK: If a variable already existed but not in the same scope
-        else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
+        else if (!retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel)) {
             enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
         }
         else {
@@ -282,11 +302,20 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitClassFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, String className) {
         enterFunctionDeclaration(functionDeclarationNode);
-        visitClassFunctionBlock(functionDeclarationNode.getBlockNode(), className);
+        visitClassFunctionBlock(functionDeclarationNode.getBlockNode(), className, functionDeclarationNode);
     }
 
-    private void visitClassFunctionBlock(BlockNode blockNode, String className) {
+    private void visitClassFunctionBlock(BlockNode blockNode, String className, FunctionDeclarationNode functionDeclarationNode) {
         openClassFunctionScope(className);
+
+        // Put the function arguments as variable declarations in function block
+        ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
+        if(functionArgs != null) {
+            for (FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
+        }
+
         for (StatementNode statementNode: blockNode.getStatementNodes()) {
             visitStatement(statementNode);
         }
@@ -295,7 +324,7 @@ public class SymbolTableFilling implements SymbolTable{
 
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         enterFunctionDeclaration(functionDeclarationNode);
-        visitFunctionBlock(functionDeclarationNode.getBlockNode());
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode);
     }
 
     private void enterFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
@@ -305,29 +334,14 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a function with this name doesn't exist
         if(retrieveSymbol(functionName) == null) {
-            if(functionArgs != null) {
-                for (FunctionArgNode functionArg : functionArgs) {
-                    enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
-                }
-            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but is in a different scope
         else if(!(retrieveSymbol(functionName).getScopeLevel().equals(this.scopeLevel))) {
-            if(functionArgs != null) {
-                for (FunctionArgNode functionArg : functionArgs) {
-                    enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
-                }
-            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         // SCOPE CHECK: If a function with the same name exists but the arguments are different
         else if(!(retrieveSymbol(functionName).getFunctionArguments().toString().equals(functionArgs.toString()))) {
-            if(functionArgs != null) {
-                for (FunctionArgNode functionArg : functionArgs) {
-                    enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
-                }
-            }
             enterSymbol(functionName, new NodeObject(returnType, functionName, this.scopeLevel, functionArgs));
         }
         else {
@@ -335,8 +349,17 @@ public class SymbolTableFilling implements SymbolTable{
         }
     }
 
-    private void visitFunctionBlock(BlockNode blockNode) {
+    private void visitFunctionBlock(BlockNode blockNode, FunctionDeclarationNode functionDeclarationNode) {
         openFunctionScope();
+
+        // Put the function arguments as variable declarations in function block
+        ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
+        if(functionArgs != null) {
+            for (FunctionArgNode functionArg : functionArgs) {
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+            }
+        }
+
         for (StatementNode statementNode: blockNode.getStatementNodes()) {
             visitStatement(statementNode);
         }
