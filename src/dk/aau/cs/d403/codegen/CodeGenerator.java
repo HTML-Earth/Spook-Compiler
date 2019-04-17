@@ -7,11 +7,14 @@ import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.spook.Scene;
 import dk.aau.cs.d403.spook.SpookObject;
-import dk.aau.cs.d403.spook.shapes.Rectangle;
-import dk.aau.cs.d403.spook.shapes.Shape;
+import dk.aau.cs.d403.spook.Vector2;
+import dk.aau.cs.d403.spook.Vector4;
+import dk.aau.cs.d403.spook.color.Color;
+import dk.aau.cs.d403.spook.shapes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class CodeGenerator implements ASTvisitor {
 
@@ -19,42 +22,86 @@ public class CodeGenerator implements ASTvisitor {
     private Scene scene;
 
     private HashMap<String, SpookObject> spookObjects;
+    private HashSet<Enums.ClassType> usedClasses;
 
     public String GenerateGLSL(ProgramNode ast) {
         sb = new StringBuilder();
         scene = new Scene();
         spookObjects = new HashMap<>();
+        usedClasses = new HashSet<>();
 
         visitProgram(ast);
         sb = new StringBuilder(); //hacky hack
 
+        generateStructs(usedClasses);
+        generatePrototypes(usedClasses);
+        generateMain(ast.getMainNode());
+        generateFunctions(usedClasses);
+
+        return sb.toString();
+    }
+
+    private void generateStructs(HashSet<Enums.ClassType> classTypes) {
+        for (Enums.ClassType type : classTypes) {
+            sb.append(Shape.getStruct(type));
+            sb.append("\n");
+        }
+
         sb.append("\n");
-        sb.append(Shape.getStruct(Enums.ClassType.RECTANGLE));
-        sb.append("\n\n");
-        sb.append(Shape.getCheckFunctionSignature(Enums.ClassType.RECTANGLE));
-        sb.append(";");
-        sb.append("\n\n");
+    }
+
+    private void generatePrototypes(HashSet<Enums.ClassType> classTypes) {
+        for (Enums.ClassType type : classTypes) {
+            sb.append(Shape.getCheckFunctionSignature(type));
+            sb.append(";\n");
+        }
+
+        sb.append("\n");
+    }
+
+    private void generateFunctions(HashSet<Enums.ClassType> classTypes) {
+        for (Enums.ClassType type : classTypes) {
+            sb.append(Shape.getCheckFunctionSignature(type));
+            sb.append("{\n\t");
+            sb.append(Shape.getCheckFunctionBody(type));
+            sb.append(";\n");
+        }
+
+        sb.append("\n}");
+    }
+
+    private void generateMain(MainNode mainNode) {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
+
         for (SpookObject object : scene.getChildren()) {
             sb.append("\t");
             sb.append(object.getDeclaration());
-            sb.append("\n");
-        }
-        sb.append("\n");
-        for (SpookObject object : scene.getChildren()) {
-            sb.append("\t");
-            sb.append(Shape.getCheckCall(Enums.ClassType.RECTANGLE, object.getName()));
             sb.append("\n\n");
         }
-        sb.append("\tfragColor = vec4(1, 0, 1, 1);\n");
-        sb.append("}");
-        sb.append("\n\n");
-        sb.append(Shape.getCheckFunctionSignature(Enums.ClassType.RECTANGLE));
-        sb.append("{\n\t");
-        sb.append(Shape.getCheckFunctionBody(Enums.ClassType.RECTANGLE));
-        sb.append("\n}");
 
-        return sb.toString();
+        for (SpookObject object : scene.getChildren()) {
+            sb.append("\t");
+
+            Enums.ClassType objectType;
+
+            if (object instanceof Rectangle)
+                objectType = Enums.ClassType.RECTANGLE;
+            else if (object instanceof Circle)
+                objectType = Enums.ClassType.CIRCLE;
+            else if (object instanceof Square)
+                objectType = Enums.ClassType.SQUARE;
+            else if (object instanceof Triangle)
+                objectType = Enums.ClassType.TRIANGLE;
+            else
+                throw new RuntimeException("Unrecognized object type");
+
+            sb.append(Shape.getCheckCall(objectType, object.getName()));
+            sb.append("\n\n");
+        }
+
+        sb.append("\tfragColor = vec4" + Vector4.prettyPrint(scene.getColor()) + ";\n");
+
+        sb.append("}\n\n");
     }
 
     @Override
@@ -123,15 +170,22 @@ public class CodeGenerator implements ASTvisitor {
 
         ArrayList<ObjectArgumentNode> argumentNodes = objectDeclarationNode.getObjectArgumentNodes();
 
-        switch (objectDeclarationNode.getObjectType()) {
+        Enums.ClassType objectType = objectDeclarationNode.getObjectType();
+        usedClasses.add(objectType);
+
+        switch (objectType) {
             case CIRCLE:
                 break;
             case RECTANGLE:
                 if (argumentNodes.size() == 3) {
                     float width = argumentNodes.get(0).getRealNumberNode().getNumber();
                     float height = argumentNodes.get(1).getRealNumberNode().getNumber();
+                    ClassPropertyNode colorProperty = argumentNodes.get(2).getClassPropertyNode();
 
-                    Rectangle rectangle = new Rectangle(objectDeclarationNode.getVariableName(), width, height);
+                    Vector2 size = new Vector2(width,height);
+                    Vector4 color = Color.getColorProperty(colorProperty);
+
+                    Rectangle rectangle = new Rectangle(objectDeclarationNode.getVariableName(), size, color);
                     spookObjects.put(objectDeclarationNode.getVariableName(), rectangle);
                 }
                 break;
@@ -182,11 +236,35 @@ public class CodeGenerator implements ASTvisitor {
     public ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
         sb.append("OBJECT FUNCTION CALL");
         if (objectFunctionCallNode.getObjectVariableName().equals("Scene")) {
-            if (objectFunctionCallNode.getFunctionName().equals("add")) {
-                String objectName = objectFunctionCallNode.getArgumentNodes().get(0).getVariableName();
-                SpookObject object = spookObjects.get(objectName);
-                if (object != null)
-                    scene.add(object);
+            switch (objectFunctionCallNode.getFunctionName()) {
+                case "add":
+                    String objectName = objectFunctionCallNode.getArgumentNodes().get(0).getVariableName();
+                    SpookObject object = spookObjects.get(objectName);
+                    if (object != null)
+                        scene.add(object);
+                    break;
+                case "color":
+                    scene.setColor(Color.getColorProperty(objectFunctionCallNode.getArgumentNodes().get(0).getClassPropertyNode()));
+                    break;
+                default:
+                    throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
+            }
+        }
+        else {
+            String objectName = objectFunctionCallNode.getObjectVariableName();
+            SpookObject object = spookObjects.get(objectName);
+
+            if (object == null)
+                throw new RuntimeException("Object not found");
+
+            switch (objectFunctionCallNode.getFunctionName()) {
+                case "position":
+                    float x = objectFunctionCallNode.getArgumentNodes().get(0).getRealNumberNode().getNumber();
+                    float y = objectFunctionCallNode.getArgumentNodes().get(1).getRealNumberNode().getNumber();
+                    object.setPosition(new Vector2(x,y));
+                    break;
+                default:
+                    throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
             }
         }
         return objectFunctionCallNode;

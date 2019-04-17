@@ -44,4 +44,12 @@ public class Vector4 {
     public void setW(float w) {
         this.w = w;
     }
+
+    public static Vector4 zero(){
+        return new Vector4(0,0,0,0);
+    }
+
+    public static String prettyPrint(Vector4 vector) {
+        return "(" + vector.getX() + ", " + vector.getY() + ", " + vector.getZ() + ", " + vector.getW() + ")";
+    }
 }

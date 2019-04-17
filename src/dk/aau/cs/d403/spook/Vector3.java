@@ -34,4 +34,12 @@ public class Vector3 {
     public void setZ(float z) {
         this.z = z;
     }
+
+    public static Vector3 zero(){
+        return new Vector3(0,0,0);
+    }
+
+    public static String prettyPrint(Vector3 vector) {
+        return "(" + vector.getX() + ", " + vector.getY() + ", " + vector.getZ() + ")";
+    }
 }
