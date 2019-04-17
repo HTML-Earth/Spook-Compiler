@@ -38,7 +38,7 @@ classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
 
 // Assignment
 assignment
-    : variableName ASSIGN expression;
+    : variableName ASSIGN (expression | assignedVariableName);
 
 expression
     : integerExpression
@@ -202,4 +202,6 @@ functionName
 variableName
     : ID;
 className
+    : ID;
+assignedVariableName
     : ID;

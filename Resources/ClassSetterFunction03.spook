@@ -1,0 +1,13 @@
+Shader {
+
+}
+
+class class1 {
+    Int positionX;
+}
+
+class class2 {
+    void setPositionX() {
+        positionX = 2;
+    }
+}
