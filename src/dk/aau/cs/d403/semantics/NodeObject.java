@@ -89,6 +89,7 @@ public class NodeObject {
             StringBuilder sb = new StringBuilder();
 
             for(FunctionArgNode functionArg : functionArguments) {
+
                 sb.append(functionArg.prettyPrint());
                 sb.append(",");
             }
@@ -153,6 +154,6 @@ public class NodeObject {
 
     @Override
     public String toString() {
-        return String.format("%15s, %15s, %15s, %15s, %15s", getType(), getClassType(), getReturnType(), getAttributes(), getScopeLevel());
+        return String.format("%15s, %15s, %15s, %15s, %30s, %15s", getName(), getType(), getClassType(), getReturnType(), getAttributes(), getScopeLevel());
     }
 }
