@@ -78,6 +78,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitBlock(SpookParser.BlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#functionBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionBlock(SpookParser.FunctionBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#functionBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionBlock(SpookParser.FunctionBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#classBlock}.
 	 * @param ctx the parse tree
 	 */
@@ -328,6 +338,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitFunctionArg(SpookParser.FunctionArgContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnStatement(SpookParser.ReturnStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnStatement(SpookParser.ReturnStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#variableDecl}.
 	 * @param ctx the parse tree
 	 */
@@ -557,4 +577,14 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitClassName(SpookParser.ClassNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#assignedVariableName}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#assignedVariableName}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
 }
