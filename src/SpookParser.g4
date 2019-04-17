@@ -39,7 +39,7 @@ classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
 
 // Assignment
 assignment
-    : variableName ASSIGN (expression | assignedVariableName);
+    : variableName ASSIGN (expression | assignedVariableName | nonObjectFunctionCall);
 
 expression
     : variableName
@@ -77,7 +77,7 @@ classDecl
 
 /* Object */
 objectDecl
-    : classType objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
 objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
@@ -95,7 +95,7 @@ functionCall
 
 //Non-object funtion calls
 nonObjectFunctionCall
-    :functionName LEFT_PAREN objectArgs RIGHT_PAREN;
+    :functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
 
 //Object variable assignment
 objectVariableAssign
