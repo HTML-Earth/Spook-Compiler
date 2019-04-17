@@ -75,7 +75,7 @@ classDecl
 
 /* Object */
 objectDecl
-    : classType objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+    : (classType | customClassType) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
 objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
@@ -184,6 +184,9 @@ classType
     | TRIANGLE
     | SHAPE
     | COLOR;
+
+customClassType
+    : ID;
 
 // Data types
 dataType
