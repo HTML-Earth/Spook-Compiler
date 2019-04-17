@@ -75,14 +75,27 @@ public class SymbolTableFilling implements SymbolTable{
     }
 
     public void printSymbolTable() {
+        sortHashMap(symbolTable);
+
+        List<NodeObject> nodesByScope = sortHashMap(symbolTable);
+
         System.out.println("Size of symbol table: " + symbolTable.size());
 
         System.out.println("Symbol table:\n----------------------------------");
-        System.out.println(String.format("%15s, %15s, %15s %15s, %15s, %15s", "Name", "Data type", "Class type", "Return type", "Attributes", "Scopelevel"));
-        for (Map.Entry entry : symbolTable.entrySet()) {
-            System.out.println(String.format("%15s, %5s", entry.getKey(), entry.getValue()));
+        System.out.println(String.format("%15s, %15s, %15s %15s, %30s, %15s", "Name", "Data type", "Class type", "Return type", "Attributes", "Scopelevel"));
+        for (NodeObject nodeObject : nodesByScope) {
+            System.out.println(nodeObject);
         }
         System.out.println("----------------------------------");
+    }
+
+    private List<NodeObject> sortHashMap(HashMap<String, NodeObject> symbolTable) {
+        List<NodeObject> nodesByScope = new ArrayList<>(symbolTable.values());
+
+        Collections.sort(nodesByScope, Comparator.comparing(NodeObject::getName));
+        Collections.sort(nodesByScope, Comparator.comparing(NodeObject::getScopeLevel));
+
+        return nodesByScope;
     }
 
 
