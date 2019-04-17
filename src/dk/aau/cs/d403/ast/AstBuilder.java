@@ -341,7 +341,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         String objectName = ctx.objectVariableName().getText();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
 
-        if (ctx.objectArgs() != null)
+        if (ctx.objectArgs().size() > 0)
             objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs(0));
 
         if(ctx.classType() != null) {

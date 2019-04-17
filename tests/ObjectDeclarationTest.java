@@ -23,7 +23,7 @@ public class ObjectDeclarationTest {
     }
 
     // Testing basic object declaration from a predefined class.
-    @Disabled
+    @Test
     void objectDeclaration01() {
         try {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/ObjectDeclaration01.spook"));
@@ -39,7 +39,7 @@ public class ObjectDeclarationTest {
     }
 
     // Testing basic object declaration from a custom class.
-    @Disabled
+    @Test
     void objectDeclaration02() {
         try {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/ObjectDeclaration02.spook"));
@@ -55,7 +55,7 @@ public class ObjectDeclarationTest {
     }
 
     // Testing basic object declaration but without the class.
-    @Disabled
+    @Test
     void objectDeclaration03() {
         try {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/ObjectDeclaration03.spook"));
