@@ -1,10 +1,13 @@
 package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.spook.Vector4;
 import dk.aau.cs.d403.spook.color.Colorable;
 import dk.aau.cs.d403.spook.SpookObject;
 
 public abstract class Shape extends SpookObject implements Colorable {
+    protected Vector4 color;
+
     public static String getStruct(Enums.ClassType classType) {
         switch (classType) {
             case CIRCLE:
@@ -99,5 +102,15 @@ public abstract class Shape extends SpookObject implements Colorable {
             default:
                 throw new RuntimeException("Invalid class type");
         }
+    }
+
+    @Override
+    public Vector4 getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(Vector4 color) {
+        this.color = color;
     }
 }
