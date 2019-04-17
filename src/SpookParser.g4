@@ -150,7 +150,9 @@ iterativeStatement
     : forStatement;
 
 forStatement
-    : FOR LEFT_PAREN (DIGIT | variableDecl | variableName | assignment) TO DIGIT RIGHT_PAREN (block | statement);
+    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
+
+forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
 
 // Recursive boolean operations
 boolOperations
