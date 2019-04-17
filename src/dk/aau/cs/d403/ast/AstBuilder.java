@@ -254,8 +254,12 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         for (SpookParser.ObjectArgsContext objectArg: ctx.objectArgs()) {
             objectArgs.addAll(visitAllObjectArguments(objectArg));
         }
-
-        return new ObjectDeclarationNode(getClassType(ctx.classType()), ctx.objectVariableName().getText(), objectArgs);
+        if(ctx.classType() != null)
+            return new ObjectDeclarationNode(getClassType(ctx.classType()), ctx.objectVariableName().getText(), objectArgs);
+        else if(ctx.customClassType() != null)
+            return new ObjectDeclarationNode(ctx.customClassType().getText(), ctx.objectVariableName().getText(), objectArgs);
+        else
+            throw new RuntimeException("Expected a class type or a custom class type");
     }
 
     @Override
