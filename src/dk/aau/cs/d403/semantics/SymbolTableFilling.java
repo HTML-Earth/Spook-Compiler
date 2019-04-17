@@ -303,8 +303,11 @@ public class SymbolTableFilling implements SymbolTable{
         if(retrieveSymbol(objectVariableName) != null) {
             enterSymbol(objectVariableName, new NodeObject(objectVariableName, functionName, this.scopeLevel, objectArgumentNodes));
         }
+        else if (objectVariableName.equals("Scene")) {
+            // Don't check because scene is always available
+        }
         else
-            throw new RuntimeException("ERROR: Object is not declared.");
+            throw new RuntimeException("ERROR: Object '" + objectVariableName + "' is not declared.");
     }
 
     private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
