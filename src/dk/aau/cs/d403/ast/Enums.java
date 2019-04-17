@@ -103,6 +103,7 @@ public class Enums {
     public enum ClassType {
         CIRCLE,
         RECTANGLE,
+        SQUARE,
         TRIANGLE,
         SHAPE,
         COLOR
