@@ -47,11 +47,15 @@ public class NodeObject {
         this.objectArguments = objectArguments;
 
         StringBuilder sb = new StringBuilder();
-        for(ObjectArgumentNode objectArg : objectArguments) {
-            sb.append(objectArg.prettyPrint());
-            sb.append(",");
+        if(objectArguments.size() > 0) {
+            for (ObjectArgumentNode objectArg : objectArguments) {
+                sb.append(objectArg.prettyPrint());
+                sb.append(",");
+            }
+            this.attributes = sb.toString();
         }
-        this.attributes = sb.toString();
+        else
+            this.attributes = null;
     }
 
     // Constructor for Object function calls
