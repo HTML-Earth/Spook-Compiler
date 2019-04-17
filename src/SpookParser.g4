@@ -30,8 +30,7 @@ statement
     | functionCall SEMICOLON
     | objectVariableAssign SEMICOLON
     | conditionalStatement
-    | iterativeStatement
-    | returnStatement;
+    | iterativeStatement;
 
 /* Blocks */
 block: LEFT_BRACKET (statements | comment)* RIGHT_BRACKET;
