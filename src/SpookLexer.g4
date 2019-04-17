@@ -17,6 +17,8 @@ RECTANGLE: 'Rectangle';
 TRIANGLE: 'Triangle';
 SHAPE: 'Shape';
 COLOR: 'Color';
+CIRCLEGRADIENT: 'CircleGradient';
+LINEGRADIENT: 'LineGradient';
 
 // Pre-defined colors
 BLACK: 'Black';
