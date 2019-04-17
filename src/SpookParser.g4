@@ -30,11 +30,11 @@ statement
     | functionCall SEMICOLON
     | objectVariableAssign SEMICOLON
     | conditionalStatement
-    | iterativeStatement
-    | RETURN (variableName | realNumber | BOOL_LITERAL) SEMICOLON;
+    | iterativeStatement;
 
 /* Blocks */
 block: LEFT_BRACKET (statements | comment)* RIGHT_BRACKET;
+functionBlock: LEFT_BRACKET (statements | comment)* returnStatement RIGHT_BRACKET;
 classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
 
 // Assignment
@@ -42,7 +42,8 @@ assignment
     : variableName ASSIGN (expression | assignedVariableName);
 
 expression
-    : integerExpression
+    : variableName
+    | integerExpression
     | floatExpression
     | vector2Expression
     | vector3Expression
@@ -112,7 +113,7 @@ classProperty
 
 /* Function declaration */
 functionDecl
-    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
+    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
     | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
 
 functionArgs
@@ -120,6 +121,8 @@ functionArgs
     | functionArg;
 functionArg
     : dataType variableName;
+
+returnStatement: RETURN (variableName | realNumber | BOOL_LITERAL | expression) SEMICOLON;
 
 /* Integer, float and vector declaration */
 variableDecl
