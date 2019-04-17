@@ -1,12 +1,21 @@
 import dk.aau.cs.d403.ast.expressions.*;
+import dk.aau.cs.d403.ast.AstBuilder;
+import dk.aau.cs.d403.ast.expressions.ExpressionNode;
+import dk.aau.cs.d403.ast.expressions.IntegerExpressionNode;
+import dk.aau.cs.d403.ast.expressions.NaturalNumberNode;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.structure.*;
+import dk.aau.cs.d403.parser.SpookLexer;
+import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.SymbolTableFilling;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -168,6 +177,23 @@ public class ScopeRulesTest {
 
         setupNodes();
         symbolTableFilling.visitProgram(programNode);
+    }
+
+    // Duplication of scopeRuleDeclarationTest06
+    // but with a text file instead representing the test.
+    @Test
+    void scopeRuleDeclarationTest07() {
+        try {
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ScopeRuleDeclarationTest07.spook"));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+
+            AstBuilder astBuilder = new AstBuilder();
+            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+
+            symbolTableFilling.visitProgram(programNode);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

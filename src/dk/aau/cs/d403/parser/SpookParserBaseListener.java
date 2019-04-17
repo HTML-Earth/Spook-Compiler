@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -587,6 +587,18 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClassName(SpookParser.ClassNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignedVariableName(SpookParser.AssignedVariableNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
