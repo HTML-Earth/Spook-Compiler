@@ -100,8 +100,8 @@ public class SymbolTableFilling implements SymbolTable{
 
 
     public void visitProgram(ProgramNode programNode) {
-        //setupPredefinedElements(programNode);
         openScope("Global");
+        //setupPredefinedElements(programNode);
 
         for (ClassDeclarationNode classDecl : programNode.getClassDeclarationNodes()) {
             this.insideClass = classDecl.getClassName();
@@ -285,7 +285,7 @@ public class SymbolTableFilling implements SymbolTable{
         ArrayList<ObjectArgumentNode> objectArgumentNodes = objectFunctionCallNode.getObjectArguments();
 
         // SCOPE CHECK: If a variable with the same name did not exist
-        if(retrieveSymbol(objectVariableName) == null) {
+        if(retrieveSymbol(objectVariableName) != null) {
             enterSymbol(objectVariableName, new NodeObject(objectVariableName, functionName, this.scopeLevel, objectArgumentNodes));
         }
         else
@@ -411,35 +411,46 @@ public class SymbolTableFilling implements SymbolTable{
         ArrayList<DeclarationNode> shapeDeclarations = new ArrayList<>();
         ArrayList<StatementNode> setPositionStatements = new ArrayList<>();
         ArrayList<FunctionArgNode> positionFunctionArgs = new ArrayList<>();
+        ArrayList<FunctionDeclarationNode> colorFunctions = new ArrayList<>();
+        ArrayList<DeclarationNode> colorDeclarations = new ArrayList<>();
 
-        // Variable Declarations
+        // Shape Variable Declarations
         VariableDeclarationNode positionXDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionX");
         VariableDeclarationNode positionYDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionY");
         shapeDeclarations.add(positionXDecl);
         shapeDeclarations.add(positionYDecl);
 
-        // Function Blocks
+        // Shape Function Blocks
 
-        //StatementNode setPositionXAssign = new AssignmentNode("positionX", "funcPositionX");
-        //StatementNode setPositionYAssign = new AssignmentNode("positionY", "funcPositionY");
+        StatementNode setPositionXAssign = new AssignmentNode("positionX", "funcPositionX");
+        StatementNode setPositionYAssign = new AssignmentNode("positionY", "funcPositionY");
 
-        //setPositionStatements.add(setPositionXAssign);
-        //setPositionStatements.add(setPositionYAssign);
+        setPositionStatements.add(setPositionXAssign);
+        setPositionStatements.add(setPositionYAssign);
         BlockNode positionBlockNode = new BlockNode(setPositionStatements);
 
-        // Position function arguments
+        // Shape Position function arguments
         FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionX");
         FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionY");
         positionFunctionArgs.add(positionXArg);
         positionFunctionArgs.add(positionYArg);
 
-        // Function Declarations
+        // Shape Function Declarations
         FunctionDeclarationNode positionFunction = new FunctionDeclarationNode(Enums.ReturnType.VOID, "position", positionFunctionArgs, positionBlockNode);
         shapeFunctions.add(positionFunction);
 
+        // Color Return Statements
+
+
+        // Color Function Blocks
+        //BlockNode redFunctionBlockNode = new BlockNode(returnRedStatement);
+
+        // Color Function Declarations
+        //FunctionDeclarationNode redColorFunction = new FunctionDeclarationNode(Enums.Color.RED, "red", redFunctionBlockNode);
+
         // Predefined Class Block Nodes
         ClassBlockNode shapeBlockNode = new ClassBlockNode(shapeDeclarations, shapeFunctions);
-        ClassBlockNode colorBlockNode = new ClassBlockNode(null, null);
+        ClassBlockNode colorBlockNode = new ClassBlockNode(colorDeclarations, colorFunctions);
 
         // Predefined Classes
         ClassDeclarationNode shapeClass = new ClassDeclarationNode("Shape", shapeBlockNode);
