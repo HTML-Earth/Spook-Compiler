@@ -324,6 +324,7 @@ public class ScopeRulesTest {
         symbolTableFilling.visitProgram(programNode);
     }
 
+
     /* Testing a giant Global scope
      with several functions, classes
      and function inside classes. Also
@@ -333,10 +334,32 @@ public class ScopeRulesTest {
     @Test
     void giantScopeRulesTest() {
 
-        // First we make 3 variables in the Main scope.
-        // - Int var1 = 2;
-        // - Bool var2 = true;
-        // - Float var3 = 2.5;
+        /* The following code is meant to represent this example code in our language:
+
+        Shader{
+        Int var1 = 2;
+        Bool var2 = true;
+        Float var3 = 2.5;
+
+        Int func1(Int arg1, Bool arg2) {}
+        Bool func2() {int var1 = 4; }
+
+        Class Class1 {
+              Int  func1() { Int var1 = 8; }
+              Bool func2() { Bool var1 = true; }
+           }
+
+        Class class2 {
+              Float var1 = 1.2;
+              Float func1() { Float var1 = 2.1}
+           }
+        }
+
+
+
+         First we make the 3 variables in main
+        */
+
         ExpressionNode var1Express = new IntegerExpressionNode(new NaturalNumberNode(2));
         AssignmentNode var1Ass = new AssignmentNode("var1", var1Express);
 
@@ -353,10 +376,7 @@ public class ScopeRulesTest {
         statementNodes.add(var2);
         statementNodes.add(var3);
 
-        /* We make 2 functions in the Global scope:
-         - Int func1(Int arg1, Bool arg2) {}
-         - Bool func2() {
-              int var1 = 4; }
+        /* We make 2 functions in the Global scope
         */
 
         ExpressionNode func2var1Express = new IntegerExpressionNode(new NaturalNumberNode(4));
@@ -381,17 +401,7 @@ public class ScopeRulesTest {
         functionDeclarationNodes.add(func1);
         functionDeclarationNodes.add(func2);
 
-        /* We make 2 classes in the Global scope:
-         - Class Class1 {
-              Int  func1() { Int var1 = 8; }
-              Bool func2() { Bool var1 = true; }
-           }
-
-         - Class class2 {
-              Float var1 = 1.2;
-
-              Float func1() { Float var1 = 2.1}
-           }
+        /* We make 2 classes in the Global scope
         */
 
         //class1
@@ -428,6 +438,7 @@ public class ScopeRulesTest {
         classDeclarationNodes.add(class1Node);
 
         //class2
+
         ExpressionNode class2var1Express = new FloatExpressionNode(new RealNumberNode((float)1.2));
         AssignmentNode class2var1Ass = new AssignmentNode("var1", class2var1Express);
 
@@ -455,34 +466,6 @@ public class ScopeRulesTest {
 
         setupNodes();
         symbolTableFilling.visitProgram(programNode);
-
-
-
-        /**
-         * // Class function block
-         *         StatementNode statementNode2 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
-         *         ArrayList<StatementNode> functionStatementNodes = new ArrayList<>();
-         *         functionStatementNodes.add(statementNode2);
-         *
-         *         BlockNode funcBlockNode = new BlockNode(functionStatementNodes);
-         *
-         *         // Class functions
-         *         FunctionDeclarationNode functionNode1 = new FunctionDeclarationNode(Enums.ReturnType.VOID, "func1", funcBlockNode);
-         *         ArrayList<FunctionDeclarationNode> functionNodes = new ArrayList<>();
-         *         functionNodes.add(functionNode1);
-         *
-         *         // Class decl
-         *         ClassBlockNode classBlockNode = new ClassBlockNode(declarationNodes, functionNodes);
-         *         ClassDeclarationNode classNode = new ClassDeclarationNode("class1", classBlockNode);
-         *         classDeclarationNodes.add(classNode);
-         *
-         *
-         *
-         *         // Class declarations
-         *         DeclarationNode declarationNode1 = new VariableDeclarationNode(Enums.DataType.INT, "var1");
-         *         ArrayList<DeclarationNode> declarationNodes = new ArrayList<>();
-         *         declarationNodes.add(declarationNode1);
-         */
 
     }
 }
