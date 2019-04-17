@@ -53,6 +53,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(SpookParser.BlockContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#functionBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionBlock(SpookParser.FunctionBlockContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#classBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -203,6 +209,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionArg(SpookParser.FunctionArgContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#returnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStatement(SpookParser.ReturnStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#variableDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -340,4 +352,10 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitClassName(SpookParser.ClassNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#assignedVariableName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
 }
