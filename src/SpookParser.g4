@@ -10,41 +10,29 @@ program
 main
     : MAIN block;
 
-// One or more declarations
-declarations
-    : declaration SEMICOLON declarations
-    | declaration SEMICOLON;
-
 // Int/float/vector, booleans, object declarations and object function calls
 declaration
     : variableDecl
     | objectDecl;
 
-statements
-    : statement statements
-    | statement;
-
 statement
     : declaration SEMICOLON
     | assignment SEMICOLON
     | functionCall SEMICOLON
-    | objectVariableAssign SEMICOLON
     | conditionalStatement
     | iterativeStatement;
 
 /* Blocks */
-block: LEFT_BRACKET (statements | comment)* RIGHT_BRACKET;
-functionBlock: LEFT_BRACKET (statements | comment)* returnStatement RIGHT_BRACKET;
-classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
+block: LEFT_BRACKET (statement | comment)* RIGHT_BRACKET;
+functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
+classBlock: LEFT_BRACKET (declaration | functionDecl | comment)* RIGHT_BRACKET;
 
 // Assignment
 assignment
-    : variableName ASSIGN (expression | assignedVariableName | nonObjectFunctionCall);
+    : variableName ASSIGN (expression | nonObjectFunctionCall);
 
 expression
-    : variableName
-    | integerExpression
-    | floatExpression
+    : arithExpression
     | vector2Expression
     | vector3Expression
     | vector4Expression
@@ -52,11 +40,10 @@ expression
     | ternaryOperator;
 
 // Expressions
-integerExpression: naturalNumber | lowPrecedence | mathFunction;
-floatExpression: realNumber | lowPrecedence | mathFunction;
-vector2Expression: LEFT_PAREN floatExpression COMMA floatExpression RIGHT_PAREN;
-vector3Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
-vector4Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
+arithExpression: lowPrecedence;
+vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
+vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
+vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: BOOL_LITERAL | boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
@@ -82,9 +69,7 @@ objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
 objectArg
-    : variableName
-    | realNumber
-    | lowPrecedence
+    : lowPrecedence
     | classProperty
     | functionCall;
 
@@ -97,14 +82,10 @@ functionCall
 nonObjectFunctionCall
     :functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
 
-//Object variable assignment
-objectVariableAssign
-    : objectVariableName DOT variableName ASSIGN (mathFunction | objectArg);
-
 // Object function calls
 objectFunctionCall
-    : (objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
-    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN);
+    : objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
+    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
 
 // Color function call
 classProperty
@@ -216,7 +197,11 @@ dataType
 predefinedFunctionName
     : colorName;
 colorName
-    : BLACK | WHITE | RED | GREEN | BLUE;
+    : BLACK
+    | WHITE
+    | RED
+    | GREEN
+    | BLUE;
 objectVariableName
     : ID;
 functionName
@@ -224,6 +209,4 @@ functionName
 variableName
     : ID;
 className
-    : ID;
-assignedVariableName
     : ID;
