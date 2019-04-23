@@ -26,7 +26,7 @@ comment
 
 // Statements
 statement
-    : declaration SEMICOLON
+    : declaration
     | assignment SEMICOLON
     | functionCall SEMICOLON
     | conditionalStatement
@@ -37,23 +37,23 @@ statement
 
 /*      DECLARATIONS       */
 declaration
-    : variableDecl
-    | objectDecl;
+    : variableDecl SEMICOLON
+    | objectDecl SEMICOLON;
 
 // Variable declaration
 variableDecl
-    : dataType (variableName | assignment);
+    : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
 
 // Object declaration
 objectDecl
-    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
 
 
 
 
 /*      ASSIGNMENT       */
 assignment
-    : variableName ASSIGN (expression | functionCall);
+    : (variableName | swizzle) ASSIGN (expression | functionCall | swizzle);
 
 expression
     : arithExpression
@@ -81,7 +81,7 @@ atomPrecedence
     | LEFT_PAREN lowPrecedence RIGHT_PAREN;
 
 arithOperand
-    : realNumber | mathFunction | variableName | UNIFORM;
+    : realNumber | mathFunction | variableName | UNIFORM | functionCall | swizzle;
 
 // Mathematical functions
 mathFunction
@@ -97,6 +97,14 @@ boolOperation
     : (BOOL_LITERAL | variableName) boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
     | boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
     | LEFT_PAREN boolOperation RIGHT_PAREN;
+
+// Swizzling
+swizzle
+    : variableName DOT coordinateSwizzle
+    | variableName DOT colorSwizzle;
+
+coordinateSwizzle: COORDINATE_SWIZZLE_MASK;
+colorSwizzle: COLOR_SWIZZLE_MASK;
 
 
 

@@ -25,8 +25,8 @@ public class SpookLexer extends Lexer {
 		LEFT_BRACKET=35, RIGHT_BRACKET=36, LEFT_PAREN=37, RIGHT_PAREN=38, DOT=39, 
 		COMMA=40, SEMICOLON=41, QUESTION=42, COLON=43, ASSIGN=44, ADD=45, SUB=46, 
 		MOD=47, DIV=48, MUL=49, EQUAL=50, AND=51, OR=52, NOT_EQUAL=53, NOT=54, 
-		ABS=55, SIN=56, COS=57, TAN=58, UNIFORM=59, ID=60, COMMENT_STRING=61, 
-		WS=62;
+		COORDINATE_SWIZZLE_MASK=55, COLOR_SWIZZLE_MASK=56, ABS=57, SIN=58, COS=59, 
+		TAN=60, UNIFORM=61, ID=62, COMMENT_STRING=63, WS=64;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -44,9 +44,10 @@ public class SpookLexer extends Lexer {
 			"DIGIT_NEGATIVE", "FLOAT_DIGIT", "FLOAT_DIGIT_NEGATIVE", "BOOL_LITERAL", 
 			"LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_PAREN", "RIGHT_PAREN", "DOT", 
 			"COMMA", "SEMICOLON", "QUESTION", "COLON", "ASSIGN", "ADD", "SUB", "MOD", 
-			"DIV", "MUL", "EQUAL", "AND", "OR", "NOT_EQUAL", "NOT", "ABS", "SIN", 
-			"COS", "TAN", "UNIFORM", "ID", "LETTER", "DIGIT_RULE", "DIGIT_NEGATIVE_RULE", 
-			"COMMENT_STRING", "WS"
+			"DIV", "MUL", "EQUAL", "AND", "OR", "NOT_EQUAL", "NOT", "COORDINATE_SWIZZLE_MASK", 
+			"COLOR_SWIZZLE_MASK", "ABS", "SIN", "COS", "TAN", "UNIFORM", "ID", "LETTER", 
+			"DIGIT_RULE", "DIGIT_NEGATIVE_RULE", "COORDINATE_SWIZZLE_MASK_RULE", 
+			"COLOR_SWIZZLE_MASK_RULE", "COMMENT_STRING", "WS"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -60,7 +61,7 @@ public class SpookLexer extends Lexer {
 			"'else if'", "'else'", "'for'", "'to'", null, null, null, null, null, 
 			"'{'", "'}'", "'('", "')'", "'.'", "','", "';'", "'?'", "':'", "'='", 
 			"'+'", "'-'", "'%'", "'/'", "'*'", "'=='", "'&&'", "'||'", "'!='", "'!'", 
-			"'abs'", "'sin'", "'cos'", "'tan'", "'Time'"
+			null, null, "'abs'", "'sin'", "'cos'", "'tan'", "'Time'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -73,8 +74,9 @@ public class SpookLexer extends Lexer {
 			"DIGIT", "DIGIT_NEGATIVE", "FLOAT_DIGIT", "FLOAT_DIGIT_NEGATIVE", "BOOL_LITERAL", 
 			"LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_PAREN", "RIGHT_PAREN", "DOT", 
 			"COMMA", "SEMICOLON", "QUESTION", "COLON", "ASSIGN", "ADD", "SUB", "MOD", 
-			"DIV", "MUL", "EQUAL", "AND", "OR", "NOT_EQUAL", "NOT", "ABS", "SIN", 
-			"COS", "TAN", "UNIFORM", "ID", "COMMENT_STRING", "WS"
+			"DIV", "MUL", "EQUAL", "AND", "OR", "NOT_EQUAL", "NOT", "COORDINATE_SWIZZLE_MASK", 
+			"COLOR_SWIZZLE_MASK", "ABS", "SIN", "COS", "TAN", "UNIFORM", "ID", "COMMENT_STRING", 
+			"WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -136,7 +138,7 @@ public class SpookLexer extends Lexer {
 	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2@\u01cd\b\1\4\2\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2B\u01e3\b\1\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
