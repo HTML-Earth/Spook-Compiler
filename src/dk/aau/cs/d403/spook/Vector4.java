@@ -64,7 +64,7 @@ public class Vector4 {
         return new Vector4(x,y,z,w);
     }
 
-    public static String prettyPrint(Vector4 vector) {
+    public static String GLSLPrint(Vector4 vector) {
         return "(" +
                 vector.getX().prettyPrint() + ", " +
                 vector.getY().prettyPrint() + ", " +

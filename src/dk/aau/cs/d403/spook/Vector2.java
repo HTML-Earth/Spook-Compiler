@@ -41,7 +41,7 @@ public class Vector2 {
         return new Vector2(x,y);
     }
 
-    public static String prettyPrint(Vector2 vector) {
+    public static String GLSLPrint(Vector2 vector) {
         return "(" +
                 vector.getX().prettyPrint() + ", " +
                 vector.getY().prettyPrint() + ")";
