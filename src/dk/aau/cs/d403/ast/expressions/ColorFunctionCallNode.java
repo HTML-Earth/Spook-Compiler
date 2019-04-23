@@ -15,10 +15,6 @@ public class ColorFunctionCallNode implements ASTnode {
         return colorName;
     }
 
-    public String getVariableName() {
-        return variableName;
-    }
-
     @Override
     public String prettyPrint() {
         return "Color." + Enums.colorToString(colorName);
