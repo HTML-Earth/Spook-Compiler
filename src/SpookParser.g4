@@ -135,7 +135,7 @@ objectArg
 
 // Color function call (Color.Black) etc.
 colorFunctionCall
-    : COLOR DOT (variableName | predefinedFunctionName);
+    : COLOR DOT predefinedFunctionName;
 
 
 

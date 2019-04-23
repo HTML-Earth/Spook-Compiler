@@ -4,17 +4,15 @@ import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
-public class ClassPropertyNode implements ASTnode {
-    private Enums.ClassType classType;
-    private String variableName;
+public class ColorFunctionCallNode implements ASTnode {
+    private Enums.ColorName colorName;
 
-    public ClassPropertyNode(Enums.ClassType classType, String variableName) {
-        this.classType = classType;
-        this.variableName = variableName;
+    public ColorFunctionCallNode(Enums.ColorName colorName) {
+        this.colorName = colorName;
     }
 
-    public Enums.ClassType getClassType() {
-        return classType;
+    public Enums.ColorName getClassType() {
+        return colorName;
     }
 
     public String getVariableName() {
@@ -23,7 +21,7 @@ public class ClassPropertyNode implements ASTnode {
 
     @Override
     public String prettyPrint() {
-        return Enums.classTypeToString(classType) + "." + variableName;
+        return "Color." + Enums.colorToString(colorName);
     }
 
     private CodePosition codePosition;
