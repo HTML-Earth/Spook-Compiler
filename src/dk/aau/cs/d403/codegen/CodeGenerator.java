@@ -277,11 +277,11 @@ public class CodeGenerator implements ASTvisitor {
 
     @Override
     public IntegerExpressionNode visitIntegerExpression(IntegerExpressionNode integerExpressionNode) {
-        NaturalNumberNode naturalNumberNode = integerExpressionNode.getNaturalNumberNode();
+        IntegerNumberNode integerNumberNode = integerExpressionNode.getIntegerNumberNode();
         ArrayList<ArithOperationNode> arithOperationNodes = integerExpressionNode.getArithOperationNodes();
         MathFunctionCallNode mathFunctionCallNode = integerExpressionNode.getMathFunctionCallNode();
-        if (naturalNumberNode != null) {
-            visitNaturalNumber(naturalNumberNode);
+        if (integerNumberNode != null) {
+            visitNaturalNumber(integerNumberNode);
         }
         else if (arithOperationNodes != null) {
             boolean firstOp = true;
@@ -364,9 +364,9 @@ public class CodeGenerator implements ASTvisitor {
     }
 
     @Override
-    public NaturalNumberNode visitNaturalNumber(NaturalNumberNode naturalNumberNode) {
-        sb.append(naturalNumberNode.prettyPrint());
-        return naturalNumberNode;
+    public IntegerNumberNode visitNaturalNumber(IntegerNumberNode integerNumberNode) {
+        sb.append(integerNumberNode.prettyPrint());
+        return integerNumberNode;
     }
 
     @Override

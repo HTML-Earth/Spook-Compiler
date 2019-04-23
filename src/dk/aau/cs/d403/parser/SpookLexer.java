@@ -1,4 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookLexer.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookLexer.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -53,10 +53,10 @@ public class SpookLexer extends Lexer {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'Int'", "'Float'", "'Bool'", "'Vec2'", "'Vec3'", "'Vec4'", "'void'", 
+			null, "'Int'", "'Float'", "'Bool'", "'Vec2'", "'Vec3'", "'Vec4'", "'Void'", 
 			"'Circle'", "'Rectangle'", "'Triangle'", "'Shape'", "'Color'", "'CircleGradient'", 
 			"'LineGradient'", "'Black'", "'White'", "'Red'", "'Green'", "'Blue'", 
-			"'Shader'", "'class'", "'extends'", "'implements'", "'return'", "'if'", 
+			"'Shader'", "'Class'", "'extends'", "'implements'", "'return'", "'if'", 
 			"'else if'", "'else'", "'for'", "'to'", null, null, null, null, null, 
 			"'{'", "'}'", "'('", "')'", "'.'", "','", "';'", "'?'", "':'", "'='", 
 			"'+'", "'-'", "'%'", "'/'", "'*'", "'=='", "'&&'", "'||'", "'!='", "'!'", 
@@ -202,7 +202,7 @@ public class SpookLexer extends Lexer {
 		"\7g\2\2\u0096\u0097\7e\2\2\u0097\u0098\7\64\2\2\u0098\n\3\2\2\2\u0099"+
 		"\u009a\7X\2\2\u009a\u009b\7g\2\2\u009b\u009c\7e\2\2\u009c\u009d\7\65\2"+
 		"\2\u009d\f\3\2\2\2\u009e\u009f\7X\2\2\u009f\u00a0\7g\2\2\u00a0\u00a1\7"+
-		"e\2\2\u00a1\u00a2\7\66\2\2\u00a2\16\3\2\2\2\u00a3\u00a4\7x\2\2\u00a4\u00a5"+
+		"e\2\2\u00a1\u00a2\7\66\2\2\u00a2\16\3\2\2\2\u00a3\u00a4\7X\2\2\u00a4\u00a5"+
 		"\7q\2\2\u00a5\u00a6\7k\2\2\u00a6\u00a7\7f\2\2\u00a7\20\3\2\2\2\u00a8\u00a9"+
 		"\7E\2\2\u00a9\u00aa\7k\2\2\u00aa\u00ab\7t\2\2\u00ab\u00ac\7e\2\2\u00ac"+
 		"\u00ad\7n\2\2\u00ad\u00ae\7g\2\2\u00ae\22\3\2\2\2\u00af\u00b0\7T\2\2\u00b0"+
@@ -230,7 +230,7 @@ public class SpookLexer extends Lexer {
 		"\u0101\7D\2\2\u0101\u0102\7n\2\2\u0102\u0103\7w\2\2\u0103\u0104\7g\2\2"+
 		"\u0104(\3\2\2\2\u0105\u0106\7U\2\2\u0106\u0107\7j\2\2\u0107\u0108\7c\2"+
 		"\2\u0108\u0109\7f\2\2\u0109\u010a\7g\2\2\u010a\u010b\7t\2\2\u010b*\3\2"+
-		"\2\2\u010c\u010d\7e\2\2\u010d\u010e\7n\2\2\u010e\u010f\7c\2\2\u010f\u0110"+
+		"\2\2\u010c\u010d\7E\2\2\u010d\u010e\7n\2\2\u010e\u010f\7c\2\2\u010f\u0110"+
 		"\7u\2\2\u0110\u0111\7u\2\2\u0111,\3\2\2\2\u0112\u0113\7g\2\2\u0113\u0114"+
 		"\7z\2\2\u0114\u0115\7v\2\2\u0115\u0116\7g\2\2\u0116\u0117\7p\2\2\u0117"+
 		"\u0118\7f\2\2\u0118\u0119\7u\2\2\u0119.\3\2\2\2\u011a\u011b\7k\2\2\u011b"+

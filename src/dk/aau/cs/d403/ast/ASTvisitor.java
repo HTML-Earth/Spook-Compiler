@@ -45,6 +45,6 @@ public interface ASTvisitor {
     Vector3ExpressionNode visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode);
     Vector4ExpressionNode visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode);
 
-    NaturalNumberNode visitNaturalNumber(NaturalNumberNode naturalNumberNode);
+    IntegerNumberNode visitNaturalNumber(IntegerNumberNode integerNumberNode);
     RealNumberNode visitRealNumber(RealNumberNode realNumberNode);
 }
