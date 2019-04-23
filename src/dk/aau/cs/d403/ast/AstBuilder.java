@@ -49,28 +49,14 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitBlock(SpookParser.BlockContext ctx) {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
-        for (SpookParser.StatementsContext statements: ctx.statements()) {
-            statementNodes.addAll(visitAllStatements(statements));
+        for (SpookParser.StatementContext statement: ctx.statement()) {
+            statementNodes.add((StatementNode) visitStatement(statement));
         }
 
         BlockNode blockNode = new BlockNode(statementNodes);
         blockNode.setCodePosition(getCodePosition(ctx));
 
         return blockNode;
-    }
-
-    private ArrayList<StatementNode> visitAllStatements(SpookParser.StatementsContext ctx) {
-        ArrayList<StatementNode> statementNodes = new ArrayList<>();
-
-        StatementNode statementNode = (StatementNode) visitStatement(ctx.statement());
-
-        if (statementNode != null)
-            statementNodes.add(statementNode);
-
-        if (ctx.statements() != null)
-            statementNodes.addAll(visitAllStatements(ctx.statements()));
-
-        return statementNodes;
     }
 
     @Override
@@ -83,42 +69,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return visitFunctionCall(ctx.functionCall());
         else if (ctx.conditionalStatement() != null)
             return visitConditionalStatement(ctx.conditionalStatement());
-        else if (ctx.RETURN() != null) {
-            if (ctx.variableName() != null) {
-                ReturnNode returnNode = new ReturnNode(ctx.variableName().getText());
-                returnNode.setCodePosition(getCodePosition(ctx));
-                return returnNode;
-            }
-            else if (ctx.realNumber() != null) {
-                ReturnNode returnNode = new ReturnNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
-                returnNode.setCodePosition(getCodePosition(ctx));
-                return returnNode;
-            }
-            else if (ctx.BOOL_LITERAL() != null) {
-                ReturnNode returnNode = new ReturnNode(getBooleanValue(ctx.BOOL_LITERAL()));
-                returnNode.setCodePosition(getCodePosition(ctx));
-                return returnNode;
-            }
-            else
-                throw new CompilerException("Invalid return statement", getCodePosition(ctx));
-        }
         else {
             throw new CompilerException("Statement is of unknown type", getCodePosition(ctx));
         }
-    }
-
-    private ArrayList<DeclarationNode> visitAllDeclarations(SpookParser.DeclarationsContext ctx) {
-        ArrayList<DeclarationNode> declarationNodes = new ArrayList<>();
-
-        DeclarationNode declarationNode = (DeclarationNode) visitDeclaration(ctx.declaration());
-
-        if (declarationNode != null)
-            declarationNodes.add(declarationNode);
-
-        if (ctx.declarations() != null)
-            declarationNodes.addAll(visitAllDeclarations(ctx.declarations()));
-
-        return declarationNodes;
     }
 
     @Override
@@ -156,10 +109,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitExpression(SpookParser.ExpressionContext ctx) {
-        if (ctx.integerExpression() != null)
-            return visitIntegerExpression(ctx.integerExpression());
-        else if (ctx.floatExpression() != null)
-            return visitFloatExpression(ctx.floatExpression());
+        if (ctx.arithExpression() != null)
+            return visitArithExpression(ctx.arithExpression());
         else if (ctx.vector2Expression() != null)
             return visitVector2Expression(ctx.vector2Expression());
         else if (ctx.vector3Expression() != null)
@@ -273,8 +224,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         ArrayList<FunctionDeclarationNode> functionDeclarationNodes = new ArrayList<>();
 
         // Declarations
-        for (SpookParser.DeclarationsContext declarations: ctx.declarations()) {
-            declarationNodes.addAll(visitAllDeclarations(declarations));
+        for (SpookParser.DeclarationContext declaration: ctx.declaration()) {
+            declarationNodes.add((DeclarationNode) visitDeclaration(declaration));
         }
 
         //Function declarations
@@ -325,11 +276,51 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return functionDeclarationNode;
         }
         else {
-            FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), (BlockNode)visitBlock(ctx.block()));
+            FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), (BlockNode)visitFunctionBlock(ctx.functionBlock()));
             functionDeclarationNode.setCodePosition(getCodePosition(ctx));
 
             return functionDeclarationNode;
         }
+    }
+
+    @Override
+    public ASTnode visitFunctionBlock(SpookParser.FunctionBlockContext ctx) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
+        for (SpookParser.StatementContext statement: ctx.statement()) {
+            statementNodes.add((StatementNode) visitStatement(statement));
+        }
+
+        BlockNode blockNode = new BlockNode(statementNodes, (ReturnNode) visitReturnStatement(ctx.returnStatement()));
+        blockNode.setCodePosition(getCodePosition(ctx));
+
+        return blockNode;
+    }
+
+    @Override
+    public ASTnode visitReturnStatement(SpookParser.ReturnStatementContext ctx) {
+        if (ctx.variableName() != null) {
+            ReturnNode returnNode = new ReturnNode(ctx.variableName().getText());
+            returnNode.setCodePosition(getCodePosition(ctx));
+            return returnNode;
+        }
+        else if (ctx.realNumber() != null) {
+            ReturnNode returnNode = new ReturnNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+            returnNode.setCodePosition(getCodePosition(ctx));
+            return returnNode;
+        }
+        else if (ctx.BOOL_LITERAL() != null) {
+            ReturnNode returnNode = new ReturnNode(getBooleanValue(ctx.BOOL_LITERAL()));
+            returnNode.setCodePosition(getCodePosition(ctx));
+            return returnNode;
+        }
+        else if (ctx.expression() != null) {
+            ReturnNode returnNode = new ReturnNode((ExpressionNode) visitExpression(ctx.expression()));
+            returnNode.setCodePosition(getCodePosition(ctx));
+            return returnNode;
+        }
+        else
+            throw new CompilerException("Invalid return statement", getCodePosition(ctx));
     }
 
     private ArrayList<FunctionArgNode> visitAllFunctionArgs(SpookParser.FunctionArgsContext ctx) {
