@@ -1,20 +1,30 @@
 parser grammar SpookParser;
 options { tokenVocab=SpookLexer; }
 
+
+
+/*      PROGRAM START        */
 // Shader() {} (Needed)
 // Comments, Classes and functions can be declared outside (under) of the main function
 program
     : main (comment | classDecl | functionDecl)*;
 
+
+
+
+/*      MAIN             */
 // Shader() {} (Needed), Declarations (Optional), Comments (Optional)
 main
     : MAIN block;
 
-// Int/float/vector, booleans, object declarations and object function calls
-declaration
-    : variableDecl
-    | objectDecl;
+// Main block
+block: LEFT_BRACKET (statement | comment)* RIGHT_BRACKET;
 
+// Comment: Single-line
+comment
+    : COMMENT_STRING;
+
+// Statements
 statement
     : declaration SEMICOLON
     | assignment SEMICOLON
@@ -22,14 +32,28 @@ statement
     | conditionalStatement
     | iterativeStatement;
 
-/* Blocks */
-block: LEFT_BRACKET (statement | comment)* RIGHT_BRACKET;
-functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
-classBlock: LEFT_BRACKET (declaration | functionDecl | comment)* RIGHT_BRACKET;
 
-// Assignment
+
+
+/*      DECLARATIONS       */
+declaration
+    : variableDecl
+    | objectDecl;
+
+// Variable declaration
+variableDecl
+    : dataType (variableName | assignment);
+
+// Object declaration
+objectDecl
+    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+
+
+
+
+/*      ASSIGNMENT       */
 assignment
-    : variableName ASSIGN (expression | nonObjectFunctionCall);
+    : variableName ASSIGN (expression | functionCall);
 
 expression
     : arithExpression
@@ -47,71 +71,6 @@ vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithE
 boolExpression: BOOL_LITERAL | boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
-// Conditional statements
-conditionalStatement
-    : ifElseStatement;
-
-// If-else if-else
-ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
-
-// Single-line comment
-comment
-    : COMMENT_STRING;
-
-/* Class declaration */
-classDecl
-    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
-
-/* Object */
-objectDecl
-    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
-objectArgs
-    : objectArg COMMA objectArgs
-    | objectArg;
-objectArg
-    : lowPrecedence
-    | classProperty
-    | functionCall;
-
-//Function calls
-functionCall
-    : nonObjectFunctionCall
-    | objectFunctionCall;
-
-//Non-object funtion calls
-nonObjectFunctionCall
-    :functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
-
-// Object function calls
-objectFunctionCall
-    : objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
-    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
-
-// Color function call
-classProperty
-    : classType DOT (variableName | predefinedFunctionName);
-
-
-/* Function declaration */
-functionDecl
-    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
-    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
-
-functionArgs
-    : functionArg COMMA functionArgs
-    | functionArg;
-functionArg
-    : dataType variableName;
-
-returnStatement: RETURN (variableName | realNumber | BOOL_LITERAL | expression) SEMICOLON;
-
-/* Integer, float and vector declaration */
-variableDecl
-    : dataType (variableName | assignment);
-
-arithOperand
-    : realNumber | mathFunction | variableName | UNIFORM;
-
 //Precedence, goes through low to high, ends at atom
 lowPrecedence
     : highPrecedence ((ADD | SUB) highPrecedence)*;
@@ -121,19 +80,12 @@ atomPrecedence
     : SUB? arithOperand
     | LEFT_PAREN lowPrecedence RIGHT_PAREN;
 
+arithOperand
+    : realNumber | mathFunction | variableName | UNIFORM;
 
 // Mathematical functions
 mathFunction
     : function LEFT_PAREN lowPrecedence RIGHT_PAREN;
-
-//Loops
-iterativeStatement
-    : forStatement;
-
-forStatement
-    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
-
-forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
 
 // Recursive boolean operations
 boolOperations
@@ -149,8 +101,93 @@ boolOperation
 
 
 
+/*      FUNCTION CALLS       */
+functionCall
+    : nonObjectFunctionCall
+    | objectFunctionCall;
 
 
+// Non-object funtion calls (Global functions)
+nonObjectFunctionCall
+    : functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
+
+// Object function calls
+objectFunctionCall
+    : objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
+    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
+
+// Object arguments
+objectArgs
+    : objectArg COMMA objectArgs
+    | objectArg;
+objectArg
+    : lowPrecedence
+    | colorFunctionCall
+    | functionCall;
+
+// Color function call (Color.Black) etc.
+colorFunctionCall
+    : COLOR DOT (variableName | predefinedFunctionName);
+
+
+
+
+/*      CONDITIONAL STATEMENTS      */
+conditionalStatement
+    : ifElseStatement;
+
+// If-else if-else
+ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
+
+
+
+
+/*      LOOPS        */
+iterativeStatement
+    : forStatement;
+
+// For loop
+forStatement
+    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
+
+forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
+
+
+
+
+/*      CLASSES     */
+// Class declaration
+classDecl
+    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
+
+// Class block
+classBlock: LEFT_BRACKET (declaration | functionDecl | comment)* RIGHT_BRACKET;
+
+
+
+
+/*      FUNCTIONS    */
+/* Function declaration */
+functionDecl
+    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
+    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+
+functionArgs
+    : functionArg COMMA functionArgs
+    | functionArg;
+functionArg
+    : dataType variableName;
+
+// Function block
+functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
+
+// Return statement
+returnStatement: RETURN (variableName | realNumber | BOOL_LITERAL | expression) SEMICOLON;
+
+
+
+
+/*      HELPERS       */
 // Numbers
 realNumber: naturalNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
 naturalNumber: DIGIT | DIGIT_NEGATIVE;
@@ -193,7 +230,6 @@ dataType
     | VECTOR3
     | VECTOR4;
 
-// Variable name
 predefinedFunctionName
     : colorName;
 colorName
@@ -202,6 +238,8 @@ colorName
     | RED
     | GREEN
     | BLUE;
+
+// Variable names
 objectVariableName
     : ID;
 functionName
