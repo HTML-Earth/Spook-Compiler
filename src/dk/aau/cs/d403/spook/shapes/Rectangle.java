@@ -16,9 +16,17 @@ public class Rectangle extends Shape {
     @Override
     public String getDeclaration() {
         return "Rectangle " + name + " = Rectangle(\n\t\t" +
-                "vec2(" + size.getX() + ", " + size.getY() + "),\n\t\t" +
-                "vec2(" + position.getX() + ", " + position.getY() + "),\n\t\t" +
-                "vec4(" + color.getX() + ", " + color.getY() + ", " + color.getZ() + ", " + color.getW() + ")\n\t" +
+                "vec2(" +
+                size.getX().prettyPrint() + ", " +
+                size.getY().prettyPrint() + "),\n\t\t" +
+                "vec2(" +
+                position.getX().prettyPrint() + ", " +
+                position.getY().prettyPrint() + "),\n\t\t" +
+                "vec4(" +
+                color.getX().prettyPrint() + ", " +
+                color.getY().prettyPrint() + ", " +
+                color.getZ().prettyPrint() + ", " +
+                color.getW().prettyPrint() + ")\n\t" +
                 ");";
     }
 }
