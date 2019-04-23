@@ -26,7 +26,7 @@ comment
 
 // Statements
 statement
-    : declaration SEMICOLON
+    : declaration
     | assignment SEMICOLON
     | functionCall SEMICOLON
     | conditionalStatement
@@ -37,8 +37,8 @@ statement
 
 /*      DECLARATIONS       */
 declaration
-    : variableDecl
-    | objectDecl;
+    : variableDecl SEMICOLON
+    | objectDecl SEMICOLON;
 
 // Variable declaration
 variableDecl
@@ -46,7 +46,7 @@ variableDecl
 
 // Object declaration
 objectDecl
-    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
+    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
 
 
 
