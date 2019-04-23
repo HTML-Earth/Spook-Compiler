@@ -93,7 +93,7 @@ public class PrintGLSL {
             return printMathFunctionCall(mathFunctionCallNode);
         }
         else if (variableName != null) {
-            return variableName;
+            return printVariableName(variableName);
         }
         else throw new RuntimeException("Invalid arith operand");
     }
@@ -157,7 +157,7 @@ public class PrintGLSL {
         else if (node.getArithOperationNodes() != null) {
             StringBuilder sb = new StringBuilder();
             for (ArithOperationNode arithOperationNode : node.getArithOperationNodes()) {
-                sb.append(arithOperationNode.prettyPrint());
+                sb.append(printArithOperation(arithOperationNode));
             }
             return sb.toString();
         }
@@ -186,5 +186,12 @@ public class PrintGLSL {
                 printObjArgNode(vector.getY()) + ", " +
                 printObjArgNode(vector.getZ()) + ", " +
                 printObjArgNode(vector.getW()) + ")";
+    }
+
+    public static String printVariableName(String variableName) {
+        if (variableName.equals("Time"))
+            return "iTime";
+        else
+            return variableName;
     }
 }
