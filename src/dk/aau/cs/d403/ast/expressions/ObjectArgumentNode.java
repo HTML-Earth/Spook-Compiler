@@ -10,7 +10,7 @@ public class ObjectArgumentNode implements ASTnode {
     private String variableName;
     private RealNumberNode realNumberNode;
     private ArrayList<ArithOperationNode> arithOperationNodes;
-    private ClassPropertyNode classPropertyNode;
+    private ColorFunctionCallNode colorFunctionCallNode;
 
     public ObjectArgumentNode(String variableName) {
         this.variableName = variableName;
@@ -24,8 +24,8 @@ public class ObjectArgumentNode implements ASTnode {
         this.arithOperationNodes = arithOperationNodes;
     }
 
-    public ObjectArgumentNode(ClassPropertyNode classPropertyNode) {
-        this.classPropertyNode = classPropertyNode;
+    public ObjectArgumentNode(ColorFunctionCallNode colorFunctionCallNode) {
+        this.colorFunctionCallNode = colorFunctionCallNode;
     }
 
     public String getVariableName() {
@@ -40,8 +40,8 @@ public class ObjectArgumentNode implements ASTnode {
         return arithOperationNodes;
     }
 
-    public ClassPropertyNode getClassPropertyNode() {
-        return classPropertyNode;
+    public ColorFunctionCallNode getColorFunctionCallNode() {
+        return colorFunctionCallNode;
     }
 
     @Override
@@ -57,8 +57,8 @@ public class ObjectArgumentNode implements ASTnode {
             }
             return sb.toString();
         }
-        else if (classPropertyNode != null)
-            return classPropertyNode.prettyPrint();
+        else if (colorFunctionCallNode != null)
+            return colorFunctionCallNode.prettyPrint();
         else
             return "Invalid Object Argument";
     }

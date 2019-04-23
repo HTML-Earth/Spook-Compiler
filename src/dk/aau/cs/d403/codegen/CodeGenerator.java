@@ -142,9 +142,9 @@ public class CodeGenerator implements ASTvisitor {
     }
 
     @Override
-    public ClassPropertyNode visitClassProperty(ClassPropertyNode classPropertyNode) {
+    public ColorFunctionCallNode visitClassProperty(ColorFunctionCallNode colorFunctionCallNode) {
         sb.append("CLASS PROPERTY");
-        return classPropertyNode;
+        return colorFunctionCallNode;
     }
 
     @Override
