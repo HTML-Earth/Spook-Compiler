@@ -17,7 +17,7 @@ public class TypeCheckingTest extends ScopeRulesTest{
 
             // Assignment
                 // Natural number
-        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        IntegerNumberNode naturalNumber = new IntegerNumberNode(2);
                 // Expression
         ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
                 // Assignment

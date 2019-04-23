@@ -189,8 +189,8 @@ returnStatement: RETURN (variableName | realNumber | BOOL_LITERAL | expression) 
 
 /*      HELPERS       */
 // Numbers
-realNumber: naturalNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
-naturalNumber: DIGIT | DIGIT_NEGATIVE;
+realNumber: integerNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
+integerNumber: DIGIT | DIGIT_NEGATIVE;
 
 // Boolean operators
 boolOperator
