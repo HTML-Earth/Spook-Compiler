@@ -2,63 +2,58 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
-
-import java.util.ArrayList;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
+import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 
 public class ObjectArgumentNode implements ASTnode {
 
-    private String variableName;
-    private RealNumberNode realNumberNode;
-    private ArrayList<ArithOperationNode> arithOperationNodes;
+    private LowPrecedenceNode lowPrecedence;
     private ColorFunctionCallNode colorFunctionCallNode;
+    private NonObjectFunctionCallNode nonObjectFunctionCallNode;
+    private ObjectFunctionCallNode objectFunctionCallNode;
 
-    public ObjectArgumentNode(String variableName) {
-        this.variableName = variableName;
-    }
-
-    public ObjectArgumentNode(RealNumberNode realNumberNode) {
-        this.realNumberNode = realNumberNode;
-    }
-
-    public ObjectArgumentNode(ArrayList<ArithOperationNode> arithOperationNodes) {
-        this.arithOperationNodes = arithOperationNodes;
+    public ObjectArgumentNode(LowPrecedenceNode lowPrecedence) {
+        this.lowPrecedence = lowPrecedence;
     }
 
     public ObjectArgumentNode(ColorFunctionCallNode colorFunctionCallNode) {
         this.colorFunctionCallNode = colorFunctionCallNode;
     }
 
-    public String getVariableName() {
-        return variableName;
+    public ObjectArgumentNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.nonObjectFunctionCallNode = nonObjectFunctionCallNode;
     }
 
-    public RealNumberNode getRealNumberNode() {
-        return realNumberNode;
+    public ObjectArgumentNode(ObjectFunctionCallNode objectFunctionCallNode) {
+        this.objectFunctionCallNode = objectFunctionCallNode;
     }
 
-    public ArrayList<ArithOperationNode> getArithOperationNodes() {
-        return arithOperationNodes;
+    public LowPrecedenceNode getLowPrecedence() {
+        return lowPrecedence;
+    }
+
+    public NonObjectFunctionCallNode getNonObjectFunctionCallNode() {
+        return nonObjectFunctionCallNode;
     }
 
     public ColorFunctionCallNode getColorFunctionCallNode() {
         return colorFunctionCallNode;
     }
 
+    public ObjectFunctionCallNode getObjectFunctionCallNode() {
+        return objectFunctionCallNode;
+    }
+
     @Override
     public String prettyPrint() {
-        if (variableName != null)
-            return variableName;
-        else if (realNumberNode != null)
-            return realNumberNode.prettyPrint();
-        else if (arithOperationNodes != null) {
-            StringBuilder sb = new StringBuilder();
-            for (ArithOperationNode arithOperationNode : arithOperationNodes) {
-                sb.append(arithOperationNode.prettyPrint());
-            }
-            return sb.toString();
-        }
+        if (lowPrecedence != null)
+            return lowPrecedence.prettyPrint();
         else if (colorFunctionCallNode != null)
             return colorFunctionCallNode.prettyPrint();
+        else if (nonObjectFunctionCallNode != null)
+            return nonObjectFunctionCallNode.prettyPrint();
+        else if (objectFunctionCallNode != null)
+            return objectFunctionCallNode.prettyPrint();
         else
             return "Invalid Object Argument";
     }
