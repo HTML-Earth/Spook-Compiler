@@ -116,34 +116,24 @@ public class CodeGenerator {
 
     private void visitStatement(StatementNode statementNode) {
         if (statementNode instanceof AssignmentNode)
-            return; //visitAssignment((AssignmentNode)statementNode);
+            return; //TODO: visitAssignment((AssignmentNode)statementNode);
         else if (statementNode instanceof DeclarationNode)
             visitDeclaration((DeclarationNode)statementNode);
         else if (statementNode instanceof IfElseStatementNode)
-            return; //visitIfElseStatement((IfElseStatementNode)statementNode);
+            return; //TODO: visitIfElseStatement((IfElseStatementNode)statementNode);
         else if (statementNode instanceof ObjectFunctionCallNode)
             visitObjectFunctionCall((ObjectFunctionCallNode)statementNode);
         else if (statementNode instanceof ReturnNode)
-            return; //visitReturn((ReturnNode)statementNode);
+            return; //TODO: visitReturn((ReturnNode)statementNode);
         else {
             System.out.println(statementNode.prettyPrint());
             throw new RuntimeException("Statement is of unknown type");
         }
     }
 
-    /*
-    private AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
-        sb.append(assignmentNode.getVariableName());
-        sb.append(" = ");
-        visitExpressionNode(assignmentNode.getExpressionNode());
-        return assignmentNode;
-    }
-    */
-
     private void visitDeclaration(DeclarationNode declarationNode) {
         if (declarationNode instanceof VariableDeclarationNode)
-            //visitVariableDeclaration((VariableDeclarationNode)declarationNode);
-            System.out.println(""); //skip
+            return; //TODO: visitVariableDeclaration((VariableDeclarationNode)declarationNode);
         else if (declarationNode instanceof ObjectDeclarationNode)
             visitObjectDeclaration((ObjectDeclarationNode)declarationNode);
         else
@@ -179,14 +169,6 @@ public class CodeGenerator {
         }
     }
 
-    /*
-    private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
-        sb.append(Enums.dataTypeToStringGLSL(variableDeclarationNode.getDataType()));
-        sb.append(" ");
-        visitAssignment(variableDeclarationNode.getAssignmentNode());
-    }
-    */
-
     private void visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
         if (objectFunctionCallNode.getObjectVariableName().equals("Scene")) {
             switch (objectFunctionCallNode.getFunctionName()) {
@@ -221,32 +203,4 @@ public class CodeGenerator {
             }
         }
     }
-
-    /*
-    private ExpressionNode visitExpressionNode(ExpressionNode expressionNode) {
-        if (expressionNode instanceof IntegerExpressionNode) {
-            return visitIntegerExpression((IntegerExpressionNode)expressionNode);
-        }
-        else if (expressionNode instanceof FloatExpressionNode) {
-            return visitFloatExpression((FloatExpressionNode)expressionNode);
-        }
-        else if (expressionNode instanceof Vector4ExpressionNode) {
-            return visitVector4Expression((Vector4ExpressionNode)expressionNode);
-        }
-        else if (expressionNode instanceof Vector3ExpressionNode) {
-            return visitVector3Expression((Vector3ExpressionNode)expressionNode);
-        }
-        else if (expressionNode instanceof Vector2ExpressionNode) {
-            return visitVector2Expression((Vector2ExpressionNode)expressionNode);
-        }
-        else if (expressionNode instanceof BoolExpressionNode) {
-            return visitBoolExpression((BoolExpressionNode)expressionNode);
-        }
-        else if (expressionNode instanceof TernaryOperatorNode) {
-            return visitTernaryOperator((TernaryOperatorNode)expressionNode);
-        }
-        else
-            throw new RuntimeException("Invalid expression");
-    }
-    */
 }
