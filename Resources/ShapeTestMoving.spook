@@ -1,0 +1,11 @@
+Shader {
+  Rectangle rec = (50, 50, Color.black);
+  rec.position(110, 10 + cos(Time) * 60);
+
+  Rectangle rec2 = (50, 50, Color.yellow);
+  rec2.position(110 + sin(Time) * 100, 10);
+
+  Scene.color = Color.red;
+  Scene.add(rec);
+  Scene.add(rec2);
+}

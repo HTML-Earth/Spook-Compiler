@@ -52,7 +52,7 @@ public class Vector3 {
         return new Vector3(x,y,z);
     }
 
-    public static String prettyPrint(Vector3 vector) {
+    public static String GLSLPrint(Vector3 vector) {
         return "(" +
                 vector.getX().prettyPrint() + ", " +
                 vector.getY().prettyPrint() + ", " +
