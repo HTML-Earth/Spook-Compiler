@@ -9,7 +9,7 @@ VECTOR3: 'Vec3';
 VECTOR4: 'Vec4';
 
 // Return types (without data types)
-VOID: 'void';
+VOID: 'Void';
 
 // Pre-defined classes
 CIRCLE: 'Circle';
@@ -29,7 +29,7 @@ BLUE: 'Blue';
 
 // Keywords
 MAIN: 'Shader';
-CLASS: 'class';
+CLASS: 'Class';
 EXTENDS: 'extends';
 IMPLEMENTS: 'implements';
 RETURN: 'return';
