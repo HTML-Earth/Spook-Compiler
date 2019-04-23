@@ -423,26 +423,26 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectArg(SpookParser.ObjectArgContext ctx) {
-        if (ctx.variableName() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode(ctx.variableName().getText());
+        if (ctx.functionCall().nonObjectFunctionCall() != null) {
+            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((NonObjectFunctionCallNode) visitNonObjectFunctionCall(ctx.functionCall().nonObjectFunctionCall()));
             objectArgumentNode.setCodePosition(getCodePosition(ctx));
 
             return objectArgumentNode;
         }
-        else if (ctx.realNumber() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+        else if (ctx.functionCall().objectFunctionCall() != null) {
+            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((ObjectFunctionCallNode) visitObjectFunctionCall(ctx.functionCall().objectFunctionCall()));
             objectArgumentNode.setCodePosition(getCodePosition(ctx));
 
             return objectArgumentNode;
         }
-        else if (ctx.arithOperations() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode(visitAllArithOperations(ctx.arithOperations()));
+        else if (ctx.lowPrecedence() != null) {
+            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
             objectArgumentNode.setCodePosition(getCodePosition(ctx));
 
             return objectArgumentNode;
         }
-        else if (ctx.classProperty() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((ColorFunctionCallNode)visitClassProperty(ctx.classProperty()));
+        else if (ctx.colorFunctionCall() != null) {
+            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((ColorFunctionCallNode) visitColorFunctionCall(ctx.colorFunctionCall()));
             objectArgumentNode.setCodePosition(getCodePosition(ctx));
 
             return objectArgumentNode;
