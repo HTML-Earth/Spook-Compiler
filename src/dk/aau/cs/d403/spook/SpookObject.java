@@ -1,11 +1,13 @@
 package dk.aau.cs.d403.spook;
 
+import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
+
 import java.util.ArrayList;
 
 public abstract class SpookObject {
     protected String name;
     protected Vector2 position;
-    protected float rotation;
+    protected ObjectArgumentNode rotation;
 
     protected SpookObject parent;
     protected ArrayList<SpookObject> children;
@@ -26,11 +28,11 @@ public abstract class SpookObject {
         this.position = position;
     }
 
-    public float getRotation() {
+    public ObjectArgumentNode getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    public void setRotation(ObjectArgumentNode rotation) {
         this.rotation = rotation;
     }
 

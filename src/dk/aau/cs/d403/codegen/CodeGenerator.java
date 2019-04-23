@@ -33,16 +33,16 @@ public class CodeGenerator implements ASTvisitor {
         visitProgram(ast);
         sb = new StringBuilder(); //hacky hack
 
-        generateStructs(usedClasses);
-        generatePrototypes(usedClasses);
-        generateMain(ast.getMainNode());
-        generateFunctions(usedClasses);
+        generateStructs();
+        generatePrototypes();
+        generateMain();
+        generateFunctions();
 
         return sb.toString();
     }
 
-    private void generateStructs(HashSet<Enums.ClassType> classTypes) {
-        for (Enums.ClassType type : classTypes) {
+    private void generateStructs() {
+        for (Enums.ClassType type : usedClasses) {
             sb.append(Shape.getStruct(type));
             sb.append("\n");
         }
@@ -50,8 +50,8 @@ public class CodeGenerator implements ASTvisitor {
         sb.append("\n");
     }
 
-    private void generatePrototypes(HashSet<Enums.ClassType> classTypes) {
-        for (Enums.ClassType type : classTypes) {
+    private void generatePrototypes() {
+        for (Enums.ClassType type : usedClasses) {
             sb.append(Shape.getCheckFunctionSignature(type));
             sb.append(";\n");
         }
@@ -59,18 +59,18 @@ public class CodeGenerator implements ASTvisitor {
         sb.append("\n");
     }
 
-    private void generateFunctions(HashSet<Enums.ClassType> classTypes) {
-        for (Enums.ClassType type : classTypes) {
+    private void generateFunctions() {
+        for (Enums.ClassType type : usedClasses) {
             sb.append(Shape.getCheckFunctionSignature(type));
             sb.append("{\n\t");
             sb.append(Shape.getCheckFunctionBody(type));
             sb.append("\n");
         }
 
-        sb.append("\n}");
+        sb.append("}");
     }
 
-    private void generateMain(MainNode mainNode) {
+    private void generateMain() {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
 
         for (SpookObject object : scene.getChildren()) {
@@ -178,11 +178,9 @@ public class CodeGenerator implements ASTvisitor {
                 break;
             case RECTANGLE:
                 if (argumentNodes.size() == 3) {
-                    float width = argumentNodes.get(0).getRealNumberNode().getNumber();
-                    float height = argumentNodes.get(1).getRealNumberNode().getNumber();
                     ClassPropertyNode colorProperty = argumentNodes.get(2).getClassPropertyNode();
 
-                    Vector2 size = new Vector2(width,height);
+                    Vector2 size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
                     Vector4 color = Color.getColorProperty(colorProperty);
 
                     Rectangle rectangle = new Rectangle(objectDeclarationNode.getVariableName(), size, color);
@@ -259,8 +257,8 @@ public class CodeGenerator implements ASTvisitor {
 
             switch (objectFunctionCallNode.getFunctionName()) {
                 case "position":
-                    float x = objectFunctionCallNode.getObjectArguments().get(0).getRealNumberNode().getNumber();
-                    float y = objectFunctionCallNode.getObjectArguments().get(1).getRealNumberNode().getNumber();
+                    ObjectArgumentNode x = objectFunctionCallNode.getObjectArguments().get(0);
+                    ObjectArgumentNode y = objectFunctionCallNode.getObjectArguments().get(1);
                     object.setPosition(new Vector2(x,y));
                     break;
                 default:
