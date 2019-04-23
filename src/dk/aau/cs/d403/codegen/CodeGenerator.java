@@ -25,13 +25,8 @@ public class CodeGenerator implements ASTvisitor {
     private HashSet<Enums.ClassType> usedClasses;
 
     public String GenerateGLSL(ProgramNode ast) {
-        sb = new StringBuilder();
-        scene = new Scene();
-        spookObjects = new HashMap<>();
-        usedClasses = new HashSet<>();
 
         visitProgram(ast);
-        sb = new StringBuilder(); //hacky hack
 
         generateStructs(usedClasses);
         generatePrototypes(usedClasses);
@@ -72,6 +67,12 @@ public class CodeGenerator implements ASTvisitor {
 
     private void generateMain(MainNode mainNode) {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
+
+        sb = new StringBuilder();
+        scene = new Scene();
+        spookObjects = new HashMap<>();
+        usedClasses = new HashSet<>();
+
 
         for (SpookObject object : scene.getChildren()) {
             sb.append("\t");
