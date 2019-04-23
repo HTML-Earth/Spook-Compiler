@@ -128,7 +128,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitArithExpression(SpookParser.ArithExpressionContext ctx) {
 
-        return new ArithExpressionNode(visitLowPrecedence(ctx.lowPrecedence()));
+        return new ArithExpressionNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
     }
 
     @Override
@@ -176,7 +176,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return boolExpressionNode;
         }
         else if (ctx.boolOperations() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new ArrayList<BoolOperationNode>());
+            BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new ArrayList<>());
             boolExpressionNode.setCodePosition(getCodePosition(ctx));
 
             return boolExpressionNode;
@@ -188,24 +188,18 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitMathFunction(SpookParser.MathFunctionContext ctx) {
         Enums.MathFunctionName functionName = getMathFunction(ctx.function());
-        if (ctx.arithOperand() != null) {
-            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (ArithOperandNode)visitArithOperand(ctx.arithOperand()));
-            mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
+        if (ctx.function() != null) {
+            if (ctx.lowPrecedence() != null) {
+                MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
+                mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
 
-            return mathFunctionCallNode;
+                return mathFunctionCallNode;
+            }
+            else
+                throw new CompilerException("Invalid expression in math function", getCodePosition(ctx));
         }
-        else if (ctx.arithOperations() != null) {
-            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, visitAllArithOperations(ctx.arithOperations()));
-            mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
-
-            return mathFunctionCallNode;
-        }
-        else {
-            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName);
-            mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
-
-            return mathFunctionCallNode;
-        }
+        else
+            throw new CompilerException("Invalid math function name", getCodePosition(ctx));
     }
 
     @Override
