@@ -144,10 +144,23 @@ colorFunctionCall
 conditionalStatement
     : ifElseStatement;
 
-// If-else if-else
-ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
+// If-else statement
+ifElseStatement:  ifStatement elseIfStatement* elseStatement?;
 
+// Statements
+ifStatement: IF LEFT_PAREN ifBoolExpression RIGHT_PAREN ifBlock;
+elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock;
+elseStatement: ELSE elseBlock;
 
+// Expressions
+ifBoolExpression: boolExpression;
+elseifBoolExpression: boolExpression;
+
+// Blocks
+ifBlock: conditionalBlock;
+elseIfBlock: conditionalBlock;
+elseBlock: conditionalBlock;
+conditionalBlock: block | statement;
 
 
 /*      LOOPS        */
