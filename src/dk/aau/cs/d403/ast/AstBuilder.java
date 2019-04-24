@@ -68,7 +68,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         else if (ctx.functionCall() != null)
             return visitFunctionCall(ctx.functionCall());
         else if (ctx.conditionalStatement() != null)
-            return visitConditionalStatement(ctx.conditionalStatement());
+            return visitIfElseStatement(ctx.conditionalStatement().ifElseStatement());
+        else if (ctx.iterativeStatement() != null)
+            return visitForStatement(ctx.iterativeStatement().forStatement());
         else {
             throw new CompilerException("Statement is of unknown type", getCodePosition(ctx));
         }
@@ -571,6 +573,126 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         colorFunctionCallNode.setCodePosition(getCodePosition(ctx));
 
         return colorFunctionCallNode;
+    }
+
+    @Override
+    public ASTnode visitTernaryOperator(SpookParser.TernaryOperatorContext ctx) {
+        return super.visitTernaryOperator(ctx);
+    }
+
+    @Override
+    public ASTnode visitIfElseStatement(SpookParser.IfElseStatementContext ctx) {
+        IfStatementNode ifStatementNode = (IfStatementNode) visitIfStatement(ctx.ifStatement());
+        ArrayList<ElseIfStatementNode> elseIfStatementNode = null;
+        ElseStatementNode elseStatementNode = null;
+
+        if (ctx.elseIfStatement() != null) {
+            for (SpookParser.ElseIfStatementContext elseIfStatementContext : ctx.elseIfStatement()) {
+                elseIfStatementNode.add((ElseIfStatementNode) visitElseIfStatement(elseIfStatementContext));
+            }
+        }
+        if (ctx.elseStatement() != null) {
+            elseStatementNode = (ElseStatementNode) visitElseStatement(ctx.elseStatement());
+        }
+
+        return new IfElseStatementNode(ifStatementNode, elseIfStatementNode, elseStatementNode);
+    }
+
+    @Override
+    public ASTnode visitIfStatement(SpookParser.IfStatementContext ctx) {
+        BoolExpressionNode ifBool;
+        BlockNode ifBlock;
+        StatementNode ifStatement;
+
+        if (ctx.ifBoolExpression() != null) {
+            ifBool = (BoolExpressionNode) visitBoolExpression(ctx.ifBoolExpression().boolExpression());
+            if (ctx.ifBlock().conditionalBlock().block() != null) {
+                ifBlock = (BlockNode) visitBlock(ctx.ifBlock().conditionalBlock().block());
+                return new IfStatementNode(ifBool, ifBlock);
+            }
+            else if (ctx.ifBlock().conditionalBlock().statement() != null) {
+                ifStatement = (StatementNode) visitStatement(ctx.ifBlock().conditionalBlock().statement());
+                return new IfStatementNode(ifBool, ifStatement);
+            }
+            else
+                throw new CompilerException("Invalid If-Block or If-Statement", getCodePosition(ctx));
+        }
+        else
+            throw new CompilerException("Invalid If-Boolean expression", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitElseIfStatement(SpookParser.ElseIfStatementContext ctx) {
+        BoolExpressionNode elseIfBool;
+        BlockNode elseIfBlock;
+        StatementNode elseIfStatement;
+
+        if (ctx.elseifBoolExpression() != null) {
+            elseIfBool = (BoolExpressionNode) visitBoolExpression(ctx.elseifBoolExpression().boolExpression());
+            if (ctx.elseIfBlock().conditionalBlock().block() != null) {
+                elseIfBlock = (BlockNode) visitBlock(ctx.elseIfBlock().conditionalBlock().block());
+                return new ElseIfStatementNode(elseIfBool, elseIfBlock);
+            }
+            else if (ctx.elseIfBlock().conditionalBlock().statement() != null) {
+                elseIfStatement = (StatementNode) visitStatement(ctx.elseIfBlock().conditionalBlock().statement());
+                return new ElseIfStatementNode(elseIfBool, elseIfStatement);
+            }
+            else
+                throw new CompilerException("Invalid ElseIf-Block or ElseIf-Statement", getCodePosition(ctx));
+        }
+        else
+            throw new CompilerException("Invalid ElseIf-Boolean expression", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitElseStatement(SpookParser.ElseStatementContext ctx) {
+        BlockNode elseBlock;
+        StatementNode elseStatement;
+
+        if (ctx.elseBlock().conditionalBlock().block() != null) {
+            elseBlock = (BlockNode) visitBlock(ctx.elseBlock().conditionalBlock().block());
+            return new ElseStatementNode(elseBlock);
+        }
+        else if (ctx.elseBlock().conditionalBlock().statement() != null) {
+            elseStatement = (StatementNode) visitStatement(ctx.elseBlock().conditionalBlock().statement());
+            return new ElseStatementNode(elseStatement);
+        }
+        else
+            throw new CompilerException("Invalid Else-Block or Else-Statement", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitForStatement(SpookParser.ForStatementContext ctx) {
+        BlockNode blockNode;
+        StatementNode statementNode;
+
+        ForLoopExpressionNode forLoopExpressionNode1 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(0));
+        ForLoopExpressionNode forLoopExpressionNode2 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(1));
+
+        if (ctx.statement() != null) {
+            statementNode = (StatementNode) visitStatement(ctx.statement());
+            return new ForLoopStatementNode(forLoopExpressionNode1, forLoopExpressionNode2, statementNode);
+        }
+        else if (ctx.block() != null) {
+            blockNode = (BlockNode) visitBlock(ctx.block());
+            return new ForLoopStatementNode(forLoopExpressionNode1, forLoopExpressionNode2, blockNode);
+        }
+        else
+            throw new CompilerException("Invalid ForLoop Statement", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitForLoopExpression(SpookParser.ForLoopExpressionContext ctx) {
+        if (ctx.assignment() != null)
+            return new ForLoopExpressionNode((AssignmentNode) visitAssignment(ctx.assignment()));
+        else if (ctx.DIGIT() != null)
+            return new ForLoopExpressionNode(Integer.valueOf(ctx.DIGIT().getSymbol().getText()));
+        else if (ctx.variableName() != null)
+            return new ForLoopExpressionNode(ctx.variableName().getText());
+        else if (ctx.variableDecl() != null)
+            return new ForLoopExpressionNode((VariableDeclarationNode) visitVariableDecl(ctx.variableDecl()));
+        else
+            throw new CompilerException("Invalid ForLoop expression", getCodePosition(ctx));
     }
 
     private float getRealNumberValue(SpookParser.RealNumberContext ctx) {
