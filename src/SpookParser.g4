@@ -1,157 +1,102 @@
 parser grammar SpookParser;
 options { tokenVocab=SpookLexer; }
 
+
+
+/*      PROGRAM START        */
 // Shader() {} (Needed)
 // Comments, Classes and functions can be declared outside (under) of the main function
 program
     : main (comment | classDecl | functionDecl)*;
 
+
+
+
+/*      MAIN             */
 // Shader() {} (Needed), Declarations (Optional), Comments (Optional)
 main
     : MAIN block;
 
-// One or more declarations
-declarations
-    : declaration SEMICOLON declarations
-    | declaration SEMICOLON;
+// Main block
+block: LEFT_BRACKET (statement | comment)* RIGHT_BRACKET;
 
-// Int/float/vector, booleans, object declarations and object function calls
-declaration
-    : variableDecl
-    | objectDecl;
+// Comment: Single-line
+comment
+    : COMMENT_STRING;
 
-statements
-    : statement statements
-    | statement;
-
+// Statements
 statement
-    : declaration SEMICOLON
+    : declaration
     | assignment SEMICOLON
     | functionCall SEMICOLON
-    | objectVariableAssign SEMICOLON
     | conditionalStatement
     | iterativeStatement;
 
-/* Blocks */
-block: LEFT_BRACKET (statements | comment)* RIGHT_BRACKET;
-functionBlock: LEFT_BRACKET (statements | comment)* returnStatement RIGHT_BRACKET;
-classBlock: LEFT_BRACKET (declarations | functionDecl | comment)* RIGHT_BRACKET;
 
-// Assignment
+
+
+/*      DECLARATIONS       */
+declaration
+    : variableDecl SEMICOLON
+    | objectDecl SEMICOLON;
+
+// Variable declaration
+variableDecl
+    : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
+
+// Object declaration
+objectDecl
+    : className objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
+
+
+
+
+/*      ASSIGNMENT       */
 assignment
-    : variableName ASSIGN (expression | assignedVariableName);
+    : (variableName | swizzle) ASSIGN expression;
 
 expression
-    : variableName
-    | integerExpression
-    | floatExpression
+    : arithExpression
     | vector2Expression
     | vector3Expression
     | vector4Expression
     | boolExpression
-    | ternaryOperator;
+    | ternaryOperator
+    | functionCall;
 
 // Expressions
-integerExpression: naturalNumber | arithOperations | mathFunction;
-floatExpression: realNumber | arithOperations | mathFunction;
-vector2Expression: LEFT_PAREN floatExpression COMMA floatExpression RIGHT_PAREN;
-vector3Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
-vector4Expression: LEFT_PAREN floatExpression COMMA floatExpression COMMA floatExpression COMMA floatExpression RIGHT_PAREN;
+arithExpression: lowPrecedence;
+vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
+vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
+vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: BOOL_LITERAL | boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
-// Conditional statements
-conditionalStatement
-    : ifElseStatement;
-
-// If-else if-else
-ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
-
-// Single-line comment
-comment
-    : COMMENT_STRING;
-
-/* Class declaration */
-classDecl
-    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
-
-/* Object */
-objectDecl
-    : (classType | customClassType) objectVariableName ASSIGN LEFT_PAREN objectArgs* RIGHT_PAREN;
-objectArgs
-    : objectArg COMMA objectArgs
-    | objectArg;
-objectArg
-    : variableName
-    | realNumber
-    | arithOperations
-    | classProperty
-    | functionCall;
-
-//Function calls
-functionCall
-    : nonObjectFunctionCall
-    | objectFunctionCall;
-
-//Non-object funtion calls
-nonObjectFunctionCall
-    :functionName LEFT_PAREN objectArgs RIGHT_PAREN;
-
-//Object variable assignment
-objectVariableAssign
-    : objectVariableName DOT variableName ASSIGN (mathFunction | objectArg);
-
-// Object function calls
-objectFunctionCall
-    : (objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
-    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN);
-
-// Color function call
-classProperty
-    : classType DOT (variableName | predefinedFunctionName);
-
-
-/* Function declaration */
-functionDecl
-    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
-    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
-
-functionArgs
-    : functionArg COMMA functionArgs
-    | functionArg;
-functionArg
-    : dataType variableName;
-
-returnStatement: RETURN (variableName | realNumber | BOOL_LITERAL | expression) SEMICOLON;
-
-/* Integer, float and vector declaration */
-variableDecl
-    : dataType (variableName | assignment);
-
-// Recursive arithmetic operations
-arithOperations
-    : arithOperation arithOperations
-    | arithOperation;
-
-// Arithmetic operations
-arithOperation
-    : arithOperand operator (arithOperand | LEFT_PAREN arithOperations RIGHT_PAREN)
-    | operator (arithOperand | LEFT_PAREN arithOperation RIGHT_PAREN)
-    | LEFT_PAREN arithOperations RIGHT_PAREN;
-
 arithOperand
-    : realNumber | mathFunction | variableName | UNIFORM;
+    : realNumber | mathFunction | variableName | UNIFORM | functionCall | swizzle;
 
 // Mathematical functions
 mathFunction
-    : function LEFT_PAREN (arithOperand | arithOperations) RIGHT_PAREN;
+    : function LEFT_PAREN lowPrecedence RIGHT_PAREN;
 
-//Loops
-iterativeStatement
-    : forStatement;
+//Precedence, goes through low to high, ends at atom
+lowPrecedence
+    : highPrecedence (lowOperator highPrecedence)*;
+highPrecedence
+    : atomPrecedence (highOperator atomPrecedence)*;
+atomPrecedence
+    : SUB? arithOperand
+    | LEFT_PAREN lowPrecedence RIGHT_PAREN;
 
-forStatement
-    : FOR LEFT_PAREN (DIGIT | variableDecl | variableName | assignment) TO DIGIT RIGHT_PAREN (block | statement);
+
+highOperator
+    : MUL
+    | DIV
+    | MOD;
+
+lowOperator
+    : ADD
+    | SUB;
 
 // Recursive boolean operations
 boolOperations
@@ -164,22 +109,120 @@ boolOperation
     | boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
     | LEFT_PAREN boolOperation RIGHT_PAREN;
 
+// Swizzling
+swizzle
+    : variableName DOT coordinateSwizzle
+    | variableName DOT colorSwizzle;
+
+coordinateSwizzle: COORDINATE_SWIZZLE_MASK;
+colorSwizzle: COLOR_SWIZZLE_MASK;
 
 
 
 
+/*      FUNCTION CALLS       */
+functionCall
+    : nonObjectFunctionCall
+    | objectFunctionCall;
 
+
+// Non-object funtion calls (Global functions)
+nonObjectFunctionCall
+    : functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
+
+// Object function calls
+objectFunctionCall
+    : objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
+    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
+
+// Object arguments
+objectArgs
+    : objectArg COMMA objectArgs
+    | objectArg;
+objectArg
+    : lowPrecedence
+    | colorFunctionCall
+    | functionCall;
+
+// Color function call (Color.Black) etc.
+colorFunctionCall
+    : COLOR DOT (predefinedFunctionName | vector3Expression);
+
+
+
+
+/*      CONDITIONAL STATEMENTS      */
+conditionalStatement
+    : ifElseStatement;
+
+// If-else statement
+ifElseStatement:  ifStatement elseIfStatement* elseStatement?;
+
+// Statements
+ifStatement: IF LEFT_PAREN ifBoolExpression RIGHT_PAREN ifBlock;
+elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock;
+elseStatement: ELSE elseBlock;
+
+// Expressions
+ifBoolExpression: boolExpression;
+elseifBoolExpression: boolExpression;
+
+// Blocks
+ifBlock: conditionalBlock;
+elseIfBlock: conditionalBlock;
+elseBlock: conditionalBlock;
+conditionalBlock: block | statement;
+
+
+/*      LOOPS        */
+iterativeStatement
+    : forStatement;
+
+// For loop
+forStatement
+    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
+
+forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
+
+
+
+
+/*      CLASSES     */
+// Class declaration
+classDecl
+    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
+
+// Class block
+classBlock: LEFT_BRACKET (declaration | functionDecl | comment)* RIGHT_BRACKET;
+
+
+
+
+/*      FUNCTIONS    */
+/* Function declaration */
+functionDecl
+    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
+    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+
+functionArgs
+    : functionArg COMMA functionArgs
+    | functionArg;
+functionArg
+    : (dataType | className) variableName;
+
+// Function block
+functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
+
+// Return statement
+returnStatement: RETURN expression SEMICOLON;
+
+
+
+
+/*      HELPERS       */
 // Numbers
-realNumber: naturalNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
-naturalNumber: DIGIT | DIGIT_NEGATIVE;
-
-// Arithmetic operators
-operator
-    : ADD
-    | SUB
-    | MOD
-    | DIV
-    | MUL;
+realNumber: integerNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
+integerNumber: DIGIT | DIGIT_NEGATIVE;
 
 // Boolean operators
 boolOperator
@@ -198,18 +241,19 @@ function
 
 // Return types
 returnType
-    : dataType;
+    : dataType
+    | classType;
 
 // Pre-defined classes
 classType
     : CIRCLE
     | RECTANGLE
     | TRIANGLE
+    | SQUARE
     | SHAPE
-    | COLOR;
-
-customClassType
-    : ID;
+    | COLOR
+    | CIRCLEGRADIENT
+    | LINEGRADIENT;
 
 // Data types
 dataType
@@ -220,11 +264,16 @@ dataType
     | VECTOR3
     | VECTOR4;
 
-// Variable name
 predefinedFunctionName
     : colorName;
 colorName
-    : BLACK | WHITE | RED | GREEN | BLUE;
+    : BLACK
+    | WHITE
+    | RED
+    | GREEN
+    | BLUE;
+
+// Variable names
 objectVariableName
     : ID;
 functionName
@@ -232,6 +281,5 @@ functionName
 variableName
     : ID;
 className
-    : ID;
-assignedVariableName
-    : ID;
+    : ID
+    | classType;

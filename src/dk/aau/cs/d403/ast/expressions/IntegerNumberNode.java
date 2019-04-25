@@ -3,20 +3,20 @@ package dk.aau.cs.d403.ast.expressions;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 
-public class RealNumberNode implements ASTnode {
-    private float number;
+public class IntegerNumberNode implements ASTnode {
+    private int number;
 
-    public RealNumberNode(float number) {
+    public IntegerNumberNode(int number) {
         this.number = number;
     }
 
-    public float getNumber() {
+    public int getNumber() {
         return number;
     }
 
     @Override
     public String prettyPrint() {
-        return String.valueOf(number);
+        return "" + number;
     }
 
     private CodePosition codePosition;

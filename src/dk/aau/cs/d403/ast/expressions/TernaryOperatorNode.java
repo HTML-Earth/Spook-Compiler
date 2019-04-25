@@ -27,7 +27,7 @@ public class TernaryOperatorNode extends ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "Ternary operator";
+        return boolExpressionNode.prettyPrint() + " ? " + expressionNode1.prettyPrint() + " : " + expressionNode2.prettyPrint();
     }
 
     private CodePosition codePosition;

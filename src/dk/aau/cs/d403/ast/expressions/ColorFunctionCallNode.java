@@ -2,21 +2,22 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
+import dk.aau.cs.d403.ast.Enums;
 
-public class RealNumberNode implements ASTnode {
-    private float number;
+public class ColorFunctionCallNode implements ASTnode {
+    private Enums.ColorName colorName;
 
-    public RealNumberNode(float number) {
-        this.number = number;
+    public ColorFunctionCallNode(Enums.ColorName colorName) {
+        this.colorName = colorName;
     }
 
-    public float getNumber() {
-        return number;
+    public Enums.ColorName getClassType() {
+        return colorName;
     }
 
     @Override
     public String prettyPrint() {
-        return String.valueOf(number);
+        return "Color." + Enums.colorToString(colorName);
     }
 
     private CodePosition codePosition;

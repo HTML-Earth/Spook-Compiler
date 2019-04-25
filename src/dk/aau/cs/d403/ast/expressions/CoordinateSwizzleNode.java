@@ -1,22 +1,21 @@
 package dk.aau.cs.d403.ast.expressions;
 
-import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 
-public class RealNumberNode implements ASTnode {
-    private float number;
+public class CoordinateSwizzleNode extends ExpressionNode {
+    private String swizzle;
 
-    public RealNumberNode(float number) {
-        this.number = number;
+    public CoordinateSwizzleNode(String swizzle) {
+        this.swizzle = swizzle;
     }
 
-    public float getNumber() {
-        return number;
+    public String getSwizzle() {
+        return swizzle;
     }
 
     @Override
     public String prettyPrint() {
-        return String.valueOf(number);
+        return swizzle;
     }
 
     private CodePosition codePosition;
