@@ -181,7 +181,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             integerExpressionNode.setCodePosition(getCodePosition(ctx));
             return integerExpressionNode;
         }
-        else if (ctx.arithOperations() != null) {
+        else if (ctx.lowPrecedence() != null) {
             IntegerExpressionNode integerExpressionNode = new IntegerExpressionNode(visitAllArithOperations(ctx.arithOperations()));
             integerExpressionNode.setCodePosition(getCodePosition(ctx));
             return integerExpressionNode;
@@ -202,7 +202,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             floatExpressionNode.setCodePosition(getCodePosition(ctx));
             return floatExpressionNode;
         }
-        else if (ctx.arithOperations() != null) {
+        else if (ctx.lowPrecedence() != null) {
             FloatExpressionNode floatExpressionNode = new FloatExpressionNode(visitAllArithOperations(ctx.arithOperations()));
             floatExpressionNode.setCodePosition(getCodePosition(ctx));
             return floatExpressionNode;
@@ -273,14 +273,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitMathFunction(SpookParser.MathFunctionContext ctx) {
         Enums.MathFunctionName functionName = getMathFunction(ctx.function());
-        if (ctx.arithOperand() != null) {
-            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (ArithOperandNode)visitArithOperand(ctx.arithOperand()));
-            mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
-
-            return mathFunctionCallNode;
-        }
-        else if (ctx.arithOperations() != null) {
-            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, visitAllArithOperations(ctx.arithOperations()));
+        if (ctx.lowPrecedence() != null) {
+            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (ArithOperandNode)visitLowPrecedence(ctx.lowPrecedence()));
             mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
 
             return mathFunctionCallNode;
@@ -465,8 +459,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return objectArgumentNode;
         }
-        else if (ctx.arithOperations() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode(visitAllArithOperations(ctx.arithOperations()));
+        else if (ctx.lowPrecedence() != null) {
+            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
             objectArgumentNode.setCodePosition(getCodePosition(ctx));
 
             return objectArgumentNode;
@@ -479,6 +473,75 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         }
         else
             throw new CompilerException("Invalid Object Function Call Argument", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitLowPrecedence(SpookParser.LowPrecedenceContext ctx) {
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+        ArrayList<Enums.Operator> operators = new ArrayList<>();
+
+
+        //High Precedence Nodes
+        for (SpookParser.HighPrecedenceContext highPrecedence : ctx.highPrecedence()) {
+            highPrecedenceNodes.add((HighPrecedenceNode) visitHighPrecedence(highPrecedence));
+        }
+
+        //Operators
+        for (SpookParser.LowOperatorContext lowOperatorContext : ctx.lowOperator()) {
+            operators.add(getOperator(lowOperatorContext));
+        }
+
+        if (highPrecedenceNodes.size() == 1) {
+            return new LowPrecedenceNode(highPrecedenceNodes);
+        } else {
+            return new LowPrecedenceNode(highPrecedenceNodes, operators);
+        }
+    }
+
+    @Override
+    public ASTnode visitHighPrecedence(SpookParser.HighPrecedenceContext ctx) {
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+        ArrayList<Enums.Operator> operators = new ArrayList<>();
+
+
+        //Atom Precedence Nodes
+        for (SpookParser.AtomPrecedenceContext atomPrecedence : ctx.atomPrecedence()) {
+            atomPrecedenceNodes.add((AtomPrecedenceNode) visitAtomPrecedence(atomPrecedence));
+        }
+
+        //Operators
+        for (SpookParser.HighOperatorContext highOperatorContext : ctx.highOperator()) {
+            operators.add(getOperator(highOperatorContext));
+        }
+
+        if (atomPrecedenceNodes.size() == 1) {
+            return new HighPrecedenceNode(atomPrecedenceNodes);
+        } else {
+            return new HighPrecedenceNode(atomPrecedenceNodes, operators);
+        }
+    }
+
+    @Override
+    public ASTnode visitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx) {
+        //return -operand AtomNode
+        if (ctx.SUB() != null && ctx.arithOperand() != null) {
+            ArithOperandNode atomOperandNode = (ArithOperandNode) visitArithOperand(ctx.arithOperand());
+            atomOperandNode.setCodePosition(getCodePosition(ctx));
+            return new AtomPrecedenceNode(Enums.Operator.SUB, atomOperandNode);
+        }
+        //return operand AtomNode
+        else if (ctx.arithOperand() != null) {
+            ArithOperandNode atomOperandNode = (ArithOperandNode) visitArithOperand(ctx.arithOperand());
+            atomOperandNode.setCodePosition(getCodePosition(ctx));
+            return new AtomPrecedenceNode(atomOperandNode);
+        }
+        //return (lowprecedence) AtomNode
+        else if (ctx.lowPrecedence() != null) {
+            LowPrecedenceNode lowPrecedenceNode = (LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence());
+            lowPrecedenceNode.setCodePosition(getCodePosition(ctx));
+            return new AtomPrecedenceNode(lowPrecedenceNode);
+        } else
+            throw new CompilerException("Invalid AtomPrecedence Operation", getCodePosition(ctx));
     }
 
     @Override
@@ -706,14 +769,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return classType;
     }
 
-    private Enums.Operator getOperator(SpookParser.OperatorContext ctx) {
+    private Enums.Operator getOperator(SpookParser.HighOperatorContext ctx) {
         Enums.Operator operator;
 
-        if (ctx.ADD() != null)
-            operator = Enums.Operator.ADD;
-        else if (ctx.SUB() != null)
-            operator = Enums.Operator.SUB;
-        else if (ctx.MOD() != null)
+        if (ctx.MOD() != null)
             operator = Enums.Operator.MOD;
         else if (ctx.DIV() != null)
             operator = Enums.Operator.DIV;
@@ -724,6 +783,20 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         return operator;
     }
+
+    private Enums.Operator getOperator(SpookParser.LowOperatorContext ctx) {
+        Enums.Operator operator;
+
+        if (ctx.ADD() != null)
+            operator = Enums.Operator.ADD;
+        else if (ctx.SUB() != null)
+            operator = Enums.Operator.SUB;
+        else
+            throw new CompilerException("Operator is unknown", getCodePosition(ctx));
+
+        return operator;
+    }
+
 
     private Enums.MathFunctionName getMathFunction(SpookParser.FunctionContext ctx) {
         Enums.MathFunctionName mathFunction;

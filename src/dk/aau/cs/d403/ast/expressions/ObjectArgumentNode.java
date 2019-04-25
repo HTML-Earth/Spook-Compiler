@@ -3,13 +3,11 @@ package dk.aau.cs.d403.ast.expressions;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 
-import java.util.ArrayList;
-
 public class ObjectArgumentNode implements ASTnode {
 
     private String variableName;
     private RealNumberNode realNumberNode;
-    private ArrayList<ArithOperationNode> arithOperationNodes;
+    private LowPrecedenceNode lowPrecedenceNode;
     private ClassPropertyNode classPropertyNode;
 
     public ObjectArgumentNode(String variableName) {
@@ -20,8 +18,8 @@ public class ObjectArgumentNode implements ASTnode {
         this.realNumberNode = realNumberNode;
     }
 
-    public ObjectArgumentNode(ArrayList<ArithOperationNode> arithOperationNodes) {
-        this.arithOperationNodes = arithOperationNodes;
+    public ObjectArgumentNode(LowPrecedenceNode lowPrecedenceNode) {
+        this.lowPrecedenceNode = lowPrecedenceNode;
     }
 
     public ObjectArgumentNode(ClassPropertyNode classPropertyNode) {
@@ -36,8 +34,8 @@ public class ObjectArgumentNode implements ASTnode {
         return realNumberNode;
     }
 
-    public ArrayList<ArithOperationNode> getArithOperationNodes() {
-        return arithOperationNodes;
+    public LowPrecedenceNode getLowPrecedenceNode() {
+        return lowPrecedenceNode;
     }
 
     public ClassPropertyNode getClassPropertyNode() {
@@ -50,13 +48,8 @@ public class ObjectArgumentNode implements ASTnode {
             return variableName;
         else if (realNumberNode != null)
             return realNumberNode.prettyPrint();
-        else if (arithOperationNodes != null) {
-            StringBuilder sb = new StringBuilder();
-            for (ArithOperationNode arithOperationNode : arithOperationNodes) {
-                sb.append(arithOperationNode.prettyPrint());
-            }
-            return sb.toString();
-        }
+        else if (lowPrecedenceNode != null)
+            return lowPrecedenceNode.prettyPrint();
         else if (classPropertyNode != null)
             return classPropertyNode.prettyPrint();
         else
