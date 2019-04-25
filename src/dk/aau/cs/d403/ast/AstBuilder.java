@@ -163,7 +163,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
 
     public ASTnode visitArithExpression(SpookParser.ArithExpressionContext ctx) {
-
         return new ArithExpressionNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
     }
 
@@ -272,18 +271,26 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
-        Enums.ClassType classType = getClassType(ctx.classType());
+        String className;
+
         String objectName = ctx.objectVariableName().getText();
+
+        if (ctx.className() != null) {
+            className = ctx.className().getText();
+        }
+        else
+            throw new CompilerException("Invalid Class name for Object Declaration", getCodePosition(ctx));
+
         if (ctx.objectArgs() != null) {
             ArrayList<ObjectArgumentNode> objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs());
 
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(classType, objectName, objectArgumentNodes);
+            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName, objectArgumentNodes);
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
 
             return objectDeclarationNode;
         }
         else {
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(classType, objectName);
+            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName);
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
 
             return objectDeclarationNode;
@@ -297,6 +304,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         {
             returnType = getReturnType(ctx.returnType());
         }
+        else
+            throw new CompilerException("Invalid return type", getCodePosition(ctx));
 
         if (getReturnType(ctx.returnType()) != Enums.ReturnType.VOID) {
             if (ctx.functionArgs() != null) {
@@ -339,8 +348,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitFunctionBlock(SpookParser.FunctionBlockContext ctx) {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
-        for (SpookParser.StatementContext statement: ctx.statement()) {
-            statementNodes.add((StatementNode) visitStatement(statement));
+        if (ctx.statement() != null) {
+            for (SpookParser.StatementContext statement : ctx.statement()) {
+                statementNodes.add((StatementNode) visitStatement(statement));
+            }
         }
 
         BlockNode blockNode = new BlockNode(statementNodes, (ReturnNode) visitReturnStatement(ctx.returnStatement()));
@@ -351,22 +362,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitReturnStatement(SpookParser.ReturnStatementContext ctx) {
-        if (ctx.variableName() != null) {
-            ReturnNode returnNode = new ReturnNode(ctx.variableName().getText());
-            returnNode.setCodePosition(getCodePosition(ctx));
-            return returnNode;
-        }
-        else if (ctx.realNumber() != null) {
-            ReturnNode returnNode = new ReturnNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
-            returnNode.setCodePosition(getCodePosition(ctx));
-            return returnNode;
-        }
-        else if (ctx.BOOL_LITERAL() != null) {
-            ReturnNode returnNode = new ReturnNode(getBooleanValue(ctx.BOOL_LITERAL()));
-            returnNode.setCodePosition(getCodePosition(ctx));
-            return returnNode;
-        }
-        else if (ctx.expression() != null) {
+        if (ctx.expression() != null) {
             ReturnNode returnNode = new ReturnNode((ExpressionNode) visitExpression(ctx.expression()));
             returnNode.setCodePosition(getCodePosition(ctx));
             return returnNode;

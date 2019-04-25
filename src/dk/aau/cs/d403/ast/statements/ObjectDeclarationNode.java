@@ -9,23 +9,23 @@ import java.util.ArrayList;
 import static dk.aau.cs.d403.ast.Enums.classTypeToString;
 
 public class ObjectDeclarationNode extends DeclarationNode {
-    private Enums.ClassType objectType;
+    private String objectType;
     private String variableName;
 
     ArrayList<ObjectArgumentNode> objectArgumentNodes;
 
-    public ObjectDeclarationNode(Enums.ClassType objectType, String variableName) {
+    public ObjectDeclarationNode(String objectType, String variableName) {
         this.objectType = objectType;
         this.variableName = variableName;
     }
 
-    public ObjectDeclarationNode(Enums.ClassType objectType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+    public ObjectDeclarationNode(String objectType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
         this.objectType = objectType;
         this.variableName = variableName;
         this.objectArgumentNodes = objectArgumentNodes;
     }
 
-    public Enums.ClassType getObjectType() {
+    public String getObjectType() {
         return objectType;
     }
 
@@ -40,7 +40,7 @@ public class ObjectDeclarationNode extends DeclarationNode {
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
-        sb.append(classTypeToString(objectType));
+        sb.append(objectType);
         sb.append(" ");
         sb.append(variableName);
         sb.append(" = ");
