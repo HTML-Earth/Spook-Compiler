@@ -37,15 +37,16 @@ Shader{
 
 #Totally unnecessary function to create new circles
 Circle circleFactory(Int radius, Color color) {
-  return Circle(radius, color);
+  Circle circle = (radius, color);
+  return circle;
 }
 
 Class Bulletbill extends Shape{
   Float length, height;
   Float radius = height/2;
   #Color from Shape
-  Rectangle body;
-  Circle head;
+  Rectangle body = ();
+  Circle head = ();
   Color shadow = Color(105, 105, 105);
 
   #Constructor
