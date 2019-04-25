@@ -1,5 +1,4 @@
 // Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
-package dk.aau.cs.d403.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
