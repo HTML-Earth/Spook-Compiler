@@ -60,10 +60,8 @@ public class CodeGenerator {
             sb.append(getClassCode(type, "getCheckFunctionSignature"));
             sb.append("{\n\t");
             sb.append(getClassCode(type, "getCheckFunctionBody"));
-            sb.append("\n");
+            sb.append("\n}\n");
         }
-
-        sb.append("}");
     }
 
     private void generateMain() {
