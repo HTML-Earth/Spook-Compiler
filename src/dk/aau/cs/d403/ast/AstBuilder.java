@@ -747,7 +747,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         if (ctx.assignment() != null)
             return new ForLoopExpressionNode((AssignmentNode) visitAssignment(ctx.assignment()));
         else if (ctx.DIGIT() != null)
-            return new ForLoopExpressionNode(Integer.valueOf(ctx.DIGIT().getSymbol().getText()));
+            return new ForLoopExpressionNode(new IntegerNumberNode(Integer.valueOf(ctx.DIGIT().getSymbol().getText())));
         else if (ctx.variableName() != null)
             return new ForLoopExpressionNode(ctx.variableName().getText());
         else if (ctx.variableDecl() != null)
