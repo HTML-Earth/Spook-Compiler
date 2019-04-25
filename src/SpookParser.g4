@@ -214,7 +214,7 @@ functionArg
 functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
 
 // Return statement
-returnStatement: RETURN (variableName | realNumber | BOOL_LITERAL | expression) SEMICOLON;
+returnStatement: RETURN expression SEMICOLON;
 
 
 
