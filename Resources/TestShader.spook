@@ -22,7 +22,7 @@ Shader {
     Circle shadow = (shadowSize, shadowColor);
 
     #Shiny ball gradient
-    Circle shiny = (Color.white, ballSize/2);
+    Circle shiny = (Color.White, ballSize/2);
     shiny.position = (ballSize/2, ballSize/2);
     ball.add(shiny);
 
@@ -31,17 +31,17 @@ Shader {
     shadow.position = (xPos, groundHeight);
 
     #Setup scene
-    Scene.color = Color.gray;
+    Scene.color = Color.Black;
 
     Scene.add(shadow);
     Scene.add(ball);
 }
 
 
-class CustomShape {
+Class CustomShape {
     Int sides = 4;
 }
 
-float GiveMeTen(int irrelevant) {
-    Float result = 10;
+Float GiveMeTen(Int irrelevant) {
+    return 10;
 }

@@ -1,22 +1,22 @@
 package dk.aau.cs.d403.ast.expressions;
 
 public class Vector3ExpressionNode extends Vector2ExpressionNode {
-    protected FloatExpressionNode floatExpressionNode3;
+    protected ArithExpressionNode arithExpressionNode3;
 
-    public Vector3ExpressionNode(FloatExpressionNode floatExpressionNode1, FloatExpressionNode floatExpressionNode2, FloatExpressionNode floatExpressionNode3) {
-        super(floatExpressionNode1, floatExpressionNode2);
-        this.floatExpressionNode3 = floatExpressionNode3;
+    public Vector3ExpressionNode(ArithExpressionNode arithExpressionNode1, ArithExpressionNode arithExpressionNode2, ArithExpressionNode arithExpressionNode3) {
+        super(arithExpressionNode1, arithExpressionNode2);
+        this.arithExpressionNode3 = arithExpressionNode3;
     }
 
-    public FloatExpressionNode getFloatExpressionNode3() {
-        return floatExpressionNode3;
+    public ArithExpressionNode getArithExpressionNode3() {
+        return arithExpressionNode3;
     }
 
     @Override
     public String prettyPrint() {
-        return "(" + floatExpressionNode1.prettyPrint()
-                + ", " + floatExpressionNode2.prettyPrint()
-                + ", " + floatExpressionNode3.prettyPrint()
+        return "(" + arithExpressionNode1.prettyPrint()
+                + ", " + arithExpressionNode2.prettyPrint()
+                + ", " + arithExpressionNode3.prettyPrint()
                 + ")";
     }
 }
