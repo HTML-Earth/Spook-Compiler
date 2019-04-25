@@ -280,4 +280,5 @@ functionName
 variableName
     : ID;
 className
-    : ID;
+    : ID
+    | classType;
