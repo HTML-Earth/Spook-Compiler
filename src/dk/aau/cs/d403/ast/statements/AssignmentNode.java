@@ -2,13 +2,20 @@ package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.expressions.ExpressionNode;
+import dk.aau.cs.d403.ast.expressions.SwizzleNode;
 
 public class AssignmentNode extends StatementNode {
     private String variableName;
     private ExpressionNode expressionNode;
+    private SwizzleNode swizzleNode;
 
     public AssignmentNode(String variableName, ExpressionNode expressionNode) {
         this.variableName = variableName;
+        this.expressionNode = expressionNode;
+    }
+
+    public AssignmentNode(SwizzleNode swizzleNode, ExpressionNode expressionNode) {
+        this.swizzleNode = swizzleNode;
         this.expressionNode = expressionNode;
     }
 
@@ -18,6 +25,10 @@ public class AssignmentNode extends StatementNode {
 
     public ExpressionNode getExpressionNode() {
         return expressionNode;
+    }
+
+    public SwizzleNode getSwizzleNode() {
+        return swizzleNode;
     }
 
     @Override

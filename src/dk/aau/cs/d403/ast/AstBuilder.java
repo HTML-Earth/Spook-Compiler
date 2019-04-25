@@ -90,10 +90,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitVariableDecl(SpookParser.VariableDeclContext ctx) {
 
         if (ctx.assignment() != null) {
-            return new VariableDeclarationNode(getDataType(ctx.dataType()), (AssignmentNode)visitAssignment(ctx.assignment()));
+            return new VariableDeclarationNode(getDataType(ctx.dataType()), (AssignmentNode)visitAssignment(ctx.assignment(0)));
         }
         else if (ctx.variableName() != null) {
-            return new VariableDeclarationNode(getDataType(ctx.dataType()), ctx.variableName().getText());
+            return new VariableDeclarationNode(getDataType(ctx.dataType()), ctx.variableName(0).getText());
         }
         else {
             throw new CompilerException("Expected variable name or assignment in declaration", getCodePosition(ctx));
@@ -102,11 +102,43 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitAssignment(SpookParser.AssignmentContext ctx) {
-        ExpressionNode expressionNode = (ExpressionNode)visitExpression(ctx.expression());
-        AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), expressionNode);
-        assignmentNode.setCodePosition(getCodePosition(ctx));
+        ExpressionNode expressionNode;
 
-        return assignmentNode;
+        if (ctx.expression() != null) {
+            expressionNode = (ExpressionNode)visitExpression(ctx.expression());
+        }
+        else
+            throw new CompilerException("Invalid expression in assignment", getCodePosition(ctx));
+
+        if (ctx.swizzle() != null) {
+            AssignmentNode assignmentNode = new AssignmentNode((SwizzleNode) visitSwizzle(ctx.swizzle()), expressionNode);
+            assignmentNode.setCodePosition(getCodePosition(ctx));
+            return assignmentNode;
+        }
+        else if (ctx.variableName() != null) {
+            AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), expressionNode);
+            assignmentNode.setCodePosition(getCodePosition(ctx));
+            return assignmentNode;
+        }
+        else
+            throw new CompilerException("Expected variable name or swizzle in assignment", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitSwizzle(SpookParser.SwizzleContext ctx) {
+        if (ctx.variableName() != null) {
+            String variableName = ctx.variableName().getText();
+            if (ctx.colorSwizzle() != null) {
+                return new SwizzleNode(variableName, new ColorSwizzleNode(ctx.colorSwizzle().getText()));
+            }
+            else if (ctx.coordinateSwizzle() != null) {
+                return new SwizzleNode(variableName, new CoordinateSwizzleNode(ctx.coordinateSwizzle().getText()));
+            }
+            else
+                throw new CompilerException("Expected Color- or Coordinate swizzle", getCodePosition(ctx));
+        }
+        else
+            throw new CompilerException("Expected variable name for swizzle", getCodePosition(ctx));
     }
 
     @Override
@@ -123,6 +155,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return visitBoolExpression(ctx.boolExpression());
         else if (ctx.ternaryOperator() != null)
             return visitTernaryOperator(ctx.ternaryOperator());
+        else if (ctx.functionCall() != null)
+            return visitFunctionCall(ctx.functionCall());
         else
             throw new CompilerException("Invalid expression", getCodePosition(ctx));
     }
@@ -189,8 +223,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitMathFunction(SpookParser.MathFunctionContext ctx) {
-        Enums.MathFunctionName functionName = getMathFunction(ctx.function());
         if (ctx.function() != null) {
+            Enums.MathFunctionName functionName = getMathFunction(ctx.function());
             if (ctx.lowPrecedence() != null) {
                 MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
                 mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
@@ -240,7 +274,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         Enums.ClassType classType = getClassType(ctx.classType());
         String objectName = ctx.objectVariableName().getText();
         if (ctx.objectArgs() != null) {
-            ArrayList<ObjectArgumentNode> objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs(0));
+            ArrayList<ObjectArgumentNode> objectArgumentNodes = visitAllObjectArguments(ctx.objectArgs());
 
             ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(classType, objectName, objectArgumentNodes);
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
@@ -577,7 +611,27 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitTernaryOperator(SpookParser.TernaryOperatorContext ctx) {
-        return super.visitTernaryOperator(ctx);
+        BoolExpressionNode boolExpression;
+        ExpressionNode expression1;
+        ExpressionNode expression2;
+
+        if (ctx.boolExpression() != null) {
+            boolExpression = (BoolExpressionNode) visitBoolExpression(ctx.boolExpression());
+
+            if (ctx.expression(0) != null)
+                expression1 = (ExpressionNode) visitExpression(ctx.expression(0));
+            else
+                throw new CompilerException("Invalid first expression for Ternary operator", getCodePosition(ctx));
+
+            if (ctx.expression(1) != null)
+                expression2 = (ExpressionNode) visitExpression(ctx.expression(1));
+            else
+                throw new CompilerException("Invalid second expression for Ternary operator", getCodePosition(ctx));
+        }
+        else
+            throw new CompilerException("Invalid Boolean expression in Ternary operator", getCodePosition(ctx));
+
+        return new TernaryOperatorNode(boolExpression, expression1, expression2);
     }
 
     @Override
@@ -587,8 +641,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         ElseStatementNode elseStatementNode = null;
 
         if (ctx.elseIfStatement() != null) {
-            for (SpookParser.ElseIfStatementContext elseIfStatementContext : ctx.elseIfStatement()) {
-                elseIfStatementNode.add((ElseIfStatementNode) visitElseIfStatement(elseIfStatementContext));
+            for (SpookParser.ElseIfStatementContext elseIfStatement : ctx.elseIfStatement()) {
+                elseIfStatementNode.add((ElseIfStatementNode) visitElseIfStatement(elseIfStatement));
             }
         }
         if (ctx.elseStatement() != null) {

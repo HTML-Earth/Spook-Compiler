@@ -53,7 +53,7 @@ objectDecl
 
 /*      ASSIGNMENT       */
 assignment
-    : (variableName | swizzle) ASSIGN (expression | functionCall | swizzle);
+    : (variableName | swizzle) ASSIGN expression;
 
 expression
     : arithExpression
@@ -61,7 +61,8 @@ expression
     | vector3Expression
     | vector4Expression
     | boolExpression
-    | ternaryOperator;
+    | ternaryOperator
+    | functionCall;
 
 // Expressions
 arithExpression: lowPrecedence;
