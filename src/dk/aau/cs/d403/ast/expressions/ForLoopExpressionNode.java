@@ -8,15 +8,15 @@ public class ForLoopExpressionNode extends ExpressionNode {
     private VariableDeclarationNode variableDeclarationNode;
     private String variableName;
     private AssignmentNode assignmentNode;
-    private int number;
+    private IntegerNumberNode integerNumberNode;
 
     // Constructors
     public ForLoopExpressionNode(AssignmentNode assignmentNode) {
         this.assignmentNode = assignmentNode;
     }
 
-    public ForLoopExpressionNode(int number) {
-        this.number = number;
+    public ForLoopExpressionNode(IntegerNumberNode integerNumberNode) {
+        this.integerNumberNode = integerNumberNode;
     }
 
     public ForLoopExpressionNode(VariableDeclarationNode variableDeclarationNode) {
@@ -40,13 +40,22 @@ public class ForLoopExpressionNode extends ExpressionNode {
         return assignmentNode;
     }
 
-    public int getNumber() {
-        return number;
+    public IntegerNumberNode getIntegerNumberNode() {
+        return integerNumberNode;
     }
 
     @Override
     public String prettyPrint() {
-        return "ForLoop Expression";
+        if (variableDeclarationNode != null)
+            return variableDeclarationNode.prettyPrint();
+        else if (variableName != null)
+            return variableName;
+        else if (assignmentNode != null)
+            return assignmentNode.prettyPrint();
+        else if (integerNumberNode != null)
+            return integerNumberNode.prettyPrint();
+        else
+            return "Invalid ForLoop Expression";
     }
 
     private CodePosition codePosition;

@@ -6,6 +6,8 @@ import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 
 import java.util.ArrayList;
 
+import static dk.aau.cs.d403.ast.Enums.classTypeToString;
+
 public class ObjectDeclarationNode extends DeclarationNode {
     private Enums.ClassType objectType;
     private String variableName;
@@ -37,7 +39,27 @@ public class ObjectDeclarationNode extends DeclarationNode {
 
     @Override
     public String prettyPrint() {
-        return "Object Declaration";
+        StringBuilder sb = new StringBuilder();
+        sb.append(classTypeToString(objectType));
+        sb.append(" ");
+        sb.append(variableName);
+        sb.append(" = ");
+        sb.append("(");
+
+        if (objectArgumentNodes != null) {
+            //Print ',' before each arg except the first
+            boolean firstArg = true;
+            for (ObjectArgumentNode arg : objectArgumentNodes) {
+                if (!firstArg)
+                    sb.append(", ");
+                else
+                    firstArg = false;
+                sb.append(arg.prettyPrint());
+            }
+        }
+
+        sb.append(")");
+        return sb.toString();
     }
 
     private CodePosition codePosition;

@@ -33,7 +33,12 @@ public class AssignmentNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return variableName + " = " + expressionNode.prettyPrint() + ";";
+        if (swizzleNode != null)
+            return swizzleNode.prettyPrint() + " = " + expressionNode.prettyPrint() + ";";
+        else if (variableName != null)
+            return variableName + " = " + expressionNode.prettyPrint() + ";";
+        else
+            return "Invalid Assignment";
     }
 
     private CodePosition codePosition;

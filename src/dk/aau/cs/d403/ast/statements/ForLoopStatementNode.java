@@ -26,7 +26,22 @@ public class ForLoopStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return "ForLoop Statement";
+        StringBuilder sb = new StringBuilder();
+        sb.append("for (");
+        sb.append(forLoopExpressionNode1.prettyPrint());
+        sb.append(" to ");
+        sb.append(forLoopExpressionNode2.prettyPrint());
+        sb.append(") ");
+
+        if (blockNode != null) {
+            sb.append(blockNode.prettyPrint());
+        }
+        else if (statementNode != null) {
+            sb.append("\n\t");
+            sb.append(statementNode.prettyPrint());
+        }
+
+        return sb.toString();
     }
 
     private CodePosition codePosition;

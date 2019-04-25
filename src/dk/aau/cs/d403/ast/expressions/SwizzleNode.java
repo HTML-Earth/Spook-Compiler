@@ -31,7 +31,12 @@ public class SwizzleNode extends ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "Swizzle";
+        if (colorSwizzle != null)
+            return variableName + "." + colorSwizzle.prettyPrint();
+        else if (coordinateSwizzle != null)
+            return variableName + "." + coordinateSwizzle.prettyPrint();
+        else
+            return "Invalid swizzle";
     }
 
     private CodePosition codePosition;

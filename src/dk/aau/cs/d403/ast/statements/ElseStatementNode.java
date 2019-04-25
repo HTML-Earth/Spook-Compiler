@@ -25,7 +25,12 @@ public class ElseStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return "Else statement";
+        if (elseBlock != null)
+            return "else " + elseBlock.prettyPrint();
+        else if (elseStatement != null)
+            return "else " + elseStatement.prettyPrint();
+        else
+            return "Invalid else statement";
     }
 
     private CodePosition codePosition;

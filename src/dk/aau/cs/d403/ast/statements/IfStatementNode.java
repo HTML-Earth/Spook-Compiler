@@ -33,7 +33,12 @@ public class IfStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return "If statement";
+        if (ifBlock != null)
+            return "if (" + ifBool.prettyPrint() + ") " + ifBlock.prettyPrint();
+        else if (ifStatement != null)
+            return "if (" + ifBool.prettyPrint() + ")\n\t" + ifStatement.prettyPrint();
+        else
+            return "Invalid If-statement";
     }
 
     private CodePosition codePosition;

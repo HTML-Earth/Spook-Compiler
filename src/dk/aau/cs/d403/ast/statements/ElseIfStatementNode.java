@@ -33,7 +33,14 @@ public class ElseIfStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return "If else statement";
+        if (elseIfBlock != null) {
+            return "else if (" + elseIfBool.prettyPrint() + ") " + elseIfBlock.prettyPrint();
+        }
+        else if (elseIfStatement != null) {
+            return "else if (" + elseIfBool.prettyPrint() + ")\n\t" + elseIfStatement.prettyPrint();
+        }
+        else
+            return "Invalid ElseIf statement";
     }
 
     private CodePosition codePosition;
