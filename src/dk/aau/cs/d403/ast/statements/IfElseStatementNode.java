@@ -31,7 +31,20 @@ public class IfElseStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint() {
-        return "If else statement";
+        StringBuilder sb = new StringBuilder();
+        sb.append(ifStatementNode.prettyPrint());
+        sb.append("\n");
+        if (elseIfStatementNodes != null) {
+            for (ElseIfStatementNode elseIfStatementNode : elseIfStatementNodes) {
+                sb.append(elseIfStatementNode.prettyPrint());
+            }
+        }
+        if (elseStatementNode != null) {
+            sb.append("\n");
+            sb.append(elseStatementNode.prettyPrint());
+        }
+
+        return sb.toString();
     }
 
     private CodePosition codePosition;

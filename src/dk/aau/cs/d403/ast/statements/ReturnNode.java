@@ -46,6 +46,8 @@ public class ReturnNode extends StatementNode {
             returnValue = variableName;
         else if (realNumberNode != null)
             returnValue = realNumberNode.prettyPrint();
+        else if (expressionNode != null)
+            returnValue = expressionNode.prettyPrint();
         else
             returnValue = "" + boolLiteral;
 

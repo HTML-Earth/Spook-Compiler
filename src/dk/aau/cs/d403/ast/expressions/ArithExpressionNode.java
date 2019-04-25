@@ -15,7 +15,7 @@ public class ArithExpressionNode extends ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "Arithmetic Expression";
+        return lowPrecedenceNode.prettyPrint();
     }
 
     private CodePosition codePosition;

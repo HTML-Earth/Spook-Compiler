@@ -49,11 +49,20 @@ public class FunctionDeclarationNode implements ASTnode {
         sb.append(Enums.returnTypeToStringSpook(returnType));
         sb.append(" ");
         sb.append(functionName);
-        sb.append("() {\n");
-
-        //for each declaration / function
-
-        sb.append("\n}");
+        sb.append("(");
+        if (functionArgNodes != null) {
+            //Print ',' before each arg except the first
+            boolean firstArg = true;
+            for (FunctionArgNode arg : functionArgNodes) {
+                if (!firstArg)
+                    sb.append(", ");
+                else
+                    firstArg = false;
+                sb.append(arg.prettyPrint());
+            }
+        }
+        sb.append(") ");
+        sb.append(blockNode.prettyPrint());
 
         return sb.toString();
     }

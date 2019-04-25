@@ -15,7 +15,7 @@ public class ColorSwizzleNode extends ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "Color swizzle";
+        return swizzle;
     }
 
     private CodePosition codePosition;

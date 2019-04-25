@@ -15,7 +15,7 @@ public class CoordinateSwizzleNode extends ExpressionNode {
 
     @Override
     public String prettyPrint() {
-        return "Coordinate Swizzle";
+        return swizzle;
     }
 
     private CodePosition codePosition;
