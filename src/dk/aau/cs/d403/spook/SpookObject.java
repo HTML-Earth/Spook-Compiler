@@ -1,21 +1,27 @@
 package dk.aau.cs.d403.spook;
 
+import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
+import dk.aau.cs.d403.spook.shapes.Rectangle;
+import dk.aau.cs.d403.spook.shapes.Shape;
+
 import java.util.ArrayList;
 
 public abstract class SpookObject {
+    protected Enums.ClassType classType;
     protected String name;
     protected Vector2 position;
-    protected float rotation;
+    protected ObjectArgumentNode rotation;
 
     protected SpookObject parent;
     protected ArrayList<SpookObject> children;
 
-    public String getName() {
-        return name;
+    public Enums.ClassType getClassType() {
+        return classType;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return name;
     }
 
     public Vector2 getPosition() {
@@ -26,11 +32,11 @@ public abstract class SpookObject {
         this.position = position;
     }
 
-    public float getRotation() {
+    public ObjectArgumentNode getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    public void setRotation(ObjectArgumentNode rotation) {
         this.rotation = rotation;
     }
 
@@ -47,4 +53,34 @@ public abstract class SpookObject {
     }
 
     public abstract String getDeclaration();
+
+    public static Class getClassFromClassType(Enums.ClassType classType) {
+        String className;
+        String packagePath = "dk.aau.cs.d403.spook.shapes";
+
+        switch (classType) {
+            case CIRCLE:
+                className = "Circle";
+                break;
+            case RECTANGLE:
+                className = "Rectangle";
+                break;
+            case SQUARE:
+                className = "Square";
+                break;
+            case TRIANGLE:
+                className = "Triangle";
+                break;
+            default:
+                throw new RuntimeException(classType.toString() + " unavailable");
+        }
+
+        try {
+            return Class.forName(packagePath + "." + className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+
+            return Shape.class;
+        }
+    }
 }
