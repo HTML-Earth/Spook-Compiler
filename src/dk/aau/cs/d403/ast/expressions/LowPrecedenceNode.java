@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.ast.expressions;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
@@ -9,28 +10,24 @@ import java.util.ArrayList;
 import static dk.aau.cs.d403.ast.Enums.operatorToString;
 
 public class LowPrecedenceNode implements ASTnode {
-    private HighPrecedenceNode highPrecedenceNode;
     private ArrayList<HighPrecedenceNode> highPrecedenceNodes;
     private ArrayList<Enums.Operator> operators;
 
     //Low -> High
-    public LowPrecedenceNode(HighPrecedenceNode highPrecedenceNode) {
-        this.highPrecedenceNode = highPrecedenceNode;
+
+
+    public LowPrecedenceNode(ArrayList<HighPrecedenceNode> highPrecedenceNodes) {
+        this.highPrecedenceNodes = highPrecedenceNodes;
     }
 
     //Low -> High (Operator High)*
-    public LowPrecedenceNode(HighPrecedenceNode highPrecedenceNode, ArrayList<HighPrecedenceNode> highPrecedenceNodes, ArrayList<Enums.Operator> operators) {
+    public LowPrecedenceNode(ArrayList<HighPrecedenceNode> highPrecedenceNodes, ArrayList<Enums.Operator> operators) {
         //Check for illegal operators
         if (!(operators.contains(Enums.Operator.ADD) || operators.contains(Enums.Operator.SUB))) {
-            throw new IllegalArgumentException("MUL, DIV & MOD are not Low Precedence");
+            throw new CompilerException("MUL, DIV & MOD are not Low Precedence", getCodePosition());
         }
-        this.highPrecedenceNode = highPrecedenceNode;
         this.highPrecedenceNodes = highPrecedenceNodes;
         this.operators = operators;
-    }
-
-    public HighPrecedenceNode getHighPrecedenceNode() {
-        return highPrecedenceNode;
     }
 
     public ArrayList<HighPrecedenceNode> getHighPrecedenceNodes() {
@@ -44,18 +41,17 @@ public class LowPrecedenceNode implements ASTnode {
     @Override
     public String prettyPrint() {
         int matchHigh = 0;
-        if (highPrecedenceNode != null && !highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
+        if (!highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
-                //Get operator matching the highNode
-                sb.append(operatorToString(operators.get(matchHigh)));
                 //Get the highNode
                 sb.append(highPrecedenceNode.prettyPrint());
+                //Get operator matching the highNode
+                sb.append(operatorToString(operators.get(matchHigh)));
+
                 matchHigh++;
             }
-            return highPrecedenceNode.prettyPrint() + sb.toString();
-        } else if (highPrecedenceNode != null) {
-            return highPrecedenceNode.prettyPrint();
+            return sb.toString();
         } else
             return "Invalid Low Precedence Operation";
     }

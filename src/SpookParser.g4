@@ -133,12 +133,21 @@ arithOperand
 
 //Precedence, goes through low to high, ends at atom
 lowPrecedence
-    : highPrecedence ((ADD | SUB) highPrecedence)*;
+    : highPrecedence (lowOperator highPrecedence)*;
 highPrecedence
-    : atomPrecedence ((MUL | MOD | DIV) atomPrecedence)*;
+    : atomPrecedence (highOperator atomPrecedence)*;
 atomPrecedence
     : SUB? arithOperand
     | LEFT_PAREN lowPrecedence RIGHT_PAREN;
+
+highOperator
+    : MUL
+    | DIV
+    | MOD;
+
+lowOperator
+    : ADD
+    | SUB;
 
 
 // Mathematical functions
