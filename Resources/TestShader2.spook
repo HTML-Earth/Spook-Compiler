@@ -1,6 +1,6 @@
 Shader{
   #Declarations
-  Int i = 0, radius, height = 100, length = 100; // virker ikke
+  Int i = 0, radius, height = 100, length = 100; # virker ikke
   Int d;
 
   #Unused for

@@ -1,7 +1,6 @@
 import dk.aau.cs.d403.ast.expressions.ExpressionNode;
 import dk.aau.cs.d403.ast.expressions.IntegerExpressionNode;
-import dk.aau.cs.d403.ast.expressions.NaturalNumberNode;
-import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
+import dk.aau.cs.d403.ast.expressions.IntegerNumberNode;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.structure.*;
@@ -181,7 +180,7 @@ public class ScopeRulesTest {
     void scopeRuleAssignmentTest01() {
         // Main
             // Assignment
-        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        IntegerNumberNode naturalNumber = new IntegerNumberNode(2);
         ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
         StatementNode statement1 = new AssignmentNode("var1", expression1);
         statementNodes.add(statement1);
@@ -210,7 +209,7 @@ public class ScopeRulesTest {
         statementNodes.add(declaration1);
 
             // Assignment
-        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        IntegerNumberNode naturalNumber = new IntegerNumberNode(2);
         ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
         StatementNode statement1 = new AssignmentNode("var1", expression1);
         statementNodes.add(statement1);
@@ -232,7 +231,7 @@ public class ScopeRulesTest {
         statementNodes.add(declaration1);
 
             // Assignment
-        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        IntegerNumberNode naturalNumber = new IntegerNumberNode(2);
         ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
         StatementNode statement1 = new AssignmentNode("var2", expression1);
         statementNodes.add(statement1);
@@ -256,7 +255,7 @@ public class ScopeRulesTest {
 
         // Function
         // New function
-        NaturalNumberNode naturalNumber = new NaturalNumberNode(2);
+        IntegerNumberNode naturalNumber = new IntegerNumberNode(2);
         ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
 
         ArrayList<StatementNode> funcStatementNodes = new ArrayList<>();

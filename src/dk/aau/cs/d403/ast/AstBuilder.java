@@ -4,8 +4,8 @@ import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
-import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import dk.aau.cs.d403.parser.SpookParser;
+import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -174,52 +174,16 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("Invalid expression", getCodePosition(ctx));
     }
 
-    @Override
-    public ASTnode visitIntegerExpression(SpookParser.IntegerExpressionContext ctx) {
-        if (ctx.naturalNumber() != null) {
-            IntegerExpressionNode integerExpressionNode = new IntegerExpressionNode(new NaturalNumberNode(getNaturalNumberValue(ctx.naturalNumber())));
-            integerExpressionNode.setCodePosition(getCodePosition(ctx));
-            return integerExpressionNode;
-        }
-        else if (ctx.lowPrecedence() != null) {
-            IntegerExpressionNode integerExpressionNode = new IntegerExpressionNode(visitAllArithOperations(ctx.arithOperations()));
-            integerExpressionNode.setCodePosition(getCodePosition(ctx));
-            return integerExpressionNode;
-        }
-        else if (ctx.mathFunction() != null) {
-            IntegerExpressionNode integerExpressionNode = new IntegerExpressionNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
-            integerExpressionNode.setCodePosition(getCodePosition(ctx));
-            return integerExpressionNode;
-        }
-        else
-            throw new CompilerException("Invalid integer expression", getCodePosition(ctx));
-    }
 
-    @Override
-    public ASTnode visitFloatExpression(SpookParser.FloatExpressionContext ctx) {
-        if (ctx.realNumber() != null) {
-            FloatExpressionNode floatExpressionNode = new FloatExpressionNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
-            floatExpressionNode.setCodePosition(getCodePosition(ctx));
-            return floatExpressionNode;
-        }
-        else if (ctx.lowPrecedence() != null) {
-            FloatExpressionNode floatExpressionNode = new FloatExpressionNode(visitAllArithOperations(ctx.arithOperations()));
-            floatExpressionNode.setCodePosition(getCodePosition(ctx));
-            return floatExpressionNode;
-        }
-        else if (ctx.mathFunction() != null) {
-            FloatExpressionNode floatExpressionNode = new FloatExpressionNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
-            floatExpressionNode.setCodePosition(getCodePosition(ctx));
-            return floatExpressionNode;
-        }
-        else
-            throw new CompilerException("Invalid float expression", getCodePosition(ctx));
+    public ASTnode visitArithExpression(SpookParser.ArithExpressionContext ctx) {
+
+        return new ArithExpressionNode(visitLowPrecedence(ctx.lowPrecedence()));
     }
 
     @Override
     public ASTnode visitVector2Expression(SpookParser.Vector2ExpressionContext ctx) {
-        FloatExpressionNode float1 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(0));
-        FloatExpressionNode float2 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(1));
+        FloatExpressionNode float1 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(0));
+        FloatExpressionNode float2 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(1));
 
         Vector2ExpressionNode vector2ExpressionNode = new Vector2ExpressionNode(float1, float2);
         vector2ExpressionNode.setCodePosition(getCodePosition(ctx));
@@ -229,9 +193,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitVector3Expression(SpookParser.Vector3ExpressionContext ctx) {
-        FloatExpressionNode float1 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(0));
-        FloatExpressionNode float2 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(1));
-        FloatExpressionNode float3 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(2));
+        FloatExpressionNode float1 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(0));
+        FloatExpressionNode float2 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(1));
+        FloatExpressionNode float3 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(2));
 
         Vector3ExpressionNode vector3ExpressionNode = new Vector3ExpressionNode(float1, float2, float3);
         vector3ExpressionNode.setCodePosition(getCodePosition(ctx));
@@ -241,10 +205,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitVector4Expression(SpookParser.Vector4ExpressionContext ctx) {
-        FloatExpressionNode float1 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(0));
-        FloatExpressionNode float2 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(1));
-        FloatExpressionNode float3 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(2));
-        FloatExpressionNode float4 = (FloatExpressionNode)visitFloatExpression(ctx.floatExpression(3));
+        FloatExpressionNode float1 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(0));
+        FloatExpressionNode float2 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(1));
+        FloatExpressionNode float3 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(2));
+        FloatExpressionNode float4 = (FloatExpressionNode)visitArithExpression(ctx.arithExpression(3));
 
         Vector4ExpressionNode vector4ExpressionNode = new Vector4ExpressionNode(float1, float2, float3, float4);
         vector4ExpressionNode.setCodePosition(getCodePosition(ctx));
