@@ -409,39 +409,53 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitNonObjectFunctionCall(SpookParser.NonObjectFunctionCallContext ctx) {
-        String functionName = ctx.functionName().getText();
-        if (ctx.objectArgs() != null) {
-            ArrayList<ObjectArgumentNode> argumentNodes = visitAllObjectArguments(ctx.objectArgs());
-            NonObjectFunctionCallNode nonObjectFunctionCallNode = new NonObjectFunctionCallNode(functionName, argumentNodes);
-            nonObjectFunctionCallNode.setCodePosition(getCodePosition(ctx));
+        if (ctx.functionName() != null) {
+            String functionName = ctx.functionName().getText();
 
-            return nonObjectFunctionCallNode;
-        }
-        else {
-            NonObjectFunctionCallNode nonObjectFunctionCallNode = new NonObjectFunctionCallNode(functionName);
-            nonObjectFunctionCallNode.setCodePosition(getCodePosition(ctx));
+            if (ctx.objectArgs() != null) {
+                ArrayList<ObjectArgumentNode> argumentNodes = visitAllObjectArguments(ctx.objectArgs());
+                NonObjectFunctionCallNode nonObjectFunctionCallNode = new NonObjectFunctionCallNode(functionName, argumentNodes);
+                nonObjectFunctionCallNode.setCodePosition(getCodePosition(ctx));
 
-            return nonObjectFunctionCallNode;
+                return nonObjectFunctionCallNode;
+            }
+            else {
+                NonObjectFunctionCallNode nonObjectFunctionCallNode = new NonObjectFunctionCallNode(functionName);
+                nonObjectFunctionCallNode.setCodePosition(getCodePosition(ctx));
+
+                return nonObjectFunctionCallNode;
+            }
         }
+        else
+            throw new CompilerException("Invalid function name for function call", getCodePosition(ctx));
     }
 
     @Override
     public ASTnode visitObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx) {
-        String objectName = ctx.objectVariableName().getText();
-        String functionName = ctx.functionName().getText();
-        if (ctx.objectArgs() != null) {
-            ArrayList<ObjectArgumentNode> argumentNodes = visitAllObjectArguments(ctx.objectArgs());
-            ObjectFunctionCallNode objectFunctionCallNode = new ObjectFunctionCallNode(objectName, functionName, argumentNodes);
-            objectFunctionCallNode.setCodePosition(getCodePosition(ctx));
+        if (ctx.objectVariableName() != null) {
+            String objectName = ctx.objectVariableName().getText();
+            if (ctx.functionName() != null) {
+                String functionName = ctx.functionName().getText();
 
-            return objectFunctionCallNode;
-        }
-        else {
-            ObjectFunctionCallNode objectFunctionCallNode = new ObjectFunctionCallNode(objectName, functionName);
-            objectFunctionCallNode.setCodePosition(getCodePosition(ctx));
+                if (ctx.objectArgs() != null) {
+                    ArrayList<ObjectArgumentNode> argumentNodes = visitAllObjectArguments(ctx.objectArgs());
+                    ObjectFunctionCallNode objectFunctionCallNode = new ObjectFunctionCallNode(objectName, functionName, argumentNodes);
+                    objectFunctionCallNode.setCodePosition(getCodePosition(ctx));
 
-            return objectFunctionCallNode;
+                    return objectFunctionCallNode;
+                }
+                else {
+                    ObjectFunctionCallNode objectFunctionCallNode = new ObjectFunctionCallNode(objectName, functionName);
+                    objectFunctionCallNode.setCodePosition(getCodePosition(ctx));
+
+                    return objectFunctionCallNode;
+                }
+            }
+            else
+                throw new CompilerException("Invalid function name in function call", getCodePosition(ctx));
         }
+        else
+            throw new CompilerException("Invalid object variable name in function call", getCodePosition(ctx));
     }
 
     private ArrayList<ObjectArgumentNode> visitAllObjectArguments(SpookParser.ObjectArgsContext ctx) {
