@@ -15,6 +15,7 @@ VOID: 'Void';
 CIRCLE: 'Circle';
 RECTANGLE: 'Rectangle';
 TRIANGLE: 'Triangle';
+SQUARE: 'Square';
 SHAPE: 'Shape';
 COLOR: 'Color';
 CIRCLEGRADIENT: 'CircleGradient';
