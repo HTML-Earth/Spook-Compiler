@@ -28,7 +28,7 @@ public interface ASTvisitor {
 
     //Expressions
     TernaryOperatorNode visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode);
-    ClassPropertyNode visitClassProperty(ClassPropertyNode classPropertyNode);
+    ColorFunctionCallNode visitClassProperty(ColorFunctionCallNode colorFunctionCallNode);
 
     ArithOperandNode visitArithOperand(ArithOperandNode arithOperandNode);
     ArithOperationNode visitArithOperation(ArithOperationNode arithOperationNode);
