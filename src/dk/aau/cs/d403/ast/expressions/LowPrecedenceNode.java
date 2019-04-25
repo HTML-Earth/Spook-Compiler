@@ -41,7 +41,7 @@ public class LowPrecedenceNode implements ASTnode {
     @Override
     public String prettyPrint() {
         int matchHigh = 0;
-        if (!highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
+        if (highPrecedenceNodes != null && operators != null) {
             StringBuilder sb = new StringBuilder();
             for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
                 //Get the highNode

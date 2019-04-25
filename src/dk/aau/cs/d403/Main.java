@@ -2,7 +2,8 @@ package dk.aau.cs.d403;
 
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
-import dk.aau.cs.d403.codegen.CodeGenerator;
+import dk.aau.cs.d403.parser.SpookLexer;
+import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.SymbolTableFilling;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -28,8 +29,8 @@ public class Main {
             symbolTableFilling.visitProgram(ast);
 
             System.out.println("Generated GLSL:");
-            CodeGenerator codeGenerator = new CodeGenerator();
-            System.out.println(codeGenerator.GenerateGLSL(ast));
+           // CodeGenerator codeGenerator = new CodeGenerator();
+            // System.out.println(codeGenerator.GenerateGLSL(ast));
         }
         catch (IOException e) {
             e.printStackTrace();

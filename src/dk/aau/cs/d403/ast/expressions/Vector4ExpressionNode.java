@@ -1,23 +1,23 @@
 package dk.aau.cs.d403.ast.expressions;
 
 public class Vector4ExpressionNode extends Vector3ExpressionNode {
-    protected FloatExpressionNode floatExpressionNode4;
+    protected ArithExpressionNode arithExpressionNode4;
 
-    public Vector4ExpressionNode(FloatExpressionNode floatExpressionNode1, FloatExpressionNode floatExpressionNode2, FloatExpressionNode floatExpressionNode3, FloatExpressionNode floatExpressionNode4) {
-        super(floatExpressionNode1, floatExpressionNode2, floatExpressionNode3);
-        this.floatExpressionNode4 = floatExpressionNode4;
+    public Vector4ExpressionNode(ArithExpressionNode arithExpressionNode1, ArithExpressionNode arithExpressionNode2, ArithExpressionNode arithExpressionNode3, ArithExpressionNode arithExpressionNode4) {
+        super(arithExpressionNode1, arithExpressionNode2, arithExpressionNode3);
+        this.arithExpressionNode4 = arithExpressionNode4;
     }
 
-    public FloatExpressionNode getFloatExpressionNode4() {
-        return floatExpressionNode4;
+    public ArithExpressionNode getArithExpressionNode() {
+        return arithExpressionNode4;
     }
 
     @Override
     public String prettyPrint() {
-        return "(" + floatExpressionNode1.prettyPrint()
-                + ", " + floatExpressionNode2.prettyPrint()
-                + ", " + floatExpressionNode3.prettyPrint()
-                + ", " + floatExpressionNode4.prettyPrint()
+        return "(" + arithExpressionNode1.prettyPrint()
+                + ", " + arithExpressionNode2.prettyPrint()
+                + ", " + arithExpressionNode3.prettyPrint()
+                + ", " + arithExpressionNode4.prettyPrint()
                 + ")";
     }
 }
