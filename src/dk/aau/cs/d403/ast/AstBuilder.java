@@ -89,10 +89,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitVariableDecl(SpookParser.VariableDeclContext ctx) {
 
-        if (ctx.assignment() != null) {
+        if (ctx.assignment(0) != null) {
             return new VariableDeclarationNode(getDataType(ctx.dataType()), (AssignmentNode)visitAssignment(ctx.assignment(0)));
         }
-        else if (ctx.variableName() != null) {
+        else if (ctx.variableName(0) != null) {
             return new VariableDeclarationNode(getDataType(ctx.dataType()), ctx.variableName(0).getText());
         }
         else {
