@@ -377,12 +377,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClassType(SpookParser.ClassTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#customClassType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCustomClassType(SpookParser.CustomClassTypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#dataType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -424,10 +418,4 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitClassName(SpookParser.ClassNameContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#assignedVariableName}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
 }
