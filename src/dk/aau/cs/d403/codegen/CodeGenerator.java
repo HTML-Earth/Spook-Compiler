@@ -1,6 +1,5 @@
 package dk.aau.cs.d403.codegen;
 
-import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -19,7 +18,7 @@ public class CodeGenerator {
     private Scene scene;
 
     private HashMap<String, SpookObject> spookObjects;
-    private HashSet<Enums.ClassType> usedClasses;
+    private HashSet<String> usedClasses;
 
     public String GenerateGLSL(ProgramNode ast) {
         sb = new StringBuilder();
@@ -38,7 +37,7 @@ public class CodeGenerator {
     }
 
     private void generateStructs() {
-        for (Enums.ClassType type : usedClasses) {
+        for (String type : usedClasses) {
             sb.append(getClassCode(type, "getStruct"));
             sb.append("\n");
         }
@@ -47,7 +46,7 @@ public class CodeGenerator {
     }
 
     private void generatePrototypes() {
-        for (Enums.ClassType type : usedClasses) {
+        for (String type : usedClasses) {
             sb.append(getClassCode(type, "getCheckFunctionSignature"));
             sb.append(";\n");
         }
@@ -56,7 +55,7 @@ public class CodeGenerator {
     }
 
     private void generateFunctions() {
-        for (Enums.ClassType type : usedClasses) {
+        for (String type : usedClasses) {
             sb.append(getClassCode(type, "getCheckFunctionSignature"));
             sb.append("{\n\t");
             sb.append(getClassCode(type, "getCheckFunctionBody"));
@@ -128,22 +127,22 @@ public class CodeGenerator {
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         ArrayList<ObjectArgumentNode> argumentNodes = objectDeclarationNode.getObjectArgumentNodes();
 
-        Enums.ClassType objectType = objectDeclarationNode.getObjectType();
+        String objectType = objectDeclarationNode.getObjectType();
         usedClasses.add(objectType);
 
         SpookObject object;
 
         switch (objectType) {
-            case CIRCLE:
+            case "Circle":
                 object = new Circle(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
-            case RECTANGLE:
+            case "Rectangle":
                 object = new Rectangle(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
-            case SQUARE:
+            case "Square":
                 object = new Square(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
-            case TRIANGLE:
+            case "Triangle":
                 object = new Triangle(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
             default:
@@ -157,13 +156,18 @@ public class CodeGenerator {
         if (objectFunctionCallNode.getObjectVariableName().equals("Scene")) {
             switch (objectFunctionCallNode.getFunctionName()) {
                 case "add":
-                    String objectName = objectFunctionCallNode.getObjectArguments().get(0).getVariableName();
+                    String objectName = objectFunctionCallNode.getObjectArguments().get(0)
+                            .getLowPrecedence()
+                            .getHighPrecedenceNodes().get(0)
+                            .getAtomPrecedenceNodes().get(0)
+                            .getOperand()
+                            .getVariableName();
                     SpookObject object = spookObjects.get(objectName);
                     if (object != null)
                         scene.add(object);
                     break;
                 case "setColor":
-                    scene.setColor(Color.getColorProperty(objectFunctionCallNode.getObjectArguments().get(0).getClassPropertyNode()));
+                    scene.setColor(Color.getColorProperty(objectFunctionCallNode.getObjectArguments().get(0).getColorFunctionCallNode()));
                     break;
                 default:
                     throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
@@ -188,7 +192,7 @@ public class CodeGenerator {
         }
     }
 
-    private String getClassCode(Enums.ClassType classType, String methodName) {
+    private String getClassCode(String classType, String methodName) {
         java.lang.reflect.Method method;
         try {
             Class objClass = SpookObject.getClassFromClassType(classType);
