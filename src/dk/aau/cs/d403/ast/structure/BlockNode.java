@@ -20,10 +20,6 @@ public class BlockNode implements ASTnode {
         this.returnNode = returnNode;
     }
 
-    public BlockNode(ReturnNode returnNode) {
-        this.returnNode = returnNode;
-    }
-
     public ArrayList<StatementNode> getStatementNodes() {
         return statementNodes;
     }
@@ -41,6 +37,8 @@ public class BlockNode implements ASTnode {
                 sb.append(stmnt.prettyPrint());
             }
         }
+        if (returnNode != null)
+            sb.append(returnNode.prettyPrint());
 
         sb.append("\n}");
 
