@@ -43,12 +43,7 @@ public class ClassDeclarationNode implements ASTnode {
             sb.append(" extends ");
             sb.append(classType.toString());
         }
-
-        sb.append(" {\n");
-
-        //for each declaration / function
-
-        sb.append("\n}");
+        sb.append(classBlockNode.prettyPrint());
 
         return sb.toString();
     }
