@@ -33,7 +33,7 @@ public class Color {
     }
 
     public static Vector4 getColorProperty(ColorFunctionCallNode colorFunctionCallNode) {
-        if (colorFunctionCallNode.getClassType() != null)
+        if (colorFunctionCallNode.getClassType() == null)
             throw new RuntimeException("Property is not a color property");
 
         switch (colorFunctionCallNode.getClassType()) {
