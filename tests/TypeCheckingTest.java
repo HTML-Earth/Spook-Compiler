@@ -5,6 +5,8 @@ import dk.aau.cs.d403.ast.statements.StatementNode;
 import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TypeCheckingTest extends ScopeRulesTest{
@@ -17,9 +19,17 @@ public class TypeCheckingTest extends ScopeRulesTest{
 
             // Assignment
                 // Natural number
-        IntegerNumberNode naturalNumber = new IntegerNumberNode(2);
-                // Expression
-        ExpressionNode expression1 = new IntegerExpressionNode(naturalNumber);
+        RealNumberNode naturalNumber = new RealNumberNode(2);
+        AtomPrecedenceNode atomPrecedenceNode = new AtomPrecedenceNode(new ArithOperandNode(naturalNumber));
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+        atomPrecedenceNodes.add(atomPrecedenceNode);
+
+        HighPrecedenceNode highPrecedenceNode = new HighPrecedenceNode(atomPrecedenceNodes);
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+        highPrecedenceNodes.add(highPrecedenceNode);
+
+        LowPrecedenceNode lowPrecedenceNode = new LowPrecedenceNode(highPrecedenceNodes);
+        ExpressionNode expression1 = new ArithExpressionNode(lowPrecedenceNode);
                 // Assignment
         StatementNode assignment1 = new AssignmentNode("var1", expression1);
 
@@ -41,9 +51,18 @@ public class TypeCheckingTest extends ScopeRulesTest{
 
             // Assignment
                 // Real number
-        RealNumberNode realNumber = new RealNumberNode((float) 2.2);
-                // Expression
-        ExpressionNode expression1 = new FloatExpressionNode(realNumber);
+        RealNumberNode naturalNumber = new RealNumberNode((float) 2.2);
+        AtomPrecedenceNode atomPrecedenceNode = new AtomPrecedenceNode(new ArithOperandNode(naturalNumber));
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+        atomPrecedenceNodes.add(atomPrecedenceNode);
+
+        HighPrecedenceNode highPrecedenceNode = new HighPrecedenceNode(atomPrecedenceNodes);
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+        highPrecedenceNodes.add(highPrecedenceNode);
+
+        LowPrecedenceNode lowPrecedenceNode = new LowPrecedenceNode(highPrecedenceNodes);
+        ExpressionNode expression1 = new ArithExpressionNode(lowPrecedenceNode);
+
                 // Assignment
         StatementNode assignment1 = new AssignmentNode("var1", expression1);
 

@@ -27,10 +27,6 @@ public class Main {
             System.out.println("Contextual Analysis...\n");
             SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
             symbolTableFilling.visitProgram(ast);
-
-            System.out.println("Generated GLSL:");
-           // CodeGenerator codeGenerator = new CodeGenerator();
-            // System.out.println(codeGenerator.GenerateGLSL(ast));
         }
         catch (IOException e) {
             e.printStackTrace();
