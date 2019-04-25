@@ -4,7 +4,6 @@ import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
-import dk.aau.cs.d403.semantics.SymbolTableFilling;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -23,10 +22,6 @@ public class Main {
 
             System.out.println("Pretty Print:");
             System.out.println(ast.prettyPrint());
-
-            System.out.println("Contextual Analysis...\n");
-            SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
-            symbolTableFilling.visitProgram(ast);
         }
         catch (IOException e) {
             e.printStackTrace();
