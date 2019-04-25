@@ -52,6 +52,10 @@ public class LowPrecedenceNode implements ASTnode {
                 matchHigh++;
             }
             return sb.toString();
+        }
+        //Single HighNode
+        else if (highPrecedenceNodes != null) {
+            return highPrecedenceNodes.get(0).prettyPrint();
         } else
             return "Invalid Low Precedence Operation";
     }

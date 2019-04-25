@@ -519,10 +519,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         }
 
         if (highPrecedenceNodes.size() == 1) {
-            return new LowPrecedenceNode(highPrecedenceNodes);
-        } else {
-            return new LowPrecedenceNode(highPrecedenceNodes, operators);
-        }
+            LowPrecedenceNode lowPrecedenceNode = new LowPrecedenceNode(highPrecedenceNodes);
+            lowPrecedenceNode.setCodePosition(getCodePosition(ctx));
+            return lowPrecedenceNode;
+
+        } else if (highPrecedenceNodes.size() > 1) {
+            LowPrecedenceNode lowPrecedenceNode = new LowPrecedenceNode(highPrecedenceNodes, operators);
+            lowPrecedenceNode.setCodePosition(getCodePosition(ctx));
+            return lowPrecedenceNode;
+
+        } else
+            throw new CompilerException("Invalid Low Precedence", getCodePosition(ctx));
     }
 
     @Override
