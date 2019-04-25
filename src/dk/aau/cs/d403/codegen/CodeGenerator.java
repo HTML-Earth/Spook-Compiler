@@ -8,6 +8,7 @@ import dk.aau.cs.d403.spook.*;
 import dk.aau.cs.d403.spook.color.Color;
 import dk.aau.cs.d403.spook.shapes.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +39,7 @@ public class CodeGenerator {
 
     private void generateStructs() {
         for (Enums.ClassType type : usedClasses) {
-            sb.append(Shape.getStruct(type));
+            sb.append(getClassCode(type, "getStruct"));
             sb.append("\n");
         }
 
@@ -47,7 +48,7 @@ public class CodeGenerator {
 
     private void generatePrototypes() {
         for (Enums.ClassType type : usedClasses) {
-            sb.append(Shape.getCheckFunctionSignature(type));
+            sb.append(getClassCode(type, "getCheckFunctionSignature"));
             sb.append(";\n");
         }
 
@@ -56,9 +57,9 @@ public class CodeGenerator {
 
     private void generateFunctions() {
         for (Enums.ClassType type : usedClasses) {
-            sb.append(Shape.getCheckFunctionSignature(type));
+            sb.append(getClassCode(type, "getCheckFunctionSignature"));
             sb.append("{\n\t");
-            sb.append(Shape.getCheckFunctionBody(type));
+            sb.append(getClassCode(type, "getCheckFunctionBody"));
             sb.append("\n");
         }
 
@@ -76,21 +77,7 @@ public class CodeGenerator {
 
         for (SpookObject object : scene.getChildren()) {
             sb.append("\t");
-
-            Enums.ClassType objectType;
-
-            if (object instanceof Rectangle)
-                objectType = Enums.ClassType.RECTANGLE;
-            else if (object instanceof Circle)
-                objectType = Enums.ClassType.CIRCLE;
-            else if (object instanceof Square)
-                objectType = Enums.ClassType.SQUARE;
-            else if (object instanceof Triangle)
-                objectType = Enums.ClassType.TRIANGLE;
-            else
-                throw new RuntimeException("Unrecognized object type");
-
-            sb.append(Shape.getCheckCall(objectType, object.getName()));
+            sb.append(((Shape)object).getCheckCall());
             sb.append("\n\n");
         }
 
@@ -146,27 +133,26 @@ public class CodeGenerator {
         Enums.ClassType objectType = objectDeclarationNode.getObjectType();
         usedClasses.add(objectType);
 
+        SpookObject object;
+
         switch (objectType) {
             case CIRCLE:
+                object = new Circle(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
             case RECTANGLE:
-                if (argumentNodes.size() == 3) {
-                    ClassPropertyNode colorProperty = argumentNodes.get(2).getClassPropertyNode();
-
-                    Vector2 size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
-                    Vector4 color = Color.getColorProperty(colorProperty);
-
-                    Rectangle rectangle = new Rectangle(objectDeclarationNode.getVariableName(), size, color);
-                    spookObjects.put(objectDeclarationNode.getVariableName(), rectangle);
-                }
+                object = new Rectangle(objectDeclarationNode.getVariableName(), argumentNodes);
+                break;
+            case SQUARE:
+                object = new Square(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
             case TRIANGLE:
+                object = new Triangle(objectDeclarationNode.getVariableName(), argumentNodes);
                 break;
-            case SHAPE:
-                break;
-            case COLOR:
-                break;
+            default:
+                throw new RuntimeException("Invalid object declaration");
         }
+
+        spookObjects.put(objectDeclarationNode.getVariableName(), object);
     }
 
     private void visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
@@ -202,5 +188,25 @@ public class CodeGenerator {
                     throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
             }
         }
+    }
+
+    private String getClassCode(Enums.ClassType classType, String methodName) {
+        java.lang.reflect.Method method;
+        try {
+            Class objClass = SpookObject.getClassFromClassType(classType);
+            method = objClass.getMethod(methodName);
+            try {
+                return method.invoke(null).toString();
+            }
+            catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+        }
+        catch (SecurityException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        return classType.toString() + "." + methodName;
     }
 }
