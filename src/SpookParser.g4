@@ -193,9 +193,13 @@ classDecl
     : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
 
 // Class block
-classBlock: LEFT_BRACKET (declaration | functionDecl | comment)* RIGHT_BRACKET;
+classBlock: LEFT_BRACKET (declaration | constructor | functionDecl | comment)* RIGHT_BRACKET;
 
+// Class constructor
+constructor: className LEFT_PAREN functionArgs? RIGHT_PAREN constructorBlock;
 
+// Class constructor block
+constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 
 
 /*      FUNCTIONS    */
