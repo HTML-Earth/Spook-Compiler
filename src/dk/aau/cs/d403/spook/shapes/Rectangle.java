@@ -39,7 +39,7 @@ public class Rectangle extends Shape {
     }
 
     public static String getCheckFunctionBody() {
-        return "return (point.x > rec.pos.x - rec.size.x * 0.5 && point.x < rec.pos.x + rec.size.x * 0.5 &&\n\t" +
+        return "return (point.x > rec.pos.x - rec.size.x * 0.5 && point.x < rec.pos.x + rec.size.x * 0.5 &&\n\t\t\t" +
                        "point.y > rec.pos.y - rec.size.y * 0.5 && point.y < rec.pos.y + rec.size.y * 0.5);";
     }
 

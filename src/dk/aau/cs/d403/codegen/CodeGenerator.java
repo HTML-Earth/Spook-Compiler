@@ -162,7 +162,7 @@ public class CodeGenerator {
                     if (object != null)
                         scene.add(object);
                     break;
-                case "color":
+                case "setColor":
                     scene.setColor(Color.getColorProperty(objectFunctionCallNode.getObjectArguments().get(0).getClassPropertyNode()));
                     break;
                 default:
@@ -177,7 +177,7 @@ public class CodeGenerator {
                 throw new RuntimeException("Object not found");
 
             switch (objectFunctionCallNode.getFunctionName()) {
-                case "position":
+                case "setPosition":
                     ObjectArgumentNode x = objectFunctionCallNode.getObjectArguments().get(0);
                     ObjectArgumentNode y = objectFunctionCallNode.getObjectArguments().get(1);
                     object.setPosition(new Vector2(x,y));
