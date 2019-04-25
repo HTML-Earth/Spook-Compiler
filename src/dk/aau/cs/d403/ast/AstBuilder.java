@@ -289,9 +289,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
 
             if (objectArgumentNodes.size() > 0)
-                objectDeclarationNode = new ObjectDeclarationNode(classType, objectName, objectArgumentNodes);
+                objectDeclarationNode = new ObjectDeclarationNode(className, objectName, objectArgumentNodes);
             else
-                objectDeclarationNode = new ObjectDeclarationNode(classType, objectName);
+                objectDeclarationNode = new ObjectDeclarationNode(className, objectName);
 
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
             return objectDeclarationNode;
@@ -303,8 +303,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             objectDeclarationNode.setCodePosition(getCodePosition(ctx));
             return objectDeclarationNode;
         }
-        else
-            throw new RuntimeException("Expected a class type or a custom class type");
     }
 
     @Override
