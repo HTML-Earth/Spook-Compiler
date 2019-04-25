@@ -2,56 +2,58 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
+import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 
 public class ObjectArgumentNode implements ASTnode {
 
-    private String variableName;
-    private RealNumberNode realNumberNode;
-    private LowPrecedenceNode lowPrecedenceNode;
-    private ClassPropertyNode classPropertyNode;
+    private LowPrecedenceNode lowPrecedence;
+    private ColorFunctionCallNode colorFunctionCallNode;
+    private NonObjectFunctionCallNode nonObjectFunctionCallNode;
+    private ObjectFunctionCallNode objectFunctionCallNode;
 
-    public ObjectArgumentNode(String variableName) {
-        this.variableName = variableName;
+    public ObjectArgumentNode(LowPrecedenceNode lowPrecedence) {
+        this.lowPrecedence = lowPrecedence;
     }
 
-    public ObjectArgumentNode(RealNumberNode realNumberNode) {
-        this.realNumberNode = realNumberNode;
+    public ObjectArgumentNode(ColorFunctionCallNode colorFunctionCallNode) {
+        this.colorFunctionCallNode = colorFunctionCallNode;
     }
 
-    public ObjectArgumentNode(LowPrecedenceNode lowPrecedenceNode) {
-        this.lowPrecedenceNode = lowPrecedenceNode;
+    public ObjectArgumentNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.nonObjectFunctionCallNode = nonObjectFunctionCallNode;
     }
 
-    public ObjectArgumentNode(ClassPropertyNode classPropertyNode) {
-        this.classPropertyNode = classPropertyNode;
+    public ObjectArgumentNode(ObjectFunctionCallNode objectFunctionCallNode) {
+        this.objectFunctionCallNode = objectFunctionCallNode;
     }
 
-    public String getVariableName() {
-        return variableName;
+    public LowPrecedenceNode getLowPrecedence() {
+        return lowPrecedence;
     }
 
-    public RealNumberNode getRealNumberNode() {
-        return realNumberNode;
+    public NonObjectFunctionCallNode getNonObjectFunctionCallNode() {
+        return nonObjectFunctionCallNode;
     }
 
-    public LowPrecedenceNode getLowPrecedenceNode() {
-        return lowPrecedenceNode;
+    public ColorFunctionCallNode getColorFunctionCallNode() {
+        return colorFunctionCallNode;
     }
 
-    public ClassPropertyNode getClassPropertyNode() {
-        return classPropertyNode;
+    public ObjectFunctionCallNode getObjectFunctionCallNode() {
+        return objectFunctionCallNode;
     }
 
     @Override
     public String prettyPrint() {
-        if (variableName != null)
-            return variableName;
-        else if (realNumberNode != null)
-            return realNumberNode.prettyPrint();
-        else if (lowPrecedenceNode != null)
-            return lowPrecedenceNode.prettyPrint();
-        else if (classPropertyNode != null)
-            return classPropertyNode.prettyPrint();
+        if (lowPrecedence != null)
+            return lowPrecedence.prettyPrint();
+        else if (colorFunctionCallNode != null)
+            return colorFunctionCallNode.prettyPrint();
+        else if (nonObjectFunctionCallNode != null)
+            return nonObjectFunctionCallNode.prettyPrint();
+        else if (objectFunctionCallNode != null)
+            return objectFunctionCallNode.prettyPrint();
         else
             return "Invalid Object Argument";
     }

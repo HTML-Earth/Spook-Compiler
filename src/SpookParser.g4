@@ -53,7 +53,7 @@ objectDecl
 
 /*      ASSIGNMENT       */
 assignment
-    : (variableName | swizzle) ASSIGN (expression | functionCall | swizzle);
+    : (variableName | swizzle) ASSIGN expression;
 
 expression
     : arithExpression
@@ -61,7 +61,8 @@ expression
     | vector3Expression
     | vector4Expression
     | boolExpression
-    | ternaryOperator;
+    | ternaryOperator
+    | functionCall;
 
 // Expressions
 arithExpression: lowPrecedence;
@@ -126,7 +127,7 @@ objectArg
 
 // Color function call (Color.Black) etc.
 colorFunctionCall
-    : COLOR DOT (variableName | predefinedFunctionName);
+    : COLOR DOT predefinedFunctionName;
 
 
 
@@ -135,8 +136,8 @@ colorFunctionCall
 conditionalStatement
     : ifElseStatement;
 
-// If-else if-else
-ifElseStatement: IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement) (ELSE_IF LEFT_PAREN boolExpression RIGHT_PAREN (block | statement))* (ELSE (block | statement))?;
+// If-else statement
+ifElseStatement:  ifStatement elseIfStatement* elseStatement?;
 
 //Precedence, goes through low to high, ends at atom
 lowPrecedence
@@ -156,7 +157,20 @@ highOperator
 lowOperator
     : ADD
     | SUB;
+// Statements
+ifStatement: IF LEFT_PAREN ifBoolExpression RIGHT_PAREN ifBlock;
+elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock;
+elseStatement: ELSE elseBlock;
 
+// Expressions
+ifBoolExpression: boolExpression;
+elseifBoolExpression: boolExpression;
+
+// Blocks
+ifBlock: conditionalBlock;
+elseIfBlock: conditionalBlock;
+elseBlock: conditionalBlock;
+conditionalBlock: block | statement;
 
 
 /*      LOOPS        */

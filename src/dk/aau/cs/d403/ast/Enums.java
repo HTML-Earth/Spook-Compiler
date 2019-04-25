@@ -171,4 +171,29 @@ public class Enums {
                 return "UnknownMathFunction";
         }
     }
+
+    public enum ColorName {
+        BLACK,
+        WHITE,
+        RED,
+        GREEN,
+        BLUE
+    }
+
+    public static String colorToString(ColorName colorName) {
+        switch (colorName) {
+            case BLACK:
+                return "Black";
+            case WHITE:
+                return "White";
+            case RED:
+                return "Red";
+            case GREEN:
+                return "Green";
+            case BLUE:
+                return "Blue";
+            default:
+                return "Unknown color";
+        }
+    }
 }
