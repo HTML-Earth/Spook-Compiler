@@ -79,6 +79,25 @@ arithOperand
 mathFunction
     : function LEFT_PAREN lowPrecedence RIGHT_PAREN;
 
+//Precedence, goes through low to high, ends at atom
+lowPrecedence
+    : highPrecedence (lowOperator highPrecedence)*;
+highPrecedence
+    : atomPrecedence (highOperator atomPrecedence)*;
+atomPrecedence
+    : SUB? arithOperand
+    | LEFT_PAREN lowPrecedence RIGHT_PAREN;
+
+
+highOperator
+    : MUL
+    | DIV
+    | MOD;
+
+lowOperator
+    : ADD
+    | SUB;
+
 // Recursive boolean operations
 boolOperations
     : boolOperation boolOperations
@@ -139,24 +158,6 @@ conditionalStatement
 // If-else statement
 ifElseStatement:  ifStatement elseIfStatement* elseStatement?;
 
-//Precedence, goes through low to high, ends at atom
-lowPrecedence
-    : highPrecedence (lowOperator highPrecedence)*;
-highPrecedence
-    : atomPrecedence (highOperator atomPrecedence)*;
-atomPrecedence
-    : SUB? arithOperand
-    | LEFT_PAREN lowPrecedence RIGHT_PAREN;
-
-
-highOperator
-    : MUL
-    | DIV
-    | MOD;
-
-lowOperator
-    : ADD
-    | SUB;
 // Statements
 ifStatement: IF LEFT_PAREN ifBoolExpression RIGHT_PAREN ifBlock;
 elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock;
