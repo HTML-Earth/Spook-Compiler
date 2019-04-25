@@ -1,7 +1,7 @@
 package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.Enums;
-import dk.aau.cs.d403.ast.expressions.ClassPropertyNode;
+import dk.aau.cs.d403.ast.expressions.ColorFunctionCallNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.spook.Vector2;
@@ -20,7 +20,7 @@ public class Circle extends Shape {
 
         if (argumentNodes.size() == 2) {
             this.radius = argumentNodes.get(0);
-            ClassPropertyNode colorProperty = argumentNodes.get(1).getClassPropertyNode();
+            ColorFunctionCallNode colorProperty = argumentNodes.get(1).getColorFunctionCallNode();
             this.color = Color.getColorProperty(colorProperty);
         }
     }

@@ -37,10 +37,6 @@ public class ObjectDeclarationNode extends DeclarationNode {
         return objectArgumentNodes;
     }
 
-    public String getCustomClassType() {
-        return customClassType;
-    }
-
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();

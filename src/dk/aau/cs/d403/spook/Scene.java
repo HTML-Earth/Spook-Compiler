@@ -1,7 +1,7 @@
 package dk.aau.cs.d403.spook;
 
-import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
-import dk.aau.cs.d403.ast.expressions.RealNumberNode;
+import dk.aau.cs.d403.ast.NumberPacking;
+import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.spook.color.Color;
 import dk.aau.cs.d403.spook.color.Colorable;
 
@@ -24,7 +24,7 @@ public class Scene extends SpookObject implements Colorable {
     }
 
     public ObjectArgumentNode getRotation() {
-        return new ObjectArgumentNode(new RealNumberNode(0));
+        return NumberPacking.getObjectArgumentFromFloat(0);
     }
 
     public void setRotation(ObjectArgumentNode rotation) {

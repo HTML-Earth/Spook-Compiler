@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook;
 
+import dk.aau.cs.d403.ast.NumberPacking;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.ast.expressions.RealNumberNode;
 
@@ -17,10 +18,10 @@ public class Vector4 {
     }
 
     public Vector4(float x, float y, float z, float w) {
-        this.x = new ObjectArgumentNode(new RealNumberNode(x));
-        this.y = new ObjectArgumentNode(new RealNumberNode(y));
-        this.z = new ObjectArgumentNode(new RealNumberNode(z));
-        this.w = new ObjectArgumentNode(new RealNumberNode(w));
+        this.x = NumberPacking.getObjectArgumentFromFloat(x);
+        this.y = NumberPacking.getObjectArgumentFromFloat(y);
+        this.z = NumberPacking.getObjectArgumentFromFloat(z);
+        this.w = NumberPacking.getObjectArgumentFromFloat(w);
     }
 
     public ObjectArgumentNode getX() {
@@ -57,10 +58,10 @@ public class Vector4 {
 
     public static Vector4 zero(){
         RealNumberNode zero = new RealNumberNode(0);
-        ObjectArgumentNode x = new ObjectArgumentNode(zero);
-        ObjectArgumentNode y = new ObjectArgumentNode(zero);
-        ObjectArgumentNode z = new ObjectArgumentNode(zero);
-        ObjectArgumentNode w = new ObjectArgumentNode(zero);
+        ObjectArgumentNode x = NumberPacking.getObjectArgumentFromRealNumber(zero);
+        ObjectArgumentNode y = NumberPacking.getObjectArgumentFromRealNumber(zero);
+        ObjectArgumentNode z = NumberPacking.getObjectArgumentFromRealNumber(zero);
+        ObjectArgumentNode w = NumberPacking.getObjectArgumentFromRealNumber(zero);
         return new Vector4(x,y,z,w);
     }
 

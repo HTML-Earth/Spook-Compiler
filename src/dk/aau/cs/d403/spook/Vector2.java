@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook;
 
+import dk.aau.cs.d403.ast.NumberPacking;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.ast.expressions.RealNumberNode;
 
@@ -14,8 +15,8 @@ public class Vector2 {
 
 
     public Vector2(float x, float y) {
-        this.x = new ObjectArgumentNode(new RealNumberNode(x));
-        this.y = new ObjectArgumentNode(new RealNumberNode(y));
+        this.x = NumberPacking.getObjectArgumentFromFloat(x);
+        this.y = NumberPacking.getObjectArgumentFromFloat(y);
     }
 
     public ObjectArgumentNode getX() {
@@ -36,8 +37,8 @@ public class Vector2 {
 
     public static Vector2 zero(){
         RealNumberNode zero = new RealNumberNode(0);
-        ObjectArgumentNode x = new ObjectArgumentNode(zero);
-        ObjectArgumentNode y = new ObjectArgumentNode(zero);
+        ObjectArgumentNode x = NumberPacking.getObjectArgumentFromRealNumber(zero);
+        ObjectArgumentNode y = NumberPacking.getObjectArgumentFromRealNumber(zero);
         return new Vector2(x,y);
     }
 

@@ -1,42 +1,15 @@
 package dk.aau.cs.d403.codegen;
 
-import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
 
-import java.util.ArrayList;
-
 public class PrintGLSL {
 
-    public static String printIntegerExpression(IntegerExpressionNode integerExpressionNode) {
-        NaturalNumberNode naturalNumberNode = integerExpressionNode.getNaturalNumberNode();
-        ArrayList<ArithOperationNode> arithOperationNodes = integerExpressionNode.getArithOperationNodes();
-        MathFunctionCallNode mathFunctionCallNode = integerExpressionNode.getMathFunctionCallNode();
-        if (naturalNumberNode != null) {
-            return printNaturalNumber(naturalNumberNode);
-        }
-        else if (arithOperationNodes != null) {
-            StringBuilder sb = new StringBuilder();
-            boolean firstOp = true;
-            for (ArithOperationNode arithOperationNode : arithOperationNodes) {
-                if (!firstOp)
-                    sb.append(" ");
-                firstOp = false;
-                sb.append(printArithOperation(arithOperationNode));
-            }
-            return sb.toString();
-        }
-        else if (mathFunctionCallNode != null) {
-            return printMathFunctionCall(mathFunctionCallNode);
-        }
-        else
-            throw new RuntimeException("Invalid integer expression");
-    }
-
-    public static String printFloatExpression(FloatExpressionNode floatExpressionNode) {
-        RealNumberNode realNumberNode = floatExpressionNode.getRealNumberNode();
+    public static String printArithExpression(ArithExpressionNode arithExpressionNode) {
+        /*
+        RealNumberNode realNumberNode = arithExpressionNode.getRealNumberNode();
         ArrayList<ArithOperationNode> arithOperationNodes = floatExpressionNode.getArithOperationNodes();
         MathFunctionCallNode mathFunctionCallNode = floatExpressionNode.getMathFunctionCallNode();
         if (realNumberNode != null) {
@@ -58,9 +31,13 @@ public class PrintGLSL {
         }
         else
             throw new RuntimeException("Invalid float expression");
+            */
+
+        return arithExpressionNode.prettyPrint();
     }
 
     public static String printMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
+        /*
         StringBuilder sb = new StringBuilder();
         sb.append(Enums.mathFunctionToString(mathFunctionCallNode.getFunctionName()));
         sb.append("(");
@@ -78,6 +55,8 @@ public class PrintGLSL {
         sb.append(")");
 
         return sb.toString();
+        */
+        return mathFunctionCallNode.prettyPrint();
     }
 
 
@@ -98,6 +77,7 @@ public class PrintGLSL {
         else throw new RuntimeException("Invalid arith operand");
     }
 
+    /*
     public static String printArithOperation(ArithOperationNode arithOperationNode) {
         StringBuilder sb = new StringBuilder();
         ArithOperandNode leftOperand = arithOperationNode.getLeftOperand();
@@ -140,16 +120,14 @@ public class PrintGLSL {
 
         return sb.toString();
     }
-
-    public static String printNaturalNumber(NaturalNumberNode naturalNumberNode) {
-        return naturalNumberNode.prettyPrint();
-    }
+    */
 
     public static String printRealNumber(RealNumberNode realNumberNode) {
         return realNumberNode.prettyPrint();
     }
 
     public static String printObjArgNode(ObjectArgumentNode node) {
+        /*
         if (node.getVariableName() != null)
             return node.getVariableName();
         else if (node.getRealNumberNode() != null)
@@ -165,6 +143,8 @@ public class PrintGLSL {
             return node.getClassPropertyNode().prettyPrint();
         else
             return "Invalid Object Argument";
+            */
+        return node.prettyPrint();
     }
 
     public static String printVector2(Vector2 vector){

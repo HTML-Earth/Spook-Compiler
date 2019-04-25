@@ -1,11 +1,10 @@
 package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.Enums;
-import dk.aau.cs.d403.ast.expressions.ClassPropertyNode;
+import dk.aau.cs.d403.ast.expressions.ColorFunctionCallNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.spook.Vector2;
-import dk.aau.cs.d403.spook.Vector4;
 import dk.aau.cs.d403.spook.color.Color;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class Rectangle extends Shape {
 
         if (argumentNodes.size() == 3) {
             this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
-            ClassPropertyNode colorProperty = argumentNodes.get(2).getClassPropertyNode();
+            ColorFunctionCallNode colorProperty = argumentNodes.get(2).getColorFunctionCallNode();
             this.color = Color.getColorProperty(colorProperty);
         }
     }

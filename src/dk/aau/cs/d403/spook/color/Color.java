@@ -1,7 +1,6 @@
 package dk.aau.cs.d403.spook.color;
 
-import dk.aau.cs.d403.ast.Enums;
-import dk.aau.cs.d403.ast.expressions.ClassPropertyNode;
+import dk.aau.cs.d403.ast.expressions.ColorFunctionCallNode;
 import dk.aau.cs.d403.spook.Vector4;
 
 public class Color {
@@ -33,29 +32,29 @@ public class Color {
         return new Vector4(0,0,0,0);
     }
 
-    public static Vector4 getColorProperty(ClassPropertyNode propertyNode) {
-        if (propertyNode.getClassType() != Enums.ClassType.COLOR)
+    public static Vector4 getColorProperty(ColorFunctionCallNode colorFunctionCallNode) {
+        if (colorFunctionCallNode.getClassType() != null)
             throw new RuntimeException("Property is not a color property");
 
-        switch (propertyNode.getVariableName()) {
-            case "black":
+        switch (colorFunctionCallNode.getClassType()) {
+            case BLACK:
                 return black();
-            case "white":
+            case WHITE:
                 return white();
-            case "red":
+            case RED:
                 return red();
-            case "green":
+            case GREEN:
                 return green();
-            case "blue":
+            case BLUE:
                 return blue();
-            case "cyan":
-                return cyan();
-            case "magenta":
-                return magenta();
-            case "yellow":
-                return yellow();
-            case "invisible":
-                return invisible();
+            //case CYAN
+            //    return cyan();
+            //case MAGENTA:
+            //    return magenta();
+            //case YELLOW:
+            //    return yellow();
+            //case INVISIBLE:
+            //    return invisible();
             default:
                 throw new RuntimeException("Unknown color");
         }
