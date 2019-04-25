@@ -223,10 +223,12 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitMathFunction(SpookParser.MathFunctionContext ctx) {
-        Enums.MathFunctionName functionName = getMathFunction(ctx.function());
         if (ctx.lowPrecedence() != null) {
-            MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (ArithOperandNode)visitLowPrecedence(ctx.lowPrecedence()));
-            mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
+            if (ctx.function() != null) {
+                Enums.MathFunctionName functionName = getMathFunction(ctx.function());
+
+                MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
+                mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
 
                 return mathFunctionCallNode;
             }
