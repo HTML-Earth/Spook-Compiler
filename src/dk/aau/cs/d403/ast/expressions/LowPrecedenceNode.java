@@ -42,16 +42,20 @@ public class LowPrecedenceNode implements ASTnode {
     public String prettyPrint() {
         int matchHigh = 0;
         if (highPrecedenceNodes != null && operators != null) {
-            StringBuilder sb = new StringBuilder();
-            for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
-                //Get the highNode
-                sb.append(highPrecedenceNode.prettyPrint());
-                //Get operator matching the highNode
-                sb.append(operatorToString(operators.get(matchHigh)));
-
-                matchHigh++;
-            }
-            return sb.toString();
+            if (!highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
+                    //Get the highNode
+                    sb.append(highPrecedenceNode.prettyPrint());
+                    //Get operator matching the highNode
+                    if (matchHigh < highPrecedenceNodes.size() - 1) {
+                        sb.append(operatorToString(operators.get(matchHigh)));
+                        matchHigh++;
+                    }
+                }
+                return sb.toString();
+            } else
+                return "LowPrecedenceNode receives empty list";
         }
         //Single HighNode
         else if (highPrecedenceNodes != null) {

@@ -46,7 +46,7 @@ public class AtomPrecedenceNode implements ASTnode {
         }
         //Print operand
         else if (operand != null) {
-            return "" + operand;
+            return operand.prettyPrint();
         }
         //Print Parenthesis
         else if (lowPrecedenceNode != null) {
