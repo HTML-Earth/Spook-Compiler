@@ -46,7 +46,7 @@ variableDecl
 
 // Object declaration
 objectDecl
-    : (classType | className) objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
+    : className objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
 
 
 
