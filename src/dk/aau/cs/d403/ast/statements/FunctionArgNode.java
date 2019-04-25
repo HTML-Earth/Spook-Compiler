@@ -23,7 +23,7 @@ public class FunctionArgNode implements ASTnode {
 
     @Override
     public String prettyPrint() {
-        return dataType + " " + variableName;
+        return Enums.dataTypeToStringSpook(dataType) + " " + variableName;
     }
 
     private CodePosition codePosition;
