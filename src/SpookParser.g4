@@ -146,7 +146,7 @@ objectArg
 
 // Color function call (Color.Black) etc.
 colorFunctionCall
-    : COLOR DOT predefinedFunctionName;
+    : COLOR DOT (predefinedFunctionName | vector3Expression);
 
 
 
@@ -208,7 +208,7 @@ functionArgs
     : functionArg COMMA functionArgs
     | functionArg;
 functionArg
-    : dataType variableName;
+    : (dataType | className) variableName;
 
 // Function block
 functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
@@ -241,7 +241,8 @@ function
 
 // Return types
 returnType
-    : dataType;
+    : dataType
+    | classType;
 
 // Pre-defined classes
 classType
