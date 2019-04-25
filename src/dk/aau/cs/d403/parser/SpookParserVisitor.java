@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -119,6 +119,36 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#lowPrecedence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLowPrecedence(SpookParser.LowPrecedenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#highPrecedence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHighPrecedence(SpookParser.HighPrecedenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#atomPrecedence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#highOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHighOperator(SpookParser.HighOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#lowOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLowOperator(SpookParser.LowOperatorContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#boolOperations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -196,36 +226,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfElseStatement(SpookParser.IfElseStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#lowPrecedence}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLowPrecedence(SpookParser.LowPrecedenceContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#highPrecedence}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHighPrecedence(SpookParser.HighPrecedenceContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#atomPrecedence}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#highOperator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHighOperator(SpookParser.HighOperatorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#lowOperator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLowOperator(SpookParser.LowOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#ifStatement}.
 	 * @param ctx the parse tree

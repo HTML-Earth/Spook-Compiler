@@ -248,6 +248,7 @@ classType
     : CIRCLE
     | RECTANGLE
     | TRIANGLE
+    | SQUARE
     | SHAPE
     | COLOR
     | CIRCLEGRADIENT
