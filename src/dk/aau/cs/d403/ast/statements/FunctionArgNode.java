@@ -23,14 +23,8 @@ public class FunctionArgNode implements ASTnode {
 
     @Override
     public String prettyPrint() {
-        return getDataType() + " " + getVariableName();
+        return Enums.dataTypeToStringSpook(dataType) + " " + variableName;
     }
-
-    @Override
-    public String toString() {
-        return getDataType() + " " + getVariableName() + ", ";
-    }
-
 
     private CodePosition codePosition;
 

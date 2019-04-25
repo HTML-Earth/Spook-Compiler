@@ -1,22 +1,21 @@
 package dk.aau.cs.d403.ast.expressions;
 
-import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 
-public class RealNumberNode implements ASTnode {
-    private float number;
+public class ArithExpressionNode extends ExpressionNode {
+    private LowPrecedenceNode lowPrecedenceNode;
 
-    public RealNumberNode(float number) {
-        this.number = number;
+    public ArithExpressionNode(LowPrecedenceNode lowPrecedenceNode) {
+        this.lowPrecedenceNode = lowPrecedenceNode;
     }
 
-    public float getNumber() {
-        return number;
+    public LowPrecedenceNode getLowPrecedenceNode() {
+        return lowPrecedenceNode;
     }
 
     @Override
     public String prettyPrint() {
-        return String.valueOf(number);
+        return lowPrecedenceNode.prettyPrint();
     }
 
     private CodePosition codePosition;

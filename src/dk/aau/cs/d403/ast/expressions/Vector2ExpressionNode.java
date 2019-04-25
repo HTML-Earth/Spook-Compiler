@@ -3,26 +3,26 @@ package dk.aau.cs.d403.ast.expressions;
 import dk.aau.cs.d403.ast.CodePosition;
 
 public class Vector2ExpressionNode extends ExpressionNode {
-    protected FloatExpressionNode floatExpressionNode1;
-    protected FloatExpressionNode floatExpressionNode2;
+    protected ArithExpressionNode arithExpressionNode1;
+    protected ArithExpressionNode arithExpressionNode2;
 
-    public Vector2ExpressionNode(FloatExpressionNode floatExpressionNode1, FloatExpressionNode floatExpressionNode2) {
-        this.floatExpressionNode1 = floatExpressionNode1;
-        this.floatExpressionNode2 = floatExpressionNode2;
+    public Vector2ExpressionNode(ArithExpressionNode arithExpressionNode1, ArithExpressionNode arithExpressionNode2) {
+        this.arithExpressionNode1 = arithExpressionNode1;
+        this.arithExpressionNode2 = arithExpressionNode2;
     }
 
-    public FloatExpressionNode getFloatExpressionNode1() {
-        return floatExpressionNode1;
+    public ArithExpressionNode getArithExpressionNode1() {
+        return arithExpressionNode1;
     }
 
-    public FloatExpressionNode getFloatExpressionNode2() {
-        return floatExpressionNode2;
+    public ArithExpressionNode getArithExpressionNode2() {
+        return arithExpressionNode2;
     }
 
     @Override
     public String prettyPrint() {
-        return "(" + floatExpressionNode1.prettyPrint()
-                + ", " + floatExpressionNode2.prettyPrint()
+        return "(" + arithExpressionNode1.prettyPrint()
+                + ", " + arithExpressionNode2.prettyPrint()
                 + ")";
     }
 

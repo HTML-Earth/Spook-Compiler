@@ -28,7 +28,7 @@ public class ClassBlockNode implements ASTnode {
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("{");
+        sb.append(" {");
 
         for (DeclarationNode decl : declarationNodes)
         {

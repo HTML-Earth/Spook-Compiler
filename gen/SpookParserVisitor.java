@@ -1,5 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
-package dk.aau.cs.d403.parser;
+// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -107,18 +106,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTernaryOperator(SpookParser.TernaryOperatorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#arithOperand}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithOperand(SpookParser.ArithOperandContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#mathFunction}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#lowPrecedence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -137,17 +124,17 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#highOperator}.
+	 * Visit a parse tree produced by {@link SpookParser#arithOperand}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHighOperator(SpookParser.HighOperatorContext ctx);
+	T visitArithOperand(SpookParser.ArithOperandContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#lowOperator}.
+	 * Visit a parse tree produced by {@link SpookParser#mathFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLowOperator(SpookParser.LowOperatorContext ctx);
+	T visitMathFunction(SpookParser.MathFunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#boolOperations}.
 	 * @param ctx the parse tree
@@ -160,24 +147,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolOperation(SpookParser.BoolOperationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#swizzle}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSwizzle(SpookParser.SwizzleContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#coordinateSwizzle}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCoordinateSwizzle(SpookParser.CoordinateSwizzleContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#colorSwizzle}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColorSwizzle(SpookParser.ColorSwizzleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#functionCall}.
 	 * @param ctx the parse tree
@@ -226,60 +195,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfElseStatement(SpookParser.IfElseStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfStatement(SpookParser.IfStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseIfStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseIfStatement(SpookParser.ElseIfStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseStatement(SpookParser.ElseStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifBoolExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfBoolExpression(SpookParser.IfBoolExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseifBoolExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfBlock(SpookParser.IfBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseIfBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseIfBlock(SpookParser.ElseIfBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseBlock(SpookParser.ElseBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#conditionalBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionalBlock(SpookParser.ConditionalBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#iterativeStatement}.
 	 * @param ctx the parse tree
@@ -377,12 +292,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClassType(SpookParser.ClassTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#customClassType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCustomClassType(SpookParser.CustomClassTypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#dataType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -424,10 +333,4 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitClassName(SpookParser.ClassNameContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#assignedVariableName}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx);
 }

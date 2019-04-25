@@ -8,33 +8,19 @@ import java.util.ArrayList;
 
 public class MathFunctionCallNode implements ASTnode {
     private Enums.MathFunctionName functionName;
-    private ArithOperandNode operandNode;
-    private ArrayList<ArithOperationNode> operationNodes;
+    private LowPrecedenceNode lowPrecedenceNode;
 
-    public MathFunctionCallNode(Enums.MathFunctionName functionName) {
+    public MathFunctionCallNode(Enums.MathFunctionName functionName, LowPrecedenceNode lowPrecedenceNode) {
         this.functionName = functionName;
-    }
-
-    public MathFunctionCallNode(Enums.MathFunctionName functionName, ArithOperandNode operandNode) {
-        this.functionName = functionName;
-        this.operandNode = operandNode;
-    }
-
-    public MathFunctionCallNode(Enums.MathFunctionName functionName, ArrayList<ArithOperationNode> operationNodes) {
-        this.functionName = functionName;
-        this.operationNodes = operationNodes;
+        this.lowPrecedenceNode = lowPrecedenceNode;
     }
 
     public Enums.MathFunctionName getFunctionName() {
         return functionName;
     }
 
-    public ArithOperandNode getOperandNode() {
-        return operandNode;
-    }
-
-    public ArrayList<ArithOperationNode> getOperationNodes() {
-        return operationNodes;
+    public LowPrecedenceNode getLowPrecedenceNode() {
+        return lowPrecedenceNode;
     }
 
     @Override
@@ -42,15 +28,7 @@ public class MathFunctionCallNode implements ASTnode {
         StringBuilder sb = new StringBuilder();
         sb.append(Enums.mathFunctionToString(functionName));
         sb.append("(");
-
-        if (operandNode != null)
-            sb.append(operandNode.prettyPrint());
-        else if (operationNodes != null) {
-            for (ArithOperationNode operationNode: operationNodes) {
-                sb.append(operationNode.prettyPrint());
-            }
-        }
-
+        sb.append(lowPrecedenceNode.prettyPrint());
         sb.append(")");
 
         return sb.toString();
