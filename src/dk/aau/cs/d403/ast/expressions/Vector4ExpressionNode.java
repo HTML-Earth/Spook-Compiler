@@ -8,7 +8,7 @@ public class Vector4ExpressionNode extends Vector3ExpressionNode {
         this.arithExpressionNode4 = arithExpressionNode4;
     }
 
-    public ArithExpressionNode getArithExpressionNode() {
+    public ArithExpressionNode getArithExpressionNode4() {
         return arithExpressionNode4;
     }
 
