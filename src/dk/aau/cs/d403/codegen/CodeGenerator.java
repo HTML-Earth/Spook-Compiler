@@ -26,7 +26,7 @@ public class CodeGenerator {
         spookObjects = new HashMap<>();
         usedClasses = new HashSet<>();
 
-        visitProgram(ast);
+        ProgramNode program = visitProgram(ast);
 
         generateStructs();
         generatePrototypes();
@@ -85,78 +85,223 @@ public class CodeGenerator {
         sb.append("}\n\n");
     }
 
-    private void visitProgram(ProgramNode programNode) {
-        visitMain(programNode.getMainNode());
+    private ProgramNode visitProgram(ProgramNode programNode) {
+        return new ProgramNode(visitMain(programNode.getMainNode()),programNode.getClassDeclarationNodes(), programNode.getFunctionDeclarationNodes());
     }
 
-    private void visitMain(MainNode mainNode) {
-        visitBlock(mainNode.getBlockNode());
+    private MainNode visitMain(MainNode mainNode) {
+        return new MainNode(visitBlock(mainNode.getBlockNode()));
     }
 
-    private void visitBlock(BlockNode blockNode) {
+    private BlockNode visitBlock(BlockNode blockNode) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
         for (StatementNode statement : blockNode.getStatementNodes())
-            visitStatement(statement);
+            statementNodes.add(visitStatement(statement));
+
+        return new BlockNode(statementNodes);
     }
 
-    private void visitStatement(StatementNode statementNode) {
+    private StatementNode visitStatement(StatementNode statementNode) {
         if (statementNode instanceof AssignmentNode)
-            return; //TODO: visitAssignment((AssignmentNode)statementNode);
+            return visitAssignment((AssignmentNode)statementNode);
         else if (statementNode instanceof DeclarationNode)
-            visitDeclaration((DeclarationNode)statementNode);
+            return visitDeclaration((DeclarationNode)statementNode);
         else if (statementNode instanceof IfElseStatementNode)
-            return; //TODO: visitIfElseStatement((IfElseStatementNode)statementNode);
+            return statementNode; //TODO: visitIfElseStatement((IfElseStatementNode)statementNode);
         else if (statementNode instanceof ObjectFunctionCallNode)
-            visitObjectFunctionCall((ObjectFunctionCallNode)statementNode);
+            return visitObjectFunctionCall((ObjectFunctionCallNode)statementNode);
         else if (statementNode instanceof ReturnNode)
-            return; //TODO: visitReturn((ReturnNode)statementNode);
+            return statementNode; //TODO: visitReturn((ReturnNode)statementNode);
         else {
             System.out.println(statementNode.prettyPrint());
             throw new RuntimeException("Statement is of unknown type");
         }
     }
 
-    private void visitDeclaration(DeclarationNode declarationNode) {
+    private AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
+        ExpressionNode expressionNode = visitExpression(assignmentNode.getExpressionNode());
+
+        if (assignmentNode.getVariableName() != null)
+            return new AssignmentNode(assignmentNode.getVariableName(), expressionNode);
+        else
+            return new AssignmentNode(assignmentNode.getSwizzleNode(), expressionNode);
+    }
+
+    private ExpressionNode visitExpression(ExpressionNode expressionNode) {
+        if (expressionNode instanceof ArithExpressionNode)
+            return visitArithExpression((ArithExpressionNode)expressionNode);
+        else if(expressionNode instanceof Vector2ExpressionNode) {
+            ArithExpressionNode expr1 = (ArithExpressionNode)visitExpression(((Vector2ExpressionNode) expressionNode).getArithExpressionNode1());
+            ArithExpressionNode expr2 = (ArithExpressionNode)visitExpression(((Vector2ExpressionNode) expressionNode).getArithExpressionNode2());
+            if (expressionNode instanceof Vector3ExpressionNode) {
+                ArithExpressionNode expr3 = (ArithExpressionNode)visitExpression(((Vector3ExpressionNode) expressionNode).getArithExpressionNode3());
+                if (expressionNode instanceof Vector4ExpressionNode) {
+                    ArithExpressionNode expr4 = (ArithExpressionNode)visitExpression(((Vector4ExpressionNode) expressionNode).getArithExpressionNode4());
+                    return new Vector4ExpressionNode(expr1, expr2, expr3, expr4);
+                }
+                else
+                    return new Vector3ExpressionNode(expr1, expr2, expr3);
+            }
+            else
+                return new Vector2ExpressionNode(expr1, expr2);
+        }
+        else if (expressionNode instanceof BoolExpressionNode)
+            return visitBoolExpression((BoolExpressionNode)expressionNode);
+        else if (expressionNode instanceof TernaryOperatorNode) {
+            return visitTernaryOperator((TernaryOperatorNode)expressionNode);
+        }
+        //TODO: if expressionNode is FunctionCall
+        else {
+            return expressionNode;
+        }
+    }
+
+    private BoolExpressionNode visitBoolExpression(BoolExpressionNode boolExpressionNode) {
+        return boolExpressionNode;
+    }
+
+    private TernaryOperatorNode visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
+        return ternaryOperatorNode;
+    }
+
+    private ArithExpressionNode visitArithExpression(ArithExpressionNode arithExpressionNode) {
+        return new ArithExpressionNode(visitLowPrecedence(arithExpressionNode.getLowPrecedenceNode()));
+    }
+
+    private LowPrecedenceNode visitLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+
+        for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
+            highPrecedenceNodes.add(visitHighPrecedence(highPrecedenceNode));
+        }
+
+        if (lowPrecedenceNode.getOperators() != null)
+            return new LowPrecedenceNode(highPrecedenceNodes, lowPrecedenceNode.getOperators());
+        else
+            return new LowPrecedenceNode(highPrecedenceNodes);
+    }
+
+    private HighPrecedenceNode visitHighPrecedence(HighPrecedenceNode highPrecedenceNode) {
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+
+        for (AtomPrecedenceNode atomPrecedenceNode: highPrecedenceNode.getAtomPrecedenceNodes()) {
+            atomPrecedenceNodes.add(visitAtomPrecedence(atomPrecedenceNode));
+        }
+
+        if (highPrecedenceNode.getOperators() != null)
+            return new HighPrecedenceNode(atomPrecedenceNodes, highPrecedenceNode.getOperators());
+        else
+            return new HighPrecedenceNode(atomPrecedenceNodes);
+    }
+
+    private AtomPrecedenceNode visitAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {
+        if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+            return new AtomPrecedenceNode(visitLowPrecedence(atomPrecedenceNode.getLowPrecedenceNode()));
+
+        if (atomPrecedenceNode.getOperand() != null) {
+
+            if (atomPrecedenceNode.getOperator() != null)
+                return new AtomPrecedenceNode(atomPrecedenceNode.getOperator(), visitOperand(atomPrecedenceNode.getOperand()));
+            else
+                return new AtomPrecedenceNode(visitOperand(atomPrecedenceNode.getOperand()));
+        }
+
+        return atomPrecedenceNode;
+    }
+
+    private ArithOperandNode visitOperand(ArithOperandNode arithOperandNode) {
+        if (arithOperandNode.getMathFunctionCallNode() != null)
+            return new ArithOperandNode(visitMathFunctionCall(arithOperandNode.getMathFunctionCallNode()));
+        else if (arithOperandNode.getVariableName() != null) {
+            if (arithOperandNode.getVariableName().equals("Time")) {
+                return new ArithOperandNode("iTime");
+            }
+            else
+                return arithOperandNode;
+        }
+        else
+            return arithOperandNode;
+    }
+
+    private MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
+        return new MathFunctionCallNode(mathFunctionCallNode.getFunctionName(), visitLowPrecedence(mathFunctionCallNode.getLowPrecedenceNode()));
+    }
+
+    private ObjectArgumentNode visitArgumentNode(ObjectArgumentNode argumentNode) {
+        if (argumentNode.getLowPrecedence() != null)
+            return new ObjectArgumentNode(visitLowPrecedence(argumentNode.getLowPrecedence()));
+        else if (argumentNode.getColorFunctionCallNode() != null)
+            return argumentNode; //TODO: visitColorFunctionCall
+        else if (argumentNode.getNonObjectFunctionCallNode() != null)
+            return argumentNode; //TODO: visitNonObjectFunctionCall
+        else if (argumentNode.getObjectFunctionCallNode() != null)
+            return new ObjectArgumentNode(visitObjectFunctionCall(argumentNode.getObjectFunctionCallNode()));
+        else
+            return argumentNode;
+    }
+
+    private DeclarationNode visitDeclaration(DeclarationNode declarationNode) {
         if (declarationNode instanceof VariableDeclarationNode)
-            return; //TODO: visitVariableDeclaration((VariableDeclarationNode)declarationNode);
+            return declarationNode; //TODO: visitVariableDeclaration((VariableDeclarationNode)declarationNode);
         else if (declarationNode instanceof ObjectDeclarationNode)
-            visitObjectDeclaration((ObjectDeclarationNode)declarationNode);
+            return visitObjectDeclaration((ObjectDeclarationNode)declarationNode);
         else
             throw new RuntimeException("Declaration is of unknown type");
     }
 
-    private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
-        ArrayList<ObjectArgumentNode> argumentNodes = objectDeclarationNode.getObjectArgumentNodes();
+    private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
+        ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
+
+        for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectArgumentNodes()) {
+            argumentNodes.add(visitArgumentNode(argumentNode));
+        }
 
         String objectType = objectDeclarationNode.getObjectType();
         usedClasses.add(objectType);
 
+        String variableName = objectDeclarationNode.getVariableName();
         SpookObject object;
 
         switch (objectType) {
             case "Circle":
-                object = new Circle(objectDeclarationNode.getVariableName(), argumentNodes);
+                object = new Circle(variableName, argumentNodes);
                 break;
             case "Rectangle":
-                object = new Rectangle(objectDeclarationNode.getVariableName(), argumentNodes);
+                object = new Rectangle(variableName, argumentNodes);
                 break;
             case "Square":
-                object = new Square(objectDeclarationNode.getVariableName(), argumentNodes);
+                object = new Square(variableName, argumentNodes);
                 break;
             case "Triangle":
-                object = new Triangle(objectDeclarationNode.getVariableName(), argumentNodes);
+                object = new Triangle(variableName, argumentNodes);
                 break;
             default:
                 throw new RuntimeException("Invalid object declaration");
         }
 
-        spookObjects.put(objectDeclarationNode.getVariableName(), object);
+        spookObjects.put(variableName, object);
+
+        if (argumentNodes.size() > 0)
+            return new ObjectDeclarationNode(objectType, variableName, argumentNodes);
+        else
+            return new ObjectDeclarationNode(objectType, variableName);
     }
 
-    private void visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
-        if (objectFunctionCallNode.getObjectVariableName().equals("Scene")) {
-            switch (objectFunctionCallNode.getFunctionName()) {
+    private ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
+        String objectVariableName = objectFunctionCallNode.getObjectVariableName();
+        String functionName = objectFunctionCallNode.getFunctionName();
+
+        ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
+
+        for (ObjectArgumentNode argumentNode : objectFunctionCallNode.getObjectArguments()) {
+            argumentNodes.add(visitArgumentNode(argumentNode));
+        }
+
+        if (objectVariableName.equals("Scene")) {
+            switch (functionName) {
                 case "add":
-                    String objectName = objectFunctionCallNode.getObjectArguments().get(0)
+                    String objectName = argumentNodes.get(0)
                             .getLowPrecedence()
                             .getHighPrecedenceNodes().get(0)
                             .getAtomPrecedenceNodes().get(0)
@@ -167,29 +312,33 @@ public class CodeGenerator {
                         scene.add(object);
                     break;
                 case "setColor":
-                    scene.setColor(Color.getColorProperty(objectFunctionCallNode.getObjectArguments().get(0).getColorFunctionCallNode()));
+                    scene.setColor(Color.getColorProperty(argumentNodes.get(0).getColorFunctionCallNode()));
                     break;
                 default:
-                    throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
+                    throw new RuntimeException("Unknown function: " + functionName);
             }
         }
         else {
-            String objectName = objectFunctionCallNode.getObjectVariableName();
-            SpookObject object = spookObjects.get(objectName);
+            SpookObject object = spookObjects.get(objectVariableName);
 
             if (object == null)
                 throw new RuntimeException("Object not found");
 
-            switch (objectFunctionCallNode.getFunctionName()) {
+            switch (functionName) {
                 case "setPosition":
-                    ObjectArgumentNode x = objectFunctionCallNode.getObjectArguments().get(0);
-                    ObjectArgumentNode y = objectFunctionCallNode.getObjectArguments().get(1);
+                    ObjectArgumentNode x = argumentNodes.get(0);
+                    ObjectArgumentNode y = argumentNodes.get(1);
                     object.setPosition(new Vector2(x,y));
                     break;
                 default:
-                    throw new RuntimeException("Unknown function: " + objectFunctionCallNode.getFunctionName());
+                    throw new RuntimeException("Unknown function: " + functionName);
             }
         }
+
+        if (argumentNodes.size() > 0)
+            return new ObjectFunctionCallNode(objectVariableName, functionName, argumentNodes);
+        else
+            return new ObjectFunctionCallNode(objectVariableName, functionName);
     }
 
     private String getClassCode(String classType, String methodName) {
