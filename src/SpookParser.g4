@@ -132,8 +132,7 @@ nonObjectFunctionCall
 
 // Object function calls
 objectFunctionCall
-    : objectVariableName DOT functionName ASSIGN (objectArgs? | LEFT_PAREN objectArgs? RIGHT_PAREN)
-    | objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
+    :objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
 
 // Object arguments
 objectArgs
