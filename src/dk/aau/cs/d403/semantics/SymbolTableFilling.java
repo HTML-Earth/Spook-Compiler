@@ -34,6 +34,7 @@ public class SymbolTableFilling implements SymbolTable{
         listOfPredefinedClasses.add("Circle");
         listOfPredefinedClasses.add("Rectangle");
         listOfPredefinedClasses.add("Triangle");
+        listOfPredefinedClasses.add("Square");
         listOfPredefinedClasses.add("Color");
         listOfPredefinedClasses.add("Shape");
     }
@@ -200,16 +201,13 @@ public class SymbolTableFilling implements SymbolTable{
         String variableName = objectDeclarationNode.getVariableName();
 
         /* Check if the object is of a predefined class or a custom class */
-        Enums.ClassType objectType = null;
-        String customClassType = null;
+        String objectType = null;
         if(objectDeclarationNode.getObjectType() != null)
             objectType = objectDeclarationNode.getObjectType();
-        else if(objectDeclarationNode.getCustomClassType() != null)
-            customClassType = objectDeclarationNode.getCustomClassType();
 
         // Check if the custom class exists
         boolean customClassTypeExisting = false;
-        if(retrieveSymbol(customClassType) != null)
+        if(retrieveSymbol(objectType) != null)
             customClassTypeExisting = true;
 
         // Check if there are arguments
@@ -222,17 +220,9 @@ public class SymbolTableFilling implements SymbolTable{
                     enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
                 else
                     enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, new ArrayList<>()));
-
-            if(customClassType != null && customClassTypeExisting)
-                if(objectArguments != null)
-                    enterSymbol(variableName, new NodeObject(customClassType, variableName, this.scopeLevel, objectArguments));
-                else
-                    enterSymbol(variableName, new NodeObject(customClassType, variableName, this.scopeLevel, new ArrayList<>()));
-            else if(customClassType != null)
-                throw new RuntimeException("ERROR: Custom class type does not exist");
         }
         // SCOPE CHECK: If a variable already existed but not of the same type
-        else if (!retrieveSymbol(variableName).getClassType().equals(objectType) && !retrieveSymbol(variableName).getClassType().equals(customClassType)) {
+        else if (!retrieveSymbol(variableName).getClassType().toString().equals(objectType)) {
             enterSymbol(variableName, new NodeObject(objectType, variableName, this.scopeLevel, objectArguments));
         }
         // SCOPE CHECK: If a variable already existed but not in the same scope
@@ -303,8 +293,11 @@ public class SymbolTableFilling implements SymbolTable{
         if(retrieveSymbol(objectVariableName) != null) {
             enterSymbol(objectVariableName, new NodeObject(objectVariableName, functionName, this.scopeLevel, objectArgumentNodes));
         }
+        else if (objectVariableName.equals("Scene")) {
+            // Don't check because scene is always available
+        }
         else
-            throw new RuntimeException("ERROR: Object is not declared.");
+            throw new RuntimeException("ERROR: Object '" + objectVariableName + "' is not declared.");
     }
 
     private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
@@ -399,9 +392,7 @@ public class SymbolTableFilling implements SymbolTable{
 
     private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
 
-        if(expressionNode instanceof IntegerExpressionNode)
-            return Enums.DataType.INT;
-        else if(expressionNode instanceof FloatExpressionNode)
+        if(expressionNode instanceof ArithExpressionNode)
             return Enums.DataType.FLOAT;
         else if(expressionNode instanceof BoolExpressionNode)
             return Enums.DataType.BOOL;
@@ -413,77 +404,6 @@ public class SymbolTableFilling implements SymbolTable{
             return Enums.DataType.VEC4;
         else
             throw new RuntimeException("Assignment expression is unknown");
-    }
-
-
-
-
-
-
-
-    // NOT CURRENTLY USED BUT IS TOO BIG TO LET GO JUST YET
-
-    private void setupPredefinedElements(ProgramNode programNode) {
-        // Lists
-        ArrayList<FunctionDeclarationNode> shapeFunctions = new ArrayList<>();
-        ArrayList<DeclarationNode> shapeDeclarations = new ArrayList<>();
-        ArrayList<StatementNode> setPositionStatements = new ArrayList<>();
-        ArrayList<FunctionArgNode> positionFunctionArgs = new ArrayList<>();
-        ArrayList<FunctionDeclarationNode> colorFunctions = new ArrayList<>();
-        ArrayList<DeclarationNode> colorDeclarations = new ArrayList<>();
-
-        // Shape Variable Declarations
-        VariableDeclarationNode positionXDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionX");
-        VariableDeclarationNode positionYDecl = new VariableDeclarationNode(Enums.DataType.INT, "positionY");
-        shapeDeclarations.add(positionXDecl);
-        shapeDeclarations.add(positionYDecl);
-
-        // Shape Function Blocks
-
-        StatementNode setPositionXAssign = new AssignmentNode("positionX", "funcPositionX");
-        StatementNode setPositionYAssign = new AssignmentNode("positionY", "funcPositionY");
-
-        setPositionStatements.add(setPositionXAssign);
-        setPositionStatements.add(setPositionYAssign);
-        BlockNode positionBlockNode = new BlockNode(setPositionStatements);
-
-        // Shape Position function arguments
-        FunctionArgNode positionXArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionX");
-        FunctionArgNode positionYArg = new FunctionArgNode(Enums.DataType.INT, "funcPositionY");
-        positionFunctionArgs.add(positionXArg);
-        positionFunctionArgs.add(positionYArg);
-
-        // Shape Function Declarations
-        FunctionDeclarationNode positionFunction = new FunctionDeclarationNode(Enums.ReturnType.VOID, "position", positionFunctionArgs, positionBlockNode);
-        shapeFunctions.add(positionFunction);
-
-        // Color Return Statements
-
-
-        // Color Function Blocks
-        //BlockNode redFunctionBlockNode = new BlockNode(returnRedStatement);
-
-        // Color Function Declarations
-        //FunctionDeclarationNode redColorFunction = new FunctionDeclarationNode(Enums.Color.RED, "red", redFunctionBlockNode);
-
-        // Predefined Class Block Nodes
-        ClassBlockNode shapeBlockNode = new ClassBlockNode(shapeDeclarations, shapeFunctions);
-        ClassBlockNode colorBlockNode = new ClassBlockNode(colorDeclarations, colorFunctions);
-
-        // Predefined Classes
-        ClassDeclarationNode shapeClass = new ClassDeclarationNode("Shape", shapeBlockNode);
-        ClassDeclarationNode circleClass = new ClassDeclarationNode("Circle", shapeBlockNode);
-        ClassDeclarationNode rectangleClass = new ClassDeclarationNode("Rectangle", shapeBlockNode);
-        ClassDeclarationNode triangleClass = new ClassDeclarationNode("Triangle", shapeBlockNode);
-        ClassDeclarationNode colorClass = new ClassDeclarationNode("Color", colorBlockNode);
-
-
-        // Enter classes into the program node
-        programNode.getClassDeclarationNodes().add(shapeClass);
-        programNode.getClassDeclarationNodes().add(circleClass);
-        programNode.getClassDeclarationNodes().add(rectangleClass);
-        programNode.getClassDeclarationNodes().add(triangleClass);
-        programNode.getClassDeclarationNodes().add(colorClass);
     }
 }
 

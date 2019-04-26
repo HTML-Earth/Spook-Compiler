@@ -40,37 +40,25 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclarations(SpookParser.DeclarationsContext ctx) { }
+	@Override public void enterBlock(SpookParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclarations(SpookParser.DeclarationsContext ctx) { }
+	@Override public void exitBlock(SpookParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(SpookParser.DeclarationContext ctx) { }
+	@Override public void enterComment(SpookParser.CommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration(SpookParser.DeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStatements(SpookParser.StatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatements(SpookParser.StatementsContext ctx) { }
+	@Override public void exitComment(SpookParser.CommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -88,25 +76,37 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock(SpookParser.BlockContext ctx) { }
+	@Override public void enterDeclaration(SpookParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlock(SpookParser.BlockContext ctx) { }
+	@Override public void exitDeclaration(SpookParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassBlock(SpookParser.ClassBlockContext ctx) { }
+	@Override public void enterVariableDecl(SpookParser.VariableDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassBlock(SpookParser.ClassBlockContext ctx) { }
+	@Override public void exitVariableDecl(SpookParser.VariableDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterObjectDecl(SpookParser.ObjectDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitObjectDecl(SpookParser.ObjectDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -136,25 +136,13 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntegerExpression(SpookParser.IntegerExpressionContext ctx) { }
+	@Override public void enterArithExpression(SpookParser.ArithExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntegerExpression(SpookParser.IntegerExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFloatExpression(SpookParser.FloatExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFloatExpression(SpookParser.FloatExpressionContext ctx) { }
+	@Override public void exitArithExpression(SpookParser.ArithExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -220,85 +208,145 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalStatement(SpookParser.ConditionalStatementContext ctx) { }
+	@Override public void enterArithOperand(SpookParser.ArithOperandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalStatement(SpookParser.ConditionalStatementContext ctx) { }
+	@Override public void exitArithOperand(SpookParser.ArithOperandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfElseStatement(SpookParser.IfElseStatementContext ctx) { }
+	@Override public void enterMathFunction(SpookParser.MathFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfElseStatement(SpookParser.IfElseStatementContext ctx) { }
+	@Override public void exitMathFunction(SpookParser.MathFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComment(SpookParser.CommentContext ctx) { }
+	@Override public void enterLowPrecedence(SpookParser.LowPrecedenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComment(SpookParser.CommentContext ctx) { }
+	@Override public void exitLowPrecedence(SpookParser.LowPrecedenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassDecl(SpookParser.ClassDeclContext ctx) { }
+	@Override public void enterHighPrecedence(SpookParser.HighPrecedenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassDecl(SpookParser.ClassDeclContext ctx) { }
+	@Override public void exitHighPrecedence(SpookParser.HighPrecedenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectDecl(SpookParser.ObjectDeclContext ctx) { }
+	@Override public void enterAtomPrecedence(SpookParser.AtomPrecedenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObjectDecl(SpookParser.ObjectDeclContext ctx) { }
+	@Override public void exitAtomPrecedence(SpookParser.AtomPrecedenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectArgs(SpookParser.ObjectArgsContext ctx) { }
+	@Override public void enterHighOperator(SpookParser.HighOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObjectArgs(SpookParser.ObjectArgsContext ctx) { }
+	@Override public void exitHighOperator(SpookParser.HighOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectArg(SpookParser.ObjectArgContext ctx) { }
+	@Override public void enterLowOperator(SpookParser.LowOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObjectArg(SpookParser.ObjectArgContext ctx) { }
+	@Override public void exitLowOperator(SpookParser.LowOperatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolOperations(SpookParser.BoolOperationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolOperations(SpookParser.BoolOperationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolOperation(SpookParser.BoolOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolOperation(SpookParser.BoolOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSwizzle(SpookParser.SwizzleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSwizzle(SpookParser.SwizzleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCoordinateSwizzle(SpookParser.CoordinateSwizzleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCoordinateSwizzle(SpookParser.CoordinateSwizzleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterColorSwizzle(SpookParser.ColorSwizzleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColorSwizzle(SpookParser.ColorSwizzleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -328,18 +376,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitObjectVariableAssign(SpookParser.ObjectVariableAssignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterObjectFunctionCall(SpookParser.ObjectFunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -352,13 +388,229 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassProperty(SpookParser.ClassPropertyContext ctx) { }
+	@Override public void enterObjectArgs(SpookParser.ObjectArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassProperty(SpookParser.ClassPropertyContext ctx) { }
+	@Override public void exitObjectArgs(SpookParser.ObjectArgsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterObjectArg(SpookParser.ObjectArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitObjectArg(SpookParser.ObjectArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterColorFunctionCall(SpookParser.ColorFunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConditionalStatement(SpookParser.ConditionalStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConditionalStatement(SpookParser.ConditionalStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfElseStatement(SpookParser.IfElseStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfElseStatement(SpookParser.IfElseStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfStatement(SpookParser.IfStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfStatement(SpookParser.IfStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseIfStatement(SpookParser.ElseIfStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseIfStatement(SpookParser.ElseIfStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseStatement(SpookParser.ElseStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseStatement(SpookParser.ElseStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfBoolExpression(SpookParser.IfBoolExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfBoolExpression(SpookParser.IfBoolExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfBlock(SpookParser.IfBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfBlock(SpookParser.IfBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseIfBlock(SpookParser.ElseIfBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseIfBlock(SpookParser.ElseIfBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseBlock(SpookParser.ElseBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseBlock(SpookParser.ElseBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConditionalBlock(SpookParser.ConditionalBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConditionalBlock(SpookParser.ConditionalBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIterativeStatement(SpookParser.IterativeStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIterativeStatement(SpookParser.IterativeStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterForStatement(SpookParser.ForStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForStatement(SpookParser.ForStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterForLoopExpression(SpookParser.ForLoopExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForLoopExpression(SpookParser.ForLoopExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterClassDecl(SpookParser.ClassDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClassDecl(SpookParser.ClassDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterClassBlock(SpookParser.ClassBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClassBlock(SpookParser.ClassBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -400,109 +652,25 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDecl(SpookParser.VariableDeclContext ctx) { }
+	@Override public void enterFunctionBlock(SpookParser.FunctionBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDecl(SpookParser.VariableDeclContext ctx) { }
+	@Override public void exitFunctionBlock(SpookParser.FunctionBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArithOperations(SpookParser.ArithOperationsContext ctx) { }
+	@Override public void enterReturnStatement(SpookParser.ReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArithOperations(SpookParser.ArithOperationsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArithOperation(SpookParser.ArithOperationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithOperation(SpookParser.ArithOperationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArithOperand(SpookParser.ArithOperandContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithOperand(SpookParser.ArithOperandContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMathFunction(SpookParser.MathFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMathFunction(SpookParser.MathFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIterativeStatement(SpookParser.IterativeStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIterativeStatement(SpookParser.IterativeStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterForStatement(SpookParser.ForStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitForStatement(SpookParser.ForStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBoolOperations(SpookParser.BoolOperationsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolOperations(SpookParser.BoolOperationsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBoolOperation(SpookParser.BoolOperationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolOperation(SpookParser.BoolOperationContext ctx) { }
+	@Override public void exitReturnStatement(SpookParser.ReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -520,25 +688,13 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNaturalNumber(SpookParser.NaturalNumberContext ctx) { }
+	@Override public void enterIntegerNumber(SpookParser.IntegerNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNaturalNumber(SpookParser.NaturalNumberContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperator(SpookParser.OperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOperator(SpookParser.OperatorContext ctx) { }
+	@Override public void exitIntegerNumber(SpookParser.IntegerNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -587,18 +743,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClassType(SpookParser.ClassTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCustomClassType(SpookParser.CustomClassTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCustomClassType(SpookParser.CustomClassTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -683,18 +827,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClassName(SpookParser.ClassNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAssignedVariableName(SpookParser.AssignedVariableNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignedVariableName(SpookParser.AssignedVariableNameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

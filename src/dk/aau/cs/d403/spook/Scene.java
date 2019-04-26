@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.spook;
 
+import dk.aau.cs.d403.ast.NumberPacking;
+import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.spook.color.Color;
 import dk.aau.cs.d403.spook.color.Colorable;
 
@@ -21,11 +23,11 @@ public class Scene extends SpookObject implements Colorable {
         throw new RuntimeException("Scene position cannot be changed");
     }
 
-    public float getRotation() {
-        return 0;
+    public ObjectArgumentNode getRotation() {
+        return NumberPacking.getObjectArgumentFromFloat(0);
     }
 
-    public void setRotation(float rotation) {
+    public void setRotation(ObjectArgumentNode rotation) {
         throw new RuntimeException("Scene rotation cannot be changed");
     }
 

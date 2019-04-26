@@ -28,10 +28,12 @@ public interface ASTvisitor {
 
     //Expressions
     TernaryOperatorNode visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode);
-    ClassPropertyNode visitClassProperty(ClassPropertyNode classPropertyNode);
+    ColorFunctionCallNode visitClassProperty(ColorFunctionCallNode colorFunctionCallNode);
 
     ArithOperandNode visitArithOperand(ArithOperandNode arithOperandNode);
-    ArithOperationNode visitArithOperation(ArithOperationNode arithOperationNode);
+    LowPrecedenceNode visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode);
+    HighPrecedenceNode visitHighPrecedenceNode(HighPrecedenceNode highPrecedenceNode);
+    AtomPrecedenceNode visitAtomPrecedenceNode(AtomPrecedenceNode atomPrecedenceNode);
     BoolOperationNode visitBoolOperation(BoolOperationNode boolOperationNode);
 
     MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode);
@@ -39,12 +41,11 @@ public interface ASTvisitor {
 
     ExpressionNode visitExpressionNode(ExpressionNode expressionNode);
     BoolExpressionNode visitBoolExpression(BoolExpressionNode boolExpressionNode);
-    IntegerExpressionNode visitIntegerExpression(IntegerExpressionNode integerExpressionNode);
-    FloatExpressionNode visitFloatExpression(FloatExpressionNode floatExpressionNode);
+
     Vector2ExpressionNode visitVector2Expression(Vector2ExpressionNode vector2ExpressionNode);
     Vector3ExpressionNode visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode);
     Vector4ExpressionNode visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode);
 
-    NaturalNumberNode visitNaturalNumber(NaturalNumberNode naturalNumberNode);
+    IntegerNumberNode visitNaturalNumber(IntegerNumberNode integerNumberNode);
     RealNumberNode visitRealNumber(RealNumberNode realNumberNode);
 }
