@@ -5,7 +5,7 @@ Shader {
   Rectangle rec2 = (50, 50, Color.Green);
   rec2.setPosition(150 + sin(Time) * 100, 150);
 
-  Scene.setColor = Color.Red;
+  Scene.setColor(Color.Red);
   Scene.add(rec);
   Scene.add(rec2);
 }

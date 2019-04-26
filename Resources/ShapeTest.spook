@@ -8,7 +8,7 @@ Shader {
   Circle circle = (25, Color.Blue);
   circle.setPosition(75, 75);
 
-  Scene.setColor = Color.Red;
+  Scene.setColor(Color.Red);
   Scene.add(rec);
   Scene.add(rec2);
   Scene.add(circle);
