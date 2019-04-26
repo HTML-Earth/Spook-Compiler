@@ -6,36 +6,26 @@ import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 
 import java.util.ArrayList;
 
+import static dk.aau.cs.d403.ast.Enums.classTypeToString;
+
 public class ObjectDeclarationNode extends DeclarationNode {
-    private Enums.ClassType objectType;
-    private String customClassType;
+    private String objectType;
     private String variableName;
 
     private ArrayList<ObjectArgumentNode> objectArgumentNodes;
 
-    public ObjectDeclarationNode(Enums.ClassType objectType, String variableName) {
+    public ObjectDeclarationNode(String objectType, String variableName) {
         this.objectType = objectType;
         this.variableName = variableName;
     }
 
-    public ObjectDeclarationNode(Enums.ClassType objectType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+    public ObjectDeclarationNode(String objectType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
         this.objectType = objectType;
         this.variableName = variableName;
         this.objectArgumentNodes = objectArgumentNodes;
     }
 
-    public ObjectDeclarationNode(String customClassType, String variableName) {
-        this.customClassType = customClassType;
-        this.variableName = variableName;
-    }
-
-    public ObjectDeclarationNode(String customClassType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
-        this.customClassType = customClassType;
-        this.variableName = variableName;
-        this.objectArgumentNodes = objectArgumentNodes;
-    }
-
-    public Enums.ClassType getObjectType() {
+    public String getObjectType() {
         return objectType;
     }
 
@@ -47,28 +37,28 @@ public class ObjectDeclarationNode extends DeclarationNode {
         return objectArgumentNodes;
     }
 
-    public String getCustomClassType() {
-        return customClassType;
-    }
-
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Enums.classTypeToString(objectType));
+        sb.append(objectType);
         sb.append(" ");
         sb.append(variableName);
-        sb.append(" = (");
+        sb.append(" = ");
+        sb.append("(");
 
-        boolean first = true;
-        for (ObjectArgumentNode argNode : objectArgumentNodes) {
-            if (!first)
-                sb.append(", ");
-            first = false;
-            sb.append(argNode.prettyPrint());
+        if (objectArgumentNodes != null) {
+            //Print ',' before each arg except the first
+            boolean firstArg = true;
+            for (ObjectArgumentNode arg : objectArgumentNodes) {
+                if (!firstArg)
+                    sb.append(", ");
+                else
+                    firstArg = false;
+                sb.append(arg.prettyPrint());
+            }
         }
 
         sb.append(")");
-
         return sb.toString();
     }
 

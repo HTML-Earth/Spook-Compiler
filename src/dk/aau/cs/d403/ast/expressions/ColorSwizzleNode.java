@@ -1,22 +1,21 @@
 package dk.aau.cs.d403.ast.expressions;
 
-import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 
-public class NaturalNumberNode implements ASTnode {
-    private int number;
+public class ColorSwizzleNode extends ExpressionNode {
+    private String swizzle;
 
-    public NaturalNumberNode(int number) {
-        this.number = number;
+    public ColorSwizzleNode(String swizzle) {
+        this.swizzle = swizzle;
     }
 
-    public int getNumber() {
-        return number;
+    public String getSwizzle() {
+        return swizzle;
     }
 
     @Override
     public String prettyPrint() {
-        return "" + number;
+        return swizzle;
     }
 
     private CodePosition codePosition;

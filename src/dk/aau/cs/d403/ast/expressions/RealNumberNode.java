@@ -16,7 +16,7 @@ public class RealNumberNode implements ASTnode {
 
     @Override
     public String prettyPrint() {
-        return "" + number;
+        return String.valueOf(number);
     }
 
     private CodePosition codePosition;
