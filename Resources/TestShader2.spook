@@ -20,16 +20,16 @@ Shader{
   Float yPos = 300 * (jumptime*0.5+1) - 200;
 
   #Get in Shape
-  Rectangle red = (height, length, Color.Green);
-  Bulletbill billy = (height, length, Color.Blue);
+  Rectangle red = (height, length, Color.green());
+  Bulletbill billy = (height, length, Color.blue());
   if (true) {
     radius = 46 + 100 / 2 + 4; #Det 100
   } else
     radius = 0;
 
   #And Action!
-  Scene.color = Color.Black;
-  Scene.Add(circleFactory(radius, Color.Red));
+  Scene.setColor(Color.black());
+  Scene.Add(circleFactory(radius, Color.red()));
   Scene.Add(rec, 100, yPos);
   Scene.Add(billy.setShadow());
   Scene.Add(billy);
@@ -47,7 +47,7 @@ Class Bulletbill extends Shape{
   #Color from Shape
   Rectangle body = ();
   Circle head = ();
-  Color shadow = Color(105, 105, 105);
+  Color shadow = (105, 105, 105);
 
   #Constructor
   Bulletbill (Float height, Float length, Color color) {
