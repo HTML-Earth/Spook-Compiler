@@ -11,6 +11,7 @@ Shader {
 
     #Animation
     Float jumpTime   = abs(sin(Time * 3));
+    Float yPos = (jumpTime + 1) * jumpHeight;
     Float shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
 
     #Shadow color
@@ -27,7 +28,7 @@ Shader {
     ball.add(shiny);
 
     #Object positions
-    ball.setPosition   = (xPos, ((jumpTime + 1) * jumpHeight));
+    ball.setPosition   = (xPos, yPos);
     shadow.setPosition = (xPos, groundHeight);
 
     #Setup scene
