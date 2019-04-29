@@ -11,23 +11,6 @@ VECTOR4: 'Vec4';
 // Return types (without data types)
 VOID: 'Void';
 
-// Pre-defined classes
-CIRCLE: 'Circle';
-RECTANGLE: 'Rectangle';
-TRIANGLE: 'Triangle';
-SQUARE: 'Square';
-SHAPE: 'Shape';
-COLOR: 'Color';
-CIRCLEGRADIENT: 'CircleGradient';
-LINEGRADIENT: 'LineGradient';
-
-// Pre-defined colors
-BLACK: 'Black';
-WHITE: 'White';
-RED: 'Red';
-GREEN: 'Green';
-BLUE: 'Blue';
-
 // Keywords
 MAIN: 'Shader';
 CLASS: 'Class';

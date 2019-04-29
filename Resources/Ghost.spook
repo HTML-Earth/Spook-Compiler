@@ -1,35 +1,35 @@
 Shader {
-    Circle eye1 = (20, Color.Black);
-    Circle eye2 = (15, Color.Black);
+    Circle eye1 = (20, Color.black());
+    Circle eye2 = (15, Color.black());
     eye1.setPosition(150,290 + sin(Time - 0.1) * 25);
     eye2.setPosition(190,300 + sin(Time - 0.1) * 25);
     Scene.add(eye1);
     Scene.add(eye2);
 
-    Circle moufHole = (35, Color.Black);
+    Circle moufHole = (35, Color.black());
     moufHole.setPosition(240,200 + sin(Time - 0.2) * 30);
     Scene.add(moufHole);
 
-    Circle top1 = (40, Color.White);
-    Circle top2 = (40, Color.White);
+    Circle top1 = (40, Color.white());
+    Circle top2 = (40, Color.white());
     top1.setPosition(180, 320 + sin(Time) * 20);
     top2.setPosition(150, 310 + sin(Time) * 20);
     Scene.add(top1);
     Scene.add(top2);
 
-    Circle hed = (80, Color.White);
+    Circle hed = (80, Color.white());
     hed.setPosition(150, 260 + sin(Time) * 20);
     Scene.add(hed);
 
-    Circle mouf = (90, Color.White);
+    Circle mouf = (90, Color.white());
     mouf.setPosition(200,200 + sin(Time) * 20);
     Scene.add(mouf);
 
-    Circle tip1 = (15, Color.White);
-    Circle tip2 = (15, Color.White);
-    Circle tip3 = (15, Color.White);
-    Circle tip4 = (15, Color.White);
-    Circle tip5 = (15, Color.White);
+    Circle tip1 = (15, Color.white());
+    Circle tip2 = (15, Color.white());
+    Circle tip3 = (15, Color.white());
+    Circle tip4 = (15, Color.white());
+    Circle tip5 = (15, Color.white());
     tip1.setPosition(120,148 + sin(Time) * 15);
     tip5.setPosition(210,108 + sin(Time) * 15);
     tip2.setPosition(135,128 + sin(Time) * 15);
@@ -41,5 +41,5 @@ Shader {
     Scene.add(tip4);
     Scene.add(tip5);
 
-    Scene.setColor(Color.Black);
+    Scene.setColor(Color.black());
 }

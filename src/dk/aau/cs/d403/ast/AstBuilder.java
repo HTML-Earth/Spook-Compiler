@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
@@ -243,7 +242,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
         ClassBlockNode classBlockNode = (ClassBlockNode) visitClassBlock(ctx.classBlock());
 
-        ClassDeclarationNode classDeclarationNode = new ClassDeclarationNode(ctx.className().getText(), classBlockNode);
+        ClassDeclarationNode classDeclarationNode = new ClassDeclarationNode(ctx.className(0).getText(), classBlockNode);
         classDeclarationNode.setCodePosition(getCodePosition(ctx));
 
         return classDeclarationNode;
@@ -496,12 +495,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return objectArgumentNode;
         }
-        else if (ctx.colorFunctionCall() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((ColorFunctionCallNode) visitColorFunctionCall(ctx.colorFunctionCall()));
-            objectArgumentNode.setCodePosition(getCodePosition(ctx));
-
-            return objectArgumentNode;
-        }
         else
             throw new CompilerException("Invalid Object Function Call Argument", getCodePosition(ctx));
     }
@@ -610,21 +603,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         }
         else
             throw new CompilerException("Invalid Operand", getCodePosition(ctx));
-    }
-
-    @Override
-    public ASTnode visitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx) {
-        Enums.ColorName colorName;
-
-        if (ctx.predefinedFunctionName() != null)
-            colorName = getColorName(ctx.predefinedFunctionName());
-        else
-            throw new CompilerException("Invalid class property", getCodePosition(ctx));
-
-        ColorFunctionCallNode colorFunctionCallNode = new ColorFunctionCallNode(colorName);
-        colorFunctionCallNode.setCodePosition(getCodePosition(ctx));
-
-        return colorFunctionCallNode;
     }
 
     @Override
@@ -846,44 +824,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("ReturnType is unknown", getCodePosition(ctx));
 
         return returnType;
-    }
-
-    private Enums.ClassType getClassType(SpookParser.ClassTypeContext ctx) {
-        Enums.ClassType classType;
-
-        if (ctx.CIRCLE() != null)
-            classType = Enums.ClassType.CIRCLE;
-        else if (ctx.RECTANGLE() != null)
-            classType = Enums.ClassType.RECTANGLE;
-        else if (ctx.TRIANGLE() != null)
-            classType = Enums.ClassType.TRIANGLE;
-        else if (ctx.SHAPE() != null)
-            classType = Enums.ClassType.SHAPE;
-        else if (ctx.COLOR() != null)
-            classType = Enums.ClassType.COLOR;
-        else
-            throw new CompilerException("ClassType is unknown", getCodePosition(ctx));
-
-        return classType;
-    }
-
-    private Enums.ColorName getColorName(SpookParser.PredefinedFunctionNameContext ctx) {
-        Enums.ColorName colorName;
-
-        if (ctx.colorName().BLACK() != null)
-            colorName = Enums.ColorName.BLACK;
-        else if (ctx.colorName().BLUE() != null)
-            colorName = Enums.ColorName.BLUE;
-        else if (ctx.colorName().RED() != null)
-            colorName = Enums.ColorName.RED;
-        else if (ctx.colorName().GREEN() != null)
-            colorName = Enums.ColorName.GREEN;
-        else if (ctx.colorName().WHITE() != null)
-            colorName = Enums.ColorName.WHITE;
-        else
-            throw new CompilerException("Color is unknown", getCodePosition(ctx));
-
-        return colorName;
     }
 
     private Enums.Operator getOperator(SpookParser.HighOperatorContext ctx) {

@@ -140,14 +140,7 @@ objectArgs
     | objectArg;
 objectArg
     : lowPrecedence
-    | colorFunctionCall
     | functionCall;
-
-// Color function call (Color.Black) etc.
-colorFunctionCall
-    : COLOR DOT (predefinedFunctionName | vector3Expression);
-
-
 
 
 /*      CONDITIONAL STATEMENTS      */
@@ -189,7 +182,7 @@ forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
 /*      CLASSES     */
 // Class declaration
 classDecl
-    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
+    : CLASS className ((EXTENDS | IMPLEMENTS) className)? classBlock;
 
 // Class block
 classBlock: LEFT_BRACKET (declaration | constructor | functionDecl | comment)* RIGHT_BRACKET;
@@ -245,18 +238,7 @@ function
 // Return types
 returnType
     : dataType
-    | classType;
-
-// Pre-defined classes
-classType
-    : CIRCLE
-    | RECTANGLE
-    | TRIANGLE
-    | SQUARE
-    | SHAPE
-    | COLOR
-    | CIRCLEGRADIENT
-    | LINEGRADIENT;
+    | className;
 
 // Data types
 dataType
@@ -267,15 +249,6 @@ dataType
     | VECTOR3
     | VECTOR4;
 
-predefinedFunctionName
-    : colorName;
-colorName
-    : BLACK
-    | WHITE
-    | RED
-    | GREEN
-    | BLUE;
-
 // Variable names
 objectVariableName
     : ID;
@@ -284,5 +257,4 @@ functionName
 variableName
     : ID;
 className
-    : ID
-    | classType;
+    : ID;

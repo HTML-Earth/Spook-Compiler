@@ -1,4 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -338,16 +338,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitObjectArg(SpookParser.ObjectArgContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorFunctionCall}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorFunctionCall}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SpookParser#conditionalStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -508,6 +498,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitClassBlock(SpookParser.ClassBlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructor(SpookParser.ConstructorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructor(SpookParser.ConstructorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#constructorBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructorBlock(SpookParser.ConstructorBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#constructorBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructorBlock(SpookParser.ConstructorBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#functionDecl}.
 	 * @param ctx the parse tree
 	 */
@@ -608,16 +618,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitReturnType(SpookParser.ReturnTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#classType}.
-	 * @param ctx the parse tree
-	 */
-	void enterClassType(SpookParser.ClassTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#classType}.
-	 * @param ctx the parse tree
-	 */
-	void exitClassType(SpookParser.ClassTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SpookParser#dataType}.
 	 * @param ctx the parse tree
 	 */
@@ -627,26 +627,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataType(SpookParser.DataTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#predefinedFunctionName}.
-	 * @param ctx the parse tree
-	 */
-	void enterPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#predefinedFunctionName}.
-	 * @param ctx the parse tree
-	 */
-	void exitPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorName}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorName(SpookParser.ColorNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorName}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorName(SpookParser.ColorNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree
