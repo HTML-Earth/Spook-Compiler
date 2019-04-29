@@ -8,13 +8,27 @@ import dk.aau.cs.d403.ast.structure.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class TypeChecking {
     private Stack<HashMap<String, ASTnode>> hashMapStack;
+    private Integer functionCounter = 1;
+
+    private ArrayList<String> listOfPredefinedClasses;
 
     public TypeChecking() {
         this.hashMapStack = new Stack<>();
+        this.listOfPredefinedClasses = new ArrayList<>();
+
+        this.listOfPredefinedClasses.add("Circle");
+        this.listOfPredefinedClasses.add("Rectangle");
+        this.listOfPredefinedClasses.add("Triangle");
+        this.listOfPredefinedClasses.add("Square");
+        this.listOfPredefinedClasses.add("Shape");
+        this.listOfPredefinedClasses.add("Color");
+        this.listOfPredefinedClasses.add("CircleGradient");
+        this.listOfPredefinedClasses.add("LineGradient");
     }
 
     private void openScope() {
@@ -27,13 +41,18 @@ public class TypeChecking {
     }
 
     private void enterSymbol(String name, ASTnode object) {
-        this.hashMapStack.peek().put(name, object);
+        if (retrieveSymbol(name) != null) {
+            String functionName = functionCounter.toString() + name;
+            functionCounter += 1;
+            this.hashMapStack.peek().put(functionName, object);
+        } else
+            this.hashMapStack.peek().put(name, object);
     }
 
     private ASTnode retrieveSymbol(String name) {
         int stackLevel = this.hashMapStack.size() - 1;
 
-        while (stackLevel != 0) {
+        while (stackLevel >= 0) {
             if (this.hashMapStack.elementAt(stackLevel).get(name) != null)
                 return this.hashMapStack.elementAt(stackLevel).get(name);
             else
@@ -47,8 +66,8 @@ public class TypeChecking {
         System.out.println("Symbol table:\n----------------------------------");
         System.out.println("Size of stack: " + hashMapStack.size());
         for (HashMap<String, ASTnode> hashMap : hashMapStack) {
-            for (ASTnode object : hashMap.values()) {
-                System.out.println(object.prettyPrint());
+            for (Map.Entry<String, ASTnode> entry : hashMap.entrySet()) {
+                System.out.println(entry);
             }
         }
         System.out.println("----------------------------------");
@@ -62,7 +81,6 @@ public class TypeChecking {
             visitFunctionDeclaration(functionDeclaration);
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
             visitClassDeclaration(classDeclaration);
-        closeScope();
     }
 
     public void visitMain(MainNode mainNode) {
@@ -138,26 +156,50 @@ public class TypeChecking {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
 
-        FunctionDeclarationNode retrievedNode = null;
+        FunctionDeclarationNode retrievedNode;
         if (retrieveSymbol(functionName) != null)
             retrievedNode = (FunctionDeclarationNode) retrieveSymbol(functionName);
-
-        if (retrieveSymbol(functionName) == null)
-            enterSymbol(functionName, functionDeclarationNode);
-        else if (retrievedNode != null && !functionArgs.equals(retrievedNode.getFunctionArgNodes()))
-            enterSymbol(functionName, functionDeclarationNode);
         else
-            throw new RuntimeException("ERROR: A function with the same name and parameters already exists");
+            retrievedNode = null;
 
-        visitFunctionBlock(functionDeclarationNode.getBlockNode());
+        // Same name
+        if (retrievedNode == null)
+            enterSymbol(functionName, functionDeclarationNode);
+        else if (retrievedNode.getFunctionArgNodes() != null && functionArgs != null)  {
+            boolean unique = false;
+            for (int i = functionArgs.size(); i > 0; i--) {
+                if (!functionArgs.get(i - 1).prettyPrint().equals(retrievedNode.getFunctionArgNodes().get(i - 1).prettyPrint())) {
+                    unique = true;
+                    break;
+                }
+            }
+            if (unique)
+                enterSymbol(functionName, functionDeclarationNode);
+            else
+                throw new RuntimeException("ERROR: A function with the same name already exists.");
+        }
+        else if (retrievedNode.getFunctionArgNodes() == null) {
+            if (functionArgs != null)
+                enterSymbol(functionName, functionDeclarationNode);
+            else
+                throw new RuntimeException("ERROR: A function with the same name already exists.");
+        }
+        else if (retrievedNode.getFunctionArgNodes() != null) {
+            enterSymbol(functionName, functionDeclarationNode);
+        }
+        else
+            throw new RuntimeException("ERROR: A function with the same name already exists.");
+
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType());
     }
 
-    private void visitFunctionBlock(BlockNode blockNode) {
+    private void visitFunctionBlock(BlockNode blockNode, Enums.ReturnType returnType) {
         openScope();
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
         }
-        visitReturnStatement(blockNode.getReturnNode());
+        if (returnType != Enums.ReturnType.VOID)
+            visitReturnStatement(blockNode.getReturnNode());
         closeScope();
     }
 
@@ -188,10 +230,12 @@ public class TypeChecking {
 
                     AssignmentNode assignmentNode = (AssignmentNode) retrieveSymbol(atomPrecedenceNode.getOperand().getVariableName());
                     Enums.DataType dataType = null;
-                    if (getExpressionNodeType(assignmentNode.getExpressionNode()).contains(Enums.DataType.FLOAT))
-                        dataType = Enums.DataType.FLOAT;
-                    else if (getExpressionNodeType(assignmentNode.getExpressionNode()).contains(Enums.DataType.INT))
-                        dataType = Enums.DataType.INT;
+                    if (assignmentNode != null) {
+                        if (getExpressionNodeType(assignmentNode.getExpressionNode()).contains(Enums.DataType.FLOAT))
+                            dataType = Enums.DataType.FLOAT;
+                        else if (getExpressionNodeType(assignmentNode.getExpressionNode()).contains(Enums.DataType.INT))
+                            dataType = Enums.DataType.INT;
+                    }
 
                     if (dataType == null)
                         throw new RuntimeException("ERROR: Variable does not match the expression type.");
@@ -204,7 +248,30 @@ public class TypeChecking {
     }
 
     /*      CLASSES          */
-    private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {}
+    private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
+        String className = classDeclarationNode.getClassName();
+
+        if (retrieveSymbol(className) == null && !this.listOfPredefinedClasses.contains(className))
+            enterSymbol(className, classDeclarationNode);
+        else
+            throw new RuntimeException("ERROR: Class name is already in use.");
+
+        visitClassBlock(classDeclarationNode.getClassBlockNode());
+    }
+
+    private void visitClassBlock(ClassBlockNode classBlockNode) {
+        openScope();
+        for (DeclarationNode declarationNode : classBlockNode.getDeclarationNodes()) {
+            if (declarationNode instanceof VariableDeclarationNode)
+                visitVariableDeclaration((VariableDeclarationNode) declarationNode);
+            //else if (declarationNode instanceof ObjectDeclarationNode)
+               // visitObjectDeclaration((ObjectDeclarationNode) declarationNode);
+        }
+        for (FunctionDeclarationNode functionDeclarationNode : classBlockNode.getFunctionDeclarationNodes()) {
+            visitFunctionDeclaration(functionDeclarationNode);
+        }
+        closeScope();
+    }
 
     private ArrayList<Enums.DataType> getExpressionNodeType(ExpressionNode expressionNode) {
         ArrayList<Enums.DataType> dataTypeList = new ArrayList<>();
