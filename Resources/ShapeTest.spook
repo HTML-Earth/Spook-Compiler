@@ -1,14 +1,14 @@
 Shader {
-  Rectangle rec = (50, 50, Color.Black);
+  Rectangle rec = (50, 50, Color.black());
   rec.setPosition(25, 75);
 
-  Rectangle rec2 = (50, 50, Color.Green);
+  Rectangle rec2 = (50, 50, Color.green());
   rec2.setPosition(75, 25);
 
-  Circle circle = (25, Color.Blue);
+  Circle circle = (25, Color.blue());
   circle.setPosition(75, 75);
 
-  Scene.setColor(Color.Red);
+  Scene.setColor(Color.red());
   Scene.add(rec);
   Scene.add(rec2);
   Scene.add(circle);
