@@ -1,5 +1,10 @@
 Shader {
-    Bool var1 = true && true;
 }
 
-Bool
+Class class1  {
+    Int position;
+
+    Void setPosition() {
+        position = 2;
+    }
+}
