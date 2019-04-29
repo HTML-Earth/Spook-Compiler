@@ -178,16 +178,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitArithOperand(SpookParser.ArithOperandContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#mathFunction}.
-	 * @param ctx the parse tree
-	 */
-	void enterMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#mathFunction}.
-	 * @param ctx the parse tree
-	 */
-	void exitMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SpookParser#lowPrecedence}.
 	 * @param ctx the parse tree
 	 */
@@ -597,16 +587,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolOperator(SpookParser.BoolOperatorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#function}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunction(SpookParser.FunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#function}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunction(SpookParser.FunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#returnType}.
 	 * @param ctx the parse tree

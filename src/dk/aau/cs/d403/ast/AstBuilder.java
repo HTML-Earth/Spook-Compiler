@@ -221,24 +221,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
-    public ASTnode visitMathFunction(SpookParser.MathFunctionContext ctx) {
-        if (ctx.lowPrecedence() != null) {
-            if (ctx.function() != null) {
-                Enums.MathFunctionName functionName = getMathFunction(ctx.function());
-
-                MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
-                mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
-
-                return mathFunctionCallNode;
-            }
-            else
-                throw new CompilerException("Invalid expression in math function", getCodePosition(ctx));
-        }
-        else
-            throw new CompilerException("Invalid math function name", getCodePosition(ctx));
-    }
-
-    @Override
     public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
         ClassBlockNode classBlockNode = (ClassBlockNode) visitClassBlock(ctx.classBlock());
 
@@ -583,20 +565,21 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return arithOperandNode;
         }
-        else if (ctx.mathFunction() != null) {
-            ArithOperandNode arithOperandNode = new ArithOperandNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
+        else if (ctx.functionCall() != null) {
+            ASTnode functionCallNode = visitFunctionCall(ctx.functionCall());
+            ArithOperandNode arithOperandNode;
+            
+            if (functionCallNode instanceof NonObjectFunctionCallNode)
+                arithOperandNode = new ArithOperandNode((NonObjectFunctionCallNode)functionCallNode);
+            else
+                arithOperandNode = new ArithOperandNode((ObjectFunctionCallNode)functionCallNode);
+
             arithOperandNode.setCodePosition(getCodePosition(ctx));
 
             return arithOperandNode;
         }
         else if (ctx.variableName() != null) {
             ArithOperandNode arithOperandNode = new ArithOperandNode(ctx.variableName().getText());
-            arithOperandNode.setCodePosition(getCodePosition(ctx));
-
-            return arithOperandNode;
-        }
-        else if (ctx.UNIFORM() != null) {
-            ArithOperandNode arithOperandNode = new ArithOperandNode(ctx.UNIFORM().getText());
             arithOperandNode.setCodePosition(getCodePosition(ctx));
 
             return arithOperandNode;
@@ -852,24 +835,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("Operator is unknown", getCodePosition(ctx));
 
         return operator;
-    }
-
-
-    private Enums.MathFunctionName getMathFunction(SpookParser.FunctionContext ctx) {
-        Enums.MathFunctionName mathFunction;
-
-        if (ctx.ABS() != null)
-            mathFunction = Enums.MathFunctionName.ABS;
-        else if (ctx.SIN() != null)
-            mathFunction = Enums.MathFunctionName.SIN;
-        else if (ctx.COS() != null)
-            mathFunction = Enums.MathFunctionName.COS;
-        else if (ctx.TAN() != null)
-            mathFunction = Enums.MathFunctionName.TAN;
-        else
-            throw new CompilerException("Math function is unknown", getCodePosition(ctx));
-
-        return mathFunction;
     }
 
     private CodePosition getCodePosition(ParserRuleContext ctx) {

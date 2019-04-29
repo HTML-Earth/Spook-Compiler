@@ -211,8 +211,10 @@ public class CodeGenerator {
     }
 
     private ArithOperandNode visitOperand(ArithOperandNode arithOperandNode) {
-        if (arithOperandNode.getMathFunctionCallNode() != null)
-            return new ArithOperandNode(visitMathFunctionCall(arithOperandNode.getMathFunctionCallNode()));
+        if (arithOperandNode.getNonObjectFunctionCallNode() != null)
+            return new ArithOperandNode(visitNonObjectFunctionCall(arithOperandNode.getNonObjectFunctionCallNode()));
+        else if (arithOperandNode.getObjectFunctionCallNode() != null)
+            return new ArithOperandNode(visitObjectFunctionCall(arithOperandNode.getObjectFunctionCallNode()));
         else if (arithOperandNode.getVariableName() != null) {
             if (arithOperandNode.getVariableName().equals("Time")) {
                 return new ArithOperandNode("iTime");
@@ -222,10 +224,6 @@ public class CodeGenerator {
         }
         else
             return arithOperandNode;
-    }
-
-    private MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
-        return new MathFunctionCallNode(mathFunctionCallNode.getFunctionName(), visitLowPrecedence(mathFunctionCallNode.getLowPrecedenceNode()));
     }
 
     private ObjectArgumentNode visitArgumentNode(ObjectArgumentNode argumentNode) {
@@ -286,6 +284,10 @@ public class CodeGenerator {
             return new ObjectDeclarationNode(objectType, variableName, argumentNodes);
         else
             return new ObjectDeclarationNode(objectType, variableName);
+    }
+
+    private NonObjectFunctionCallNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        return nonObjectFunctionCallNode;
     }
 
     private ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
