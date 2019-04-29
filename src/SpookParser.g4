@@ -141,8 +141,7 @@ objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
 objectArg
-    : lowPrecedence
-    | functionCall;
+    : lowPrecedence;
 
 
 /*      CONDITIONAL STATEMENTS      */
