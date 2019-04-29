@@ -11,6 +11,7 @@ Shader {
 
     #Animation
     Float jumpTime   = abs(sin(Time * 3));
+    Float yPos = (jumpTime + 1) * jumpHeight;
     Float shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
 
     #Shadow color
@@ -23,15 +24,15 @@ Shader {
 
     #Shiny ball gradient
     Circle shiny = (Color.White, ballSize/2);
-    shiny.position = (ballSize/2, ballSize/2);
+    shiny.setPosition = (ballSize/2, ballSize/2);
     ball.add(shiny);
 
     #Object positions
-    ball.position   = (xPos, ((jumpTime + 1) * jumpHeight));
-    shadow.position = (xPos, groundHeight);
+    ball.setPosition   = (xPos, yPos);
+    shadow.setPosition = (xPos, groundHeight);
 
     #Setup scene
-    Scene.color = Color.Black;
+    Scene.setColor = Color.Black;
 
     Scene.add(shadow);
     Scene.add(ball);

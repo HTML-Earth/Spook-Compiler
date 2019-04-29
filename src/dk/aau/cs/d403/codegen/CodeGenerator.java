@@ -330,8 +330,19 @@ public class CodeGenerator {
                     ObjectArgumentNode y = argumentNodes.get(1);
                     object.setPosition(new Vector2(x,y));
                     break;
+                case "add":
+                    String objectName = argumentNodes.get(0)
+                            .getLowPrecedence()
+                            .getHighPrecedenceNodes().get(0)
+                            .getAtomPrecedenceNodes().get(0)
+                            .getOperand()
+                            .getVariableName();
+                    SpookObject childObject = spookObjects.get(objectName);
+                    if (childObject != null)
+                        object.add(childObject);
+                    break;
                 default:
-                    throw new RuntimeException("Unknown function: " + functionName);
+                    throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);
             }
         }
 
