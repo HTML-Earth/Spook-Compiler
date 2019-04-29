@@ -248,6 +248,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitBoolOperation(SpookParser.BoolOperationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolOperationExtend}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolOperationExtend}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolGreaterLess}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolGreaterLess}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#swizzle}.
 	 * @param ctx the parse tree
 	 */
@@ -587,6 +607,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolOperator(SpookParser.BoolOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#returnType}.
 	 * @param ctx the parse tree
