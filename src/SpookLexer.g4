@@ -67,16 +67,6 @@ COORDINATE_SWIZZLE_MASK
 COLOR_SWIZZLE_MASK
     : COLOR_SWIZZLE_MASK_RULE+;
 
-
-// Mathematical functions
-ABS: 'abs';
-SIN: 'sin';
-COS: 'cos';
-TAN: 'tan';
-
-// Uniforms
-UNIFORM: 'Time';
-
 // Identifier - chars and non-negative digits
 ID: (LETTER | DIGIT)+;
 

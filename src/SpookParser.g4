@@ -73,11 +73,7 @@ boolExpression: BOOL_LITERAL | boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 arithOperand
-    : realNumber | mathFunction | variableName | UNIFORM | functionCall | swizzle;
-
-// Mathematical functions
-mathFunction
-    : function LEFT_PAREN lowPrecedence RIGHT_PAREN;
+    : realNumber | variableName | functionCall | swizzle;
 
 //Precedence, goes through low to high, ends at atom
 lowPrecedence
@@ -228,12 +224,6 @@ boolOperator
     | NOT_EQUAL
     | NOT;
 
-// Math functions
-function
-    : ABS
-    | SIN
-    | COS
-    | TAN;
 
 // Return types
 returnType

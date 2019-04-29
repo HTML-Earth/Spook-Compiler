@@ -113,12 +113,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArithOperand(SpookParser.ArithOperandContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#mathFunction}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#lowPrecedence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -364,12 +358,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolOperator(SpookParser.BoolOperatorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#function}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunction(SpookParser.FunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#returnType}.
 	 * @param ctx the parse tree

@@ -1,6 +1,8 @@
 package dk.aau.cs.d403.codegen;
 
 import dk.aau.cs.d403.ast.expressions.*;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
+import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
@@ -11,21 +13,28 @@ public class PrintGLSL {
         return arithExpressionNode.prettyPrint();
     }
 
-    public static String printMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
-        return mathFunctionCallNode.prettyPrint();
+    public static String printNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        return nonObjectFunctionCallNode.prettyPrint();
     }
 
+    public static String printObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
+        return objectFunctionCallNode.prettyPrint();
+    }
 
     public static String printArithOperand(ArithOperandNode arithOperandNode) {
         RealNumberNode realNumberNode = arithOperandNode.getRealNumberNode();
-        MathFunctionCallNode mathFunctionCallNode = arithOperandNode.getMathFunctionCallNode();
+        NonObjectFunctionCallNode nonObjectFunctionCallNode = arithOperandNode.getNonObjectFunctionCallNode();
+        ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
         String variableName = arithOperandNode.getVariableName();
 
         if (realNumberNode != null) {
             return printRealNumber(realNumberNode);
         }
-        else if (mathFunctionCallNode != null) {
-            return printMathFunctionCall(mathFunctionCallNode);
+        else if (nonObjectFunctionCallNode != null) {
+            return printNonObjectFunctionCall(nonObjectFunctionCallNode);
+        }
+        else if (objectFunctionCallNode != null) {
+            return printObjectFunctionCall(objectFunctionCallNode);
         }
         else if (variableName != null) {
             return printVariableName(variableName);
