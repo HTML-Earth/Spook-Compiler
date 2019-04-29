@@ -1,7 +1,6 @@
 package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.Enums;
-import dk.aau.cs.d403.ast.expressions.ColorFunctionCallNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.spook.Vector2;
@@ -20,8 +19,7 @@ public class Square extends Shape {
 
         if (argumentNodes.size() == 2) {
             this.size = argumentNodes.get(0);
-            ColorFunctionCallNode colorProperty = argumentNodes.get(1).getColorFunctionCallNode();
-            this.color = Color.getColorProperty(colorProperty);
+            this.color = Color.getColorArgument(argumentNodes.get(1));
         }
     }
 
