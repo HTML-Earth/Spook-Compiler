@@ -24,6 +24,10 @@ public class BlockNode implements ASTnode {
         return statementNodes;
     }
 
+    public ReturnNode getReturnNode() {
+        return returnNode;
+    }
+
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
