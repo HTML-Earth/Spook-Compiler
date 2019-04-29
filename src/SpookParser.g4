@@ -69,7 +69,7 @@ arithExpression: lowPrecedence;
 vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
-boolExpression: BOOL_LITERAL | boolOperations;
+boolExpression: boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 arithOperand
@@ -96,14 +96,20 @@ lowOperator
 
 // Recursive boolean operations
 boolOperations
-    : boolOperation boolOperations
-    | boolOperation;
+    : NOT? boolOperation boolOperationExtend*;
 
 // Boolean operations
 boolOperation
-    : (BOOL_LITERAL | variableName) boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
-    | boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
-    | LEFT_PAREN boolOperation RIGHT_PAREN;
+    : BOOL_LITERAL
+    | variableName
+    | LEFT_PAREN boolOperations RIGHT_PAREN
+    | boolGreaterLess;
+
+boolOperationExtend
+    : boolOperator NOT? (BOOL_LITERAL | variableName | boolGreaterLess | (LEFT_PAREN boolOperation RIGHT_PAREN));
+
+boolGreaterLess
+    :(variableName | DIGIT) boolNumberCompareOp (variableName | DIGIT);
 
 // Swizzling
 swizzle
@@ -224,6 +230,14 @@ boolOperator
     | NOT_EQUAL
     | NOT;
 
+// Booloean ops for numbers
+boolNumberCompareOp
+    : GREATER_THAN
+    | GREATER_OR_EQUAL
+    | LESS_THAN
+    | LESS_OR_EQUAL
+    | EQUAL
+    | NOT_EQUAL;
 
 // Return types
 returnType
