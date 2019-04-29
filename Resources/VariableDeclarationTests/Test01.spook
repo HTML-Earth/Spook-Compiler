@@ -1,0 +1,5 @@
+Shader {
+    Bool var1 = true && true;
+}
+
+Bool

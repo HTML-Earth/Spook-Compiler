@@ -159,15 +159,15 @@ public class SymbolTableFilling implements SymbolTable{
 
         // SCOPE CHECK: If a variable doesn't exist
         if(retrieveSymbol(variableName) == null) {
-            enterSymbol(variableName, new NodeObject(declarationType, variableName, this.scopeLevel));
+            enterSymbol(variableName, new NodeObject(declarationType, variableName));
         }
         // SCOPE CHECK: If a variable already existed but not of the same type
         else if (!(retrieveSymbol(variableName).getType().equals(declarationType))) {
-            enterSymbol(variableName, new NodeObject(declarationType, variableName, this.scopeLevel));
+            enterSymbol(variableName, new NodeObject(declarationType, variableName));
         }
         // SCOPE CHECK: If a variable already existed but not in the same scope
         else if (!(retrieveSymbol(variableName).getScopeLevel().equals(this.scopeLevel))) {
-            enterSymbol(variableName, new NodeObject(declarationType, variableName, this.scopeLevel));
+            enterSymbol(variableName, new NodeObject(declarationType, variableName));
         }
         // If a variable already existed in the same scope
         else {
@@ -264,7 +264,7 @@ public class SymbolTableFilling implements SymbolTable{
                     enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
                 }
                 else
-                    enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel));
+                    enterSymbol(variableName, new NodeObject(assignmentType, variableName));
             }
             // SCOPE CHECK: If the variable is defined within a class and
             // the assignment is within a function in the class
@@ -274,7 +274,7 @@ public class SymbolTableFilling implements SymbolTable{
                     enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel, expression));
                 }
                 else
-                    enterSymbol(variableName, new NodeObject(assignmentType, variableName, this.scopeLevel));
+                    enterSymbol(variableName, new NodeObject(assignmentType, variableName));
             }
             else
                 throw new RuntimeException("ERROR: Variable is not declared in this scope.");
@@ -336,7 +336,7 @@ public class SymbolTableFilling implements SymbolTable{
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         if(functionArgs != null) {
             for (FunctionArgNode functionArg : functionArgs) {
-                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName()));
             }
         }
 
@@ -380,7 +380,7 @@ public class SymbolTableFilling implements SymbolTable{
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         if(functionArgs != null) {
             for (FunctionArgNode functionArg : functionArgs) {
-                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName(), this.scopeLevel));
+                enterSymbol(functionArg.getVariableName(), new NodeObject(functionArg.getDataType(), functionArg.getVariableName()));
             }
         }
 
