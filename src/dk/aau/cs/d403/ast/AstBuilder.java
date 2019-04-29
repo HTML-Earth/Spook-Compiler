@@ -204,13 +204,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolExpression(SpookParser.BoolExpressionContext ctx) {
-        if (ctx.BOOL_LITERAL() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode(getBooleanValue(ctx.BOOL_LITERAL()));
-            boolExpressionNode.setCodePosition(getCodePosition(ctx));
-
-            return boolExpressionNode;
-        }
-        else if (ctx.boolOperations() != null) {
+        if (ctx.boolOperations() != null) {
             BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new ArrayList<>());
             boolExpressionNode.setCodePosition(getCodePosition(ctx));
 
