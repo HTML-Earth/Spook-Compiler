@@ -21,7 +21,7 @@ public class NodeObject {
     private ExpressionNode expression;
 
     // Constructor for Variable declarations
-    public NodeObject(Enums.DataType type, String name, String scopeLevel) {
+    public NodeObject(Enums.DataType type, String name) {
         this.type = type;
         this.name = name;
         this.scopeLevel = scopeLevel;
