@@ -37,8 +37,8 @@ Shader {
     mouf.setPosition(xPos + 150, yPos + 130);
     Scene.add(mouf);
 
-    for (i = 0 to 4) {
-        frac = i * (1/5);
+    for (Float i = 0 to 4) {
+        Float frac = i * (1/5);
         Circle tip = (15, Color.white());
         tip.setPosition(xPos + 200 + sin(frac - 1) * 150, yPos + 128 - cos(frac * 1.5 - 1) * 90 + hoverTips);
         Scene.add(tip1);
