@@ -1,4 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -178,16 +178,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitArithOperand(SpookParser.ArithOperandContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#mathFunction}.
-	 * @param ctx the parse tree
-	 */
-	void enterMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#mathFunction}.
-	 * @param ctx the parse tree
-	 */
-	void exitMathFunction(SpookParser.MathFunctionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SpookParser#lowPrecedence}.
 	 * @param ctx the parse tree
 	 */
@@ -257,6 +247,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolOperation(SpookParser.BoolOperationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolOperationExtend}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolOperationExtend}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#boolGreaterLess}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#boolGreaterLess}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#swizzle}.
 	 * @param ctx the parse tree
@@ -337,16 +347,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitObjectArg(SpookParser.ObjectArgContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorFunctionCall}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorFunctionCall}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#conditionalStatement}.
 	 * @param ctx the parse tree
@@ -508,6 +508,26 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitClassBlock(SpookParser.ClassBlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructor(SpookParser.ConstructorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructor(SpookParser.ConstructorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpookParser#constructorBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructorBlock(SpookParser.ConstructorBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#constructorBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructorBlock(SpookParser.ConstructorBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#functionDecl}.
 	 * @param ctx the parse tree
 	 */
@@ -588,15 +608,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitBoolOperator(SpookParser.BoolOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#function}.
+	 * Enter a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunction(SpookParser.FunctionContext ctx);
+	void enterBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#function}.
+	 * Exit a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunction(SpookParser.FunctionContext ctx);
+	void exitBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#returnType}.
 	 * @param ctx the parse tree
@@ -608,16 +628,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitReturnType(SpookParser.ReturnTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#classType}.
-	 * @param ctx the parse tree
-	 */
-	void enterClassType(SpookParser.ClassTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#classType}.
-	 * @param ctx the parse tree
-	 */
-	void exitClassType(SpookParser.ClassTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SpookParser#dataType}.
 	 * @param ctx the parse tree
 	 */
@@ -627,26 +637,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataType(SpookParser.DataTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#predefinedFunctionName}.
-	 * @param ctx the parse tree
-	 */
-	void enterPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#predefinedFunctionName}.
-	 * @param ctx the parse tree
-	 */
-	void exitPredefinedFunctionName(SpookParser.PredefinedFunctionNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorName}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorName(SpookParser.ColorNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorName}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorName(SpookParser.ColorNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectVariableName}.
 	 * @param ctx the parse tree

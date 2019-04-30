@@ -2,10 +2,10 @@ Shader {
     Int var1;
 }
 
-class class1 {
+Class class1 {
     Int var1;
 
-    void func1() {
+    Void func1() {
         Int var1;
     }
 }
