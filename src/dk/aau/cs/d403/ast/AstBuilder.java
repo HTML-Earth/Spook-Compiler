@@ -282,15 +282,18 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
-        Enums.ReturnType returnType = Enums.ReturnType.VOID;
+        Enums.ReturnType returnType;
         if (ctx.returnType() != null)
         {
             returnType = getReturnType(ctx.returnType());
         }
+        else if (ctx.VOID() != null) {
+            returnType = Enums.ReturnType.VOID;
+        }
         else
             throw new CompilerException("Invalid return type", getCodePosition(ctx));
 
-        if (getReturnType(ctx.returnType()) != Enums.ReturnType.VOID) {
+        if (returnType != Enums.ReturnType.VOID) {
             if (ctx.functionArgs() != null) {
                 ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
 
@@ -306,7 +309,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 return functionDeclarationNode;
             }
         }
-        else if (getReturnType(ctx.returnType()) == Enums.ReturnType.VOID) {
+        else if (returnType == Enums.ReturnType.VOID) {
             if (ctx.functionArgs() != null) {
                 ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
 
