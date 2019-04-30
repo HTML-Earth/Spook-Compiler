@@ -204,6 +204,8 @@ public class PrintGLSL {
                 return "iTime";
             case "Resolution":
                 return "iResolution";
+            case "ScreenWidth":
+                return "iResolution.x";
             default:
                 return variableName;
         }
