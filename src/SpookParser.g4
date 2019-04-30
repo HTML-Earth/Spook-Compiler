@@ -6,8 +6,9 @@ options { tokenVocab=SpookLexer; }
 /*      PROGRAM START        */
 // Shader() {} (Needed)
 // Comments, Classes and functions can be declared outside (under) of the main function
+// ID to catch errors
 program
-    : main (comment | classDecl | functionDecl)*;
+    : main (comment | classDecl | functionDecl | variableName)*;
 
 
 
