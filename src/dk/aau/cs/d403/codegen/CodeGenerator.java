@@ -238,9 +238,6 @@ public class CodeGenerator {
                 return new ArithOperandNode("iTime");
             }
             else {
-                if (variableName.equals("hover"))
-                    System.out.println("hover");
-
                 usedVariables.add(variableName);
 
                 if (variables.get(variableName) != null)
