@@ -161,12 +161,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#boolGreaterLess}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#swizzle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -370,12 +364,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolOperator(SpookParser.BoolOperatorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#returnType}.
 	 * @param ctx the parse tree

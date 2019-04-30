@@ -6,8 +6,9 @@ options { tokenVocab=SpookLexer; }
 /*      PROGRAM START        */
 // Shader() {} (Needed)
 // Comments, Classes and functions can be declared outside (under) of the main function
+// variableName to catch errors
 program
-    : main (comment | classDecl | functionDecl)*;
+    : main (comment | classDecl | functionDecl | variableName)*;
 
 
 
@@ -103,13 +104,10 @@ boolOperation
     : BOOL_LITERAL
     | variableName
     | LEFT_PAREN boolOperations RIGHT_PAREN
-    | boolGreaterLess;
+    | realNumber;
 
 boolOperationExtend
-    : boolOperator NOT? (BOOL_LITERAL | variableName | boolGreaterLess | (LEFT_PAREN boolOperation RIGHT_PAREN));
-
-boolGreaterLess
-    :(variableName | DIGIT) boolNumberCompareOp (variableName | DIGIT);
+    : boolOperator NOT? boolOperation;
 
 // Swizzling
 swizzle
@@ -221,22 +219,16 @@ returnStatement: RETURN expression SEMICOLON;
 realNumber: integerNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
 integerNumber: DIGIT | DIGIT_NEGATIVE;
 
-// Boolean operators
+// Boolean operators, NOT does not fit here (True ! False)
 boolOperator
     : EQUAL
     | OR
     | AND
     | NOT_EQUAL
-    | NOT;
-
-// Booloean ops for numbers
-boolNumberCompareOp
-    : GREATER_THAN
+    | GREATER_THAN
     | GREATER_OR_EQUAL
     | LESS_THAN
-    | LESS_OR_EQUAL
-    | EQUAL
-    | NOT_EQUAL;
+    | LESS_OR_EQUAL;
 
 // Return types
 returnType
@@ -245,8 +237,7 @@ returnType
 
 // Data types
 dataType
-    : INT
-    | FLOAT
+    : NUM
     | BOOL
     | VECTOR2
     | VECTOR3

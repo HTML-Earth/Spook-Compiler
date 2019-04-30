@@ -316,18 +316,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSwizzle(SpookParser.SwizzleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -731,18 +719,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolOperator(SpookParser.BoolOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

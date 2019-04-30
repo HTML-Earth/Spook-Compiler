@@ -1,7 +1,7 @@
 Shader{
   #Declarations
-  Int i = 0; Int radius; Int height = 100; Int length = 100; # virker ikke
-  Int d;
+  Num i = 0; Num radius; Num height = 100; Num length = 100; # virker ikke
+  Num d;
 
   #Unused for
   for(d = 0 to 1){}
@@ -12,12 +12,12 @@ Shader{
   }
 
   #Forget previous for-loop, this one does even require a block
-  for (Int i = 0 to 4)
+  for (Num i = 0 to 4)
     i = 4;
 
   #Shape movement
-  Float jumptime = abs(sin(iTime * i));
-  Float yPos = 300 * (jumptime*0.5+1) - 200;
+  Num jumptime = abs(sin(iTime * i));
+  Num yPos = 300 * (jumptime*0.5+1) - 200;
 
   #Get in Shape
   Rectangle red = (height, length, Color.green());
@@ -36,21 +36,21 @@ Shader{
 }
 
 #Totally unnecessary function to create new circles
-Circle circleFactory(Int radius, Color color) {
+Circle circleFactory(Num radius, Color color) {
   Circle circle = (radius, color);
   return circle;
 }
 
 Class Bulletbill extends Shape{
-  Float length, height;
-  Float radius = height/2;
+  Num length, height;
+  Num radius = height/2;
   #Color from Shape
   Rectangle body = ();
   Circle head = ();
   Color shadow = (105, 105, 105);
 
   #Constructor
-  Bulletbill (Float height, Float length, Color color) {
+  Bulletbill (Num height, Num length, Color color) {
     this.height = height;
     this.length = length;
     super.color = color;

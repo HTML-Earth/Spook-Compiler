@@ -1,21 +1,21 @@
 Shader {
     #Ball values
-    Float ballSize = 64;
+    Num ballSize = 64;
     Vec4 ballColor = (0.6, 0, 0, 1);
 
     #Position and size values
-    Float groundHeight = 100;
-    Float jumpHeight   = 150;
+    Num groundHeight = 100;
+    Num jumpHeight   = 150;
 
-    Float xPos = 150;
+    Num xPos = 150;
 
     #Animation
-    Float jumpTime   = abs(sin(Time * 3));
-    Float yPos = (jumpTime + 1) * jumpHeight;
-    Float shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
+    Num jumpTime   = abs(sin(Time * 3));
+    Num yPos = (jumpTime + 1) * jumpHeight;
+    Num shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
 
     #Shadow color
-    Float shadowDarkness = shadowSize * 0.005;
+    Num shadowDarkness = shadowSize * 0.005;
     Vec4 shadowColor = (0,0,0,0);
 
     #Objects
@@ -40,9 +40,9 @@ Shader {
 
 
 Class CustomShape {
-    Int sides = 4;
+    Num sides = 4;
 }
 
-Float GiveMeTen(Int irrelevant) {
+Float GiveMeTen(Num irrelevant) {
     return 10;
 }
