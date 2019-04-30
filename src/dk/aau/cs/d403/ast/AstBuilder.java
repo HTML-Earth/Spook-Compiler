@@ -29,6 +29,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             functionDeclarationNodes.add((FunctionDeclarationNode)visitFunctionDecl(functionDecl));
         }
 
+        //ID error
+        if (ctx.ID() != null) {
+            throw new CompilerException("Unknown declaration (check type for " + ctx.ID().toString() + ")", getCodePosition(ctx));
+        }
+
         ProgramNode programNode = new ProgramNode(mainNode, classDeclarationNodes, functionDeclarationNodes);
         programNode.setCodePosition(getCodePosition(ctx));
 
