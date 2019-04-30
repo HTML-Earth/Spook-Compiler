@@ -1,10 +1,10 @@
 Shader {
 }
 
-class CustomShape {
+Class CustomShape {
     Int positionX;
 
-    void setPositionX() {
+    Void setPositionX() {
         positionX = 2;
     }
 }
