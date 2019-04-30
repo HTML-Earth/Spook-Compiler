@@ -197,4 +197,41 @@ public class Enums {
                 return "Unknown color";
         }
     }
+
+    public enum boolOperator {
+        EQUAL,
+        OR,
+        AND,
+        NOT_EQUAL,
+        GREATER_THAN,
+        GREATER_OR_EQUAL,
+        LESS_THAN,
+        LESS_OR_EQUAL,
+        NOT
+    }
+
+    public static String boolOperatorToString(boolOperator boolOperator) {
+        switch (boolOperator) {
+            case EQUAL:
+                return "==";
+            case OR:
+                return "||";
+            case AND:
+                return "&&";
+            case NOT_EQUAL:
+                return "!=";
+            case GREATER_THAN:
+                return ">";
+            case GREATER_OR_EQUAL:
+                return ">=";
+            case LESS_THAN:
+                return "<";
+            case LESS_OR_EQUAL:
+                return "<=";
+            case NOT:
+                return "!";
+            default:
+                return "Unknown Boolean Operator";
+        }
+    }
 }
