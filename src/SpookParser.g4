@@ -103,13 +103,10 @@ boolOperation
     : BOOL_LITERAL
     | variableName
     | LEFT_PAREN boolOperations RIGHT_PAREN
-    | boolGreaterLess;
+    | realNumber;
 
 boolOperationExtend
-    : boolOperator NOT? (BOOL_LITERAL | variableName | boolGreaterLess | (LEFT_PAREN boolOperation RIGHT_PAREN));
-
-boolGreaterLess
-    :(variableName | DIGIT) boolNumberCompareOp (variableName | DIGIT);
+    : boolOperator NOT? boolOperation;
 
 // Swizzling
 swizzle
@@ -221,22 +218,16 @@ returnStatement: RETURN expression SEMICOLON;
 realNumber: integerNumber | FLOAT_DIGIT | FLOAT_DIGIT_NEGATIVE;
 integerNumber: DIGIT | DIGIT_NEGATIVE;
 
-// Boolean operators
+// Boolean operators, NOT does not fit here (True ! False)
 boolOperator
     : EQUAL
     | OR
     | AND
     | NOT_EQUAL
-    | NOT;
-
-// Booloean ops for numbers
-boolNumberCompareOp
-    : GREATER_THAN
+    | GREATER_THAN
     | GREATER_OR_EQUAL
     | LESS_THAN
-    | LESS_OR_EQUAL
-    | EQUAL
-    | NOT_EQUAL;
+    | LESS_OR_EQUAL;
 
 // Return types
 returnType
