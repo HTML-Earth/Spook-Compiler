@@ -3,7 +3,7 @@ Shader {
 }
 
 Class class1 {
-    Int positionX;
+    Num positionX;
 }
 
 Class class2 {

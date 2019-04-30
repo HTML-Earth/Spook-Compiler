@@ -237,8 +237,7 @@ returnType
 
 // Data types
 dataType
-    : INT
-    | FLOAT
+    : NUM
     | BOOL
     | VECTOR2
     | VECTOR3

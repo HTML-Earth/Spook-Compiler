@@ -1,5 +1,5 @@
 Shader {
-    Float positionX;
+    Num positionX;
 }
 
 Class CustomShape {
