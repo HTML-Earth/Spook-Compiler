@@ -8,9 +8,7 @@ import dk.aau.cs.d403.spook.color.Color;
 import dk.aau.cs.d403.spook.shapes.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class CodeGenerator {
 
@@ -20,7 +18,7 @@ public class CodeGenerator {
     private HashMap<String, SpookObject> spookObjects;
     private HashSet<String> usedClasses;
     private HashMap<String, VariableDeclarationNode> variables;
-    private HashSet<String> usedVariables;
+    private LinkedHashSet<String> usedVariables;
 
     public String GenerateGLSL(ProgramNode ast) {
         sb = new StringBuilder();
@@ -30,7 +28,7 @@ public class CodeGenerator {
         usedClasses = new HashSet<>();
 
         variables = new HashMap<>();
-        usedVariables = new HashSet<>();
+        usedVariables = new LinkedHashSet<>();
 
         ProgramNode program = visitProgram(ast);
 
@@ -72,8 +70,11 @@ public class CodeGenerator {
     private void generateMain() {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
 
-        for (String variableName : usedVariables) {
-            VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
+        LinkedList<String> list = new LinkedList<>(usedVariables);
+        Iterator<String> itr = list.descendingIterator();
+        while(itr.hasNext()) {
+            String varDecl = itr.next();
+            VariableDeclarationNode variableDeclarationNode = variables.get(varDecl);
             if (variableDeclarationNode != null) {
                 sb.append("\t");
                 sb.append(PrintGLSL.printVariableDeclaration(variableDeclarationNode));
@@ -226,16 +227,25 @@ public class CodeGenerator {
     }
 
     private ArithOperandNode visitOperand(ArithOperandNode arithOperandNode) {
+        String variableName = arithOperandNode.getVariableName();
+
         if (arithOperandNode.getNonObjectFunctionCallNode() != null)
             return new ArithOperandNode(visitNonObjectFunctionCall(arithOperandNode.getNonObjectFunctionCallNode()));
         else if (arithOperandNode.getObjectFunctionCallNode() != null)
             return new ArithOperandNode(visitObjectFunctionCall(arithOperandNode.getObjectFunctionCallNode()));
-        else if (arithOperandNode.getVariableName() != null) {
-            if (arithOperandNode.getVariableName().equals("Time")) {
+        else if (variableName != null) {
+            if (variableName.equals("Time")) {
                 return new ArithOperandNode("iTime");
             }
             else {
-                usedVariables.add(arithOperandNode.getVariableName());
+                if (variableName.equals("hover"))
+                    System.out.println("hover");
+
+                usedVariables.add(variableName);
+
+                if (variables.get(variableName) != null)
+                    visitAssignment(variables.get(variableName).getAssignmentNode());
+
                 return arithOperandNode;
             }
         }
@@ -268,7 +278,6 @@ public class CodeGenerator {
 
         for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectArgumentNodes()) {
             argumentNodes.add(visitArgumentNode(argumentNode));
-
         }
 
         String objectType = objectDeclarationNode.getObjectType();
