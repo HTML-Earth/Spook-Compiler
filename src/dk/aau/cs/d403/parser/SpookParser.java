@@ -165,9 +165,11 @@ public class SpookParser extends Parser {
 		public FunctionDeclContext functionDecl(int i) {
 			return getRuleContext(FunctionDeclContext.class,i);
 		}
-		public List<TerminalNode> ID() { return getTokens(SpookParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(SpookParser.ID, i);
+		public List<VariableNameContext> variableName() {
+			return getRuleContexts(VariableNameContext.class);
+		}
+		public VariableNameContext variableName(int i) {
+			return getRuleContext(VariableNameContext.class,i);
 		}
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -226,7 +228,7 @@ public class SpookParser extends Parser {
 				case 4:
 					{
 					setState(138);
-					match(ID);
+					variableName();
 					}
 					break;
 				}
@@ -4622,7 +4624,7 @@ public class SpookParser extends Parser {
 		"\2\2v\u020f\3\2\2\2x\u0211\3\2\2\2z\u0213\3\2\2\2|\u0217\3\2\2\2~\u0219"+
 		"\3\2\2\2\u0080\u021b\3\2\2\2\u0082\u021d\3\2\2\2\u0084\u021f\3\2\2\2\u0086"+
 		"\u0221\3\2\2\2\u0088\u008f\5\4\3\2\u0089\u008e\5\b\5\2\u008a\u008e\5b"+
-		"\62\2\u008b\u008e\5j\66\2\u008c\u008e\7\63\2\2\u008d\u0089\3\2\2\2\u008d"+
+		"\62\2\u008b\u008e\5j\66\2\u008c\u008e\5\u0084C\2\u008d\u0089\3\2\2\2\u008d"+
 		"\u008a\3\2\2\2\u008d\u008b\3\2\2\2\u008d\u008c\3\2\2\2\u008e\u0091\3\2"+
 		"\2\2\u008f\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\3\3\2\2\2\u0091\u008f"+
 		"\3\2\2\2\u0092\u0093\7\n\2\2\u0093\u0094\5\6\4\2\u0094\5\3\2\2\2\u0095"+
