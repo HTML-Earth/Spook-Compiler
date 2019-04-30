@@ -1,4 +1,4 @@
-// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -257,16 +257,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#boolGreaterLess}.
-	 * @param ctx the parse tree
-	 */
-	void enterBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#boolGreaterLess}.
-	 * @param ctx the parse tree
-	 */
-	void exitBoolGreaterLess(SpookParser.BoolGreaterLessContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#swizzle}.
 	 * @param ctx the parse tree
@@ -607,16 +597,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolOperator(SpookParser.BoolOperatorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
-	 * @param ctx the parse tree
-	 */
-	void enterBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#boolNumberCompareOp}.
-	 * @param ctx the parse tree
-	 */
-	void exitBoolNumberCompareOp(SpookParser.BoolNumberCompareOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#returnType}.
 	 * @param ctx the parse tree
