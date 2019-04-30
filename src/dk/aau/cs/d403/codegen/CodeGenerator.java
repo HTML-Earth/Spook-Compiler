@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
+import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -234,16 +235,18 @@ public class CodeGenerator {
         else if (arithOperandNode.getObjectFunctionCallNode() != null)
             return new ArithOperandNode(visitObjectFunctionCall(arithOperandNode.getObjectFunctionCallNode()));
         else if (variableName != null) {
-            if (variableName.equals("Time")) {
-                return new ArithOperandNode("iTime");
-            }
-            else {
-                usedVariables.add(variableName);
+            switch (variableName) {
+                case "Time":
+                    return new ArithOperandNode("iTime");
+                case "ScreenHeight":
+                    return new ArithOperandNode("iResolution.y");
+                default:
+                    usedVariables.add(variableName);
 
-                if (variables.get(variableName) != null)
-                    visitAssignment(variables.get(variableName).getAssignmentNode());
+                    if (variables.get(variableName) != null)
+                        visitAssignment(variables.get(variableName).getAssignmentNode());
 
-                return arithOperandNode;
+                    return arithOperandNode;
             }
         }
         else
@@ -259,15 +262,28 @@ public class CodeGenerator {
 
     private DeclarationNode visitDeclaration(DeclarationNode declarationNode) {
         if (declarationNode instanceof VariableDeclarationNode) {
+
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) declarationNode;
+
             //Add variable declaration to HashMap
             variables.put((variableDeclarationNode).getVariableName(), variableDeclarationNode);
-            return declarationNode;
+
+            return visitVariableDeclaration(variableDeclarationNode);
         }
         else if (declarationNode instanceof ObjectDeclarationNode)
             return visitObjectDeclaration((ObjectDeclarationNode)declarationNode);
         else
             throw new RuntimeException("Declaration is of unknown type");
+    }
+
+    private VariableDeclarationNode visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
+        Enums.DataType dataType = variableDeclarationNode.getDataType();
+        String variableName = variableDeclarationNode.getVariableName();
+        AssignmentNode assignmentNode = variableDeclarationNode.getAssignmentNode();
+
+        if (assignmentNode != null)
+            return new VariableDeclarationNode(dataType, visitAssignment(assignmentNode));
+        return new VariableDeclarationNode(dataType, variableName);
     }
 
     private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {

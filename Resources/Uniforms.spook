@@ -1,0 +1,9 @@
+Shader {
+    Num xPos = ScreenWidth / 2;
+    Num yPos = ScreenHeight / 2;
+
+    Circle middle = (sin(Time) * 50 + 100, Color.yellow());
+    middle.setPosition(xPos,yPos);
+    Scene.add(middle);
+    Scene.setColor(Color.blue());
+}
