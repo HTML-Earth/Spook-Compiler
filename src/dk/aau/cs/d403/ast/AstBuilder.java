@@ -29,6 +29,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             functionDeclarationNodes.add((FunctionDeclarationNode)visitFunctionDecl(functionDecl));
         }
 
+        //ID error
+        if (!ctx.variableName().isEmpty()) {
+            throw new CompilerException("Unknown declaration (check type for " + ctx.variableName(0).getText() + ")", getCodePosition(ctx));
+        }
+
         ProgramNode programNode = new ProgramNode(mainNode, classDeclarationNodes, functionDeclarationNodes);
         programNode.setCodePosition(getCodePosition(ctx));
 
@@ -755,10 +760,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private Enums.DataType getDataType(SpookParser.DataTypeContext ctx) {
         Enums.DataType dataType;
 
-        if (ctx.INT() != null)
-            dataType = Enums.DataType.INT;
-        else if (ctx.FLOAT() != null)
-            dataType = Enums.DataType.FLOAT;
+        if (ctx.NUM() != null)
+            dataType = Enums.DataType.NUM;
         else if (ctx.BOOL() != null)
             dataType = Enums.DataType.BOOL;
         else if (ctx.VECTOR2() != null)
@@ -776,10 +779,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private Enums.ReturnType getReturnType(SpookParser.ReturnTypeContext ctx) {
         Enums.ReturnType returnType;
 
-        if (ctx.dataType().INT() != null)
-            returnType = Enums.ReturnType.INT;
-        else if (ctx.dataType().FLOAT() != null)
-            returnType = Enums.ReturnType.FLOAT;
+        if (ctx.dataType().NUM() != null)
+            returnType = Enums.ReturnType.NUM;
         else if (ctx.dataType().BOOL() != null)
             returnType = Enums.ReturnType.BOOL;
         else if (ctx.dataType().VECTOR2() != null)

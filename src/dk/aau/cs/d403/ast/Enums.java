@@ -2,8 +2,7 @@ package dk.aau.cs.d403.ast;
 
 public class Enums {
     public enum DataType {
-        INT,
-        FLOAT,
+        NUM,
         BOOL,
         VEC2,
         VEC3,
@@ -12,10 +11,8 @@ public class Enums {
 
     public static String dataTypeToStringSpook(DataType dataType) {
         switch (dataType) {
-            case INT:
-                return "Int";
-            case FLOAT:
-                return "Float";
+            case NUM:
+                return "Num";
             case BOOL:
                 return "Bool";
             case VEC2:
@@ -31,9 +28,7 @@ public class Enums {
 
     public static String dataTypeToStringGLSL(DataType dataType) {
         switch (dataType) {
-            case INT:
-                return "int";
-            case FLOAT:
+            case NUM:
                 return "float";
             case BOOL:
                 return "bool";
@@ -50,8 +45,7 @@ public class Enums {
 
     public enum ReturnType {
         VOID,
-        INT,
-        FLOAT,
+        NUM,
         BOOL,
         VEC2,
         VEC3,
@@ -60,10 +54,8 @@ public class Enums {
 
     public static String returnTypeToStringSpook(ReturnType returnType) {
         switch (returnType) {
-            case INT:
-                return dataTypeToStringSpook(DataType.INT);
-            case FLOAT:
-                return dataTypeToStringSpook(DataType.FLOAT);
+            case NUM:
+                return dataTypeToStringSpook(DataType.NUM);
             case BOOL:
                 return dataTypeToStringSpook(DataType.BOOL);
             case VEC2:
@@ -81,10 +73,8 @@ public class Enums {
 
     public static String returnTypeToStringGLSL(ReturnType returnType) {
         switch (returnType) {
-            case INT:
-                return dataTypeToStringGLSL(DataType.INT);
-            case FLOAT:
-                return dataTypeToStringGLSL(DataType.FLOAT);
+            case NUM:
+                return dataTypeToStringGLSL(DataType.NUM);
             case BOOL:
                 return dataTypeToStringGLSL(DataType.BOOL);
             case VEC2:
@@ -195,6 +185,43 @@ public class Enums {
                 return "Blue";
             default:
                 return "Unknown color";
+        }
+    }
+
+    public enum boolOperator {
+        EQUAL,
+        OR,
+        AND,
+        NOT_EQUAL,
+        GREATER_THAN,
+        GREATER_OR_EQUAL,
+        LESS_THAN,
+        LESS_OR_EQUAL,
+        NOT
+    }
+
+    public static String boolOperatorToString(boolOperator boolOperator) {
+        switch (boolOperator) {
+            case EQUAL:
+                return "==";
+            case OR:
+                return "||";
+            case AND:
+                return "&&";
+            case NOT_EQUAL:
+                return "!=";
+            case GREATER_THAN:
+                return ">";
+            case GREATER_OR_EQUAL:
+                return ">=";
+            case LESS_THAN:
+                return "<";
+            case LESS_OR_EQUAL:
+                return "<=";
+            case NOT:
+                return "!";
+            default:
+                return "Unknown Boolean Operator";
         }
     }
 }

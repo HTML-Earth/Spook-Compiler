@@ -1,8 +1,7 @@
 lexer grammar SpookLexer;
 
 // Data types
-INT: 'Int';
-FLOAT: 'Float';
+NUM: 'Num';
 BOOL: 'Bool';
 VECTOR2: 'Vec2';
 VECTOR3: 'Vec3';
