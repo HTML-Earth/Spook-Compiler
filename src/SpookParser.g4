@@ -69,15 +69,11 @@ arithExpression: lowPrecedence;
 vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
-boolExpression: BOOL_LITERAL | boolOperations;
+boolExpression: boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 arithOperand
-    : realNumber | mathFunction | variableName | UNIFORM | functionCall | swizzle;
-
-// Mathematical functions
-mathFunction
-    : function LEFT_PAREN lowPrecedence RIGHT_PAREN;
+    : realNumber | variableName | functionCall | swizzle;
 
 //Precedence, goes through low to high, ends at atom
 lowPrecedence
@@ -100,14 +96,20 @@ lowOperator
 
 // Recursive boolean operations
 boolOperations
-    : boolOperation boolOperations
-    | boolOperation;
+    : NOT? boolOperation boolOperationExtend*;
 
 // Boolean operations
 boolOperation
-    : (BOOL_LITERAL | variableName) boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
-    | boolOperator (BOOL_LITERAL | variableName | (LEFT_PAREN boolOperation RIGHT_PAREN))
-    | LEFT_PAREN boolOperation RIGHT_PAREN;
+    : BOOL_LITERAL
+    | variableName
+    | LEFT_PAREN boolOperations RIGHT_PAREN
+    | boolGreaterLess;
+
+boolOperationExtend
+    : boolOperator NOT? (BOOL_LITERAL | variableName | boolGreaterLess | (LEFT_PAREN boolOperation RIGHT_PAREN));
+
+boolGreaterLess
+    :(variableName | DIGIT) boolNumberCompareOp (variableName | DIGIT);
 
 // Swizzling
 swizzle
@@ -139,15 +141,7 @@ objectArgs
     : objectArg COMMA objectArgs
     | objectArg;
 objectArg
-    : lowPrecedence
-    | colorFunctionCall
-    | functionCall;
-
-// Color function call (Color.Black) etc.
-colorFunctionCall
-    : COLOR DOT (predefinedFunctionName | vector3Expression);
-
-
+    : lowPrecedence;
 
 
 /*      CONDITIONAL STATEMENTS      */
@@ -189,19 +183,23 @@ forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
 /*      CLASSES     */
 // Class declaration
 classDecl
-    : CLASS className ((EXTENDS | IMPLEMENTS) classType)? classBlock;
+    : CLASS className ((EXTENDS | IMPLEMENTS) className)? classBlock;
 
 // Class block
-classBlock: LEFT_BRACKET (declaration | functionDecl | comment)* RIGHT_BRACKET;
+classBlock: LEFT_BRACKET (declaration | constructor | functionDecl | comment)* RIGHT_BRACKET;
 
+// Class constructor
+constructor: className LEFT_PAREN functionArgs? RIGHT_PAREN constructorBlock;
 
+// Class constructor block
+constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 
 
 /*      FUNCTIONS    */
 /* Function declaration */
 functionDecl
-    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
-    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+    : VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
+    | returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock;
 
 functionArgs
     : functionArg COMMA functionArgs
@@ -231,28 +229,19 @@ boolOperator
     | NOT_EQUAL
     | NOT;
 
-// Math functions
-function
-    : ABS
-    | SIN
-    | COS
-    | TAN;
+// Booloean ops for numbers
+boolNumberCompareOp
+    : GREATER_THAN
+    | GREATER_OR_EQUAL
+    | LESS_THAN
+    | LESS_OR_EQUAL
+    | EQUAL
+    | NOT_EQUAL;
 
 // Return types
 returnType
     : dataType
-    | classType;
-
-// Pre-defined classes
-classType
-    : CIRCLE
-    | RECTANGLE
-    | TRIANGLE
-    | SQUARE
-    | SHAPE
-    | COLOR
-    | CIRCLEGRADIENT
-    | LINEGRADIENT;
+    | className;
 
 // Data types
 dataType
@@ -263,15 +252,6 @@ dataType
     | VECTOR3
     | VECTOR4;
 
-predefinedFunctionName
-    : colorName;
-colorName
-    : BLACK
-    | WHITE
-    | RED
-    | GREEN
-    | BLUE;
-
 // Variable names
 objectVariableName
     : ID;
@@ -280,5 +260,4 @@ functionName
 variableName
     : ID;
 className
-    : ID
-    | classType;
+    : ID;

@@ -211,8 +211,10 @@ public class CodeGenerator {
     }
 
     private ArithOperandNode visitOperand(ArithOperandNode arithOperandNode) {
-        if (arithOperandNode.getMathFunctionCallNode() != null)
-            return new ArithOperandNode(visitMathFunctionCall(arithOperandNode.getMathFunctionCallNode()));
+        if (arithOperandNode.getNonObjectFunctionCallNode() != null)
+            return new ArithOperandNode(visitNonObjectFunctionCall(arithOperandNode.getNonObjectFunctionCallNode()));
+        else if (arithOperandNode.getObjectFunctionCallNode() != null)
+            return new ArithOperandNode(visitObjectFunctionCall(arithOperandNode.getObjectFunctionCallNode()));
         else if (arithOperandNode.getVariableName() != null) {
             if (arithOperandNode.getVariableName().equals("Time")) {
                 return new ArithOperandNode("iTime");
@@ -224,19 +226,9 @@ public class CodeGenerator {
             return arithOperandNode;
     }
 
-    private MathFunctionCallNode visitMathFunctionCall(MathFunctionCallNode mathFunctionCallNode) {
-        return new MathFunctionCallNode(mathFunctionCallNode.getFunctionName(), visitLowPrecedence(mathFunctionCallNode.getLowPrecedenceNode()));
-    }
-
     private ObjectArgumentNode visitArgumentNode(ObjectArgumentNode argumentNode) {
         if (argumentNode.getLowPrecedence() != null)
             return new ObjectArgumentNode(visitLowPrecedence(argumentNode.getLowPrecedence()));
-        else if (argumentNode.getColorFunctionCallNode() != null)
-            return argumentNode; //TODO: visitColorFunctionCall
-        else if (argumentNode.getNonObjectFunctionCallNode() != null)
-            return argumentNode; //TODO: visitNonObjectFunctionCall
-        else if (argumentNode.getObjectFunctionCallNode() != null)
-            return new ObjectArgumentNode(visitObjectFunctionCall(argumentNode.getObjectFunctionCallNode()));
         else
             return argumentNode;
     }
@@ -288,62 +280,80 @@ public class CodeGenerator {
             return new ObjectDeclarationNode(objectType, variableName);
     }
 
+    private NonObjectFunctionCallNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
+
+        if (nonObjectFunctionCallNode.getArgumentNodes() != null) {
+            for (ObjectArgumentNode argumentNode : nonObjectFunctionCallNode.getArgumentNodes()) {
+                argumentNodes.add(visitArgumentNode(argumentNode));
+            }
+        }
+
+        return new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName(), argumentNodes);
+    }
+
     private ObjectFunctionCallNode visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
         String objectVariableName = objectFunctionCallNode.getObjectVariableName();
         String functionName = objectFunctionCallNode.getFunctionName();
 
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
 
-        for (ObjectArgumentNode argumentNode : objectFunctionCallNode.getObjectArguments()) {
-            argumentNodes.add(visitArgumentNode(argumentNode));
-        }
-
-        if (objectVariableName.equals("Scene")) {
-            switch (functionName) {
-                case "add":
-                    String objectName = argumentNodes.get(0)
-                            .getLowPrecedence()
-                            .getHighPrecedenceNodes().get(0)
-                            .getAtomPrecedenceNodes().get(0)
-                            .getOperand()
-                            .getVariableName();
-                    SpookObject object = spookObjects.get(objectName);
-                    if (object != null)
-                        scene.add(object);
-                    break;
-                case "setColor":
-                    scene.setColor(Color.getColorProperty(argumentNodes.get(0).getColorFunctionCallNode()));
-                    break;
-                default:
-                    throw new RuntimeException("Unknown function: " + functionName);
+        if (objectFunctionCallNode.getObjectArguments() != null) {
+            for (ObjectArgumentNode argumentNode : objectFunctionCallNode.getObjectArguments()) {
+                argumentNodes.add(visitArgumentNode(argumentNode));
             }
         }
-        else {
-            SpookObject object = spookObjects.get(objectVariableName);
 
-            if (object == null)
-                throw new RuntimeException("Object not found");
+        switch (objectVariableName) {
+            case "Scene":
+                switch (functionName) {
+                    case "add":
+                        String objectName = argumentNodes.get(0)
+                                .getLowPrecedence()
+                                .getHighPrecedenceNodes().get(0)
+                                .getAtomPrecedenceNodes().get(0)
+                                .getOperand()
+                                .getVariableName();
+                        SpookObject object = spookObjects.get(objectName);
+                        if (object != null)
+                            scene.add(object);
+                        break;
+                    case "setColor":
+                        scene.setColor(Color.getColorArgument(argumentNodes.get(0)));
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown function: " + functionName);
+                }
+                break;
+            case "Color":
+                //TODO: color
+                break;
+            default:
+                SpookObject object = spookObjects.get(objectVariableName);
 
-            switch (functionName) {
-                case "setPosition":
-                    ObjectArgumentNode x = argumentNodes.get(0);
-                    ObjectArgumentNode y = argumentNodes.get(1);
-                    object.setPosition(new Vector2(x,y));
-                    break;
-                case "add":
-                    String objectName = argumentNodes.get(0)
-                            .getLowPrecedence()
-                            .getHighPrecedenceNodes().get(0)
-                            .getAtomPrecedenceNodes().get(0)
-                            .getOperand()
-                            .getVariableName();
-                    SpookObject childObject = spookObjects.get(objectName);
-                    if (childObject != null)
-                        object.add(childObject);
-                    break;
-                default:
-                    throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);
-            }
+                if (object == null)
+                    throw new RuntimeException("Object (" + objectVariableName + ") not found");
+
+                switch (functionName) {
+                    case "setPosition":
+                        ObjectArgumentNode x = argumentNodes.get(0);
+                        ObjectArgumentNode y = argumentNodes.get(1);
+                        object.setPosition(new Vector2(x, y));
+                        break;
+                    case "add":
+                        String objectName = argumentNodes.get(0)
+                                .getLowPrecedence()
+                                .getHighPrecedenceNodes().get(0)
+                                .getAtomPrecedenceNodes().get(0)
+                                .getOperand()
+                                .getVariableName();
+                        SpookObject childObject = spookObjects.get(objectName);
+                        if (childObject != null)
+                            object.add(childObject);
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);
+                }
         }
 
         if (argumentNodes.size() > 0)
