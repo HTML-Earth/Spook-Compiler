@@ -37,12 +37,21 @@ Shader {
     mouf.setPosition(xPos + 150, yPos + 130);
     Scene.add(mouf);
 
-    for (i = 0 to 4) {
-        frac = i * (1/5);
-        Circle tip = (15, Color.white());
-        tip.setPosition(xPos + 200 + sin(frac - 1) * 150, yPos + 128 - cos(frac * 1.5 - 1) * 90 + hoverTips);
-        Scene.add(tip1);
-    }
+    Circle tip1 = (15, Color.white());
+    Circle tip2 = (15, Color.white());
+    Circle tip3 = (15, Color.white());
+    Circle tip4 = (15, Color.white());
+    Circle tip5 = (15, Color.white());
+    tip1.setPosition(xPos + 70, yPos + 78 + hoverTips);
+    tip2.setPosition(xPos + 85, yPos + 58 + hoverTips);
+    tip3.setPosition(xPos + 110, yPos + 48 + hoverTips);
+    tip4.setPosition(xPos + 135, yPos + 43 + hoverTips);
+    tip5.setPosition(xPos + 160, yPos + 38 + hoverTips);
+    Scene.add(tip1);
+    Scene.add(tip2);
+    Scene.add(tip3);
+    Scene.add(tip4);
+    Scene.add(tip5);
 
     Scene.setColor(Color.black());
 }
