@@ -3637,23 +3637,23 @@ public class SpookParser extends Parser {
 	}
 
 	public static class FunctionDeclContext extends ParserRuleContext {
-		public ReturnTypeContext returnType() {
-			return getRuleContext(ReturnTypeContext.class,0);
-		}
+		public TerminalNode VOID() { return getToken(SpookParser.VOID, 0); }
 		public FunctionNameContext functionName() {
 			return getRuleContext(FunctionNameContext.class,0);
 		}
 		public TerminalNode LEFT_PAREN() { return getToken(SpookParser.LEFT_PAREN, 0); }
 		public TerminalNode RIGHT_PAREN() { return getToken(SpookParser.RIGHT_PAREN, 0); }
-		public FunctionBlockContext functionBlock() {
-			return getRuleContext(FunctionBlockContext.class,0);
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
 		}
 		public FunctionArgsContext functionArgs() {
 			return getRuleContext(FunctionArgsContext.class,0);
 		}
-		public TerminalNode VOID() { return getToken(SpookParser.VOID, 0); }
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
+		public ReturnTypeContext returnType() {
+			return getRuleContext(ReturnTypeContext.class,0);
+		}
+		public FunctionBlockContext functionBlock() {
+			return getRuleContext(FunctionBlockContext.class,0);
 		}
 		public FunctionDeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3682,17 +3682,11 @@ public class SpookParser extends Parser {
 			setState(489);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case INT:
-			case FLOAT:
-			case BOOL:
-			case VECTOR2:
-			case VECTOR3:
-			case VECTOR4:
-			case ID:
+			case VOID:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(471);
-				returnType();
+				match(VOID);
 				setState(472);
 				functionName();
 				setState(473);
@@ -3710,14 +3704,20 @@ public class SpookParser extends Parser {
 				setState(477);
 				match(RIGHT_PAREN);
 				setState(478);
-				functionBlock();
+				block();
 				}
 				break;
-			case VOID:
+			case INT:
+			case FLOAT:
+			case BOOL:
+			case VECTOR2:
+			case VECTOR3:
+			case VECTOR4:
+			case ID:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(480);
-				match(VOID);
+				returnType();
 				setState(481);
 				functionName();
 				setState(482);
@@ -3735,7 +3735,7 @@ public class SpookParser extends Parser {
 				setState(486);
 				match(RIGHT_PAREN);
 				setState(487);
-				block();
+				functionBlock();
 				}
 				break;
 			default:
@@ -4730,12 +4730,12 @@ public class SpookParser extends Parser {
 		"\u01ce\u01d4\7\31\2\2\u01cf\u01d0\5\22\n\2\u01d0\u01d1\7\37\2\2\u01d1"+
 		"\u01d3\3\2\2\2\u01d2\u01cf\3\2\2\2\u01d3\u01d6\3\2\2\2\u01d4\u01d2\3\2"+
 		"\2\2\u01d4\u01d5\3\2\2\2\u01d5\u01d7\3\2\2\2\u01d6\u01d4\3\2\2\2\u01d7"+
-		"\u01d8\7\32\2\2\u01d8i\3\2\2\2\u01d9\u01da\5|?\2\u01da\u01db\5\u0082B"+
-		"\2\u01db\u01dd\7\33\2\2\u01dc\u01de\5l\67\2\u01dd\u01dc\3\2\2\2\u01dd"+
+		"\u01d8\7\32\2\2\u01d8i\3\2\2\2\u01d9\u01da\7\t\2\2\u01da\u01db\5\u0082"+
+		"B\2\u01db\u01dd\7\33\2\2\u01dc\u01de\5l\67\2\u01dd\u01dc\3\2\2\2\u01dd"+
 		"\u01de\3\2\2\2\u01de\u01df\3\2\2\2\u01df\u01e0\7\34\2\2\u01e0\u01e1\5"+
-		"p9\2\u01e1\u01ec\3\2\2\2\u01e2\u01e3\7\t\2\2\u01e3\u01e4\5\u0082B\2\u01e4"+
+		"\6\4\2\u01e1\u01ec\3\2\2\2\u01e2\u01e3\5|?\2\u01e3\u01e4\5\u0082B\2\u01e4"+
 		"\u01e6\7\33\2\2\u01e5\u01e7\5l\67\2\u01e6\u01e5\3\2\2\2\u01e6\u01e7\3"+
-		"\2\2\2\u01e7\u01e8\3\2\2\2\u01e8\u01e9\7\34\2\2\u01e9\u01ea\5\6\4\2\u01ea"+
+		"\2\2\2\u01e7\u01e8\3\2\2\2\u01e8\u01e9\7\34\2\2\u01e9\u01ea\5p9\2\u01ea"+
 		"\u01ec\3\2\2\2\u01eb\u01d9\3\2\2\2\u01eb\u01e2\3\2\2\2\u01eck\3\2\2\2"+
 		"\u01ed\u01ee\5n8\2\u01ee\u01ef\7\36\2\2\u01ef\u01f0\5l\67\2\u01f0\u01f3"+
 		"\3\2\2\2\u01f1\u01f3\5n8\2\u01f2\u01ed\3\2\2\2\u01f2\u01f1\3\2\2\2\u01f3"+

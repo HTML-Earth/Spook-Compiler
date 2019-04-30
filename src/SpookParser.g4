@@ -198,8 +198,8 @@ constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 /*      FUNCTIONS    */
 /* Function declaration */
 functionDecl
-    : returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock
-    | VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+    : VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
+    | returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock;
 
 functionArgs
     : functionArg COMMA functionArgs
