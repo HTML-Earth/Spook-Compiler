@@ -106,7 +106,7 @@ public class TypeChecking {
         visitBlock(mainNode.getBlockNode());
     }
 
-    public void visitBlock(BlockNode blockNode) {
+    private void visitBlock(BlockNode blockNode) {
         openScope();
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
@@ -197,13 +197,13 @@ public class TypeChecking {
             retrievedFunctions = null;
 
         if (retrievedFunctions != null) {
-            boolean matchingSize = false;
-            boolean argumentMatch = false;
+            boolean matchingSize = true;
+            boolean argumentMatch = true;
             for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
                 if (retrievedNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
-                    if (retrievedNode.getFunctionArgNodes().size() == objectArgumentNodes.size()) {
-                        matchingSize = true;
-
+                    if (retrievedNode.getFunctionArgNodes().size() != objectArgumentNodes.size())
+                        matchingSize = false;
+                    else {
                         // Check parameters
                         outerLoop:
                         for (int i = 0; i < objectArgumentNodes.size(); i++) {
@@ -219,8 +219,6 @@ public class TypeChecking {
                                                 argumentMatch = false;
                                                 break outerLoop;
                                             }
-                                            else
-                                                argumentMatch = true;
                                         }
                                     }
                                 }
@@ -396,7 +394,8 @@ public class TypeChecking {
     private void visitReturnStatement(ReturnNode returnNode) {
         visitExpression(returnNode.getExpressionNode());
     }
-
+// swizzle, return, objectdecl
+    /*      Expressions      */
     private void visitExpression(ExpressionNode expressionNode) {
         LowPrecedenceNode lowPrecedenceNode;
         if (expressionNode instanceof ArithExpressionNode) {
@@ -406,6 +405,14 @@ public class TypeChecking {
         else if (expressionNode instanceof BoolExpressionNode) {
             // Do BoolExpression things
         }
+        else if (expressionNode instanceof TernaryOperatorNode)
+            visitTernaryOperator((TernaryOperatorNode) expressionNode);
+        else if (expressionNode instanceof  Vector4ExpressionNode)
+            visitVector4Expression((Vector4ExpressionNode) expressionNode);
+        else if (expressionNode instanceof  Vector3ExpressionNode)
+            visitVector3Expression((Vector3ExpressionNode) expressionNode);
+        else if (expressionNode instanceof  Vector2ExpressionNode)
+            visitVector2Expression((Vector2ExpressionNode) expressionNode);
     }
 
     private void visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
@@ -452,6 +459,30 @@ public class TypeChecking {
                     visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
             }
         }
+    }
+
+    private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
+        visitExpression(ternaryOperatorNode.getBoolExpressionNode());
+        visitExpression(ternaryOperatorNode.getExpressionNode1());
+        visitExpression(ternaryOperatorNode.getExpressionNode2());
+    }
+
+    private void visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
+        visitExpression(vector4ExpressionNode.getArithExpressionNode1());
+        visitExpression(vector4ExpressionNode.getArithExpressionNode2());
+        visitExpression(vector4ExpressionNode.getArithExpressionNode3());
+        visitExpression(vector4ExpressionNode.getArithExpressionNode4());
+    }
+
+    private void visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode) {
+        visitExpression(vector3ExpressionNode.getArithExpressionNode1());
+        visitExpression(vector3ExpressionNode.getArithExpressionNode2());
+        visitExpression(vector3ExpressionNode.getArithExpressionNode3());
+    }
+
+    private void visitVector2Expression(Vector2ExpressionNode vector2ExpressionNode) {
+        visitExpression(vector2ExpressionNode.getArithExpressionNode1());
+        visitExpression(vector2ExpressionNode.getArithExpressionNode2());
     }
 
     /*      CLASSES          */
