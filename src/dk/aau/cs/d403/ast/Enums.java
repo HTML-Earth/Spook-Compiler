@@ -141,28 +141,6 @@ public class Enums {
         }
     }
 
-    public enum MathFunctionName {
-        ABS,
-        SIN,
-        COS,
-        TAN
-    }
-
-    public static String mathFunctionToString(MathFunctionName mathFunction) {
-        switch (mathFunction) {
-            case ABS:
-                return "abs";
-            case SIN:
-                return "sin";
-            case COS:
-                return "cos";
-            case TAN:
-                return "tan";
-            default:
-                return "UnknownMathFunction";
-        }
-    }
-
     public enum ColorName {
         BLACK,
         WHITE,
