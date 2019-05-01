@@ -76,11 +76,11 @@ public class TypeChecking {
     /*      VISITOR         */
     public void visitProgram(ProgramNode programNode) {
         openScope();
-        visitMain(programNode.getMainNode());
         for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes())
             visitFunctionDeclaration(functionDeclaration);
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
             visitClassDeclaration(classDeclaration);
+        visitMain(programNode.getMainNode());
     }
 
     public void visitMain(MainNode mainNode) {
@@ -98,8 +98,20 @@ public class TypeChecking {
     private void visitStatement(StatementNode statementNode) {
         if (statementNode instanceof VariableDeclarationNode)
             visitVariableDeclaration((VariableDeclarationNode) statementNode);
+        else if (statementNode instanceof ObjectDeclarationNode)
+            visitObjectDeclaration((ObjectDeclarationNode) statementNode);
         else if (statementNode instanceof AssignmentNode)
             visitAssignment((AssignmentNode) statementNode);
+        else if (statementNode instanceof NonObjectFunctionCallNode)
+            visitNonObjectFunctionCall((NonObjectFunctionCallNode) statementNode);
+        /*
+        else if (statementNode instanceof ObjectFunctionCallNode)
+            visitObjectFunctionCall((ObjectFunctionCallNode) statementNode);
+            */
+        else if (statementNode instanceof IfElseStatementNode)
+            visitIfElseStatement((IfElseStatementNode) statementNode);
+        else if (statementNode instanceof ForLoopStatementNode)
+            visitForLoopStatement((ForLoopStatementNode) statementNode);
     }
 
     /*      STATEMENTS       */
@@ -122,33 +134,126 @@ public class TypeChecking {
             visitAssignment(variableDeclarationNode.getAssignmentNode());
     }
 
+    private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
+        String objectType = objectDeclarationNode.getObjectType();
+        String variableName = objectDeclarationNode.getVariableName();
+
+        ObjectDeclarationNode retrievedNode;
+        if (retrieveSymbol(variableName) != null)
+            retrievedNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
+        else
+            retrievedNode = null;
+
+        // Check if the class is custom and check if that class is declared
+        if (!listOfPredefinedClasses.contains(objectType)) {
+            if (retrieveSymbol(objectType) == null)
+                throw new RuntimeException("ERROR: An object is declared with a non-existing class.");
+        }
+
+        if (retrieveSymbol(variableName) == null)
+            enterSymbol(variableName, objectDeclarationNode);
+        else if (retrievedNode != null && !retrievedNode.getObjectType().equals(objectType))
+            enterSymbol(variableName, objectDeclarationNode);
+        else
+            throw new RuntimeException("ERROR: An object is already declared with the same name and type.");
+    }
+
     private void visitAssignment(AssignmentNode assignmentNode) {
         String variableName = assignmentNode.getVariableName();
 
-        // Check if the assignment expression is an INT or FLOAT
-        Enums.DataType dataType;
-        ArrayList<Enums.DataType> dataTypeList = getExpressionNodeType(assignmentNode.getExpressionNode());
-        if (dataTypeList.contains(Enums.DataType.INT))
-            dataType = Enums.DataType.INT;
-        else if (dataTypeList.contains(Enums.DataType.FLOAT))
-            dataType = Enums.DataType.FLOAT;
-        else
-            dataType = dataTypeList.get(0);
-
-        VariableDeclarationNode retrievedNode = null;
-        if (retrieveSymbol(variableName) != null)
-            retrievedNode = (VariableDeclarationNode) retrieveSymbol(variableName);
-
-        if (retrievedNode != null) {
-            if (retrievedNode.getDataType().equals(dataType))
-                enterSymbol(variableName, assignmentNode);
-            else
-                throw new RuntimeException("ERROR: The variable type does not match the expression type.");
-        }
-        else
-            throw new RuntimeException("ERROR: Variable is not declared.");
+        if (retrieveSymbol(variableName) == null)
+            throw new RuntimeException("ERROR: Variable on left side of assignment is not initialized.");
 
         visitExpression(assignmentNode.getExpressionNode());
+    }
+
+    ////////////////
+    private void visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        String functionName = nonObjectFunctionCallNode.getFunctionName();
+        ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
+
+        FunctionDeclarationNode functionDeclarationNode;
+        if (retrieveSymbol(functionName) != null)
+            functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(functionName);
+        else
+            functionDeclarationNode = null;
+
+        if (functionDeclarationNode != null) {
+            if (functionDeclarationNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
+                int hej;
+            }
+        }
+        else
+            throw new RuntimeException("ERROR: Non-object function does not exist.");
+    }
+
+    private void visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
+        IfStatementNode ifStatementNode = ifElseStatementNode.getIfStatementNode();
+
+        // Make sure its boolean expression and block/statement is well typed
+        visitExpression(ifStatementNode.getIfBool());
+        if (ifStatementNode.getIfBlock() != null)
+            visitBlock(ifStatementNode.getIfBlock());
+        else
+            visitStatement(ifStatementNode.getIfStatement());
+
+        // Check if there are any Else-if statements and do the same for Else-if statements as for If statements
+        if (ifElseStatementNode.getElseIfStatementNodes() != null) {
+            for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()) {
+                visitExpression(elseIfStatementNode.getElseIfBool());
+                if (elseIfStatementNode.getElseIfBlock() != null)
+                    visitBlock(elseIfStatementNode.getElseIfBlock());
+                else
+                    visitStatement(elseIfStatementNode.getElseIfStatement());
+            }
+        }
+
+        // Check if there are an Else statements and do the same for it as for Else-if and If
+        if (ifElseStatementNode.getElseStatementNode() != null) {
+            if (ifElseStatementNode.getElseStatementNode().getElseBlock() != null)
+                visitBlock(ifElseStatementNode.getElseStatementNode().getElseBlock());
+            else
+                visitStatement(ifElseStatementNode.getElseStatementNode().getElseStatement());
+        }
+    }
+
+    private void visitForLoopStatement(ForLoopStatementNode forLoopStatementNode) {
+        ForLoopExpressionNode forLoopExpression1 = forLoopStatementNode.getForLoopExpressionNode1();
+        ForLoopExpressionNode forLoopExpression2 = forLoopStatementNode.getForLoopExpressionNode2();
+
+        // Visit expression and check if they are well typed
+        visitForLoopExpression(forLoopExpression1);
+        visitForLoopExpression(forLoopExpression2);
+
+        if (forLoopStatementNode.getBlockNode() != null)
+            visitBlock(forLoopStatementNode.getBlockNode());
+        else if (forLoopStatementNode.getStatementNode() != null)
+            visitStatement(forLoopStatementNode.getStatementNode());
+    }
+
+    private void visitForLoopExpression(ForLoopExpressionNode forLoopExpressionNode) {
+        if (forLoopExpressionNode.getVariableDeclarationNode() != null) {
+            VariableDeclarationNode variableDeclarationNode = forLoopExpressionNode.getVariableDeclarationNode();
+            if (!variableDeclarationNode.getDataType().equals(Enums.DataType.INT) && !variableDeclarationNode.getDataType().equals(Enums.DataType.FLOAT))
+                throw new RuntimeException("ERROR: Variable is of an incompatible type for ForLoop");
+            else
+                visitVariableDeclaration(variableDeclarationNode);
+        }
+        else if (forLoopExpressionNode.getAssignmentNode() != null) {
+            visitAssignment(forLoopExpressionNode.getAssignmentNode());
+        }
+        else if (retrieveSymbol(forLoopExpressionNode.getVariableName()) != null) {
+            VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(forLoopExpressionNode.getVariableName());
+            if (variableDeclarationNode == null)
+                throw new RuntimeException("ERROR: Variable in ForLoop is not declared.");
+            else if (variableDeclarationNode.getAssignmentNode() == null)
+                throw new RuntimeException("ERROR: Variable in ForLoop is not initialized.");
+            else if (!variableDeclarationNode.getDataType().equals(Enums.DataType.INT) && !variableDeclarationNode.getDataType().equals(Enums.DataType.FLOAT)) {
+                throw new RuntimeException("ERROR: Variable is of an illegal type for the ForLoop.");
+            }
+        }
+        else
+            throw new RuntimeException("ERROR: Invalid ForLoop expression");
     }
 
     /*      FUNCTIONS        */
@@ -223,22 +328,23 @@ public class TypeChecking {
             for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
                 if (atomPrecedenceNode.getOperand().getVariableName() != null) {
-                    if (retrieveSymbol(atomPrecedenceNode.getOperand().getVariableName()) == null)
-                        throw new RuntimeException("ERROR: Variable is not declared.");
-                    else if (!(retrieveSymbol(atomPrecedenceNode.getOperand().getVariableName()) instanceof AssignmentNode))
-                        throw new RuntimeException("ERROR: Variable is not initialized.");
+                    String variableName = atomPrecedenceNode.getOperand().getVariableName();
 
-                    AssignmentNode assignmentNode = (AssignmentNode) retrieveSymbol(atomPrecedenceNode.getOperand().getVariableName());
-                    Enums.DataType dataType = null;
-                    if (assignmentNode != null) {
-                        if (getExpressionNodeType(assignmentNode.getExpressionNode()).contains(Enums.DataType.FLOAT))
-                            dataType = Enums.DataType.FLOAT;
-                        else if (getExpressionNodeType(assignmentNode.getExpressionNode()).contains(Enums.DataType.INT))
-                            dataType = Enums.DataType.INT;
+                    if (retrieveSymbol(variableName) == null)
+                        throw new RuntimeException("ERROR: Assigned variable is not declared.");
+                    else if (retrieveSymbol(variableName) instanceof VariableDeclarationNode) {
+                        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+
+                        if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() != null)
+                            visitAssignment(variableDeclarationNode.getAssignmentNode());
+                        else
+                            throw new RuntimeException("ERROR: Assigned variable is not initialized.");
+
+                        if (!variableDeclarationNode.getDataType().equals(Enums.DataType.INT) && !variableDeclarationNode.getDataType().equals(Enums.DataType.FLOAT))
+                            throw new RuntimeException("ERROR: Assigned variable is of an incompatible type.");
                     }
-
-                    if (dataType == null)
-                        throw new RuntimeException("ERROR: Variable does not match the expression type.");
+                    else
+                        enterSymbol(variableName, lowPrecedenceNode);
                 }
 
                 if (atomPrecedenceNode.getLowPrecedenceNode() != null)
