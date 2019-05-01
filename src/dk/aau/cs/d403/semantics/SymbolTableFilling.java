@@ -393,7 +393,7 @@ public class SymbolTableFilling implements SymbolTable{
     private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
 
         if(expressionNode instanceof ArithExpressionNode)
-            return Enums.DataType.FLOAT;
+            return Enums.DataType.NUM;
         else if(expressionNode instanceof BoolExpressionNode)
             return Enums.DataType.BOOL;
         else if(expressionNode instanceof Vector4ExpressionNode)

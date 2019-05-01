@@ -85,7 +85,6 @@ public class Main {
         if (parser == null)
             throw new RuntimeException("Parser failed.");
 
-
         // AST
         AstBuilder builder = new AstBuilder();
         ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());

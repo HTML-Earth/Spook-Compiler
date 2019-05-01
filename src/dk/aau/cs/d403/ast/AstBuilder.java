@@ -9,8 +9,8 @@ import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.function.Function;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
@@ -28,6 +28,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         //Function declarations
         for (SpookParser.FunctionDeclContext functionDecl : ctx.functionDecl()) {
             functionDeclarationNodes.add((FunctionDeclarationNode)visitFunctionDecl(functionDecl));
+        }
+
+        //ID error
+        if (!ctx.variableName().isEmpty()) {
+            throw new CompilerException("Unknown declaration (check type for " + ctx.variableName(0).getText() + ")", getCodePosition(ctx));
         }
 
         ProgramNode programNode = new ProgramNode(mainNode, classDeclarationNodes, functionDeclarationNodes);
@@ -205,16 +210,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolExpression(SpookParser.BoolExpressionContext ctx) {
-        if (ctx.BOOL_LITERAL() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode(getBooleanValue(ctx.BOOL_LITERAL()));
+        if (ctx.boolOperations() != null) {
+            BoolExpressionNode boolExpressionNode = new BoolExpressionNode((BoolOperationsNode) visitBoolOperations(ctx.boolOperations()));
             boolExpressionNode.setCodePosition(getCodePosition(ctx));
-
-            return boolExpressionNode;
-        }
-        else if (ctx.boolOperations() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new ArrayList<>());
-            boolExpressionNode.setCodePosition(getCodePosition(ctx));
-
             return boolExpressionNode;
         }
         else
@@ -222,28 +220,83 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     @Override
-    public ASTnode visitMathFunction(SpookParser.MathFunctionContext ctx) {
-        if (ctx.lowPrecedence() != null) {
-            if (ctx.function() != null) {
-                Enums.MathFunctionName functionName = getMathFunction(ctx.function());
+    public ASTnode visitBoolOperations(SpookParser.BoolOperationsContext ctx) {
+        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        BoolOperationNode boolOperationNode = ((BoolOperationNode) visitBoolOperation(ctx.boolOperation()));
+        ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = new ArrayList<>();
 
-                MathFunctionCallNode mathFunctionCallNode = new MathFunctionCallNode(functionName, (LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
-                mathFunctionCallNode.setCodePosition(getCodePosition(ctx));
+        for (SpookParser.BoolOperationExtendContext boolOperationExtendContext : ctx.boolOperationExtend())
+            boolOperationExtendNodes.add((BoolOperationExtendNode) visitBoolOperationExtend(boolOperationExtendContext));
 
-                return mathFunctionCallNode;
-            }
-            else
-                throw new CompilerException("Invalid expression in math function", getCodePosition(ctx));
+        if (ctx.NOT() != null && ctx.boolOperation() != null && ctx.boolOperationExtend() != null) {
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, boolOperationExtendNodes, optionalNOT);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
         }
-        else
-            throw new CompilerException("Invalid math function name", getCodePosition(ctx));
+
+        else if (ctx.NOT() != null && ctx.boolOperation() != null) {
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, optionalNOT);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
+        }
+
+        else if (ctx.boolOperation() != null && ctx.boolOperationExtend() != null) {
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, boolOperationExtendNodes);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
+        } else
+            throw new CompilerException("Invalid Boolean operations", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx) {
+        Enums.boolOperator boolOperator = getBoolOperator(ctx.boolOperator());
+        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        BoolOperationNode boolOperationNode = ((BoolOperationNode) visitBoolOperation(ctx.boolOperation()));
+
+        if (ctx.boolOperation() != null && ctx.boolOperator() != null & ctx.NOT() != null) {
+            BoolOperationExtendNode boolOperationExtendNode = new BoolOperationExtendNode(boolOperator, optionalNOT, boolOperationNode);
+            boolOperationExtendNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationExtendNode;
+        }
+        else if (ctx.boolOperator() != null && ctx.boolOperation() != null) {
+            BoolOperationExtendNode boolOperationExtendNode = new BoolOperationExtendNode(boolOperator, boolOperationNode);
+            boolOperationExtendNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationExtendNode;
+        }
+        else throw new CompilerException("Invalid Boolean Operation Extension", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitBoolOperation(SpookParser.BoolOperationContext ctx) {
+        if (ctx.BOOL_LITERAL() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode(getBooleanValue(ctx.BOOL_LITERAL()));
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else if (ctx.boolOperations() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode((BoolOperationsNode) visitBoolOperations(ctx.boolOperations()));
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else if (ctx.variableName() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode(ctx.variableName().getText());
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else if (ctx.realNumber() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else throw new CompilerException("Invalid Boolean operation/operand", getCodePosition(ctx));
     }
 
     @Override
     public ASTnode visitClassDecl(SpookParser.ClassDeclContext ctx) {
         ClassBlockNode classBlockNode = (ClassBlockNode) visitClassBlock(ctx.classBlock());
 
-        ClassDeclarationNode classDeclarationNode = new ClassDeclarationNode(ctx.className().getText(), classBlockNode);
+        ClassDeclarationNode classDeclarationNode = new ClassDeclarationNode(ctx.className(0).getText(), classBlockNode);
         classDeclarationNode.setCodePosition(getCodePosition(ctx));
 
         return classDeclarationNode;
@@ -480,26 +533,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectArg(SpookParser.ObjectArgContext ctx) {
-        if (ctx.functionCall() != null && ctx.functionCall().nonObjectFunctionCall() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((NonObjectFunctionCallNode) visitNonObjectFunctionCall(ctx.functionCall().nonObjectFunctionCall()));
-            objectArgumentNode.setCodePosition(getCodePosition(ctx));
-
-            return objectArgumentNode;
-        }
-        else if (ctx.functionCall() != null && ctx.functionCall().objectFunctionCall() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((ObjectFunctionCallNode) visitObjectFunctionCall(ctx.functionCall().objectFunctionCall()));
-            objectArgumentNode.setCodePosition(getCodePosition(ctx));
-
-            return objectArgumentNode;
-        }
-        else if (ctx.lowPrecedence() != null) {
+        if (ctx.lowPrecedence() != null) {
             ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
-            objectArgumentNode.setCodePosition(getCodePosition(ctx));
-
-            return objectArgumentNode;
-        }
-        else if (ctx.colorFunctionCall() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((ColorFunctionCallNode) visitColorFunctionCall(ctx.colorFunctionCall()));
             objectArgumentNode.setCodePosition(getCodePosition(ctx));
 
             return objectArgumentNode;
@@ -592,8 +627,15 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return arithOperandNode;
         }
-        else if (ctx.mathFunction() != null) {
-            ArithOperandNode arithOperandNode = new ArithOperandNode((MathFunctionCallNode)visitMathFunction(ctx.mathFunction()));
+        else if (ctx.functionCall() != null) {
+            ASTnode functionCallNode = visitFunctionCall(ctx.functionCall());
+            ArithOperandNode arithOperandNode;
+
+            if (functionCallNode instanceof NonObjectFunctionCallNode)
+                arithOperandNode = new ArithOperandNode((NonObjectFunctionCallNode)functionCallNode);
+            else
+                arithOperandNode = new ArithOperandNode((ObjectFunctionCallNode)functionCallNode);
+
             arithOperandNode.setCodePosition(getCodePosition(ctx));
 
             return arithOperandNode;
@@ -604,29 +646,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return arithOperandNode;
         }
-        else if (ctx.UNIFORM() != null) {
-            ArithOperandNode arithOperandNode = new ArithOperandNode(ctx.UNIFORM().getText());
+        else if (ctx.swizzle() != null) {
+            ASTnode swizzleNode = visitSwizzle(ctx.swizzle());
+            ArithOperandNode arithOperandNode = new ArithOperandNode((SwizzleNode) swizzleNode);
+
             arithOperandNode.setCodePosition(getCodePosition(ctx));
 
             return arithOperandNode;
         }
+
         else
             throw new CompilerException("Invalid Operand", getCodePosition(ctx));
-    }
-
-    @Override
-    public ASTnode visitColorFunctionCall(SpookParser.ColorFunctionCallContext ctx) {
-        Enums.ColorName colorName;
-
-        if (ctx.predefinedFunctionName() != null)
-            colorName = getColorName(ctx.predefinedFunctionName());
-        else
-            throw new CompilerException("Invalid class property", getCodePosition(ctx));
-
-        ColorFunctionCallNode colorFunctionCallNode = new ColorFunctionCallNode(colorName);
-        colorFunctionCallNode.setCodePosition(getCodePosition(ctx));
-
-        return colorFunctionCallNode;
     }
 
     @Override
@@ -811,10 +841,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private Enums.DataType getDataType(SpookParser.DataTypeContext ctx) {
         Enums.DataType dataType;
 
-        if (ctx.INT() != null)
-            dataType = Enums.DataType.INT;
-        else if (ctx.FLOAT() != null)
-            dataType = Enums.DataType.FLOAT;
+        if (ctx.NUM() != null)
+            dataType = Enums.DataType.NUM;
         else if (ctx.BOOL() != null)
             dataType = Enums.DataType.BOOL;
         else if (ctx.VECTOR2() != null)
@@ -832,10 +860,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private Enums.ReturnType getReturnType(SpookParser.ReturnTypeContext ctx) {
         Enums.ReturnType returnType;
 
-        if (ctx.dataType().INT() != null)
-            returnType = Enums.ReturnType.INT;
-        else if (ctx.dataType().FLOAT() != null)
-            returnType = Enums.ReturnType.FLOAT;
+        if (ctx.dataType().NUM() != null)
+            returnType = Enums.ReturnType.NUM;
         else if (ctx.dataType().BOOL() != null)
             returnType = Enums.ReturnType.BOOL;
         else if (ctx.dataType().VECTOR2() != null)
@@ -848,44 +874,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("ReturnType is unknown", getCodePosition(ctx));
 
         return returnType;
-    }
-
-    private Enums.ClassType getClassType(SpookParser.ClassTypeContext ctx) {
-        Enums.ClassType classType;
-
-        if (ctx.CIRCLE() != null)
-            classType = Enums.ClassType.CIRCLE;
-        else if (ctx.RECTANGLE() != null)
-            classType = Enums.ClassType.RECTANGLE;
-        else if (ctx.TRIANGLE() != null)
-            classType = Enums.ClassType.TRIANGLE;
-        else if (ctx.SHAPE() != null)
-            classType = Enums.ClassType.SHAPE;
-        else if (ctx.COLOR() != null)
-            classType = Enums.ClassType.COLOR;
-        else
-            throw new CompilerException("ClassType is unknown", getCodePosition(ctx));
-
-        return classType;
-    }
-
-    private Enums.ColorName getColorName(SpookParser.PredefinedFunctionNameContext ctx) {
-        Enums.ColorName colorName;
-
-        if (ctx.colorName().BLACK() != null)
-            colorName = Enums.ColorName.BLACK;
-        else if (ctx.colorName().BLUE() != null)
-            colorName = Enums.ColorName.BLUE;
-        else if (ctx.colorName().RED() != null)
-            colorName = Enums.ColorName.RED;
-        else if (ctx.colorName().GREEN() != null)
-            colorName = Enums.ColorName.GREEN;
-        else if (ctx.colorName().WHITE() != null)
-            colorName = Enums.ColorName.WHITE;
-        else
-            throw new CompilerException("Color is unknown", getCodePosition(ctx));
-
-        return colorName;
     }
 
     private Enums.Operator getOperator(SpookParser.HighOperatorContext ctx) {
@@ -916,22 +904,27 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return operator;
     }
 
+    private  Enums.boolOperator getBoolOperator (SpookParser.BoolOperatorContext ctx) {
+        Enums.boolOperator boolOperator;
 
-    private Enums.MathFunctionName getMathFunction(SpookParser.FunctionContext ctx) {
-        Enums.MathFunctionName mathFunction;
-
-        if (ctx.ABS() != null)
-            mathFunction = Enums.MathFunctionName.ABS;
-        else if (ctx.SIN() != null)
-            mathFunction = Enums.MathFunctionName.SIN;
-        else if (ctx.COS() != null)
-            mathFunction = Enums.MathFunctionName.COS;
-        else if (ctx.TAN() != null)
-            mathFunction = Enums.MathFunctionName.TAN;
-        else
-            throw new CompilerException("Math function is unknown", getCodePosition(ctx));
-
-        return mathFunction;
+        if (ctx.AND() != null)
+            boolOperator = Enums.boolOperator.AND;
+        else if (ctx.EQUAL() != null)
+            boolOperator = Enums.boolOperator.EQUAL;
+        else if (ctx.GREATER_OR_EQUAL() != null)
+            boolOperator = Enums.boolOperator.GREATER_OR_EQUAL;
+        else if (ctx.GREATER_THAN() != null)
+            boolOperator = Enums.boolOperator.GREATER_THAN;
+        else if (ctx.LESS_OR_EQUAL() != null)
+            boolOperator = Enums.boolOperator.LESS_OR_EQUAL;
+        else if (ctx.LESS_THAN() != null)
+            boolOperator = Enums.boolOperator.LESS_THAN;
+        else if (ctx.NOT_EQUAL() != null)
+            boolOperator = Enums.boolOperator.NOT_EQUAL;
+        else if (ctx.OR() != null)
+            boolOperator = Enums.boolOperator.OR;
+        else throw new CompilerException("Boolean operator is unknown", getCodePosition(ctx));
+        return boolOperator;
     }
 
     private CodePosition getCodePosition(ParserRuleContext ctx) {

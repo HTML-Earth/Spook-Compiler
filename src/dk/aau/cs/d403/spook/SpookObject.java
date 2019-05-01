@@ -14,7 +14,7 @@ public abstract class SpookObject {
     protected ObjectArgumentNode rotation;
 
     protected SpookObject parent;
-    protected ArrayList<SpookObject> children;
+    protected ArrayList<SpookObject> children = new ArrayList<>();
 
     public Enums.ClassType getClassType() {
         return classType;

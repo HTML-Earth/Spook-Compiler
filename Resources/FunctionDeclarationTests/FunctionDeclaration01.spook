@@ -1,7 +1,7 @@
 Shader{}
 
-void func1(Int positionX) {}
+Void func1(Num positionX) {}
 
-void func2(Int positionX) {}
+Void func2(Num positionX) {}
 
-void func2(Int positionY) {}
+Void func2(Num positionY) {}

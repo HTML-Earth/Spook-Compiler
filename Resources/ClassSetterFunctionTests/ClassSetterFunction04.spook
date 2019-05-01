@@ -1,9 +1,9 @@
 Shader {}
 
-class class1 {
-    Int positionX;
+Class class1 {
+    Num positionX;
 
-    void setPositionX(Int funcPosition) {
+    Void setPositionX(Num funcPosition) {
         positionX = funcPosition;
     }
 }

@@ -1,7 +1,11 @@
 package dk.aau.cs.d403.spook.color;
 
-import dk.aau.cs.d403.ast.expressions.ColorFunctionCallNode;
+import dk.aau.cs.d403.ast.expressions.LowPrecedenceNode;
+import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
+import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 import dk.aau.cs.d403.spook.Vector4;
+
+import java.lang.reflect.Method;
 
 public class Color {
     public static Vector4 black() {
@@ -32,31 +36,49 @@ public class Color {
         return new Vector4(0,0,0,0);
     }
 
-    public static Vector4 getColorProperty(ColorFunctionCallNode colorFunctionCallNode) {
-        if (colorFunctionCallNode.getClassType() == null)
-            throw new RuntimeException("Property is not a color property");
+    public static Vector4 getColorArgument(ObjectArgumentNode objectArgumentNode) {
+        LowPrecedenceNode lowPrecedenceNode = objectArgumentNode.getLowPrecedence();
 
-        switch (colorFunctionCallNode.getClassType()) {
-            case BLACK:
-                return black();
-            case WHITE:
-                return white();
-            case RED:
-                return red();
-            case GREEN:
-                return green();
-            case BLUE:
-                return blue();
-            //case CYAN
-            //    return cyan();
-            //case MAGENTA:
-            //    return magenta();
-            //case YELLOW:
-            //    return yellow();
-            //case INVISIBLE:
-            //    return invisible();
-            default:
-                throw new RuntimeException("Unknown color");
+        if (lowPrecedenceNode != null) {
+            return getColorProperty(lowPrecedenceNode.getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes().get(0).getOperand().getObjectFunctionCallNode());
         }
+        else {
+            throw new RuntimeException("Invalid color argument");
+        }
+    }
+
+    public static Vector4 getColorProperty(ObjectFunctionCallNode objectFunctionCallNode) {
+        if (objectFunctionCallNode.getFunctionName() == null)
+            throw new RuntimeException("Color function has no name");
+
+        if (objectFunctionCallNode.getObjectVariableName().equals("Color")) {
+            try {
+                return new Color().invokeColor(objectFunctionCallNode.getFunctionName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            throw new RuntimeException("Object variable name is not 'Color'");
+        }
+
+        throw new RuntimeException("Unknown color");
+    }
+
+    Vector4 invokeColor(String name) throws Exception {
+        Vector4 color = new Vector4(1,0,1,1);
+        Method method;
+        Class<?> enclosingClass = getClass();
+        if (enclosingClass != null) {
+            method = enclosingClass.getDeclaredMethod(name);
+            try {
+                Object value = method.invoke(this);
+                color = (Vector4) value;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return color;
     }
 }
