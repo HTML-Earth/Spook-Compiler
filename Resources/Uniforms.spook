@@ -2,8 +2,14 @@ Shader {
     Num xPos = Screen.x / 2;
     Num yPos = Screen.y / 2;
 
-    Circle middle = (sin(Time) * 50 + 100, Color.yellow());
-    middle.setPosition(xPos,yPos);
+    for (Num i = 1 to 5) {
+        Circle c = (25, Color.red());
+        c.setPosition(xPos, yPos + i * 10);
+        Scene.add(c);
+    }
+
+    Circle middle = (50, Color.yellow());
+    middle.setPosition(xPos + tan(Time) * 10,yPos + tan(Time + 2) * 10);
     Scene.add(middle);
     Scene.setColor(Color.blue());
 }
