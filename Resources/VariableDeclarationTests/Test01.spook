@@ -1,6 +1,7 @@
 Shader {
-    Bool var1 = true;
-    for(var1 to 10) {
-        var1 = i;
-    }
+    giveMeTen(1, 1, 1);
+}
+
+Int giveMeTen(Int arg1, Bool arg2, Int arg3) {
+return 10;
 }

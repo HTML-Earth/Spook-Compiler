@@ -62,6 +62,25 @@ public class TypeChecking {
         return null;
     }
 
+    private ArrayList<FunctionDeclarationNode> retrieveAllFunctions(String name) {
+        ArrayList<FunctionDeclarationNode> symbols = new ArrayList<>();
+        int stackLevel = this.hashMapStack.size() - 1;
+
+        while (stackLevel >= 0) {
+            if (this.hashMapStack.elementAt(stackLevel).get(name) != null) {
+                symbols.add((FunctionDeclarationNode) this.hashMapStack.elementAt(stackLevel).get(name));
+                if (functionCounter != 1) {
+                    for (int i = 1; i < functionCounter; i++)
+                        symbols.add((FunctionDeclarationNode) this.hashMapStack.elementAt(stackLevel).get(i + name));
+                }
+            }
+
+            stackLevel -= 1;
+        }
+
+        return symbols;
+    }
+
     public void printSymbolTable() {
         System.out.println("Symbol table:\n----------------------------------");
         System.out.println("Size of stack: " + hashMapStack.size());
@@ -167,24 +186,61 @@ public class TypeChecking {
         visitExpression(assignmentNode.getExpressionNode());
     }
 
-    ////////////////
     private void visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        FunctionDeclarationNode functionDeclarationNode;
-        if (retrieveSymbol(functionName) != null)
-            functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(functionName);
+        ArrayList<FunctionDeclarationNode> retrievedFunctions;
+        if (retrieveAllFunctions(functionName) != null)
+            retrievedFunctions = retrieveAllFunctions(functionName);
         else
-            functionDeclarationNode = null;
+            retrievedFunctions = null;
 
-        if (functionDeclarationNode != null) {
-            if (functionDeclarationNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
-                int hej;
+        if (retrievedFunctions != null) {
+            boolean matchingSize = false;
+            boolean argumentMatch = false;
+            for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
+                if (retrievedNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
+                    if (retrievedNode.getFunctionArgNodes().size() == objectArgumentNodes.size()) {
+                        matchingSize = true;
+
+                        // Check parameters
+                        outerLoop:
+                        for (int i = 0; i < objectArgumentNodes.size(); i++) {
+                            if (objectArgumentNodes.get(i).getLowPrecedence() != null) {
+                                LowPrecedenceNode lowPrecedenceNode = objectArgumentNodes.get(i).getLowPrecedence();
+                                for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
+                                    for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
+                                        if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
+                                            if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.INT) && !retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.FLOAT)) {
+                                                argumentMatch = false;
+                                                break outerLoop;
+                                            }
+                                            else
+                                                argumentMatch = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (retrievedNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
+                    enterSymbol(functionName, nonObjectFunctionCallNode);
+                    matchingSize = true;
+                    break;
+                }
+                else
+                    throw new RuntimeException("ERROR: Non-object function does not exist with no parameters.");
             }
+            if (!matchingSize)
+                throw new RuntimeException("ERROR: The given arguments for the Non-Object function call does not match the parameters for the function");
+            if (!argumentMatch)
+                throw new RuntimeException("ERROR: Mismatch");
         }
-        else
+        else {
             throw new RuntimeException("ERROR: Non-object function does not exist.");
+        }
     }
 
     private void visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
@@ -272,16 +328,21 @@ public class TypeChecking {
             enterSymbol(functionName, functionDeclarationNode);
         else if (retrievedNode.getFunctionArgNodes() != null && functionArgs != null)  {
             boolean unique = false;
-            for (int i = functionArgs.size(); i > 0; i--) {
-                if (!functionArgs.get(i - 1).prettyPrint().equals(retrievedNode.getFunctionArgNodes().get(i - 1).prettyPrint())) {
-                    unique = true;
-                    break;
+            if (retrievedNode.getFunctionArgNodes().size() == functionArgs.size()) {
+                for (int i = functionArgs.size(); i > 0; i--) {
+                    if (!functionArgs.get(i - 1).prettyPrint().equals(retrievedNode.getFunctionArgNodes().get(i - 1).prettyPrint())) {
+                        unique = true;
+                        break;
+                    }
                 }
+                if (unique)
+                    enterSymbol(functionName, functionDeclarationNode);
+                else
+                    throw new RuntimeException("ERROR: A function with the same name and arguments already exists.");
             }
-            if (unique)
-                enterSymbol(functionName, functionDeclarationNode);
             else
-                throw new RuntimeException("ERROR: A function with the same name already exists.");
+                enterSymbol(functionName, functionDeclarationNode);
+
         }
         else if (retrievedNode.getFunctionArgNodes() == null) {
             if (functionArgs != null)
@@ -327,6 +388,7 @@ public class TypeChecking {
         for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
             for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
+                // Operand: Variable name
                 if (atomPrecedenceNode.getOperand().getVariableName() != null) {
                     String variableName = atomPrecedenceNode.getOperand().getVariableName();
 
@@ -347,6 +409,9 @@ public class TypeChecking {
                         enterSymbol(variableName, lowPrecedenceNode);
                 }
 
+                // Operand: Function Call
+
+                // Operand: Low precedence
                 if (atomPrecedenceNode.getLowPrecedenceNode() != null)
                     visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
             }
@@ -379,6 +444,14 @@ public class TypeChecking {
         closeScope();
     }
 
+    /*      MISC         */
+    private boolean visitVariableName(String variableName) {
+        boolean correctVariable = false;
+
+
+
+        return correctVariable;
+    }
     private ArrayList<Enums.DataType> getExpressionNodeType(ExpressionNode expressionNode) {
         ArrayList<Enums.DataType> dataTypeList = new ArrayList<>();
 
