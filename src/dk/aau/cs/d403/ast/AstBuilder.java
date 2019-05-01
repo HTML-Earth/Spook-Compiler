@@ -657,7 +657,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitIfElseStatement(SpookParser.IfElseStatementContext ctx) {
         IfStatementNode ifStatementNode = (IfStatementNode) visitIfStatement(ctx.ifStatement());
-        ArrayList<ElseIfStatementNode> elseIfStatementNode = null;
+        ArrayList<ElseIfStatementNode> elseIfStatementNode = new ArrayList<>();
         ElseStatementNode elseStatementNode = null;
 
         if (ctx.elseIfStatement() != null) {
