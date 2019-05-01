@@ -574,6 +574,15 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return arithOperandNode;
         }
+        else if (ctx.swizzle() != null) {
+            ASTnode swizzleNode = visitSwizzle(ctx.swizzle());
+            ArithOperandNode arithOperandNode = new ArithOperandNode((SwizzleNode) swizzleNode);
+
+            arithOperandNode.setCodePosition(getCodePosition(ctx));
+
+            return arithOperandNode;
+        }
+
         else
             throw new CompilerException("Invalid Operand", getCodePosition(ctx));
     }
