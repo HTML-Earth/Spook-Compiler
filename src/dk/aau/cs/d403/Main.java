@@ -39,6 +39,7 @@ public class Main {
                     switch (arg.substring(1)) {
                         case "pp": case "prettyprint":
                             prettyPrint = true;
+                            break;
                         case "p": case "print": case "sout":
                             print = true;
                             break;
