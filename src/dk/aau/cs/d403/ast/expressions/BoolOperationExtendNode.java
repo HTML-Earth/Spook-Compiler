@@ -39,11 +39,11 @@ public class BoolOperationExtendNode implements ASTnode {
     public String prettyPrint() {
         //Case of operator !bool
         if (boolOperator != null && optionalNOT != null && boolOperationNode != null) {
-            return Enums.boolOperatorToString(boolOperator) + Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint();
+            return " " + Enums.boolOperatorToString(boolOperator) + " " + Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint();
         }
         //Case of operator bool
         else if (boolOperator != null && boolOperationNode != null) {
-            return Enums.boolOperatorToString(boolOperator) + boolOperationNode.prettyPrint();
+            return " " + Enums.boolOperatorToString(boolOperator)+ " " + boolOperationNode.prettyPrint();
         } else return "Invalid Boolean Operation Extension";
     }
 

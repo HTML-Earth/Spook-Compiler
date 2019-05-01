@@ -9,6 +9,7 @@ import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
@@ -210,13 +211,90 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitBoolExpression(SpookParser.BoolExpressionContext ctx) {
         if (ctx.boolOperations() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new ArrayList<>());
+            BoolExpressionNode boolExpressionNode = new BoolExpressionNode((BoolOperationsNode) visitBoolOperations(ctx.boolOperations()));
             boolExpressionNode.setCodePosition(getCodePosition(ctx));
-
             return boolExpressionNode;
         }
         else
             throw new CompilerException("Invalid Bool expression", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitBoolOperations(SpookParser.BoolOperationsContext ctx) {
+        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        BoolOperationNode boolOperationNode = ((BoolOperationNode) visitBoolOperation(ctx.boolOperation()));
+        ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = new ArrayList<>();
+
+        for (SpookParser.BoolOperationExtendContext boolOperationExtendContext : ctx.boolOperationExtend())
+            boolOperationExtendNodes.add((BoolOperationExtendNode) visitBoolOperationExtend(boolOperationExtendContext));
+
+        if (ctx.NOT() != null && ctx.boolOperation() != null && ctx.boolOperationExtend() != null) {
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, boolOperationExtendNodes, optionalNOT);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
+        }
+
+        else if (ctx.NOT() != null && ctx.boolOperation() != null) {
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, optionalNOT);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
+        }
+
+        else if (ctx.boolOperation() != null && ctx.boolOperationExtend() != null) {
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, boolOperationExtendNodes);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
+        } else
+            throw new CompilerException("Invalid Boolean operations", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx) {
+        Enums.boolOperator boolOperator = getBoolOperator(ctx.boolOperator());
+        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        BoolOperationNode boolOperationNode = ((BoolOperationNode) visitBoolOperation(ctx.boolOperation()));
+
+        if (ctx.boolOperation() != null && ctx.boolOperator() != null & ctx.NOT() != null) {
+            BoolOperationExtendNode boolOperationExtendNode = new BoolOperationExtendNode(boolOperator, optionalNOT, boolOperationNode);
+            boolOperationExtendNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationExtendNode;
+        }
+        else if (ctx.boolOperator() != null && ctx.boolOperation() != null) {
+            BoolOperationExtendNode boolOperationExtendNode = new BoolOperationExtendNode(boolOperator, boolOperationNode);
+            boolOperationExtendNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationExtendNode;
+        }
+        else throw new CompilerException("Invalid Boolean Operation Extension", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitBoolOperation(SpookParser.BoolOperationContext ctx) {
+        if (ctx.BOOL_LITERAL() != null) {
+            BoolOperationNode boolOperationNode;
+            if (ctx.BOOL_LITERAL().getText().equals("true"))
+                boolOperationNode = new BoolOperationNode(true);
+            else if (ctx.BOOL_LITERAL().getText().equals("false"))
+                boolOperationNode = new BoolOperationNode(false);
+            else throw new CompilerException("Bool Literal is neither true or false", getCodePosition(ctx));
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else if (ctx.boolOperations() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode((BoolOperationsNode) visitBoolOperations(ctx.boolOperations()));
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else if (ctx.variableName() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode(ctx.variableName().getText());
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else if (ctx.realNumber() != null) {
+            BoolOperationNode boolOperationNode = new BoolOperationNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+            boolOperationNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationNode;
+        }
+        else throw new CompilerException("Invalid Boolean operation/operand", getCodePosition(ctx));
     }
 
     @Override
@@ -555,7 +633,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         else if (ctx.functionCall() != null) {
             ASTnode functionCallNode = visitFunctionCall(ctx.functionCall());
             ArithOperandNode arithOperandNode;
-            
+
             if (functionCallNode instanceof NonObjectFunctionCallNode)
                 arithOperandNode = new ArithOperandNode((NonObjectFunctionCallNode)functionCallNode);
             else
@@ -818,6 +896,29 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("Operator is unknown", getCodePosition(ctx));
 
         return operator;
+    }
+
+    private  Enums.boolOperator getBoolOperator (SpookParser.BoolOperatorContext ctx) {
+        Enums.boolOperator boolOperator;
+
+        if (ctx.AND() != null)
+            boolOperator = Enums.boolOperator.AND;
+        else if (ctx.EQUAL() != null)
+            boolOperator = Enums.boolOperator.EQUAL;
+        else if (ctx.GREATER_OR_EQUAL() != null)
+            boolOperator = Enums.boolOperator.GREATER_OR_EQUAL;
+        else if (ctx.GREATER_THAN() != null)
+            boolOperator = Enums.boolOperator.GREATER_THAN;
+        else if (ctx.LESS_OR_EQUAL() != null)
+            boolOperator = Enums.boolOperator.LESS_OR_EQUAL;
+        else if (ctx.LESS_THAN() != null)
+            boolOperator = Enums.boolOperator.LESS_THAN;
+        else if (ctx.NOT_EQUAL() != null)
+            boolOperator = Enums.boolOperator.NOT_EQUAL;
+        else if (ctx.OR() != null)
+            boolOperator = Enums.boolOperator.OR;
+        else throw new CompilerException("Boolean operator is unknown", getCodePosition(ctx));
+        return boolOperator;
     }
 
     private CodePosition getCodePosition(ParserRuleContext ctx) {
