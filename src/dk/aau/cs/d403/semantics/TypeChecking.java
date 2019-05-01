@@ -435,12 +435,16 @@ public class TypeChecking {
 
                 // Operand: Non-object function Call
                 if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
-                    NonObjectFunctionCallNode nonObjectFunctionCallNode =atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
-
-                    if (retrieveSymbol(nonObjectFunctionCallNode.getFunctionName()) != null) {
-///
-                    }
+                    NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
                     visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
+
+                    // The reason for not checking all functions is because a function with a given name can only have one return type.
+                    // It is not legal to have another function with the same name but with a different return type.
+                    FunctionDeclarationNode functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(nonObjectFunctionCallNode.getFunctionName());
+                    if (functionDeclarationNode != null && !functionDeclarationNode.getReturnType().equals(Enums.ReturnType.NUM))
+                        throw new RuntimeException("ERROR: Wrong return type for given expression.");
+                    else
+                        enterSymbol(nonObjectFunctionCallNode.getFunctionName(), lowPrecedenceNode);
                 }
 
                 // Operand: Low precedence
