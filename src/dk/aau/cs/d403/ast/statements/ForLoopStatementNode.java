@@ -24,6 +24,22 @@ public class ForLoopStatementNode extends StatementNode {
         this.blockNode = blockNode;
     }
 
+    public ForLoopExpressionNode getForLoopExpressionNode1() {
+        return forLoopExpressionNode1;
+    }
+
+    public ForLoopExpressionNode getForLoopExpressionNode2() {
+        return forLoopExpressionNode2;
+    }
+
+    public BlockNode getBlockNode() {
+        return blockNode;
+    }
+
+    public StatementNode getStatementNode() {
+        return statementNode;
+    }
+
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
