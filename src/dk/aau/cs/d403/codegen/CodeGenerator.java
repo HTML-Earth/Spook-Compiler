@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
+import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -130,8 +131,7 @@ public class CodeGenerator {
         else if (statementNode instanceof ReturnNode)
             return statementNode; //TODO: visitReturn((ReturnNode)statementNode);
         else {
-            System.out.println(statementNode.prettyPrint());
-            throw new RuntimeException("Statement is of unknown type");
+            throw new RuntimeException("Statement is of unknown type: " + statementNode.prettyPrint());
         }
     }
 
@@ -234,20 +234,41 @@ public class CodeGenerator {
         else if (arithOperandNode.getObjectFunctionCallNode() != null)
             return new ArithOperandNode(visitObjectFunctionCall(arithOperandNode.getObjectFunctionCallNode()));
         else if (variableName != null) {
-            if (variableName.equals("Time")) {
-                return new ArithOperandNode("iTime");
-            }
-            else {
-                usedVariables.add(variableName);
+            switch (variableName) {
+                case "Time":
+                    return new ArithOperandNode("iTime");
+                default:
+                    usedVariables.add(variableName);
 
-                if (variables.get(variableName) != null)
-                    visitAssignment(variables.get(variableName).getAssignmentNode());
+                    if (variables.get(variableName) != null)
+                        visitAssignment(variables.get(variableName).getAssignmentNode());
 
-                return arithOperandNode;
+                    return arithOperandNode;
             }
+        }
+        else if (arithOperandNode.getSwizzleNode() != null) {
+            return new ArithOperandNode(visitSwizzleNode(arithOperandNode.getSwizzleNode()));
         }
         else
             return arithOperandNode;
+    }
+
+    private SwizzleNode visitSwizzleNode(SwizzleNode swizzleNode) {
+        String variableName;
+        switch (swizzleNode.getVariableName()) {
+            case "Screen":
+                variableName = "iResolution";
+                break;
+            default:
+                variableName = swizzleNode.getVariableName();
+        }
+
+        if (swizzleNode.getColorSwizzle() != null)
+            return new SwizzleNode(variableName, swizzleNode.getColorSwizzle());
+        else if (swizzleNode.getCoordinateSwizzle() != null)
+            return new SwizzleNode(variableName, swizzleNode.getCoordinateSwizzle());
+        else
+            return swizzleNode;
     }
 
     private ObjectArgumentNode visitArgumentNode(ObjectArgumentNode argumentNode) {
@@ -259,15 +280,29 @@ public class CodeGenerator {
 
     private DeclarationNode visitDeclaration(DeclarationNode declarationNode) {
         if (declarationNode instanceof VariableDeclarationNode) {
+
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) declarationNode;
+            VariableDeclarationNode visitedVariableDeclarationNode = visitVariableDeclaration(variableDeclarationNode);
+
             //Add variable declaration to HashMap
-            variables.put((variableDeclarationNode).getVariableName(), variableDeclarationNode);
-            return declarationNode;
+            variables.put(visitedVariableDeclarationNode.getVariableName(), visitedVariableDeclarationNode);
+
+            return visitedVariableDeclarationNode;
         }
         else if (declarationNode instanceof ObjectDeclarationNode)
             return visitObjectDeclaration((ObjectDeclarationNode)declarationNode);
         else
             throw new RuntimeException("Declaration is of unknown type");
+    }
+
+    private VariableDeclarationNode visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
+        Enums.DataType dataType = variableDeclarationNode.getDataType();
+        String variableName = variableDeclarationNode.getVariableName();
+        AssignmentNode assignmentNode = variableDeclarationNode.getAssignmentNode();
+
+        if (assignmentNode != null)
+            return new VariableDeclarationNode(dataType, visitAssignment(assignmentNode));
+        return new VariableDeclarationNode(dataType, variableName);
     }
 
     private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
