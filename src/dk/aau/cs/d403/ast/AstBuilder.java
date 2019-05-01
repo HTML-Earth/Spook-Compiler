@@ -111,22 +111,22 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         if (ctx.expression() != null) {
             expressionNode = (ExpressionNode)visitExpression(ctx.expression());
+
+            if (ctx.swizzle() != null) {
+                AssignmentNode assignmentNode = new AssignmentNode((SwizzleNode) visitSwizzle(ctx.swizzle()), expressionNode);
+                assignmentNode.setCodePosition(getCodePosition(ctx));
+                return assignmentNode;
+            }
+            else if (ctx.variableName() != null) {
+                AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), expressionNode);
+                assignmentNode.setCodePosition(getCodePosition(ctx));
+                return assignmentNode;
+            }
+            else
+                throw new CompilerException("Expected variable name or swizzle in assignment", getCodePosition(ctx));
         }
         else
             throw new CompilerException("Invalid expression in assignment", getCodePosition(ctx));
-
-        if (ctx.swizzle() != null) {
-            AssignmentNode assignmentNode = new AssignmentNode((SwizzleNode) visitSwizzle(ctx.swizzle()), expressionNode);
-            assignmentNode.setCodePosition(getCodePosition(ctx));
-            return assignmentNode;
-        }
-        else if (ctx.variableName() != null) {
-            AssignmentNode assignmentNode = new AssignmentNode(ctx.variableName().getText(), expressionNode);
-            assignmentNode.setCodePosition(getCodePosition(ctx));
-            return assignmentNode;
-        }
-        else
-            throw new CompilerException("Expected variable name or swizzle in assignment", getCodePosition(ctx));
     }
 
     @Override

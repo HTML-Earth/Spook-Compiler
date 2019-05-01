@@ -21,7 +21,10 @@ public class PrintGLSL {
         StringBuilder sb = new StringBuilder();
         sb.append(Enums.dataTypeToStringGLSL(variableDeclarationNode.getDataType()));
         sb.append(" ");
-        sb.append(printAssignment(variableDeclarationNode.getAssignmentNode()));
+        if (variableDeclarationNode.getAssignmentNode() != null)
+            sb.append(printAssignment(variableDeclarationNode.getAssignmentNode()));
+        else
+            sb.append(variableDeclarationNode.getVariableName() + ";");
 
         return sb.toString();
     }

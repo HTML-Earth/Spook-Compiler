@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
@@ -72,7 +73,7 @@ public class CodeGenerator {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
 
         LinkedList<String> list = new LinkedList<>(usedVariables);
-        Iterator<String> itr = list.descendingIterator();
+        Iterator<String> itr = list.iterator();
         while(itr.hasNext()) {
             String varDecl = itr.next();
             VariableDeclarationNode variableDeclarationNode = variables.get(varDecl);
@@ -114,25 +115,72 @@ public class CodeGenerator {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
         for (StatementNode statement : blockNode.getStatementNodes())
-            statementNodes.add(visitStatement(statement));
+            statementNodes.addAll(visitStatement(statement));
 
         return new BlockNode(statementNodes);
     }
 
-    private StatementNode visitStatement(StatementNode statementNode) {
+    private ArrayList<StatementNode> visitStatement(StatementNode statementNode) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
         if (statementNode instanceof AssignmentNode)
-            return visitAssignment((AssignmentNode)statementNode);
+            statementNodes.add(visitAssignment((AssignmentNode)statementNode));
         else if (statementNode instanceof DeclarationNode)
-            return visitDeclaration((DeclarationNode)statementNode);
+            statementNodes.add(visitDeclaration((DeclarationNode)statementNode));
         else if (statementNode instanceof IfElseStatementNode)
-            return statementNode; //TODO: visitIfElseStatement((IfElseStatementNode)statementNode);
+            statementNodes.add(statementNode); //TODO: visitIfElseStatement((IfElseStatementNode)statementNode);
         else if (statementNode instanceof ObjectFunctionCallNode)
-            return visitObjectFunctionCall((ObjectFunctionCallNode)statementNode);
+            statementNodes.add(visitObjectFunctionCall((ObjectFunctionCallNode)statementNode));
         else if (statementNode instanceof ReturnNode)
-            return statementNode; //TODO: visitReturn((ReturnNode)statementNode);
+            statementNodes.add(statementNode); //TODO: visitReturn((ReturnNode)statementNode);
+        else if (statementNode instanceof ForLoopStatementNode)
+            statementNodes.addAll(visitForLoopStatement((ForLoopStatementNode)statementNode));
         else {
             throw new RuntimeException("Statement is of unknown type: " + statementNode.prettyPrint());
         }
+
+        return statementNodes;
+    }
+
+    private ArrayList<StatementNode> visitForLoopStatement(ForLoopStatementNode forLoopStatementNode) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
+        ForLoopExpressionNode expressionNode1 = visitForLoopExpressionNode(forLoopStatementNode.getForLoopExpressionNode1());
+        ForLoopExpressionNode expressionNode2 = visitForLoopExpressionNode(forLoopStatementNode.getForLoopExpressionNode2());
+
+        float expr1 = evaluateForLoopExpression(expressionNode1);
+        float expr2 = evaluateForLoopExpression(expressionNode2);
+
+        //TODO: remove this sout
+        System.out.println(expr1 + " to " + expr2);
+
+        while (expr1 <= expr2) {
+            if (forLoopStatementNode.getStatementNode() != null) {
+                statementNodes.add(new ForLoopStatementNode(expressionNode1, expressionNode2, visitStatement(forLoopStatementNode.getStatementNode()).get(0)));
+            }
+            else if (forLoopStatementNode.getBlockNode() != null) {
+                statementNodes.add(new ForLoopStatementNode(expressionNode1, expressionNode2, visitBlock(forLoopStatementNode.getBlockNode())));
+            }
+            else
+                statementNodes.add(forLoopStatementNode);
+
+            expr1++;
+        }
+
+        return statementNodes;
+    }
+
+    private ForLoopExpressionNode visitForLoopExpressionNode(ForLoopExpressionNode forLoopExpressionNode) {
+        if (forLoopExpressionNode.getAssignmentNode() != null)
+            return new ForLoopExpressionNode(forLoopExpressionNode.getAssignmentNode());
+        else if (forLoopExpressionNode.getIntegerNumberNode() != null)
+            return new ForLoopExpressionNode(forLoopExpressionNode.getIntegerNumberNode());
+        else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
+            return new ForLoopExpressionNode(forLoopExpressionNode.getVariableDeclarationNode());
+        else if (forLoopExpressionNode.getVariableName() != null)
+            return new ForLoopExpressionNode(forLoopExpressionNode.getVariableName());
+        else
+            return forLoopExpressionNode;
     }
 
     private AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
@@ -240,8 +288,10 @@ public class CodeGenerator {
                 default:
                     usedVariables.add(variableName);
 
-                    if (variables.get(variableName) != null)
-                        visitAssignment(variables.get(variableName).getAssignmentNode());
+                    if (variables.get(variableName) != null) {
+                        if (variables.get(variableName).getAssignmentNode() != null)
+                            visitAssignment(variables.get(variableName).getAssignmentNode());
+                    }
 
                     return arithOperandNode;
             }
@@ -443,5 +493,160 @@ public class CodeGenerator {
         }
 
         return classType + "." + methodName;
+    }
+
+    private float evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
+        if (expressionNode.getAssignmentNode() != null)
+            return evaluateAssignment(expressionNode.getAssignmentNode());
+        else if (expressionNode.getIntegerNumberNode() != null)
+            return expressionNode.getIntegerNumberNode().getNumber();
+        else if (expressionNode.getVariableDeclarationNode() != null)
+            return evaluateVariableDeclaration(expressionNode.getVariableDeclarationNode());
+        else if (expressionNode.getVariableName() != null)
+            return evaluateVariable(expressionNode.getVariableName());
+        else
+            throw new CompilerException("Invalid for loop expression", expressionNode.getCodePosition());
+    }
+
+    private float evaluateVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
+        if (variableDeclarationNode.getDataType() == Enums.DataType.NUM) {
+            AssignmentNode assignmentNode = variableDeclarationNode.getAssignmentNode();
+
+            if (assignmentNode != null)
+                return evaluateAssignment(variableDeclarationNode.getAssignmentNode());
+            else
+                return evaluateVariable(variableDeclarationNode.getVariableName());
+        }
+        else
+            throw new CompilerException("For loop variable is not Num", variableDeclarationNode.getCodePosition());
+    }
+
+    private float evaluateAssignment(AssignmentNode assignmentNode) {
+        if (assignmentNode.getSwizzleNode() != null)
+            throw new CompilerException("This assignment node probably shouldn't have a swizzle node", assignmentNode.getCodePosition());
+
+        return evaluateExpression(assignmentNode.getExpressionNode());
+    }
+
+    private float evaluateVariable(String variableName) {
+        VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
+        if (variableDeclarationNode != null)
+            return evaluateVariableDeclaration(variableDeclarationNode);
+        else
+            throw new RuntimeException("Variable " + variableName + " not found");
+    }
+
+    private float evaluateExpression(ExpressionNode expressionNode) {
+        if (expressionNode instanceof ArithExpressionNode) {
+            ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
+            return evaluateLowPrecedence(arithExpressionNode.getLowPrecedenceNode());
+        }
+        else
+            throw new CompilerException("For loop expression is not arith expression", expressionNode.getCodePosition());
+    }
+
+    private float evaluateLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
+        float result = evaluateHighPrecedence(lowPrecedenceNode.getHighPrecedenceNodes().get(0));
+
+        if (lowPrecedenceNode.getOperators() != null) {
+            int operatorAmt = lowPrecedenceNode.getOperators().size();
+            for (int i = 0; i < operatorAmt; i++) {
+                float operand = evaluateHighPrecedence(lowPrecedenceNode.getHighPrecedenceNodes().get(i+1));
+                result = evaluateOperation(lowPrecedenceNode.getOperators().get(i), result, operand);
+            }
+        }
+
+        return result;
+    }
+
+    private float evaluateHighPrecedence(HighPrecedenceNode highPrecedenceNode) {
+        float result = evaluateAtomPrecedence(highPrecedenceNode.getAtomPrecedenceNodes().get(0));
+
+        if (highPrecedenceNode.getOperators() != null) {
+            int operatorAmt = highPrecedenceNode.getOperators().size();
+            for (int i = 0; i < operatorAmt; i++) {
+                float operand = evaluateAtomPrecedence(highPrecedenceNode.getAtomPrecedenceNodes().get(i+1));
+                result = evaluateOperation(highPrecedenceNode.getOperators().get(i), result, operand);
+            }
+        }
+
+        return result;
+    }
+
+    private float evaluateAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {
+        if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+            return evaluateLowPrecedence(atomPrecedenceNode.getLowPrecedenceNode());
+        else if (atomPrecedenceNode.getOperator() != null) {
+            if (atomPrecedenceNode.getOperator() == Enums.Operator.SUB)
+                return 0 - evaluateArithOperand(atomPrecedenceNode.getOperand());
+            else if (atomPrecedenceNode.getOperator() == Enums.Operator.ADD)
+                return evaluateArithOperand(atomPrecedenceNode.getOperand());
+            else
+                throw new CompilerException(atomPrecedenceNode.getOperator().toString() + " before single operand is illegal", atomPrecedenceNode.getCodePosition());
+        }
+        else
+            return evaluateArithOperand(atomPrecedenceNode.getOperand());
+    }
+
+    private float evaluateArithOperand(ArithOperandNode arithOperandNode) {
+        RealNumberNode realNumberNode = arithOperandNode.getRealNumberNode();
+        NonObjectFunctionCallNode nonObjectFunctionCallNode = arithOperandNode.getNonObjectFunctionCallNode();
+        ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
+        String variableName = arithOperandNode.getVariableName();
+        SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
+
+        if (realNumberNode != null) {
+            return realNumberNode.getNumber();
+        }
+        else if (nonObjectFunctionCallNode != null) {
+            throw new CompilerException("Evaluation not yet implemented", arithOperandNode.getCodePosition());
+        }
+        else if (objectFunctionCallNode != null) {
+            throw new CompilerException("Evaluation not yet implemented", arithOperandNode.getCodePosition());
+        }
+        else if (variableName != null) {
+            return evaluateVariable(variableName);
+        }
+        else if (swizzleNode != null) {
+            return evaluateSwizzle(swizzleNode);
+        }
+        else
+            throw new CompilerException("Invalid Arith Operand", arithOperandNode.getCodePosition());
+    }
+
+    private float evaluateOperation(Enums.Operator operator, float left, float right) {
+        switch (operator) {
+            case ADD:
+                return left + right;
+            case SUB:
+                return left - right;
+            case MOD:
+                return left % right;
+            case DIV:
+                return left / right;
+            case MUL:
+                return left * right;
+            default:
+                throw new RuntimeException("Invalid operation");
+        }
+    }
+
+    private float evaluateSwizzle(SwizzleNode swizzleNode) {
+        String swizzle;
+        if (swizzleNode.getCoordinateSwizzle() != null) {
+            swizzle = swizzleNode.getCoordinateSwizzle().getSwizzle();
+        }
+        else if (swizzleNode.getColorSwizzle() != null) {
+            swizzle = swizzleNode.getColorSwizzle().getSwizzle();
+        }
+        else {
+            throw new CompilerException("Invalid swizzle", swizzleNode.getCodePosition());
+        }
+
+        if (swizzle.length() == 1) {
+            throw new CompilerException("Swizzle not yet implemented", swizzleNode.getCodePosition());
+        }
+        else
+            throw new CompilerException("Swizzle does not result in Num", swizzleNode.getCodePosition());
     }
 }
