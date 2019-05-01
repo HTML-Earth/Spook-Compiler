@@ -10,6 +10,7 @@ public class ArithOperandNode implements ASTnode {
     private NonObjectFunctionCallNode nonObjectFunctionCallNode;
     private ObjectFunctionCallNode objectFunctionCallNode;
     private String variableName;
+    private SwizzleNode swizzleNode;
 
     public ArithOperandNode(RealNumberNode realNumberNode) {
         this.realNumberNode = realNumberNode;
@@ -21,6 +22,10 @@ public class ArithOperandNode implements ASTnode {
 
     public ArithOperandNode(ObjectFunctionCallNode objectFunctionCallNode) {
         this.objectFunctionCallNode = objectFunctionCallNode;
+    }
+
+    public ArithOperandNode(SwizzleNode swizzleNode) {
+        this.swizzleNode = swizzleNode;
     }
 
     public ArithOperandNode(String variableName) {
@@ -43,6 +48,8 @@ public class ArithOperandNode implements ASTnode {
         return variableName;
     }
 
+    public SwizzleNode getSwizzleNode() {return swizzleNode; }
+
     @Override
     public String prettyPrint() {
         if (realNumberNode != null) {
@@ -56,6 +63,9 @@ public class ArithOperandNode implements ASTnode {
         }
         else if (variableName != null) {
             return variableName;
+        }
+        else if (swizzleNode != null) {
+            return swizzleNode.prettyPrint();
         }
         else
             return "Invalid Operand";
