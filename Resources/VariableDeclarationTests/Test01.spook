@@ -1,19 +1,7 @@
 Shader {
-
-}
-
-Num giveMeTen(Num arg1, Num arg2, Num arg3) {
-return 10;
-}
-
-Num giveMeTen() {
-return 10;
+    Num var1 = giveMeTen(1);
 }
 
 Num giveMeTen(Num arg1) {
-return 10;
-}
-
-Num giveMeTen(Num yeet) {
-return true;
+    return 10;
 }
