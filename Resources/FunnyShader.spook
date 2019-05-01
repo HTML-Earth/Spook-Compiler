@@ -1,0 +1,25 @@
+Shader{
+
+Num blinkMove = sin(Time) * 100;
+
+Circle circle1 = (100, Color.white());
+Circle circle2 = (100, Color.white());
+
+Circle circleEye1 = (50, Color.black());
+Circle circleEye2 = (50, Color.black());
+
+Rectangle rec1 = (1000, 300, Color.magenta());
+
+circle1.setPosition(800,400);
+circle2.setPosition(1200,400);
+circleEye1.setPosition(800,450);
+circleEye2.setPosition(1225,425);
+rec1.setPosition(800, 550 + blinkMove);
+
+Scene.add(rec1);
+Scene.add(circleEye1);
+Scene.add(circleEye2);
+Scene.add(circle1);
+Scene.add(circle2);
+
+}
