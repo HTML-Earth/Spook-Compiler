@@ -153,6 +153,7 @@ public class PrintGLSL {
         NonObjectFunctionCallNode nonObjectFunctionCallNode = arithOperandNode.getNonObjectFunctionCallNode();
         ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
         String variableName = arithOperandNode.getVariableName();
+        SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
 
         if (realNumberNode != null) {
             return printRealNumber(realNumberNode);
@@ -164,7 +165,10 @@ public class PrintGLSL {
             return printObjectFunctionCall(objectFunctionCallNode);
         }
         else if (variableName != null) {
-            return printVariableName(variableName);
+            return variableName;
+        }
+        else if (swizzleNode != null) {
+            return swizzleNode.prettyPrint();
         }
         else throw new RuntimeException("Invalid arith operand");
     }
@@ -196,18 +200,5 @@ public class PrintGLSL {
                 printObjArgNode(vector.getY()) + ", " +
                 printObjArgNode(vector.getZ()) + ", " +
                 printObjArgNode(vector.getW()) + ")";
-    }
-
-    public static String printVariableName(String variableName) {
-        switch (variableName) {
-            case "Time":
-                return "iTime";
-            case "Resolution":
-                return "iResolution";
-            case "ScreenWidth":
-                return "iResolution.x";
-            default:
-                return variableName;
-        }
     }
 }

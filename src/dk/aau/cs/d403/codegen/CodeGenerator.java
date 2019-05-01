@@ -131,8 +131,7 @@ public class CodeGenerator {
         else if (statementNode instanceof ReturnNode)
             return statementNode; //TODO: visitReturn((ReturnNode)statementNode);
         else {
-            System.out.println(statementNode.prettyPrint());
-            throw new RuntimeException("Statement is of unknown type");
+            throw new RuntimeException("Statement is of unknown type: " + statementNode.prettyPrint());
         }
     }
 
@@ -238,8 +237,6 @@ public class CodeGenerator {
             switch (variableName) {
                 case "Time":
                     return new ArithOperandNode("iTime");
-                case "ScreenHeight":
-                    return new ArithOperandNode("iResolution.y");
                 default:
                     usedVariables.add(variableName);
 
@@ -249,8 +246,29 @@ public class CodeGenerator {
                     return arithOperandNode;
             }
         }
+        else if (arithOperandNode.getSwizzleNode() != null) {
+            return new ArithOperandNode(visitSwizzleNode(arithOperandNode.getSwizzleNode()));
+        }
         else
             return arithOperandNode;
+    }
+
+    private SwizzleNode visitSwizzleNode(SwizzleNode swizzleNode) {
+        String variableName;
+        switch (swizzleNode.getVariableName()) {
+            case "Screen":
+                variableName = "iResolution";
+                break;
+            default:
+                variableName = swizzleNode.getVariableName();
+        }
+
+        if (swizzleNode.getColorSwizzle() != null)
+            return new SwizzleNode(variableName, swizzleNode.getColorSwizzle());
+        else if (swizzleNode.getCoordinateSwizzle() != null)
+            return new SwizzleNode(variableName, swizzleNode.getCoordinateSwizzle());
+        else
+            return swizzleNode;
     }
 
     private ObjectArgumentNode visitArgumentNode(ObjectArgumentNode argumentNode) {
@@ -264,11 +282,12 @@ public class CodeGenerator {
         if (declarationNode instanceof VariableDeclarationNode) {
 
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) declarationNode;
+            VariableDeclarationNode visitedVariableDeclarationNode = visitVariableDeclaration(variableDeclarationNode);
 
             //Add variable declaration to HashMap
-            variables.put((variableDeclarationNode).getVariableName(), variableDeclarationNode);
+            variables.put(visitedVariableDeclarationNode.getVariableName(), visitedVariableDeclarationNode);
 
-            return visitVariableDeclaration(variableDeclarationNode);
+            return visitedVariableDeclarationNode;
         }
         else if (declarationNode instanceof ObjectDeclarationNode)
             return visitObjectDeclaration((ObjectDeclarationNode)declarationNode);

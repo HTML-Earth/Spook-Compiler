@@ -1,6 +1,6 @@
 Shader {
-    Num xPos = ScreenWidth / 2;
-    Num yPos = ScreenHeight / 2;
+    Num xPos = Screen.x / 2;
+    Num yPos = Screen.y / 2;
 
     Circle middle = (sin(Time) * 50 + 100, Color.yellow());
     middle.setPosition(xPos,yPos);
