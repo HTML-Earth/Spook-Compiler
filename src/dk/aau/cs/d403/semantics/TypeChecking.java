@@ -207,10 +207,13 @@ public class TypeChecking {
                         // Check parameters
                         outerLoop:
                         for (int i = 0; i < objectArgumentNodes.size(); i++) {
+
+                            // Check Ints and Floats
                             if (objectArgumentNodes.get(i).getLowPrecedence() != null) {
                                 LowPrecedenceNode lowPrecedenceNode = objectArgumentNodes.get(i).getLowPrecedence();
                                 for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
                                     for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
+
                                         if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
                                             if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.INT) && !retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.FLOAT)) {
                                                 argumentMatch = false;
@@ -222,6 +225,23 @@ public class TypeChecking {
                                     }
                                 }
                             }
+                            /* Not yet implemented in the AST
+                            if (objectArgumentNodes.get(i).getNonObjectFunctionCallNode() != null) {
+                                visitNonObjectFunctionCall(objectArgumentNodes.get(i).getNonObjectFunctionCallNode());
+                            }
+                            */
+
+                            /* Not yet implemented in the AST
+                            if (objectArgumentNodes.get(i).getColorFunctionCallNode() != null) {
+                                if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.VEC3)) {
+                                    argumentMatch = false;
+                                    break outerLoop;
+                                }
+                                else {
+                                    argumentMatch = true;
+                                }
+                            }
+                             */
                         }
                     }
                 }
@@ -234,9 +254,9 @@ public class TypeChecking {
                     throw new RuntimeException("ERROR: Non-object function does not exist with no parameters.");
             }
             if (!matchingSize)
-                throw new RuntimeException("ERROR: The given arguments for the Non-Object function call does not match the parameters for the function");
+                throw new RuntimeException("ERROR: The amount of given arguments for the Non-Object function call does not match the amount of required parameters for the function.");
             if (!argumentMatch)
-                throw new RuntimeException("ERROR: Mismatch");
+                throw new RuntimeException("ERROR: The given arguments for the Non-object function call does not match the parameters for the function.");
         }
         else {
             throw new RuntimeException("ERROR: Non-object function does not exist.");
@@ -409,7 +429,7 @@ public class TypeChecking {
                         enterSymbol(variableName, lowPrecedenceNode);
                 }
 
-                // Operand: Function Call
+                // Operand: Non-object function Call
 
                 // Operand: Low precedence
                 if (atomPrecedenceNode.getLowPrecedenceNode() != null)
