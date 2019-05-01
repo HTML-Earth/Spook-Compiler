@@ -2,12 +2,12 @@ Shader {
 
 }
 
-class class1 {
-    Int positionX;
+Class class1 {
+    Num positionX;
 }
 
-class class2 {
-    void setPositionX() {
+Class class2 {
+    Void setPositionX() {
         positionX = 2;
     }
 }

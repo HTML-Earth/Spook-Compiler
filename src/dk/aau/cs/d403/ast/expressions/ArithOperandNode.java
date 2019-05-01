@@ -2,18 +2,30 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
+import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 
 public class ArithOperandNode implements ASTnode {
     private RealNumberNode realNumberNode;
-    private MathFunctionCallNode mathFunctionCallNode;
+    private NonObjectFunctionCallNode nonObjectFunctionCallNode;
+    private ObjectFunctionCallNode objectFunctionCallNode;
     private String variableName;
+    private SwizzleNode swizzleNode;
 
     public ArithOperandNode(RealNumberNode realNumberNode) {
         this.realNumberNode = realNumberNode;
     }
 
-    public ArithOperandNode(MathFunctionCallNode mathFunctionCallNode) {
-        this.mathFunctionCallNode = mathFunctionCallNode;
+    public ArithOperandNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.nonObjectFunctionCallNode = nonObjectFunctionCallNode;
+    }
+
+    public ArithOperandNode(ObjectFunctionCallNode objectFunctionCallNode) {
+        this.objectFunctionCallNode = objectFunctionCallNode;
+    }
+
+    public ArithOperandNode(SwizzleNode swizzleNode) {
+        this.swizzleNode = swizzleNode;
     }
 
     public ArithOperandNode(String variableName) {
@@ -24,24 +36,36 @@ public class ArithOperandNode implements ASTnode {
         return realNumberNode;
     }
 
-    public MathFunctionCallNode getMathFunctionCallNode() {
-        return mathFunctionCallNode;
+    public NonObjectFunctionCallNode getNonObjectFunctionCallNode() {
+        return nonObjectFunctionCallNode;
+    }
+
+    public ObjectFunctionCallNode getObjectFunctionCallNode() {
+        return objectFunctionCallNode;
     }
 
     public String getVariableName() {
         return variableName;
     }
 
+    public SwizzleNode getSwizzleNode() {return swizzleNode; }
+
     @Override
     public String prettyPrint() {
         if (realNumberNode != null) {
             return realNumberNode.prettyPrint();
         }
-        else if (mathFunctionCallNode != null) {
-            return mathFunctionCallNode.prettyPrint();
+        else if (nonObjectFunctionCallNode != null) {
+            return nonObjectFunctionCallNode.prettyPrint();
+        }
+        else if (objectFunctionCallNode != null) {
+            return objectFunctionCallNode.prettyPrint();
         }
         else if (variableName != null) {
             return variableName;
+        }
+        else if (swizzleNode != null) {
+            return swizzleNode.prettyPrint();
         }
         else
             return "Invalid Operand";

@@ -1,20 +1,21 @@
 Shader {
     #Ball values
-    Float ballSize = 64;
+    Num ballSize = 64;
     Vec4 ballColor = (0.6, 0, 0, 1);
 
     #Position and size values
-    Float groundHeight = 100;
-    Float jumpHeight   = 150;
+    Num groundHeight = 100;
+    Num jumpHeight   = 150;
 
-    Float xPos = 150;
+    Num xPos = 150;
 
     #Animation
-    Float jumpTime   = abs(sin(Time * 3));
-    Float shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
+    Num jumpTime   = abs(sin(Time * 3));
+    Num yPos = (jumpTime + 1) * jumpHeight;
+    Num shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
 
     #Shadow color
-    Float shadowDarkness = shadowSize * 0.005;
+    Num shadowDarkness = shadowSize * 0.005;
     Vec4 shadowColor = bgColor - shadowDarkness.xxxx;
 
     #Objects
@@ -22,16 +23,16 @@ Shader {
     Circle shadow = (shadowSize, shadowColor);
 
     #Shiny ball gradient
-    CircleGradient shiny = (Color.white, ballSize/2);
-    shiny.position = (ballSize/2, ballSize/2);
+    CircleGradient shiny = (Color.white(), ballSize/2);
+    shiny.setPosition(ballSize/2, ballSize/2);
     ball.add(shiny);
 
     #Object positions
-    ball.position   = (xPos, (jumpTime + 1) * jumpHeight);
-    shadow.position = (xPos, groundHeight);
+    ball.setPosition(xPos, yPos);
+    shadow.setPosition(xPos, groundHeight);
 
     #Setup scene
-    Scene.color = Color.gray;
+    Scene.setColor(Color.gray());
 
     Scene.add(shadow);
     Scene.add(ball);

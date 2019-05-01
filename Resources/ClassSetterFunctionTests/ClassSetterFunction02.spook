@@ -1,9 +1,9 @@
 Shader {
-    Float positionX;
+    Num positionX;
 }
 
-class CustomShape {
-    void setPositionX() {
+Class CustomShape {
+    Void setPositionX() {
         positionX = 2.0;
     }
 }

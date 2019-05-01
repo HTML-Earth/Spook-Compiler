@@ -1,8 +1,7 @@
 lexer grammar SpookLexer;
 
 // Data types
-INT: 'Int';
-FLOAT: 'Float';
+NUM: 'Num';
 BOOL: 'Bool';
 VECTOR2: 'Vec2';
 VECTOR3: 'Vec3';
@@ -10,23 +9,6 @@ VECTOR4: 'Vec4';
 
 // Return types (without data types)
 VOID: 'Void';
-
-// Pre-defined classes
-CIRCLE: 'Circle';
-RECTANGLE: 'Rectangle';
-TRIANGLE: 'Triangle';
-SQUARE: 'Square';
-SHAPE: 'Shape';
-COLOR: 'Color';
-CIRCLEGRADIENT: 'CircleGradient';
-LINEGRADIENT: 'LineGradient';
-
-// Pre-defined colors
-BLACK: 'Black';
-WHITE: 'White';
-RED: 'Red';
-GREEN: 'Green';
-BLUE: 'Blue';
 
 // Keywords
 MAIN: 'Shader';
@@ -74,6 +56,10 @@ AND: '&&';
 OR: '||';
 NOT_EQUAL: '!=';
 NOT: '!';
+GREATER_THAN: '>';
+GREATER_OR_EQUAL: '>=';
+LESS_THAN: '<';
+LESS_OR_EQUAL: '<=';
 
 /* Swizzle masks */
 // Coordinate swizzle mask
@@ -83,16 +69,6 @@ COORDINATE_SWIZZLE_MASK
 // Color swizzle mask
 COLOR_SWIZZLE_MASK
     : COLOR_SWIZZLE_MASK_RULE+;
-
-
-// Mathematical functions
-ABS: 'abs';
-SIN: 'sin';
-COS: 'cos';
-TAN: 'tan';
-
-// Uniforms
-UNIFORM: 'Time';
 
 // Identifier - chars and non-negative digits
 ID: (LETTER | DIGIT)+;

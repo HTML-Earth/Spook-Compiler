@@ -1,0 +1,13 @@
+Shader {
+    Num length = 100;
+    if (length > 10 && length < 200) {
+        Circle circ = (20, Color.white());
+    }
+
+
+    Rectangle rec = (length, 100, Color.black());
+    rec.setPosition(100, 50);
+
+    if (true)
+        Scene.Add(rec);
+}
