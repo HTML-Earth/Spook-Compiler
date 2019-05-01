@@ -215,7 +215,7 @@ public class TypeChecking {
                                     for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
                                         if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
-                                            if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.INT) && !retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.FLOAT)) {
+                                            if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.NUM)) {
                                                 argumentMatch = false;
                                                 break outerLoop;
                                             }
@@ -310,7 +310,7 @@ public class TypeChecking {
     private void visitForLoopExpression(ForLoopExpressionNode forLoopExpressionNode) {
         if (forLoopExpressionNode.getVariableDeclarationNode() != null) {
             VariableDeclarationNode variableDeclarationNode = forLoopExpressionNode.getVariableDeclarationNode();
-            if (!variableDeclarationNode.getDataType().equals(Enums.DataType.INT) && !variableDeclarationNode.getDataType().equals(Enums.DataType.FLOAT))
+            if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM))
                 throw new RuntimeException("ERROR: Variable is of an incompatible type for ForLoop");
             else
                 visitVariableDeclaration(variableDeclarationNode);
@@ -324,7 +324,7 @@ public class TypeChecking {
                 throw new RuntimeException("ERROR: Variable in ForLoop is not declared.");
             else if (variableDeclarationNode.getAssignmentNode() == null)
                 throw new RuntimeException("ERROR: Variable in ForLoop is not initialized.");
-            else if (!variableDeclarationNode.getDataType().equals(Enums.DataType.INT) && !variableDeclarationNode.getDataType().equals(Enums.DataType.FLOAT)) {
+            else if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM)) {
                 throw new RuntimeException("ERROR: Variable is of an illegal type for the ForLoop.");
             }
         }
@@ -336,45 +336,49 @@ public class TypeChecking {
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
+        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
 
-        FunctionDeclarationNode retrievedNode;
-        if (retrieveSymbol(functionName) != null)
-            retrievedNode = (FunctionDeclarationNode) retrieveSymbol(functionName);
+        ArrayList<FunctionDeclarationNode> retrievedFunctions;
+        if (retrieveAllFunctions(functionName) != null)
+            retrievedFunctions = retrieveAllFunctions(functionName);
         else
-            retrievedNode = null;
+            retrievedFunctions = null;
 
         // Same name
-        if (retrievedNode == null)
+        if (retrievedFunctions == null)
             enterSymbol(functionName, functionDeclarationNode);
-        else if (retrievedNode.getFunctionArgNodes() != null && functionArgs != null)  {
-            boolean unique = false;
-            if (retrievedNode.getFunctionArgNodes().size() == functionArgs.size()) {
-                for (int i = functionArgs.size(); i > 0; i--) {
-                    if (!functionArgs.get(i - 1).prettyPrint().equals(retrievedNode.getFunctionArgNodes().get(i - 1).prettyPrint())) {
-                        unique = true;
-                        break;
+
+        if (retrievedFunctions != null) {
+            boolean sameReturnType = true;
+            boolean sameFunctionArgs = false;
+            boolean sameAmountOfArgs = false;
+
+            outerloop:
+            for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
+                sameReturnType = retrievedNode.getReturnType() == returnType;
+                sameAmountOfArgs = retrievedNode.getFunctionArgNodes() == null && functionArgs == null;
+
+                if (retrievedNode.getFunctionArgNodes() != null && functionArgs != null)  {
+                    if (retrievedNode.getFunctionArgNodes().size() == functionArgs.size()) {
+                        for (int i = 0; i < functionArgs.size(); i--) {
+                            if (functionArgs.get(i).getDataType().equals(retrievedNode.getFunctionArgNodes().get(i).getDataType())) {
+                                sameFunctionArgs = true;
+                                break outerloop;
+                            }
+                        }
                     }
                 }
-                if (unique)
-                    enterSymbol(functionName, functionDeclarationNode);
-                else
-                    throw new RuntimeException("ERROR: A function with the same name and arguments already exists.");
             }
-            else
-                enterSymbol(functionName, functionDeclarationNode);
 
-        }
-        else if (retrievedNode.getFunctionArgNodes() == null) {
-            if (functionArgs != null)
-                enterSymbol(functionName, functionDeclarationNode);
-            else
+            if (sameFunctionArgs)
+                throw new RuntimeException("ERROR: A function with the same name and arguments already exists.");
+            if (!sameReturnType)
+                throw new RuntimeException("ERROR: A function with the same name with a different return type already exists.");
+            if (sameAmountOfArgs)
                 throw new RuntimeException("ERROR: A function with the same name already exists.");
-        }
-        else if (retrievedNode.getFunctionArgNodes() != null) {
+
             enterSymbol(functionName, functionDeclarationNode);
         }
-        else
-            throw new RuntimeException("ERROR: A function with the same name already exists.");
 
         visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType());
     }
@@ -422,7 +426,7 @@ public class TypeChecking {
                         else
                             throw new RuntimeException("ERROR: Assigned variable is not initialized.");
 
-                        if (!variableDeclarationNode.getDataType().equals(Enums.DataType.INT) && !variableDeclarationNode.getDataType().equals(Enums.DataType.FLOAT))
+                        if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM))
                             throw new RuntimeException("ERROR: Assigned variable is of an incompatible type.");
                     }
                     else
@@ -430,6 +434,14 @@ public class TypeChecking {
                 }
 
                 // Operand: Non-object function Call
+                if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
+                    NonObjectFunctionCallNode nonObjectFunctionCallNode =atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
+
+                    if (retrieveSymbol(nonObjectFunctionCallNode.getFunctionName()) != null) {
+///
+                    }
+                    visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
+                }
 
                 // Operand: Low precedence
                 if (atomPrecedenceNode.getLowPrecedenceNode() != null)
@@ -472,22 +484,19 @@ public class TypeChecking {
 
         return correctVariable;
     }
-    private ArrayList<Enums.DataType> getExpressionNodeType(ExpressionNode expressionNode) {
-        ArrayList<Enums.DataType> dataTypeList = new ArrayList<>();
+    private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
 
-        if(expressionNode instanceof ArithExpressionNode) {
-            dataTypeList.add(Enums.DataType.INT);
-            dataTypeList.add(Enums.DataType.FLOAT);
-        }
+        if (expressionNode instanceof ArithExpressionNode)
+            return Enums.DataType.NUM;
         else if(expressionNode instanceof BoolExpressionNode)
-            dataTypeList.add(Enums.DataType.BOOL);
+            return Enums.DataType.BOOL;
         else if(expressionNode instanceof Vector4ExpressionNode)
-            dataTypeList.add(Enums.DataType.VEC4);
+            return Enums.DataType.VEC4;
         else if(expressionNode instanceof Vector3ExpressionNode)
-            dataTypeList.add(Enums.DataType.VEC3);
+            return Enums.DataType.VEC3;
         else if(expressionNode instanceof Vector2ExpressionNode)
-            dataTypeList.add(Enums.DataType.VEC2);
-
-        return dataTypeList;
+            return Enums.DataType.VEC2;
+        else
+            throw new RuntimeException("Unknown Expression Node type.");
     }
 }

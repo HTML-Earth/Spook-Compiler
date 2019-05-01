@@ -1,11 +1,19 @@
 Shader {
-    giveMeTen(1, 1, 2.0);
+
 }
 
-Int giveMeTen(Int arg1, Int arg2, Vec3 arg3) {
+Num giveMeTen(Num arg1, Num arg2, Num arg3) {
 return 10;
 }
 
-Float giveMeTwenty() {
-return 1.0;
+Num giveMeTen() {
+return 10;
+}
+
+Num giveMeTen(Num arg1) {
+return 10;
+}
+
+Num giveMeTen(Num yeet) {
+return true;
 }
