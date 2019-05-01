@@ -270,12 +270,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitBoolOperation(SpookParser.BoolOperationContext ctx) {
         if (ctx.BOOL_LITERAL() != null) {
-            BoolOperationNode boolOperationNode;
-            if (ctx.BOOL_LITERAL().getText().equals("true"))
-                boolOperationNode = new BoolOperationNode(true);
-            else if (ctx.BOOL_LITERAL().getText().equals("false"))
-                boolOperationNode = new BoolOperationNode(false);
-            else throw new CompilerException("Bool Literal is neither true or false", getCodePosition(ctx));
+            BoolOperationNode boolOperationNode = new BoolOperationNode(getBooleanValue(ctx.BOOL_LITERAL()));
             boolOperationNode.setCodePosition(getCodePosition(ctx));
             return boolOperationNode;
         }
