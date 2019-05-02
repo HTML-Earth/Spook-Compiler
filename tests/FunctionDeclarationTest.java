@@ -2,7 +2,7 @@ import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
-import dk.aau.cs.d403.semantics.SymbolTableFilling;
+import dk.aau.cs.d403.semantics.TypeChecking;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.AfterEach;
@@ -12,11 +12,11 @@ import java.io.IOException;
 
 public class FunctionDeclarationTest {
 
-    private SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
+    private TypeChecking typeChecking = new TypeChecking();
 
     @AfterEach
     void printSymbolTable() {
-        symbolTableFilling.printSymbolTable();
+        typeChecking.printSymbolTable();
     }
 
     // Testing function declarations.
@@ -29,7 +29,7 @@ public class FunctionDeclarationTest {
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
 
-            symbolTableFilling.visitProgram(programNode);
+            typeChecking.visitProgram(programNode);
         }catch (IOException e) {
             e.printStackTrace();
         }
