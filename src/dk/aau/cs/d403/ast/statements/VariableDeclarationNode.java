@@ -32,11 +32,18 @@ public class VariableDeclarationNode extends DeclarationNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+
         if (assignmentNode != null)
-            return Enums.dataTypeToStringSpook(dataType) + " " + assignmentNode.prettyPrint();
+            sb.append(Enums.dataTypeToStringSpook(dataType) + " " + assignmentNode.prettyPrint(0));
         else
-            return Enums.dataTypeToStringSpook(dataType) + " " + variableName + ";";
+            sb.append(Enums.dataTypeToStringSpook(dataType) + " " + variableName);
+
+        return sb.toString();
     }
 
     private CodePosition codePosition;

@@ -32,13 +32,18 @@ public class AssignmentNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+
         if (swizzleNode != null)
-            return swizzleNode.prettyPrint() + " = " + expressionNode.prettyPrint() + ";";
+            sb.append(swizzleNode.prettyPrint(0) + " = " + expressionNode.prettyPrint(0));
         else if (variableName != null)
-            return variableName + " = " + expressionNode.prettyPrint() + ";";
-        else
-            return "Invalid Assignment";
+            sb.append(variableName + " = " + expressionNode.prettyPrint(0));
+
+        return sb.toString();
     }
 
     private CodePosition codePosition;

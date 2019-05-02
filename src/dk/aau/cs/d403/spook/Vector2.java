@@ -44,7 +44,7 @@ public class Vector2 {
 
     public static String GLSLPrint(Vector2 vector) {
         return "(" +
-                vector.getX().prettyPrint() + ", " +
-                vector.getY().prettyPrint() + ")";
+                vector.getX().prettyPrint(0) + ", " +
+                vector.getY().prettyPrint(0) + ")";
     }
 }

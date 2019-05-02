@@ -33,7 +33,7 @@ public class ClassDeclarationNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Class ");
@@ -43,7 +43,7 @@ public class ClassDeclarationNode implements ASTnode {
             sb.append(" extends ");
             sb.append(classType.toString());
         }
-        sb.append(classBlockNode.prettyPrint());
+        sb.append(classBlockNode.prettyPrint(indent));
 
         return sb.toString();
     }

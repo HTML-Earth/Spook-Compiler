@@ -9,7 +9,7 @@ public interface ASTnode {
 
     //<T> T accept(ASTvisitor<? extends T> var1);
 
-    String prettyPrint();
+    String prettyPrint(int indentation);
 
     void setCodePosition(CodePosition codePosition);
     CodePosition getCodePosition();

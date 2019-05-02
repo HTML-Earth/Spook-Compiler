@@ -48,25 +48,25 @@ public class BoolOperationsNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
         if (boolOperationExtendNodes != null) {
             for (BoolOperationExtendNode boolOperationExtendNode : boolOperationExtendNodes) {
-                sb.append(boolOperationExtendNode.prettyPrint());
+                sb.append(boolOperationExtendNode.prettyPrint(indent));
             }
         }
         //Case !bool extend
         if (boolOperationNode != null && boolOperationExtendNodes != null && optionalNOT != null)
-            return Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint() + sb;
+            return Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint(indent) + sb;
         //Case bool extend
         else if (boolOperationNode != null && boolOperationExtendNodes != null)
-            return boolOperationNode.prettyPrint() + sb;
+            return boolOperationNode.prettyPrint(indent) + sb;
         //Case !bool
         else if (optionalNOT != null && boolOperationNode != null)
-            return Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint();
+            return Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint(indent);
         //Case bool
         else if (boolOperationNode != null)
-            return boolOperationNode.prettyPrint();
+            return boolOperationNode.prettyPrint(indent);
         else
             return "Invalid Boolean Operations Node";
     }

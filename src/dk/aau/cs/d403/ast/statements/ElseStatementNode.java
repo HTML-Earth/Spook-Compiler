@@ -24,11 +24,11 @@ public class ElseStatementNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (elseBlock != null)
-            return "else " + elseBlock.prettyPrint();
+            return "else " + elseBlock.prettyPrint(indent);
         else if (elseStatement != null)
-            return "else " + elseStatement.prettyPrint();
+            return "else " + elseStatement.prettyPrint(indent + 1);
         else
             return "Invalid else statement";
     }

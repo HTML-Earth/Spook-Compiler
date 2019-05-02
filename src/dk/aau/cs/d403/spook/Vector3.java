@@ -55,8 +55,8 @@ public class Vector3 {
 
     public static String GLSLPrint(Vector3 vector) {
         return "(" +
-                vector.getX().prettyPrint() + ", " +
-                vector.getY().prettyPrint() + ", " +
-                vector.getZ().prettyPrint() + ")";
+                vector.getX().prettyPrint(0) + ", " +
+                vector.getY().prettyPrint(0) + ", " +
+                vector.getZ().prettyPrint(0) + ")";
     }
 }

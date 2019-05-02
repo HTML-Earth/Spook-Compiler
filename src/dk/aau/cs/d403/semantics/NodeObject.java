@@ -49,7 +49,7 @@ public class NodeObject {
         StringBuilder sb = new StringBuilder();
         if(objectArguments.size() > 0) {
             for (ObjectArgumentNode objectArg : objectArguments) {
-                sb.append(objectArg.prettyPrint());
+                sb.append(objectArg.prettyPrint(0));
                 sb.append(",");
             }
             this.attributes = sb.toString();
@@ -67,7 +67,7 @@ public class NodeObject {
 
         StringBuilder sb = new StringBuilder();
         for(ObjectArgumentNode objectArg : objectArguments) {
-            sb.append(objectArg.prettyPrint());
+            sb.append(objectArg.prettyPrint(0));
             sb.append(",");
         }
         this.attributes = sb.toString();
@@ -79,7 +79,7 @@ public class NodeObject {
         this.name = name;
         this.scopeLevel = scopeLevel;
         this.expression = expression;
-        this.attributes = expression.prettyPrint();
+        this.attributes = expression.prettyPrint(0);
     }
 
     // Constructor for Function declarations
@@ -94,7 +94,7 @@ public class NodeObject {
 
             for(FunctionArgNode functionArg : functionArguments) {
 
-                sb.append(functionArg.prettyPrint());
+                sb.append(functionArg.prettyPrint(0));
                 sb.append(",");
             }
             this.attributes = sb.toString();

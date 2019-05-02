@@ -2,8 +2,7 @@ package dk.aau.cs.d403.ast.structure;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.statements.ReturnNode;
-import dk.aau.cs.d403.ast.statements.StatementNode;
+import dk.aau.cs.d403.ast.statements.*;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class BlockNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("{");
@@ -33,16 +32,25 @@ public class BlockNode implements ASTnode {
         for (StatementNode stmnt : statementNodes)
         {
             if (stmnt != null) {
-                sb.append("\n\t");
-                sb.append(stmnt.prettyPrint());
+                sb.append("\n");
+                sb.append(stmnt.prettyPrint(indent + 1));
+
+                if (stmnt instanceof AssignmentNode || stmnt instanceof DeclarationNode ||
+                    stmnt instanceof ObjectFunctionCallNode || stmnt instanceof NonObjectFunctionCallNode)
+                    sb.append(";");
             }
         }
         if (returnNode != null) {
-            sb.append("\n\t");
-            sb.append(returnNode.prettyPrint());
+            sb.append("\n");
+            sb.append(returnNode.prettyPrint(indent + 1) + ";");
         }
 
-        sb.append("\n}");
+        sb.append("\n");
+
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+
+        sb.append("}");
 
         return sb.toString();
     }

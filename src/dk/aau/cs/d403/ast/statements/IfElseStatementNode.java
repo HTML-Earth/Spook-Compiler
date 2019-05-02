@@ -30,18 +30,18 @@ public class IfElseStatementNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
-        sb.append(ifStatementNode.prettyPrint());
+        sb.append(ifStatementNode.prettyPrint(indent));
         sb.append("\n");
         if (elseIfStatementNodes != null) {
             for (ElseIfStatementNode elseIfStatementNode : elseIfStatementNodes) {
-                sb.append(elseIfStatementNode.prettyPrint());
+                sb.append(elseIfStatementNode.prettyPrint(indent));
             }
         }
         if (elseStatementNode != null) {
             sb.append("\n");
-            sb.append(elseStatementNode.prettyPrint());
+            sb.append(elseStatementNode.prettyPrint(indent));
         }
 
         return sb.toString();

@@ -14,7 +14,7 @@ public class CoordinateSwizzleNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         return swizzle;
     }
 

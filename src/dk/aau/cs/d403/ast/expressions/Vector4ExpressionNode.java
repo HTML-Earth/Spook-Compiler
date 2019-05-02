@@ -13,11 +13,11 @@ public class Vector4ExpressionNode extends Vector3ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
-        return "(" + arithExpressionNode1.prettyPrint()
-                + ", " + arithExpressionNode2.prettyPrint()
-                + ", " + arithExpressionNode3.prettyPrint()
-                + ", " + arithExpressionNode4.prettyPrint()
+    public String prettyPrint(int indent) {
+        return "(" + arithExpressionNode1.prettyPrint(indent)
+                + ", " + arithExpressionNode2.prettyPrint(indent)
+                + ", " + arithExpressionNode3.prettyPrint(indent)
+                + ", " + arithExpressionNode4.prettyPrint(indent)
                 + ")";
     }
 }

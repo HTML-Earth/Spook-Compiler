@@ -25,11 +25,11 @@ public class BoolExpressionNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (boolOperationNodes != null) {
             StringBuilder sb = new StringBuilder();
             for (BoolOperationNode boolOperationNode: boolOperationNodes) {
-                sb.append(boolOperationNode.prettyPrint()); //TODO: check if this makes sense
+                sb.append(boolOperationNode.prettyPrint(indent)); //TODO: check if this makes sense
             }
             return sb.toString();
         }

@@ -38,19 +38,19 @@ public class AtomPrecedenceNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         //Print -operand
         if (operand != null && operator != null) {
             return Enums.operatorToString(SUB)
-                    + operand.prettyPrint();
+                    + operand.prettyPrint(indent);
         }
         //Print operand
         else if (operand != null) {
-            return operand.prettyPrint();
+            return operand.prettyPrint(indent);
         }
         //Print Parenthesis
         else if (lowPrecedenceNode != null) {
-            return "(" + lowPrecedenceNode.prettyPrint() + ")";
+            return "(" + lowPrecedenceNode.prettyPrint(indent) + ")";
         } else
             return "Invalid Atom Precedence Operation";
     }

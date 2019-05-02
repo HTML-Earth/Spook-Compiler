@@ -43,13 +43,13 @@ public class BoolOperationNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (variableName != null)
             return variableName;
         else if (realNumberNode != null)
-            return realNumberNode.prettyPrint();
+            return realNumberNode.prettyPrint(indent);
         else if (boolOperationsNode != null)
-            return boolOperationsNode.prettyPrint();
+            return boolOperationsNode.prettyPrint(indent);
         else if (boolLiteral != null)
             return boolLiteral.toString();
         else

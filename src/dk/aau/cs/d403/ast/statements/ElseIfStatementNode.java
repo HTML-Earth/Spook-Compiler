@@ -32,12 +32,12 @@ public class ElseIfStatementNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (elseIfBlock != null) {
-            return "else if (" + elseIfBool.prettyPrint() + ") " + elseIfBlock.prettyPrint();
+            return "else if (" + elseIfBool.prettyPrint(indent) + ") " + elseIfBlock.prettyPrint(indent);
         }
         else if (elseIfStatement != null) {
-            return "else if (" + elseIfBool.prettyPrint() + ")\n\t" + elseIfStatement.prettyPrint();
+            return "else if (" + elseIfBool.prettyPrint(indent) + ")\n" + elseIfStatement.prettyPrint(indent + 1);
         }
         else
             return "Invalid ElseIf statement";

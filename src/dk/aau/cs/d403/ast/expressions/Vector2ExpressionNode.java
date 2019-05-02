@@ -20,9 +20,9 @@ public class Vector2ExpressionNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
-        return "(" + arithExpressionNode1.prettyPrint()
-                + ", " + arithExpressionNode2.prettyPrint()
+    public String prettyPrint(int indent) {
+        return "(" + arithExpressionNode1.prettyPrint(indent)
+                + ", " + arithExpressionNode2.prettyPrint(indent)
                 + ")";
     }
 
