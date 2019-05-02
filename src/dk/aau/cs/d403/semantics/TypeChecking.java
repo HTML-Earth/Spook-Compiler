@@ -136,7 +136,6 @@ public class TypeChecking {
     /*      STATEMENTS       */
     private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
         String variableName = variableDeclarationNode.getVariableName();
-        Enums.DataType dataType = variableDeclarationNode.getDataType();
 
         VariableDeclarationNode retrievedNode = null;
         if (retrieveSymbol(variableName) != null)
@@ -144,10 +143,8 @@ public class TypeChecking {
 
         if (retrievedNode == null)
             enterSymbol(variableName, variableDeclarationNode);
-        else if (!dataType.equals(retrievedNode.getDataType()))
-            enterSymbol(variableName, variableDeclarationNode);
         else
-            throw new RuntimeException("ERROR: A variable with the same name and type already exists.");
+            throw new RuntimeException("ERROR: A variable with the same name already exists.");
 
         if (variableDeclarationNode.getAssignmentNode() != null)
             visitAssignment(variableDeclarationNode.getAssignmentNode());
@@ -178,10 +175,17 @@ public class TypeChecking {
     }
 
     private void visitAssignment(AssignmentNode assignmentNode) {
-        String variableName = assignmentNode.getVariableName();
+        String variableName;
 
-        if (retrieveSymbol(variableName) == null)
-            throw new RuntimeException("ERROR: Variable on left side of assignment is not initialized.");
+        if (assignmentNode.getVariableName() != null) {
+            variableName = assignmentNode.getVariableName();
+
+            if (retrieveSymbol(variableName) == null)
+                throw new RuntimeException("ERROR: Variable on left side of assignment is not initialized.");
+        }
+        else if (assignmentNode.getSwizzleNode() != null) {
+            visitSwizzle(assignmentNode.getSwizzleNode());
+        }
 
         visitExpression(assignmentNode.getExpressionNode());
     }
@@ -378,23 +382,44 @@ public class TypeChecking {
             enterSymbol(functionName, functionDeclarationNode);
         }
 
-        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType());
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
     }
 
-    private void visitFunctionBlock(BlockNode blockNode, Enums.ReturnType returnType) {
+    private void visitFunctionBlock(BlockNode blockNode, Enums.ReturnType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
         }
         if (returnType != Enums.ReturnType.VOID)
-            visitReturnStatement(blockNode.getReturnNode());
+            visitReturnStatement(blockNode.getReturnNode(), functionDeclarationNode);
         closeScope();
     }
 
-    private void visitReturnStatement(ReturnNode returnNode) {
-        visitExpression(returnNode.getExpressionNode());
+    private void visitReturnStatement(ReturnNode returnNode, FunctionDeclarationNode functionDeclarationNode) {
+        ExpressionNode expressionNode = returnNode.getExpressionNode();
+        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
+        LowPrecedenceNode lowPrecedenceNode;
+
+        if (expressionNode instanceof ArithExpressionNode && returnType.equals(Enums.ReturnType.NUM)) {
+            lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
+            visitLowPrecedenceNode(lowPrecedenceNode);
+        }
+        else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.ReturnType.BOOL)) {
+            // Do BoolExpression things
+        }
+        else if (expressionNode instanceof TernaryOperatorNode) {
+            // ternary
+        }
+        else if (expressionNode instanceof  Vector4ExpressionNode && returnType.equals(Enums.ReturnType.VEC4))
+            visitVector4Expression((Vector4ExpressionNode) expressionNode);
+        else if (expressionNode instanceof  Vector3ExpressionNode && returnType.equals(Enums.ReturnType.VEC3))
+            visitVector3Expression((Vector3ExpressionNode) expressionNode);
+        else if (expressionNode instanceof  Vector2ExpressionNode && returnType.equals(Enums.ReturnType.VEC2))
+            visitVector2Expression((Vector2ExpressionNode) expressionNode);
+        else
+            throw new RuntimeException("ERROR: Return statement does not match the return type of the function");
     }
-// swizzle, return, objectdecl
+// swizzle, ternary operator, objectdecl, bool
     /*      Expressions      */
     private void visitExpression(ExpressionNode expressionNode) {
         LowPrecedenceNode lowPrecedenceNode;
@@ -423,19 +448,10 @@ public class TypeChecking {
                 if (atomPrecedenceNode.getOperand().getVariableName() != null) {
                     String variableName = atomPrecedenceNode.getOperand().getVariableName();
 
-                    if (retrieveSymbol(variableName) == null)
-                        throw new RuntimeException("ERROR: Assigned variable is not declared.");
-                    else if (retrieveSymbol(variableName) instanceof VariableDeclarationNode) {
-                        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
-
-                        if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() != null)
-                            visitAssignment(variableDeclarationNode.getAssignmentNode());
-                        else
-                            throw new RuntimeException("ERROR: Assigned variable is not initialized.");
-
-                        if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM))
-                            throw new RuntimeException("ERROR: Assigned variable is of an incompatible type.");
-                    }
+                    visitVariableName(variableName);
+                    VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+                    if (variableDeclarationNode != null && !variableDeclarationNode.getDataType().equals(Enums.DataType.NUM))
+                        throw new RuntimeException("ERROR: Assigned variable is of an incompatible type.");
                     else
                         enterSymbol(variableName, lowPrecedenceNode);
                 }
@@ -452,6 +468,16 @@ public class TypeChecking {
                         throw new RuntimeException("ERROR: Wrong return type for given expression.");
                     else
                         enterSymbol(nonObjectFunctionCallNode.getFunctionName(), lowPrecedenceNode);
+                }
+
+                // Operand: Swizzle
+                if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
+                    SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
+                    visitSwizzle(swizzleNode);
+                    if (retrieveSymbol(swizzleNode.getVariableName()) != null) {
+                        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(swizzleNode.getVariableName());
+
+                    }
                 }
 
                 // Operand: Low precedence
@@ -485,6 +511,52 @@ public class TypeChecking {
         visitExpression(vector2ExpressionNode.getArithExpressionNode2());
     }
 
+    private void visitSwizzle(SwizzleNode swizzleNode) {
+        String variableName = swizzleNode.getVariableName();
+        Enums.DataType dataType;
+        CoordinateSwizzleNode coordinateSwizzleNode;
+        ColorSwizzleNode colorSwizzleNode;
+
+        // Check if variable is declared and initialized
+        visitVariableName(variableName);
+
+        // Check if variable is a vector
+        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+        if (variableDeclarationNode != null) {
+
+            dataType = variableDeclarationNode.getDataType();
+            if (!(dataType.equals(Enums.DataType.VEC4))) {
+                if (!(dataType.equals(Enums.DataType.VEC3))) {
+                    if (!(dataType.equals(Enums.DataType.VEC2))) {
+                        throw new RuntimeException("ERROR: Variable is not of a vector type");
+                    }
+                }
+            }
+        }
+        // Not used - is checked in visitVariableName
+        else
+            throw new RuntimeException("Variable is not declared.");
+
+        if (swizzleNode.getCoordinateSwizzle() != null) {
+            coordinateSwizzleNode = swizzleNode.getCoordinateSwizzle();
+            String swizzleString = coordinateSwizzleNode.getSwizzle();
+
+            if (dataType.equals(Enums.DataType.VEC3) && swizzleString.contains("w"))
+                throw new RuntimeException("ERROR: vec3, w");
+            else if (dataType.equals(Enums.DataType.VEC2) && swizzleString.contains("w") || swizzleString.contains("z"))
+                throw new RuntimeException("ERROR: vec2, w,z");
+        }
+        else if (swizzleNode.getColorSwizzle() != null) {
+            colorSwizzleNode = swizzleNode.getColorSwizzle();
+            String swizzleString = colorSwizzleNode.getSwizzle();
+
+            if (dataType.equals(Enums.DataType.VEC3) && swizzleString.contains("a"))
+                throw new RuntimeException("ERROR: vec3, a");
+            else if (dataType.equals(Enums.DataType.VEC2) && swizzleString.contains("a") || swizzleString.contains("b"))
+                throw new RuntimeException("ERROR: vec2, a, b");
+        }
+    }
+
     /*      CLASSES          */
     private void visitClassDeclaration(ClassDeclarationNode classDeclarationNode) {
         String className = classDeclarationNode.getClassName();
@@ -512,12 +584,15 @@ public class TypeChecking {
     }
 
     /*      MISC         */
-    private boolean visitVariableName(String variableName) {
-        boolean correctVariable = false;
+    private void visitVariableName(String variableName) {
+        if (retrieveSymbol(variableName) == null)
+            throw new RuntimeException("ERROR: Variable is not declared");
+        else if (retrieveSymbol(variableName) != null) {
+            VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
-
-
-        return correctVariable;
+            if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() == null)
+                throw new RuntimeException("ERROR: Variable is not initialized");
+        }
     }
     private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
 
