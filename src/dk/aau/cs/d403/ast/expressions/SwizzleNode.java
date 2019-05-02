@@ -30,11 +30,11 @@ public class SwizzleNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (colorSwizzle != null)
-            return variableName + "." + colorSwizzle.prettyPrint();
+            return variableName + "." + colorSwizzle.prettyPrint(indent);
         else if (coordinateSwizzle != null)
-            return variableName + "." + coordinateSwizzle.prettyPrint();
+            return variableName + "." + coordinateSwizzle.prettyPrint(indent);
         else
             return "Invalid swizzle";
     }

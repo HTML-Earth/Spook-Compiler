@@ -28,8 +28,11 @@ public class NonObjectFunctionCallNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
 
         sb.append(functionName);
         sb.append("(");
@@ -42,7 +45,7 @@ public class NonObjectFunctionCallNode extends StatementNode {
                     sb.append(", ");
                 else
                     firstArg = false;
-                sb.append(arg.prettyPrint());
+                sb.append(arg.prettyPrint(0));
             }
         }
 

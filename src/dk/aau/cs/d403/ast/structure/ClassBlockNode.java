@@ -25,7 +25,7 @@ public class ClassBlockNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(" {");
@@ -33,16 +33,16 @@ public class ClassBlockNode implements ASTnode {
         for (DeclarationNode decl : declarationNodes)
         {
             if (decl != null) {
-                sb.append("\n\t");
-                sb.append(decl.prettyPrint());
+                sb.append("\n");
+                sb.append(decl.prettyPrint(indent + 1));
             }
         }
 
         for (FunctionDeclarationNode funcDecl : functionDeclarationNodes)
         {
             if (funcDecl != null) {
-                sb.append("\n\t");
-                sb.append(funcDecl.prettyPrint());
+                sb.append("\n");
+                sb.append(funcDecl.prettyPrint(indent + 1));
             }
         }
 

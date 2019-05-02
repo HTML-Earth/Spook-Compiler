@@ -14,8 +14,8 @@ public class ArithExpressionNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
-        return lowPrecedenceNode.prettyPrint();
+    public String prettyPrint(int indent) {
+        return lowPrecedenceNode.prettyPrint(indent);
     }
 
     private CodePosition codePosition;

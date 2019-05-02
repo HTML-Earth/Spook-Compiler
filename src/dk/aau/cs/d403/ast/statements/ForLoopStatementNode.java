@@ -41,20 +41,24 @@ public class ForLoopStatementNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+
         sb.append("for (");
-        sb.append(forLoopExpressionNode1.prettyPrint());
+        sb.append(forLoopExpressionNode1.prettyPrint(0));
         sb.append(" to ");
-        sb.append(forLoopExpressionNode2.prettyPrint());
+        sb.append(forLoopExpressionNode2.prettyPrint(0));
         sb.append(") ");
 
         if (blockNode != null) {
-            sb.append(blockNode.prettyPrint());
+            sb.append(blockNode.prettyPrint(indent));
         }
         else if (statementNode != null) {
-            sb.append("\n\t");
-            sb.append(statementNode.prettyPrint());
+            sb.append("\n");
+            sb.append(statementNode.prettyPrint(indent + 1));
         }
 
         return sb.toString();

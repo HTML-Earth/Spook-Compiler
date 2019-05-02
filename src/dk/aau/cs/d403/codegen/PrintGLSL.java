@@ -148,7 +148,7 @@ public class PrintGLSL {
     }
 
     public static String printObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
-        return objectFunctionCallNode.prettyPrint();
+        return objectFunctionCallNode.prettyPrint(0);
     }
 
     public static String printArithOperand(ArithOperandNode arithOperandNode) {
@@ -171,13 +171,13 @@ public class PrintGLSL {
             return variableName;
         }
         else if (swizzleNode != null) {
-            return swizzleNode.prettyPrint();
+            return swizzleNode.prettyPrint(0);
         }
         else throw new RuntimeException("Invalid arith operand");
     }
 
     public static String printRealNumber(RealNumberNode realNumberNode) {
-        return realNumberNode.prettyPrint();
+        return realNumberNode.prettyPrint(0);
     }
 
     public static String printObjArgNode(ObjectArgumentNode node) {

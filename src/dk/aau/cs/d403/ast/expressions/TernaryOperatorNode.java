@@ -26,8 +26,8 @@ public class TernaryOperatorNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
-        return boolExpressionNode.prettyPrint() + " ? " + expressionNode1.prettyPrint() + " : " + expressionNode2.prettyPrint();
+    public String prettyPrint(int indent) {
+        return boolExpressionNode.prettyPrint(indent) + " ? " + expressionNode1.prettyPrint(indent) + " : " + expressionNode2.prettyPrint(indent);
     }
 
     private CodePosition codePosition;

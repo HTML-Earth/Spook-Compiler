@@ -101,7 +101,7 @@ public class Main {
         // Pretty printing
         if (prettyPrint) {
             System.out.println("Pretty Print:");
-            System.out.println(ast.prettyPrint());
+            System.out.println(ast.prettyPrint(0));
         }
 
         // Print the code to the terminal

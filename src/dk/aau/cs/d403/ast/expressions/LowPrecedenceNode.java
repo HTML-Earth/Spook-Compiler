@@ -39,14 +39,14 @@ public class LowPrecedenceNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         int matchHigh = 0;
         if (highPrecedenceNodes != null && operators != null) {
             if (!highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
                     //Get the highNode
-                    sb.append(highPrecedenceNode.prettyPrint());
+                    sb.append(highPrecedenceNode.prettyPrint(indent));
                     //Get operator matching the highNode
                     if (matchHigh < highPrecedenceNodes.size() - 1) {
                         sb.append(operatorToString(operators.get(matchHigh)));
@@ -59,7 +59,7 @@ public class LowPrecedenceNode implements ASTnode {
         }
         //Single HighNode
         else if (highPrecedenceNodes != null) {
-            return highPrecedenceNodes.get(0).prettyPrint();
+            return highPrecedenceNodes.get(0).prettyPrint(indent);
         } else
             return "Invalid Low Precedence Operation";
     }

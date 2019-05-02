@@ -39,14 +39,14 @@ public class HighPrecedenceNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         int matchAtom = 0;
         if (atomPrecedenceNodes != null && operators != null) {
             if (!atomPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (AtomPrecedenceNode atomPrecedenceNode : atomPrecedenceNodes) {
                     //Get the AtomNode
-                    sb.append(atomPrecedenceNode.prettyPrint());
+                    sb.append(atomPrecedenceNode.prettyPrint(indent));
                     //Get operator matching the AtomNode
                     if (matchAtom < atomPrecedenceNodes.size() - 1) {
                         sb.append(operatorToString(operators.get(matchAtom)));
@@ -57,7 +57,7 @@ public class HighPrecedenceNode implements ASTnode {
             } else
                 return "HighPrecedenceNode receives empty list";
         } else if (atomPrecedenceNodes != null && !atomPrecedenceNodes.isEmpty()) {
-            return atomPrecedenceNodes.get(0).prettyPrint();
+            return atomPrecedenceNodes.get(0).prettyPrint(indent);
         } else
             return "Invalid High Precedence Operation";
     }

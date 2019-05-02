@@ -18,9 +18,9 @@ public class ObjectArgumentNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (lowPrecedence != null)
-            return lowPrecedence.prettyPrint();
+            return lowPrecedence.prettyPrint(indent);
         else
             return "Invalid Object Argument";
     }

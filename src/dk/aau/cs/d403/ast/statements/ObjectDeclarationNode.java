@@ -1,12 +1,9 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 
 import java.util.ArrayList;
-
-import static dk.aau.cs.d403.ast.Enums.classTypeToString;
 
 public class ObjectDeclarationNode extends DeclarationNode {
     private String objectType;
@@ -38,8 +35,12 @@ public class ObjectDeclarationNode extends DeclarationNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+
         sb.append(objectType);
         sb.append(" ");
         sb.append(variableName);
@@ -54,7 +55,7 @@ public class ObjectDeclarationNode extends DeclarationNode {
                     sb.append(", ");
                 else
                     firstArg = false;
-                sb.append(arg.prettyPrint());
+                sb.append(arg.prettyPrint(0));
             }
         }
 

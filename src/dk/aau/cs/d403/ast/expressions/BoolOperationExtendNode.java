@@ -36,14 +36,14 @@ public class BoolOperationExtendNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         //Case of operator !bool
         if (boolOperator != null && optionalNOT != null && boolOperationNode != null) {
-            return Enums.boolOperatorToString(boolOperator) + Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint();
+            return Enums.boolOperatorToString(boolOperator) + Enums.boolOperatorToString(optionalNOT) + boolOperationNode.prettyPrint(indent);
         }
         //Case of operator bool
         else if (boolOperator != null && boolOperationNode != null) {
-            return Enums.boolOperatorToString(boolOperator) + boolOperationNode.prettyPrint();
+            return Enums.boolOperatorToString(boolOperator) + boolOperationNode.prettyPrint(indent);
         } else return "Invalid Boolean Operation Extension";
     }
 

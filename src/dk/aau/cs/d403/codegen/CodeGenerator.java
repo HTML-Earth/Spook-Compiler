@@ -136,7 +136,7 @@ public class CodeGenerator {
         else if (statementNode instanceof ForLoopStatementNode)
             statementNodes.addAll(visitForLoopStatement((ForLoopStatementNode)statementNode));
         else {
-            throw new RuntimeException("Statement is of unknown type: " + statementNode.prettyPrint());
+            throw new RuntimeException("Statement is of unknown type: " + statementNode.prettyPrint(0));
         }
 
         return statementNodes;

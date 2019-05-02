@@ -45,15 +45,15 @@ public class ForLoopExpressionNode extends ExpressionNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (variableDeclarationNode != null)
-            return variableDeclarationNode.prettyPrint();
+            return variableDeclarationNode.prettyPrint(indent);
         else if (variableName != null)
             return variableName;
         else if (assignmentNode != null)
-            return assignmentNode.prettyPrint();
+            return assignmentNode.prettyPrint(indent);
         else if (integerNumberNode != null)
-            return integerNumberNode.prettyPrint();
+            return integerNumberNode.prettyPrint(indent);
         else
             return "Invalid ForLoop Expression";
     }

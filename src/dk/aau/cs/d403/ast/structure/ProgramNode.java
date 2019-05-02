@@ -30,16 +30,16 @@ public class ProgramNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(mainNode.prettyPrint());
+        sb.append(mainNode.prettyPrint(indent));
 
         if (classDeclarationNodes.size() > 0) {
             sb.append("\n\n");
 
             for (ClassDeclarationNode classDec : classDeclarationNodes) {
-                sb.append(classDec.prettyPrint());
+                sb.append(classDec.prettyPrint(indent));
             }
         }
 
@@ -47,7 +47,7 @@ public class ProgramNode implements ASTnode {
             sb.append("\n\n");
 
             for (FunctionDeclarationNode funcDec : functionDeclarationNodes) {
-                sb.append(funcDec.prettyPrint());
+                sb.append(funcDec.prettyPrint(indent));
             }
         }
 

@@ -51,21 +51,21 @@ public class ArithOperandNode implements ASTnode {
     public SwizzleNode getSwizzleNode() {return swizzleNode; }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (realNumberNode != null) {
-            return realNumberNode.prettyPrint();
+            return realNumberNode.prettyPrint(indent);
         }
         else if (nonObjectFunctionCallNode != null) {
-            return nonObjectFunctionCallNode.prettyPrint();
+            return nonObjectFunctionCallNode.prettyPrint(indent);
         }
         else if (objectFunctionCallNode != null) {
-            return objectFunctionCallNode.prettyPrint();
+            return objectFunctionCallNode.prettyPrint(indent);
         }
         else if (variableName != null) {
             return variableName;
         }
         else if (swizzleNode != null) {
-            return swizzleNode.prettyPrint();
+            return swizzleNode.prettyPrint(indent);
         }
         else
             return "Invalid Operand";

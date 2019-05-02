@@ -15,8 +15,8 @@ public class MainNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
-        return "Shader " + blockNode.prettyPrint();
+    public String prettyPrint(int indent) {
+        return "Shader " + blockNode.prettyPrint(indent);
     }
 
     private CodePosition codePosition;

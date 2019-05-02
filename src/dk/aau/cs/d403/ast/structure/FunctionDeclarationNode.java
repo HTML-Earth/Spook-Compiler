@@ -43,7 +43,7 @@ public class FunctionDeclarationNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(Enums.returnTypeToStringSpook(returnType));
@@ -58,11 +58,11 @@ public class FunctionDeclarationNode implements ASTnode {
                     sb.append(", ");
                 else
                     firstArg = false;
-                sb.append(arg.prettyPrint());
+                sb.append(arg.prettyPrint(indent));
             }
         }
         sb.append(") ");
-        sb.append(blockNode.prettyPrint());
+        sb.append(blockNode.prettyPrint(indent));
 
         return sb.toString();
     }

@@ -32,11 +32,11 @@ public class IfStatementNode extends StatementNode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (ifBlock != null)
-            return "if (" + ifBool.prettyPrint() + ") " + ifBlock.prettyPrint();
+            return "if (" + ifBool.prettyPrint(indent) + ") " + ifBlock.prettyPrint(indent);
         else if (ifStatement != null)
-            return "if (" + ifBool.prettyPrint() + ")\n\t" + ifStatement.prettyPrint();
+            return "if (" + ifBool.prettyPrint(indent) + ")\n" + ifStatement.prettyPrint(indent + 1);
         else
             return "Invalid If-statement";
     }
