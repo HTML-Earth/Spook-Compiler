@@ -1,7 +1,2 @@
 Shader {
-    Num var1 = 1;
-    Vec2 vec2 = var1;
-
-    Bool var2 = true;
-    Num vec2 = var2;
 }

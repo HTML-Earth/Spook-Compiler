@@ -360,17 +360,15 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
-        Enums.ReturnType returnType;
-        if (ctx.returnType() != null)
+        Enums.DataType returnType;
+        if (ctx.dataType() != null)
         {
-            returnType = getReturnType(ctx.returnType());
+            returnType = getDataType(ctx.dataType());
         }
-        else if (ctx.VOID() != null)
-            returnType = Enums.ReturnType.VOID;
         else
             throw new CompilerException("Invalid return type", getCodePosition(ctx));
 
-        if (ctx.returnType() != null && getReturnType(ctx.returnType()) != Enums.ReturnType.VOID) {
+        if (ctx.dataType() != null) {
             if (ctx.functionArgs() != null) {
                 ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
 
@@ -386,17 +384,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 return functionDeclarationNode;
             }
         }
-        else if (returnType == Enums.ReturnType.VOID) {
+        else if (ctx.VOID() != null) {
             if (ctx.functionArgs() != null) {
                 ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
 
-                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), functionArgNodes, (BlockNode)visitBlock(ctx.block()));
+                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(ctx.functionName().getText(), functionArgNodes, (BlockNode)visitBlock(ctx.block()));
                 functionDeclarationNode.setCodePosition(getCodePosition(ctx));
 
                 return functionDeclarationNode;
             }
             else {
-                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), (BlockNode)visitBlock(ctx.block()));
+                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(ctx.functionName().getText(), (BlockNode)visitBlock(ctx.block()));
                 functionDeclarationNode.setCodePosition(getCodePosition(ctx));
 
                 return functionDeclarationNode;
@@ -855,25 +853,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("DataType is unknown", getCodePosition(ctx));
 
         return dataType;
-    }
-
-    private Enums.ReturnType getReturnType(SpookParser.ReturnTypeContext ctx) {
-        Enums.ReturnType returnType;
-
-        if (ctx.dataType().NUM() != null)
-            returnType = Enums.ReturnType.NUM;
-        else if (ctx.dataType().BOOL() != null)
-            returnType = Enums.ReturnType.BOOL;
-        else if (ctx.dataType().VECTOR2() != null)
-            returnType = Enums.ReturnType.VEC2;
-        else if (ctx.dataType().VECTOR3() != null)
-            returnType = Enums.ReturnType.VEC3;
-        else if (ctx.dataType().VECTOR4() != null)
-            returnType = Enums.ReturnType.VEC4;
-        else
-            throw new CompilerException("ReturnType is unknown", getCodePosition(ctx));
-
-        return returnType;
     }
 
     private Enums.Operator getOperator(SpookParser.HighOperatorContext ctx) {

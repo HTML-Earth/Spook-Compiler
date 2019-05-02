@@ -111,8 +111,7 @@ boolOperationExtend
 
 // Swizzling
 swizzle
-    : variableName DOT coordinateSwizzle
-    | variableName DOT colorSwizzle;
+    : variableName DOT (coordinateSwizzle | colorSwizzle);
 
 coordinateSwizzle: COORDINATE_SWIZZLE_MASK;
 colorSwizzle: COLOR_SWIZZLE_MASK;
@@ -197,7 +196,7 @@ constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 /* Function declaration */
 functionDecl
     : VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
-    | returnType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock;
+    | dataType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock;
 
 functionArgs
     : functionArg COMMA functionArgs
@@ -229,11 +228,6 @@ boolOperator
     | GREATER_OR_EQUAL
     | LESS_THAN
     | LESS_OR_EQUAL;
-
-// Return types
-returnType
-    : dataType
-    | className;
 
 // Data types
 dataType

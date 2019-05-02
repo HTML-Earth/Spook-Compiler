@@ -8,25 +8,37 @@ import dk.aau.cs.d403.ast.statements.FunctionArgNode;
 import java.util.ArrayList;
 
 public class FunctionDeclarationNode implements ASTnode {
-    private Enums.ReturnType returnType;
+    private Enums.DataType returnType;
     private String functionName;
     private ArrayList<FunctionArgNode> functionArgNodes;
     private BlockNode blockNode;
 
-    public FunctionDeclarationNode(Enums.ReturnType returnType, String functionName, BlockNode blockNode) {
+    public FunctionDeclarationNode(Enums.DataType returnType, String functionName, BlockNode blockNode) {
         this.returnType = returnType;
         this.functionName = functionName;
         this.blockNode = blockNode;
     }
 
-    public FunctionDeclarationNode(Enums.ReturnType returnType, String functionName, ArrayList<FunctionArgNode> functionArgNodes, BlockNode blockNode) {
+    public FunctionDeclarationNode(Enums.DataType returnType, String functionName, ArrayList<FunctionArgNode> functionArgNodes, BlockNode blockNode) {
         this.returnType = returnType;
         this.functionName = functionName;
         this.functionArgNodes = functionArgNodes;
         this.blockNode = blockNode;
     }
 
-    public Enums.ReturnType getReturnType() {
+    public FunctionDeclarationNode(String functionName, BlockNode blockNode) {
+        this.returnType = null;
+        this.functionName = functionName;
+        this.blockNode = blockNode;
+    }
+
+    public FunctionDeclarationNode(String functionName, ArrayList<FunctionArgNode> functionArgNodes, BlockNode blockNode) {
+        this.returnType = null;
+        this.functionName = functionName;
+        this.blockNode = blockNode;
+    }
+
+    public Enums.DataType getReturnType() {
         return returnType;
     }
 
@@ -46,7 +58,7 @@ public class FunctionDeclarationNode implements ASTnode {
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(Enums.returnTypeToStringSpook(returnType));
+        sb.append(Enums.dataTypeToStringSpook(returnType));
         sb.append(" ");
         sb.append(functionName);
         sb.append("(");

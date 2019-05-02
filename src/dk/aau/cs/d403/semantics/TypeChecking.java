@@ -6,6 +6,7 @@ import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 
+import javax.management.relation.RoleUnresolved;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,6 +101,7 @@ public class TypeChecking {
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
             visitClassDeclaration(classDeclaration);
         visitMain(programNode.getMainNode());
+        System.out.println("gucci gang xd");
     }
 
     public void visitMain(MainNode mainNode) {
@@ -176,12 +178,25 @@ public class TypeChecking {
 
     private void visitAssignment(AssignmentNode assignmentNode) {
         String variableName;
+        Enums.DataType dataType;
 
         if (assignmentNode.getVariableName() != null) {
             variableName = assignmentNode.getVariableName();
+            VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+
+            if (variableDeclarationNode != null)
+                dataType = variableDeclarationNode.getDataType();
+            else
+                dataType = null;
 
             if (retrieveSymbol(variableName) == null)
                 throw new RuntimeException("ERROR: Variable on left side of assignment is not initialized.");
+
+            if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
+                Enums.DataType assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
+                if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
+                    throw new RuntimeException("ERROR: Incompatible types.");
+            }
         }
         else if (assignmentNode.getSwizzleNode() != null) {
             visitSwizzle(assignmentNode.getSwizzleNode());
@@ -338,7 +353,7 @@ public class TypeChecking {
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
-        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
+        Enums.DataType returnType = functionDeclarationNode.getReturnType();
 
         ArrayList<FunctionDeclarationNode> retrievedFunctions;
         if (retrieveAllFunctions(functionName) != null)
@@ -385,41 +400,44 @@ public class TypeChecking {
         visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
     }
 
-    private void visitFunctionBlock(BlockNode blockNode, Enums.ReturnType returnType, FunctionDeclarationNode functionDeclarationNode) {
+    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
         }
-        if (returnType != Enums.ReturnType.VOID)
+        if (returnType != null)
             visitReturnStatement(blockNode.getReturnNode(), functionDeclarationNode);
         closeScope();
     }
 
     private void visitReturnStatement(ReturnNode returnNode, FunctionDeclarationNode functionDeclarationNode) {
         ExpressionNode expressionNode = returnNode.getExpressionNode();
-        Enums.ReturnType returnType = functionDeclarationNode.getReturnType();
+        Enums.DataType returnType = functionDeclarationNode.getReturnType();
         LowPrecedenceNode lowPrecedenceNode;
 
-        if (expressionNode instanceof ArithExpressionNode && returnType.equals(Enums.ReturnType.NUM)) {
+        if (expressionNode instanceof ArithExpressionNode) {
             lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
-            visitLowPrecedenceNode(lowPrecedenceNode);
+            Enums.DataType dataType = visitLowPrecedenceNode(lowPrecedenceNode);
+
+            if (dataType != null && !dataType.equals(returnType))
+                throw new RuntimeException("ERROR: Return statement does not match the return type of the function");
         }
-        else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.ReturnType.BOOL)) {
+        else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL)) {
             // Do BoolExpression things
         }
         else if (expressionNode instanceof TernaryOperatorNode) {
             // ternary
         }
-        else if (expressionNode instanceof  Vector4ExpressionNode && returnType.equals(Enums.ReturnType.VEC4))
+        else if (expressionNode instanceof  Vector4ExpressionNode && returnType.equals(Enums.DataType.VEC4))
             visitVector4Expression((Vector4ExpressionNode) expressionNode);
-        else if (expressionNode instanceof  Vector3ExpressionNode && returnType.equals(Enums.ReturnType.VEC3))
+        else if (expressionNode instanceof  Vector3ExpressionNode && returnType.equals(Enums.DataType.VEC3))
             visitVector3Expression((Vector3ExpressionNode) expressionNode);
-        else if (expressionNode instanceof  Vector2ExpressionNode && returnType.equals(Enums.ReturnType.VEC2))
+        else if (expressionNode instanceof  Vector2ExpressionNode && returnType.equals(Enums.DataType.VEC2))
             visitVector2Expression((Vector2ExpressionNode) expressionNode);
         else
             throw new RuntimeException("ERROR: Return statement does not match the return type of the function");
     }
-// swizzle, ternary operator, objectdecl, bool
+// ternary operator, objectdecl, bool
     /*      Expressions      */
     private void visitExpression(ExpressionNode expressionNode) {
         LowPrecedenceNode lowPrecedenceNode;
@@ -440,7 +458,7 @@ public class TypeChecking {
             visitVector2Expression((Vector2ExpressionNode) expressionNode);
     }
 
-    private void visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
+    private Enums.DataType visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
         for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
             for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
@@ -450,10 +468,8 @@ public class TypeChecking {
 
                     visitVariableName(variableName);
                     VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
-                    if (variableDeclarationNode != null && !variableDeclarationNode.getDataType().equals(Enums.DataType.NUM))
-                        throw new RuntimeException("ERROR: Assigned variable is of an incompatible type.");
-                    else
-                        enterSymbol(variableName, lowPrecedenceNode);
+                    if (variableDeclarationNode != null)
+                        return variableDeclarationNode.getDataType();
                 }
 
                 // Operand: Non-object function Call
@@ -464,27 +480,39 @@ public class TypeChecking {
                     // The reason for not checking all functions is because a function with a given name can only have one return type.
                     // It is not legal to have another function with the same name but with a different return type.
                     FunctionDeclarationNode functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(nonObjectFunctionCallNode.getFunctionName());
-                    if (functionDeclarationNode != null && !functionDeclarationNode.getReturnType().equals(Enums.ReturnType.NUM))
-                        throw new RuntimeException("ERROR: Wrong return type for given expression.");
-                    else
-                        enterSymbol(nonObjectFunctionCallNode.getFunctionName(), lowPrecedenceNode);
+                    if (functionDeclarationNode != null)
+                        return functionDeclarationNode.getReturnType();
                 }
 
                 // Operand: Swizzle
                 if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
                     SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
                     visitSwizzle(swizzleNode);
-                    if (retrieveSymbol(swizzleNode.getVariableName()) != null) {
-                        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(swizzleNode.getVariableName());
+                    int swizzleLength;
 
-                    }
+                    if (swizzleNode.getCoordinateSwizzle() != null)
+                        swizzleLength = swizzleNode.getCoordinateSwizzle().getSwizzle().length();
+                    else
+                        swizzleLength = swizzleNode.getColorSwizzle().getSwizzle().length();
+
+                    if (swizzleLength == 4)
+                        return Enums.DataType.VEC4;
+                    else if (swizzleLength == 3)
+                        return Enums.DataType.VEC3;
+                    else if (swizzleLength == 2)
+                        return Enums.DataType.VEC2;
+                    else if (swizzleLength == 1)
+                        return Enums.DataType.NUM;
+                    else
+                        throw new RuntimeException("ERROR: Too long swizzle");
                 }
 
                 // Operand: Low precedence
                 if (atomPrecedenceNode.getLowPrecedenceNode() != null)
-                    visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
+                    return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
             }
         }
+        return null;
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
@@ -528,6 +556,7 @@ public class TypeChecking {
             if (!(dataType.equals(Enums.DataType.VEC4))) {
                 if (!(dataType.equals(Enums.DataType.VEC3))) {
                     if (!(dataType.equals(Enums.DataType.VEC2))) {
+                        if (!(dataType.equals(Enums.DataType.NUM)))
                         throw new RuntimeException("ERROR: Variable is not of a vector type");
                     }
                 }
@@ -545,6 +574,8 @@ public class TypeChecking {
                 throw new RuntimeException("ERROR: vec3, w");
             else if (dataType.equals(Enums.DataType.VEC2) && swizzleString.contains("w") || swizzleString.contains("z"))
                 throw new RuntimeException("ERROR: vec2, w,z");
+            else if (dataType.equals(Enums.DataType.NUM) && swizzleString.contains("w") || swizzleString.contains("z") || swizzleString.contains("y"))
+                throw new RuntimeException("ERROR: num, y, w, z");
         }
         else if (swizzleNode.getColorSwizzle() != null) {
             colorSwizzleNode = swizzleNode.getColorSwizzle();
@@ -554,6 +585,8 @@ public class TypeChecking {
                 throw new RuntimeException("ERROR: vec3, a");
             else if (dataType.equals(Enums.DataType.VEC2) && swizzleString.contains("a") || swizzleString.contains("b"))
                 throw new RuntimeException("ERROR: vec2, a, b");
+            else if (dataType.equals(Enums.DataType.NUM) && swizzleString.contains("a") || swizzleString.contains("b") || swizzleString.contains("g"))
+                throw new RuntimeException("ERROR: num, a, b, g");
         }
     }
 
@@ -593,20 +626,5 @@ public class TypeChecking {
             if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() == null)
                 throw new RuntimeException("ERROR: Variable is not initialized");
         }
-    }
-    private Enums.DataType getExpressionNodeType(ExpressionNode expressionNode) {
-
-        if (expressionNode instanceof ArithExpressionNode)
-            return Enums.DataType.NUM;
-        else if(expressionNode instanceof BoolExpressionNode)
-            return Enums.DataType.BOOL;
-        else if(expressionNode instanceof Vector4ExpressionNode)
-            return Enums.DataType.VEC4;
-        else if(expressionNode instanceof Vector3ExpressionNode)
-            return Enums.DataType.VEC3;
-        else if(expressionNode instanceof Vector2ExpressionNode)
-            return Enums.DataType.VEC2;
-        else
-            throw new RuntimeException("Unknown Expression Node type.");
     }
 }
