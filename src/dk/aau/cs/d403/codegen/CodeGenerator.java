@@ -170,8 +170,8 @@ public class CodeGenerator {
     private ForLoopExpressionNode visitForLoopExpressionNode(ForLoopExpressionNode forLoopExpressionNode) {
         if (forLoopExpressionNode.getAssignmentNode() != null)
             return new ForLoopExpressionNode(visitAssignment(forLoopExpressionNode.getAssignmentNode()));
-        else if (forLoopExpressionNode.getIntegerNumberNode() != null)
-            return new ForLoopExpressionNode(forLoopExpressionNode.getIntegerNumberNode());
+        else if (forLoopExpressionNode.getRealNumberNode() != null)
+            return new ForLoopExpressionNode(forLoopExpressionNode.getRealNumberNode());
         else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
             return new ForLoopExpressionNode((VariableDeclarationNode)visitDeclaration(forLoopExpressionNode.getVariableDeclarationNode()));
         else if (forLoopExpressionNode.getVariableName() != null)

@@ -431,6 +431,9 @@ public class TypeChecking {
                 throw new RuntimeException("ERROR: Variable is of an illegal type for the ForLoop.");
             }
         }
+        else if (forLoopExpressionNode.getRealNumberNode() != null) {
+            // do nothing
+        }
         else
             throw new RuntimeException("ERROR: Invalid ForLoop expression");
     }

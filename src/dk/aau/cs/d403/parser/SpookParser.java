@@ -1,4 +1,4 @@
-// Generated from /Users/Garrido/PycharmProjects/PythonProjects/P4/src/SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -61,7 +61,7 @@ public class SpookParser extends Parser {
 			"elseBlock", "conditionalBlock", "iterativeStatement", "forStatement", 
 			"forLoopExpression", "classDecl", "classBlock", "constructor", "constructorBlock", 
 			"functionDecl", "functionArgs", "functionArg", "functionBlock", "returnStatement", 
-			"realNumber", "integerNumber", "BoolOperator", "dataType", "objectVariableName",
+			"realNumber", "integerNumber", "boolOperator", "dataType", "objectVariableName", 
 			"functionName", "variableName", "className"
 		};
 	}
@@ -3110,7 +3110,9 @@ public class SpookParser extends Parser {
 	}
 
 	public static class ForLoopExpressionContext extends ParserRuleContext {
-		public TerminalNode DIGIT() { return getToken(SpookParser.DIGIT, 0); }
+		public RealNumberContext realNumber() {
+			return getRuleContext(RealNumberContext.class,0);
+		}
 		public VariableDeclContext variableDecl() {
 			return getRuleContext(VariableDeclContext.class,0);
 		}
@@ -3151,7 +3153,7 @@ public class SpookParser extends Parser {
 			case 1:
 				{
 				setState(401);
-				match(DIGIT);
+				realNumber();
 				}
 				break;
 			case 2:
@@ -4456,11 +4458,11 @@ public class SpookParser extends Parser {
 		"\3\2\2\2\u0189\u018a\7\21\2\2\u018a\u018b\7\32\2\2\u018b\u018c\5^\60\2"+
 		"\u018c\u018d\7\22\2\2\u018d\u018e\5^\60\2\u018e\u0191\7\33\2\2\u018f\u0192"+
 		"\5\6\4\2\u0190\u0192\5\n\6\2\u0191\u018f\3\2\2\2\u0191\u0190\3\2\2\2\u0192"+
-		"]\3\2\2\2\u0193\u0198\7\23\2\2\u0194\u0198\5\16\b\2\u0195\u0198\5~@\2"+
-		"\u0196\u0198\5\22\n\2\u0197\u0193\3\2\2\2\u0197\u0194\3\2\2\2\u0197\u0195"+
-		"\3\2\2\2\u0197\u0196\3\2\2\2\u0198_\3\2\2\2\u0199\u019a\7\n\2\2\u019a"+
-		"\u019d\5\u0080A\2\u019b\u019c\t\4\2\2\u019c\u019e\5\u0080A\2\u019d\u019b"+
-		"\3\2\2\2\u019d\u019e\3\2\2\2\u019e\u019f\3\2\2\2\u019f\u01a0\5b\62\2\u01a0"+
+		"]\3\2\2\2\u0193\u0198\5r:\2\u0194\u0198\5\16\b\2\u0195\u0198\5~@\2\u0196"+
+		"\u0198\5\22\n\2\u0197\u0193\3\2\2\2\u0197\u0194\3\2\2\2\u0197\u0195\3"+
+		"\2\2\2\u0197\u0196\3\2\2\2\u0198_\3\2\2\2\u0199\u019a\7\n\2\2\u019a\u019d"+
+		"\5\u0080A\2\u019b\u019c\t\4\2\2\u019c\u019e\5\u0080A\2\u019d\u019b\3\2"+
+		"\2\2\u019d\u019e\3\2\2\2\u019e\u019f\3\2\2\2\u019f\u01a0\5b\62\2\u01a0"+
 		"a\3\2\2\2\u01a1\u01a8\7\30\2\2\u01a2\u01a7\5\f\7\2\u01a3\u01a7\5d\63\2"+
 		"\u01a4\u01a7\5h\65\2\u01a5\u01a7\5\b\5\2\u01a6\u01a2\3\2\2\2\u01a6\u01a3"+
 		"\3\2\2\2\u01a6\u01a4\3\2\2\2\u01a6\u01a5\3\2\2\2\u01a7\u01aa\3\2\2\2\u01a8"+
