@@ -13,13 +13,14 @@ public class TypeChecking {
     private Integer functionCounter = 1;
 
     private ArrayList<String> listOfPredefinedClasses;
+    private ArrayList<VariableDeclarationNode> listOfPredefinedVariables;
     private ArrayList<Enums.BoolOperator> booleanOperatorList;
     private ArrayList<Enums.BoolOperator> numberOperatorList;
 
     public TypeChecking() {
         this.hashMapStack = new Stack<>();
-        this.listOfPredefinedClasses = new ArrayList<>();
 
+        this.listOfPredefinedClasses = new ArrayList<>();
         this.listOfPredefinedClasses.add("Circle");
         this.listOfPredefinedClasses.add("Rectangle");
         this.listOfPredefinedClasses.add("Triangle");
@@ -29,6 +30,10 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("CircleGradient");
         this.listOfPredefinedClasses.add("LineGradient");
         this.listOfPredefinedClasses.add("Scene");
+
+        this.listOfPredefinedVariables = new ArrayList<>();
+        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.VEC2, new AssignmentNode("Screen", new Vector2ExpressionNode())));
+        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, "Time"));
 
         this.booleanOperatorList = new ArrayList<>();
         this.booleanOperatorList.add(Enums.BoolOperator.AND);
@@ -108,6 +113,11 @@ public class TypeChecking {
     /*      VISITOR         */
     public void visitProgram(ProgramNode programNode) {
         openScope();
+
+        // Enter global variables for every block to use
+        enterSymbol(this.listOfPredefinedVariables.get(0).getVariableName(), this.listOfPredefinedVariables.get(0));
+        enterSymbol(this.listOfPredefinedVariables.get(1).getVariableName(), this.listOfPredefinedVariables.get(1));
+
         for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes())
             visitFunctionDeclaration(functionDeclaration);
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
@@ -682,9 +692,9 @@ public class TypeChecking {
 
             if (dataType.equals(Enums.DataType.VEC3) && swizzleString.contains("w"))
                 throw new RuntimeException("ERROR: vec3, w");
-            else if (dataType.equals(Enums.DataType.VEC2) && swizzleString.contains("w") || swizzleString.contains("z"))
+            else if (dataType.equals(Enums.DataType.VEC2) && (swizzleString.contains("w") || swizzleString.contains("z")))
                 throw new RuntimeException("ERROR: vec2, w,z");
-            else if (dataType.equals(Enums.DataType.NUM) && swizzleString.contains("w") || swizzleString.contains("z") || swizzleString.contains("y"))
+            else if (dataType.equals(Enums.DataType.NUM) && (swizzleString.contains("w") || swizzleString.contains("z") || swizzleString.contains("y")))
                 throw new RuntimeException("ERROR: num, y, w, z");
         }
         else if (swizzleNode.getColorSwizzle() != null) {
@@ -693,9 +703,9 @@ public class TypeChecking {
 
             if (dataType.equals(Enums.DataType.VEC3) && swizzleString.contains("a"))
                 throw new RuntimeException("ERROR: vec3, a");
-            else if (dataType.equals(Enums.DataType.VEC2) && swizzleString.contains("a") || swizzleString.contains("b"))
+            else if (dataType.equals(Enums.DataType.VEC2) && (swizzleString.contains("a") || swizzleString.contains("b")))
                 throw new RuntimeException("ERROR: vec2, a, b");
-            else if (dataType.equals(Enums.DataType.NUM) && swizzleString.contains("a") || swizzleString.contains("b") || swizzleString.contains("g"))
+            else if (dataType.equals(Enums.DataType.NUM) && (swizzleString.contains("a") || swizzleString.contains("b") || swizzleString.contains("g")))
                 throw new RuntimeException("ERROR: num, a, b, g");
         }
     }
@@ -734,7 +744,7 @@ public class TypeChecking {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
             if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() == null)
-                throw new RuntimeException("ERROR: Variable is not initialized");
+                throw new RuntimeException("ERROR: Variable, " + variableName + " is not initialized");
         }
     }
 }
