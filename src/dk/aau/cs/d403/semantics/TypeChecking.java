@@ -6,17 +6,15 @@ import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 
-import javax.management.relation.RoleUnresolved;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class TypeChecking {
     private Stack<HashMap<String, ASTnode>> hashMapStack;
     private Integer functionCounter = 1;
 
     private ArrayList<String> listOfPredefinedClasses;
+    private ArrayList<Enums.BoolOperator> booleanOperatorList;
+    private ArrayList<Enums.BoolOperator> numberOperatorList;
 
     public TypeChecking() {
         this.hashMapStack = new Stack<>();
@@ -30,6 +28,19 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Color");
         this.listOfPredefinedClasses.add("CircleGradient");
         this.listOfPredefinedClasses.add("LineGradient");
+
+        this.booleanOperatorList = new ArrayList<>();
+        this.booleanOperatorList.add(Enums.BoolOperator.AND);
+        this.booleanOperatorList.add(Enums.BoolOperator.OR);
+        this.booleanOperatorList.add(Enums.BoolOperator.NOT);
+
+        this.numberOperatorList = new ArrayList<>();
+        this.numberOperatorList.add(Enums.BoolOperator.GREATER_OR_EQUAL);
+        this.numberOperatorList.add(Enums.BoolOperator.GREATER_THAN);
+        this.numberOperatorList.add(Enums.BoolOperator.LESS_OR_EQUAL);
+        this.numberOperatorList.add(Enums.BoolOperator.LESS_THAN);
+        this.numberOperatorList.add(Enums.BoolOperator.EQUAL);
+        this.numberOperatorList.add(Enums.BoolOperator.NOT_EQUAL);
     }
 
     private void openScope() {
@@ -104,7 +115,7 @@ public class TypeChecking {
         System.out.println("gucci gang xd");
     }
 
-    public void visitMain(MainNode mainNode) {
+    private void visitMain(MainNode mainNode) {
         visitBlock(mainNode.getBlockNode());
     }
 
@@ -125,10 +136,8 @@ public class TypeChecking {
             visitAssignment((AssignmentNode) statementNode);
         else if (statementNode instanceof NonObjectFunctionCallNode)
             visitNonObjectFunctionCall((NonObjectFunctionCallNode) statementNode);
-        /*
         else if (statementNode instanceof ObjectFunctionCallNode)
             visitObjectFunctionCall((ObjectFunctionCallNode) statementNode);
-            */
         else if (statementNode instanceof IfElseStatementNode)
             visitIfElseStatement((IfElseStatementNode) statementNode);
         else if (statementNode instanceof ForLoopStatementNode)
@@ -267,8 +276,6 @@ public class TypeChecking {
                     matchingSize = true;
                     break;
                 }
-                else
-                    throw new RuntimeException("ERROR: Non-object function does not exist with no parameters.");
             }
             if (!matchingSize)
                 throw new RuntimeException("ERROR: The amount of given arguments for the Non-Object function call does not match the amount of required parameters for the function.");
@@ -278,6 +285,70 @@ public class TypeChecking {
         else {
             throw new RuntimeException("ERROR: Non-object function does not exist.");
         }
+    }
+
+    private Enums.DataType visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
+        String variableName = objectFunctionCallNode.getObjectVariableName();
+        String functionName = objectFunctionCallNode.getFunctionName();
+        ArrayList<ObjectArgumentNode> objectArgumentNodes = objectFunctionCallNode.getObjectArguments();
+        ObjectDeclarationNode objectDeclarationNode;
+        ClassDeclarationNode classDeclarationNode;
+
+        // Check if variable is declared and initialized
+        if (retrieveSymbol(variableName) != null) {
+            if (!(retrieveSymbol(variableName) instanceof ObjectDeclarationNode))
+                throw new RuntimeException("ERROR: Variable is not an object declaration.");
+            else
+                objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
+        }
+        else
+            throw new RuntimeException("ERROR: Variable is not declared.");
+
+        if (objectDeclarationNode != null) {
+            // If it is a custom object function call
+            if (!(listOfPredefinedClasses.contains(objectDeclarationNode.getObjectType()))) {
+                classDeclarationNode = (ClassDeclarationNode) retrieveSymbol(objectDeclarationNode.getObjectType());
+                boolean existingFunction = false;
+                boolean sameFunction = true;
+                Enums.DataType dataType = null;
+
+                if (classDeclarationNode != null && classDeclarationNode.getClassBlockNode() != null) {
+
+                    // Check if class has the function used
+                    for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
+
+                        // Look for the function with the same name
+                        if (functionDeclarationNode.getFunctionName().equals(functionName)) {
+                            existingFunction = true;
+
+                            // Check the data types of the arguments given
+                            if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                                ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
+
+                                // Check each argument if its data type matches the function's parameters
+                                for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
+                                    dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
+                                    if (!(functionArgNodes.get(i).getDataType().equals(dataType))) {
+                                        sameFunction = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                    throw new RuntimeException("ERROR: Class does not exist.");
+
+                if (!existingFunction)
+                    throw new RuntimeException("ERROR: No functions existed with the given function name");
+                if (!sameFunction)
+                    throw new RuntimeException("ERROR: No function with the given parameters exists");
+
+                return dataType;
+            }
+        }
+        return null;
     }
 
     private void visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
@@ -377,7 +448,7 @@ public class TypeChecking {
 
                 if (retrievedNode.getFunctionArgNodes() != null && functionArgs != null)  {
                     if (retrievedNode.getFunctionArgNodes().size() == functionArgs.size()) {
-                        for (int i = 0; i < functionArgs.size(); i--) {
+                        for (int i = 0; i < functionArgs.size(); i++) {
                             if (functionArgs.get(i).getDataType().equals(retrievedNode.getFunctionArgNodes().get(i).getDataType())) {
                                 sameFunctionArgs = true;
                                 break outerloop;
@@ -422,32 +493,31 @@ public class TypeChecking {
             if (dataType != null && !dataType.equals(returnType))
                 throw new RuntimeException("ERROR: Return statement does not match the return type of the function");
         }
-        else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL)) {
-            // Do BoolExpression things
-        }
+        else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
+            visitExpression(expressionNode);
         else if (expressionNode instanceof TernaryOperatorNode) {
             // ternary
         }
         else if (expressionNode instanceof  Vector4ExpressionNode && returnType.equals(Enums.DataType.VEC4))
-            visitVector4Expression((Vector4ExpressionNode) expressionNode);
+            visitExpression(expressionNode);
         else if (expressionNode instanceof  Vector3ExpressionNode && returnType.equals(Enums.DataType.VEC3))
-            visitVector3Expression((Vector3ExpressionNode) expressionNode);
+            visitExpression(expressionNode);
         else if (expressionNode instanceof  Vector2ExpressionNode && returnType.equals(Enums.DataType.VEC2))
-            visitVector2Expression((Vector2ExpressionNode) expressionNode);
+            visitExpression(expressionNode);
         else
             throw new RuntimeException("ERROR: Return statement does not match the return type of the function");
     }
-// ternary operator, objectdecl, bool
+// ternary operator, bool
     /*      Expressions      */
     private void visitExpression(ExpressionNode expressionNode) {
+
         LowPrecedenceNode lowPrecedenceNode;
         if (expressionNode instanceof ArithExpressionNode) {
             lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
             visitLowPrecedenceNode(lowPrecedenceNode);
         }
-        else if (expressionNode instanceof BoolExpressionNode) {
-            // Do BoolExpression things
-        }
+        else if (expressionNode instanceof BoolExpressionNode)
+            visitBoolExpression((BoolExpressionNode) expressionNode);
         else if (expressionNode instanceof TernaryOperatorNode)
             visitTernaryOperator((TernaryOperatorNode) expressionNode);
         else if (expressionNode instanceof  Vector4ExpressionNode)
@@ -484,6 +554,12 @@ public class TypeChecking {
                         return functionDeclarationNode.getReturnType();
                 }
 
+                // Operand: Object function Call
+                if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
+                    ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
+                    return visitObjectFunctionCall(objectFunctionCallNode);
+                }
+
                 // Operand: Swizzle
                 if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
                     SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
@@ -507,12 +583,41 @@ public class TypeChecking {
                         throw new RuntimeException("ERROR: Too long swizzle");
                 }
 
+                if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
+                    return Enums.DataType.NUM;
+
                 // Operand: Low precedence
                 if (atomPrecedenceNode.getLowPrecedenceNode() != null)
                     return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
             }
         }
         return null;
+    }
+
+    private void visitBoolExpression(BoolExpressionNode boolExpressionNode) {
+
+        BoolOperationsNode boolOperationsNode = boolExpressionNode.getBoolOperationsNode();
+
+        BoolOperationNode boolOperationNode = boolOperationsNode.getBoolOperationNode();
+        ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = boolOperationsNode.getBoolOperationExtendNodes();
+
+        // Negation and real number
+        if (boolOperationsNode.getOptionalNOT() != null && boolOperationNode.getRealNumberNode() != null)
+            throw new RuntimeException("ERROR: Can't negate a real number");
+        if (boolOperationNode.getRealNumberNode() != null && boolOperationExtendNodes == null)
+            throw new RuntimeException("ERROR: Boolean can't be a real number");
+
+        for (BoolOperationExtendNode boolOperationExtendNode : boolOperationExtendNodes) {
+            if (booleanOperatorList.contains(boolOperationExtendNode.getBoolOperator()) && boolOperationExtendNode.getBoolOperationNode().getBoolLiteral() != null)
+                throw new RuntimeException("ERROR: Can't use number operator for booleans");
+            if (numberOperatorList.contains(boolOperationExtendNode.getBoolOperator()) && boolOperationExtendNode.getBoolOperationNode().getRealNumberNode() != null)
+                throw new RuntimeException("ERROR: Can't use boolean operator for numbers");
+            /*
+            if (boolOperationExtendNode.getBoolOperationNode().getBoolOperationsNode() != null) {
+                //visitBoolExpression(boolOperationExtendNode.getBoolOperationNode().getBoolOperationsNode());
+            }
+             */
+        }
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
