@@ -17,6 +17,20 @@ public class IfElseStatementNode extends StatementNode {
         this.elseStatementNode = elseStatementNode;
     }
 
+    public IfElseStatementNode(IfStatementNode ifStatementNode) {
+        this.ifStatementNode = ifStatementNode;
+    }
+
+    public IfElseStatementNode(IfStatementNode ifStatementNode, ElseStatementNode elseStatementNode) {
+        this.ifStatementNode = ifStatementNode;
+        this.elseStatementNode = elseStatementNode;
+    }
+
+    public IfElseStatementNode(IfStatementNode ifStatementNode, ArrayList<ElseIfStatementNode> elseIfStatementNodes) {
+        this.ifStatementNode = ifStatementNode;
+        this.elseIfStatementNodes = elseIfStatementNodes;
+    }
+
     public IfStatementNode getIfStatementNode() {
         return ifStatementNode;
     }
