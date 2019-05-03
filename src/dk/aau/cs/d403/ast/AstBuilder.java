@@ -371,12 +371,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitFunctionDecl(SpookParser.FunctionDeclContext ctx) {
         Enums.DataType returnType;
         if (ctx.dataType() != null)
-        {
             returnType = getDataType(ctx.dataType());
-        }
-        else if (ctx.VOID() != null) {
-            returnType = Enums.ReturnType.VOID;
-        }
         else
             throw new CompilerException("Invalid return type", getCodePosition(ctx));
 

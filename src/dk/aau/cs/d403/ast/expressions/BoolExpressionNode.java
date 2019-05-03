@@ -15,15 +15,14 @@ public class BoolExpressionNode extends ExpressionNode {
 
     @Override
     public String prettyPrint(int indent) {
-        if (boolOperationNodes != null) {
+        if (boolOperationsNode != null) {
             StringBuilder sb = new StringBuilder();
-            for (BoolOperationNode boolOperationNode: boolOperationNodes) {
-                sb.append(boolOperationNode.prettyPrint(indent)); //TODO: check if this makes sense
-            }
+            sb.append(boolOperationsNode.prettyPrint(indent)); //TODO: check if this makes sense
+
             return sb.toString();
         }
         else
-            return "" + boolLiteral;
+            return "Invalid BoolExpression";
     }
 
     private CodePosition codePosition;
