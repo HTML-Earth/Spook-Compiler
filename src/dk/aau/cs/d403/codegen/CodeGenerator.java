@@ -148,6 +148,13 @@ public class CodeGenerator {
         ForLoopExpressionNode expressionNode1 = visitForLoopExpressionNode(forLoopStatementNode.getForLoopExpressionNode1());
         ForLoopExpressionNode expressionNode2 = visitForLoopExpressionNode(forLoopStatementNode.getForLoopExpressionNode2());
 
+        if (expressionNode1.getVariableDeclarationNode() != null) {
+            statementNodes.add(expressionNode1.getVariableDeclarationNode());
+        }
+        else if (expressionNode1.getAssignmentNode() != null) {
+            statementNodes.add(expressionNode1.getAssignmentNode());
+        }
+
         if (forLoopStatementNode.getStatementNode() != null) {
             statementNodes.addAll(visitStatement(forLoopStatementNode.getStatementNode()));
         }
@@ -162,11 +169,11 @@ public class CodeGenerator {
 
     private ForLoopExpressionNode visitForLoopExpressionNode(ForLoopExpressionNode forLoopExpressionNode) {
         if (forLoopExpressionNode.getAssignmentNode() != null)
-            return new ForLoopExpressionNode(forLoopExpressionNode.getAssignmentNode());
+            return new ForLoopExpressionNode(visitAssignment(forLoopExpressionNode.getAssignmentNode()));
         else if (forLoopExpressionNode.getIntegerNumberNode() != null)
             return new ForLoopExpressionNode(forLoopExpressionNode.getIntegerNumberNode());
         else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
-            return new ForLoopExpressionNode(forLoopExpressionNode.getVariableDeclarationNode());
+            return new ForLoopExpressionNode((VariableDeclarationNode)visitDeclaration(forLoopExpressionNode.getVariableDeclarationNode()));
         else if (forLoopExpressionNode.getVariableName() != null)
             return new ForLoopExpressionNode(forLoopExpressionNode.getVariableName());
         else
