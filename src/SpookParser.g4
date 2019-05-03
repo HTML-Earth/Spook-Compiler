@@ -55,9 +55,6 @@ assignment
 
 expression
     : arithExpression
-    | vector2Expression
-    | vector3Expression
-    | vector4Expression
     | boolExpression
     | ternaryOperator
     | functionCall;
@@ -71,7 +68,7 @@ boolExpression: boolOperations;
 ternaryOperator: boolExpression QUESTION expression COLON expression;
 
 arithOperand
-    : realNumber | variableName | functionCall | swizzle;
+    : realNumber | variableName | functionCall | swizzle | vector2Expression | vector3Expression | vector4Expression;
 
 //Precedence, goes through low to high, ends at atom
 lowPrecedence

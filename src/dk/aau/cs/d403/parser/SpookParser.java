@@ -1,4 +1,4 @@
-// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -777,15 +777,6 @@ public class SpookParser extends Parser {
 		public ArithExpressionContext arithExpression() {
 			return getRuleContext(ArithExpressionContext.class,0);
 		}
-		public Vector2ExpressionContext vector2Expression() {
-			return getRuleContext(Vector2ExpressionContext.class,0);
-		}
-		public Vector3ExpressionContext vector3Expression() {
-			return getRuleContext(Vector3ExpressionContext.class,0);
-		}
-		public Vector4ExpressionContext vector4Expression() {
-			return getRuleContext(Vector4ExpressionContext.class,0);
-		}
 		public BoolExpressionContext boolExpression() {
 			return getRuleContext(BoolExpressionContext.class,0);
 		}
@@ -818,7 +809,7 @@ public class SpookParser extends Parser {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_expression);
 		try {
-			setState(207);
+			setState(204);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
@@ -832,41 +823,20 @@ public class SpookParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(201);
-				vector2Expression();
+				boolExpression();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(202);
-				vector3Expression();
+				ternaryOperator();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(203);
-				vector4Expression();
-				}
-				break;
-			case 5:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(204);
-				boolExpression();
-				}
-				break;
-			case 6:
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(205);
-				ternaryOperator();
-				}
-				break;
-			case 7:
-				enterOuterAlt(_localctx, 7);
-				{
-				setState(206);
 				functionCall();
 				}
 				break;
@@ -912,7 +882,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(209);
+			setState(206);
 			lowPrecedence();
 			}
 		}
@@ -962,15 +932,15 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(211);
+			setState(208);
 			match(LEFT_PAREN);
-			setState(212);
+			setState(209);
 			arithExpression();
-			setState(213);
+			setState(210);
 			match(COMMA);
-			setState(214);
+			setState(211);
 			arithExpression();
-			setState(215);
+			setState(212);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -1023,19 +993,19 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(217);
+			setState(214);
 			match(LEFT_PAREN);
+			setState(215);
+			arithExpression();
+			setState(216);
+			match(COMMA);
+			setState(217);
+			arithExpression();
 			setState(218);
-			arithExpression();
+			match(COMMA);
 			setState(219);
-			match(COMMA);
+			arithExpression();
 			setState(220);
-			arithExpression();
-			setState(221);
-			match(COMMA);
-			setState(222);
-			arithExpression();
-			setState(223);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -1088,23 +1058,23 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(225);
+			setState(222);
 			match(LEFT_PAREN);
+			setState(223);
+			arithExpression();
+			setState(224);
+			match(COMMA);
+			setState(225);
+			arithExpression();
 			setState(226);
-			arithExpression();
+			match(COMMA);
 			setState(227);
-			match(COMMA);
+			arithExpression();
 			setState(228);
-			arithExpression();
+			match(COMMA);
 			setState(229);
-			match(COMMA);
+			arithExpression();
 			setState(230);
-			arithExpression();
-			setState(231);
-			match(COMMA);
-			setState(232);
-			arithExpression();
-			setState(233);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -1148,7 +1118,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(235);
+			setState(232);
 			boolOperations();
 			}
 		}
@@ -1200,15 +1170,15 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(237);
+			setState(234);
 			boolExpression();
-			setState(238);
+			setState(235);
 			match(QUESTION);
-			setState(239);
+			setState(236);
 			expression();
-			setState(240);
+			setState(237);
 			match(COLON);
-			setState(241);
+			setState(238);
 			expression();
 			}
 		}
@@ -1235,6 +1205,15 @@ public class SpookParser extends Parser {
 		}
 		public SwizzleContext swizzle() {
 			return getRuleContext(SwizzleContext.class,0);
+		}
+		public Vector2ExpressionContext vector2Expression() {
+			return getRuleContext(Vector2ExpressionContext.class,0);
+		}
+		public Vector3ExpressionContext vector3Expression() {
+			return getRuleContext(Vector3ExpressionContext.class,0);
+		}
+		public Vector4ExpressionContext vector4Expression() {
+			return getRuleContext(Vector4ExpressionContext.class,0);
 		}
 		public ArithOperandContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1265,29 +1244,50 @@ public class SpookParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(243);
+				setState(240);
 				realNumber();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(244);
+				setState(241);
 				variableName();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(245);
+				setState(242);
 				functionCall();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(246);
+				setState(243);
 				swizzle();
+				}
+				break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(244);
+				vector2Expression();
+				}
+				break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(245);
+				vector3Expression();
+				}
+				break;
+			case 7:
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(246);
+				vector4Expression();
 				}
 				break;
 			}
@@ -1479,13 +1479,8 @@ public class SpookParser extends Parser {
 		try {
 			setState(275);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case DIGIT:
-			case DIGIT_NEGATIVE:
-			case FLOAT_DIGIT:
-			case FLOAT_DIGIT_NEGATIVE:
-			case SUB:
-			case ID:
+			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
+			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(268);
@@ -1502,7 +1497,7 @@ public class SpookParser extends Parser {
 				arithOperand();
 				}
 				break;
-			case LEFT_PAREN:
+			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(271);
@@ -1513,8 +1508,6 @@ public class SpookParser extends Parser {
 				match(RIGHT_PAREN);
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -4284,27 +4277,27 @@ public class SpookParser extends Parser {
 		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5\u00a2\n\5\3\6\3\6\3\6\3\6\3"+
 		"\6\3\6\5\6\u00aa\n\6\3\7\3\7\3\7\5\7\u00af\n\7\3\7\3\7\3\7\5\7\u00b4\n"+
 		"\7\7\7\u00b6\n\7\f\7\16\7\u00b9\13\7\3\b\3\b\3\b\3\b\3\b\5\b\u00c0\n\b"+
-		"\3\b\3\b\3\t\3\t\5\t\u00c6\n\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n"+
-		"\5\n\u00d2\n\n\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3"+
-		"\r\3\r\3\r\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\17\3\17"+
-		"\3\20\3\20\3\20\3\20\3\20\3\20\3\21\3\21\3\21\3\21\5\21\u00fa\n\21\3\22"+
-		"\3\22\3\22\3\22\7\22\u0100\n\22\f\22\16\22\u0103\13\22\3\23\3\23\3\23"+
-		"\3\23\7\23\u0109\n\23\f\23\16\23\u010c\13\23\3\24\5\24\u010f\n\24\3\24"+
-		"\3\24\3\24\3\24\3\24\5\24\u0116\n\24\3\25\3\25\3\26\3\26\3\27\5\27\u011d"+
-		"\n\27\3\27\3\27\7\27\u0121\n\27\f\27\16\27\u0124\13\27\3\30\3\30\3\30"+
-		"\3\30\3\30\3\30\3\30\5\30\u012d\n\30\3\31\3\31\5\31\u0131\n\31\3\31\3"+
-		"\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\5\32\u013d\n\32\3\33\3\33"+
-		"\3\34\3\34\3\35\3\35\5\35\u0145\n\35\3\36\3\36\3\36\5\36\u014a\n\36\3"+
-		"\36\3\36\3\37\3\37\3\37\3\37\3\37\5\37\u0153\n\37\3\37\3\37\3 \3 \3 \3"+
-		" \3 \5 \u015c\n \3!\3!\3\"\3\"\3#\3#\7#\u0164\n#\f#\16#\u0167\13#\3#\5"+
-		"#\u016a\n#\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3%\3&\3&\3&\3\'\3\'\3(\3("+
-		"\3)\3)\3*\3*\3+\3+\3,\3,\5,\u0187\n,\3-\3-\3.\3.\3.\3.\3.\3.\3.\3.\5."+
-		"\u0193\n.\3/\3/\3/\3/\5/\u0199\n/\3\60\3\60\3\60\3\60\5\60\u019f\n\60"+
-		"\3\60\3\60\3\61\3\61\3\61\3\61\7\61\u01a7\n\61\f\61\16\61\u01aa\13\61"+
-		"\3\61\3\61\3\62\3\62\3\62\5\62\u01b1\n\62\3\62\3\62\3\62\3\63\3\63\3\63"+
-		"\3\63\7\63\u01ba\n\63\f\63\16\63\u01bd\13\63\3\63\3\63\3\64\3\64\3\64"+
-		"\3\64\5\64\u01c5\n\64\3\64\3\64\3\64\3\64\3\64\3\64\3\64\5\64\u01ce\n"+
-		"\64\3\64\3\64\3\64\5\64\u01d3\n\64\3\65\3\65\3\65\3\65\3\65\5\65\u01da"+
+		"\3\b\3\b\3\t\3\t\5\t\u00c6\n\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\5\n\u00cf\n"+
+		"\n\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3"+
+		"\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\17\3\17\3\20\3\20\3"+
+		"\20\3\20\3\20\3\20\3\21\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u00fa\n\21"+
+		"\3\22\3\22\3\22\3\22\7\22\u0100\n\22\f\22\16\22\u0103\13\22\3\23\3\23"+
+		"\3\23\3\23\7\23\u0109\n\23\f\23\16\23\u010c\13\23\3\24\5\24\u010f\n\24"+
+		"\3\24\3\24\3\24\3\24\3\24\5\24\u0116\n\24\3\25\3\25\3\26\3\26\3\27\5\27"+
+		"\u011d\n\27\3\27\3\27\7\27\u0121\n\27\f\27\16\27\u0124\13\27\3\30\3\30"+
+		"\3\30\3\30\3\30\3\30\3\30\5\30\u012d\n\30\3\31\3\31\5\31\u0131\n\31\3"+
+		"\31\3\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\5\32\u013d\n\32\3\33"+
+		"\3\33\3\34\3\34\3\35\3\35\5\35\u0145\n\35\3\36\3\36\3\36\5\36\u014a\n"+
+		"\36\3\36\3\36\3\37\3\37\3\37\3\37\3\37\5\37\u0153\n\37\3\37\3\37\3 \3"+
+		" \3 \3 \3 \5 \u015c\n \3!\3!\3\"\3\"\3#\3#\7#\u0164\n#\f#\16#\u0167\13"+
+		"#\3#\5#\u016a\n#\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3%\3&\3&\3&\3\'\3\'"+
+		"\3(\3(\3)\3)\3*\3*\3+\3+\3,\3,\5,\u0187\n,\3-\3-\3.\3.\3.\3.\3.\3.\3."+
+		"\3.\5.\u0193\n.\3/\3/\3/\3/\5/\u0199\n/\3\60\3\60\3\60\3\60\5\60\u019f"+
+		"\n\60\3\60\3\60\3\61\3\61\3\61\3\61\7\61\u01a7\n\61\f\61\16\61\u01aa\13"+
+		"\61\3\61\3\61\3\62\3\62\3\62\5\62\u01b1\n\62\3\62\3\62\3\62\3\63\3\63"+
+		"\3\63\3\63\7\63\u01ba\n\63\f\63\16\63\u01bd\13\63\3\63\3\63\3\64\3\64"+
+		"\3\64\3\64\5\64\u01c5\n\64\3\64\3\64\3\64\3\64\3\64\3\64\3\64\5\64\u01ce"+
+		"\n\64\3\64\3\64\3\64\5\64\u01d3\n\64\3\65\3\65\3\65\3\65\3\65\5\65\u01da"+
 		"\n\65\3\66\3\66\5\66\u01de\n\66\3\66\3\66\3\67\3\67\7\67\u01e4\n\67\f"+
 		"\67\16\67\u01e7\13\67\3\67\3\67\3\67\38\38\38\38\39\39\39\59\u01f3\n9"+
 		"\3:\3:\3;\3;\3<\3<\5<\u01fb\n<\3=\3=\3>\3>\3?\3?\3@\3@\3A\3A\3A\2\2B\2"+
@@ -4312,8 +4305,8 @@ public class SpookParser extends Parser {
 		"NPRTVXZ\\^`bdfhjlnprtvxz|~\u0080\2\b\3\2$&\3\2\"#\3\2\13\f\3\2\23\24\4"+
 		"\2\'*,/\3\2\3\7\2\u0203\2\u0082\3\2\2\2\4\u008b\3\2\2\2\6\u008e\3\2\2"+
 		"\2\b\u00a1\3\2\2\2\n\u00a9\3\2\2\2\f\u00ab\3\2\2\2\16\u00ba\3\2\2\2\20"+
-		"\u00c5\3\2\2\2\22\u00d1\3\2\2\2\24\u00d3\3\2\2\2\26\u00d5\3\2\2\2\30\u00db"+
-		"\3\2\2\2\32\u00e3\3\2\2\2\34\u00ed\3\2\2\2\36\u00ef\3\2\2\2 \u00f9\3\2"+
+		"\u00c5\3\2\2\2\22\u00ce\3\2\2\2\24\u00d0\3\2\2\2\26\u00d2\3\2\2\2\30\u00d8"+
+		"\3\2\2\2\32\u00e0\3\2\2\2\34\u00ea\3\2\2\2\36\u00ec\3\2\2\2 \u00f9\3\2"+
 		"\2\2\"\u00fb\3\2\2\2$\u0104\3\2\2\2&\u0115\3\2\2\2(\u0117\3\2\2\2*\u0119"+
 		"\3\2\2\2,\u011c\3\2\2\2.\u012c\3\2\2\2\60\u012e\3\2\2\2\62\u013c\3\2\2"+
 		"\2\64\u013e\3\2\2\2\66\u0140\3\2\2\28\u0144\3\2\2\2:\u0146\3\2\2\2<\u014d"+
@@ -4348,22 +4341,22 @@ public class SpookParser extends Parser {
 		"\5> \2\u00bf\u00be\3\2\2\2\u00bf\u00c0\3\2\2\2\u00c0\u00c1\3\2\2\2\u00c1"+
 		"\u00c2\7\33\2\2\u00c2\17\3\2\2\2\u00c3\u00c6\5~@\2\u00c4\u00c6\5\62\32"+
 		"\2\u00c5\u00c3\3\2\2\2\u00c5\u00c4\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7\u00c8"+
-		"\7!\2\2\u00c8\u00c9\5\22\n\2\u00c9\21\3\2\2\2\u00ca\u00d2\5\24\13\2\u00cb"+
-		"\u00d2\5\26\f\2\u00cc\u00d2\5\30\r\2\u00cd\u00d2\5\32\16\2\u00ce\u00d2"+
-		"\5\34\17\2\u00cf\u00d2\5\36\20\2\u00d0\u00d2\58\35\2\u00d1\u00ca\3\2\2"+
-		"\2\u00d1\u00cb\3\2\2\2\u00d1\u00cc\3\2\2\2\u00d1\u00cd\3\2\2\2\u00d1\u00ce"+
-		"\3\2\2\2\u00d1\u00cf\3\2\2\2\u00d1\u00d0\3\2\2\2\u00d2\23\3\2\2\2\u00d3"+
-		"\u00d4\5\"\22\2\u00d4\25\3\2\2\2\u00d5\u00d6\7\32\2\2\u00d6\u00d7\5\24"+
-		"\13\2\u00d7\u00d8\7\35\2\2\u00d8\u00d9\5\24\13\2\u00d9\u00da\7\33\2\2"+
-		"\u00da\27\3\2\2\2\u00db\u00dc\7\32\2\2\u00dc\u00dd\5\24\13\2\u00dd\u00de"+
-		"\7\35\2\2\u00de\u00df\5\24\13\2\u00df\u00e0\7\35\2\2\u00e0\u00e1\5\24"+
-		"\13\2\u00e1\u00e2\7\33\2\2\u00e2\31\3\2\2\2\u00e3\u00e4\7\32\2\2\u00e4"+
-		"\u00e5\5\24\13\2\u00e5\u00e6\7\35\2\2\u00e6\u00e7\5\24\13\2\u00e7\u00e8"+
-		"\7\35\2\2\u00e8\u00e9\5\24\13\2\u00e9\u00ea\7\35\2\2\u00ea\u00eb\5\24"+
-		"\13\2\u00eb\u00ec\7\33\2\2\u00ec\33\3\2\2\2\u00ed\u00ee\5,\27\2\u00ee"+
-		"\35\3\2\2\2\u00ef\u00f0\5\34\17\2\u00f0\u00f1\7\37\2\2\u00f1\u00f2\5\22"+
-		"\n\2\u00f2\u00f3\7 \2\2\u00f3\u00f4\5\22\n\2\u00f4\37\3\2\2\2\u00f5\u00fa"+
-		"\5p9\2\u00f6\u00fa\5~@\2\u00f7\u00fa\58\35\2\u00f8\u00fa\5\62\32\2\u00f9"+
+		"\7!\2\2\u00c8\u00c9\5\22\n\2\u00c9\21\3\2\2\2\u00ca\u00cf\5\24\13\2\u00cb"+
+		"\u00cf\5\34\17\2\u00cc\u00cf\5\36\20\2\u00cd\u00cf\58\35\2\u00ce\u00ca"+
+		"\3\2\2\2\u00ce\u00cb\3\2\2\2\u00ce\u00cc\3\2\2\2\u00ce\u00cd\3\2\2\2\u00cf"+
+		"\23\3\2\2\2\u00d0\u00d1\5\"\22\2\u00d1\25\3\2\2\2\u00d2\u00d3\7\32\2\2"+
+		"\u00d3\u00d4\5\24\13\2\u00d4\u00d5\7\35\2\2\u00d5\u00d6\5\24\13\2\u00d6"+
+		"\u00d7\7\33\2\2\u00d7\27\3\2\2\2\u00d8\u00d9\7\32\2\2\u00d9\u00da\5\24"+
+		"\13\2\u00da\u00db\7\35\2\2\u00db\u00dc\5\24\13\2\u00dc\u00dd\7\35\2\2"+
+		"\u00dd\u00de\5\24\13\2\u00de\u00df\7\33\2\2\u00df\31\3\2\2\2\u00e0\u00e1"+
+		"\7\32\2\2\u00e1\u00e2\5\24\13\2\u00e2\u00e3\7\35\2\2\u00e3\u00e4\5\24"+
+		"\13\2\u00e4\u00e5\7\35\2\2\u00e5\u00e6\5\24\13\2\u00e6\u00e7\7\35\2\2"+
+		"\u00e7\u00e8\5\24\13\2\u00e8\u00e9\7\33\2\2\u00e9\33\3\2\2\2\u00ea\u00eb"+
+		"\5,\27\2\u00eb\35\3\2\2\2\u00ec\u00ed\5\34\17\2\u00ed\u00ee\7\37\2\2\u00ee"+
+		"\u00ef\5\22\n\2\u00ef\u00f0\7 \2\2\u00f0\u00f1\5\22\n\2\u00f1\37\3\2\2"+
+		"\2\u00f2\u00fa\5p9\2\u00f3\u00fa\5~@\2\u00f4\u00fa\58\35\2\u00f5\u00fa"+
+		"\5\62\32\2\u00f6\u00fa\5\26\f\2\u00f7\u00fa\5\30\r\2\u00f8\u00fa\5\32"+
+		"\16\2\u00f9\u00f2\3\2\2\2\u00f9\u00f3\3\2\2\2\u00f9\u00f4\3\2\2\2\u00f9"+
 		"\u00f5\3\2\2\2\u00f9\u00f6\3\2\2\2\u00f9\u00f7\3\2\2\2\u00f9\u00f8\3\2"+
 		"\2\2\u00fa!\3\2\2\2\u00fb\u0101\5$\23\2\u00fc\u00fd\5*\26\2\u00fd\u00fe"+
 		"\5$\23\2\u00fe\u0100\3\2\2\2\u00ff\u00fc\3\2\2\2\u0100\u0103\3\2\2\2\u0101"+
@@ -4448,7 +4441,7 @@ public class SpookParser extends Parser {
 		"\u01fbw\3\2\2\2\u01fc\u01fd\t\7\2\2\u01fdy\3\2\2\2\u01fe\u01ff\7\62\2"+
 		"\2\u01ff{\3\2\2\2\u0200\u0201\7\62\2\2\u0201}\3\2\2\2\u0202\u0203\7\62"+
 		"\2\2\u0203\177\3\2\2\2\u0204\u0205\7\62\2\2\u0205\u0081\3\2\2\2-\u0086"+
-		"\u0088\u0092\u00a1\u00a9\u00ae\u00b3\u00b7\u00bf\u00c5\u00d1\u00f9\u0101"+
+		"\u0088\u0092\u00a1\u00a9\u00ae\u00b3\u00b7\u00bf\u00c5\u00ce\u00f9\u0101"+
 		"\u010a\u010e\u0115\u011c\u0122\u012c\u0130\u013c\u0144\u0149\u0152\u015b"+
 		"\u0165\u0169\u0186\u0192\u0198\u019e\u01a6\u01a8\u01b0\u01bb\u01c4\u01cd"+
 		"\u01d2\u01d9\u01dd\u01e5\u01f2\u01fa";
