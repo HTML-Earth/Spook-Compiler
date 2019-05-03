@@ -9,18 +9,18 @@ import java.util.ArrayList;
 public class BoolOperationsNode implements ASTnode {
     private BoolOperationNode boolOperationNode;
     private ArrayList<BoolOperationExtendNode> boolOperationExtendNodes;
-    private Enums.boolOperator optionalNOT;
+    private Enums.BoolOperator optionalNOT;
 
-    public BoolOperationsNode(BoolOperationNode boolOperationNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes, Enums.boolOperator optionalNOT) {
-        if (optionalNOT != Enums.boolOperator.NOT)
+    public BoolOperationsNode(BoolOperationNode boolOperationNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes, Enums.BoolOperator optionalNOT) {
+        if (optionalNOT != Enums.BoolOperator.NOT)
             throw new IllegalArgumentException("Boolean Operator should be !");
         this.boolOperationNode = boolOperationNode;
         this.boolOperationExtendNodes = boolOperationExtendNodes;
         this.optionalNOT = optionalNOT;
     }
 
-    public BoolOperationsNode(BoolOperationNode boolOperationNode, Enums.boolOperator optionalNOT) {
-        if (optionalNOT != Enums.boolOperator.NOT)
+    public BoolOperationsNode(BoolOperationNode boolOperationNode, Enums.BoolOperator optionalNOT) {
+        if (optionalNOT != Enums.BoolOperator.NOT)
             throw new IllegalArgumentException("Boolean Operator should be !");
         this.boolOperationNode = boolOperationNode;
         this.optionalNOT = optionalNOT;
@@ -35,15 +35,11 @@ public class BoolOperationsNode implements ASTnode {
         return boolOperationNode;
     }
 
-    public BoolOperationNode getBoolOperationsNode() {
-        return boolOperationNode;
-    }
-
     public ArrayList<BoolOperationExtendNode> getBoolOperationExtendNodes() {
         return boolOperationExtendNodes;
     }
 
-    public Enums.boolOperator getOptionalNOT() {
+    public Enums.BoolOperator getOptionalNOT() {
         return optionalNOT;
     }
 

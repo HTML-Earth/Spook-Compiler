@@ -19,6 +19,10 @@ public class ReturnNode extends StatementNode {
             return "Invalid return statement";
     }
 
+    public ExpressionNode getExpressionNode() {
+        return expressionNode;
+    }
+
     private CodePosition codePosition;
 
     @Override

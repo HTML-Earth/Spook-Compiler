@@ -2,26 +2,15 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.CodePosition;
 
-import java.util.ArrayList;
-
 public class BoolExpressionNode extends ExpressionNode {
-    private boolean boolLiteral;
-    private ArrayList<BoolOperationNode> boolOperationNodes;
+    private BoolOperationsNode boolOperationsNode;
 
-    public BoolExpressionNode(boolean boolLiteral) {
-        this.boolLiteral = boolLiteral;
+    public BoolExpressionNode(BoolOperationsNode boolOperationsNode) {
+        this.boolOperationsNode = boolOperationsNode;
     }
 
-    public BoolExpressionNode(ArrayList<BoolOperationNode> boolOperationNodes) {
-        this.boolOperationNodes = boolOperationNodes;
-    }
-
-    public boolean isBoolLiteral() {
-        return boolLiteral;
-    }
-
-    public ArrayList<BoolOperationNode> getBoolOperationNodes() {
-        return boolOperationNodes;
+    public BoolOperationsNode getBoolOperationsNode() {
+        return boolOperationsNode;
     }
 
     @Override

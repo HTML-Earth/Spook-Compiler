@@ -55,7 +55,7 @@ public class SpookParser extends Parser {
 			"conditionalStatement", "ifElseStatement", "iterativeStatement", "forStatement", 
 			"forLoopExpression", "classDecl", "classBlock", "functionDecl", "functionArgs", 
 			"functionArg", "functionBlock", "returnStatement", "realNumber", "integerNumber", 
-			"boolOperator", "function", "returnType", "classType", "dataType", "predefinedFunctionName", 
+			"BoolOperator", "function", "returnType", "classType", "dataType", "predefinedFunctionName",
 			"colorName", "objectVariableName", "functionName", "variableName", "className"
 		};
 	}

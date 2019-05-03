@@ -141,7 +141,7 @@ public class Enums {
         }
     }
 
-    public enum boolOperator {
+    public enum BoolOperator {
         EQUAL,
         OR,
         AND,
@@ -153,7 +153,7 @@ public class Enums {
         NOT
     }
 
-    public static String boolOperatorToString(boolOperator boolOperator) {
+    public static String boolOperatorToString(BoolOperator boolOperator) {
         switch (boolOperator) {
             case EQUAL:
                 return "==";

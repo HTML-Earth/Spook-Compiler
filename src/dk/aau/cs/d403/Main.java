@@ -5,7 +5,7 @@ import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
-import dk.aau.cs.d403.semantics.SymbolTableFilling;
+import dk.aau.cs.d403.semantics.TypeChecking;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -91,8 +91,8 @@ public class Main {
         ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
 
         // CONTEXT ANALYSIS
-        SymbolTableFilling symbolTableFilling = new SymbolTableFilling();
-        symbolTableFilling.visitProgram(ast);
+        TypeChecking typeChecking = new TypeChecking();
+        typeChecking.visitProgram(ast);
 
         // CODE GENERATION
         CodeGenerator codeGenerator = new CodeGenerator();
