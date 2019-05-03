@@ -31,7 +31,8 @@ statement
     | assignment SEMICOLON
     | functionCall SEMICOLON
     | conditionalStatement
-    | iterativeStatement;
+    | iterativeStatement
+    | returnStatement;
 
 
 
