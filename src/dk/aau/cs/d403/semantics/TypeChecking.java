@@ -28,6 +28,7 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Color");
         this.listOfPredefinedClasses.add("CircleGradient");
         this.listOfPredefinedClasses.add("LineGradient");
+        this.listOfPredefinedClasses.add("Scene");
 
         this.booleanOperatorList = new ArrayList<>();
         this.booleanOperatorList.add(Enums.BoolOperator.AND);
@@ -294,58 +295,62 @@ public class TypeChecking {
         ObjectDeclarationNode objectDeclarationNode;
         ClassDeclarationNode classDeclarationNode;
 
-        // Check if variable is declared and initialized
-        if (retrieveSymbol(variableName) != null) {
-            if (!(retrieveSymbol(variableName) instanceof ObjectDeclarationNode))
-                throw new RuntimeException("ERROR: Variable is not an object declaration.");
+        if (!listOfPredefinedClasses.contains(variableName)) {
+            
+            // Check if variable is declared and initialized
+            if (retrieveSymbol(variableName) != null) {
+                if (!(retrieveSymbol(variableName) instanceof ObjectDeclarationNode))
+                    throw new RuntimeException("ERROR: Variable is not an object declaration.");
+                else
+                    objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
+            }
             else
-                objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
-        }
-        else
-            throw new RuntimeException("ERROR: Variable is not declared.");
+                throw new RuntimeException("ERROR: Variable is not declared.");
 
-        if (objectDeclarationNode != null) {
-            // If it is a custom object function call
-            if (!(listOfPredefinedClasses.contains(objectDeclarationNode.getObjectType()))) {
-                classDeclarationNode = (ClassDeclarationNode) retrieveSymbol(objectDeclarationNode.getObjectType());
-                boolean existingFunction = false;
-                boolean sameFunction = true;
-                Enums.DataType dataType = null;
+            if (objectDeclarationNode != null) {
 
-                if (classDeclarationNode != null && classDeclarationNode.getClassBlockNode() != null) {
+                // If it is a custom object function call
+                if (!(listOfPredefinedClasses.contains(objectDeclarationNode.getObjectType()))) {
+                    classDeclarationNode = (ClassDeclarationNode) retrieveSymbol(objectDeclarationNode.getObjectType());
+                    boolean existingFunction = false;
+                    boolean sameFunction = true;
+                    Enums.DataType dataType = null;
 
-                    // Check if class has the function used
-                    for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
+                    if (classDeclarationNode != null && classDeclarationNode.getClassBlockNode() != null) {
 
-                        // Look for the function with the same name
-                        if (functionDeclarationNode.getFunctionName().equals(functionName)) {
-                            existingFunction = true;
+                        // Check if class has the function used
+                        for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
 
-                            // Check the data types of the arguments given
-                            if (functionDeclarationNode.getFunctionArgNodes() != null) {
-                                ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
+                            // Look for the function with the same name
+                            if (functionDeclarationNode.getFunctionName().equals(functionName)) {
+                                existingFunction = true;
 
-                                // Check each argument if its data type matches the function's parameters
-                                for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
-                                    dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
-                                    if (!(functionArgNodes.get(i).getDataType().equals(dataType))) {
-                                        sameFunction = false;
-                                        break;
+                                // Check the data types of the arguments given
+                                if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                                    ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
+
+                                    // Check each argument if its data type matches the function's parameters
+                                    for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
+                                        dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
+                                        if (!(functionArgNodes.get(i).getDataType().equals(dataType))) {
+                                            sameFunction = false;
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    else
+                        throw new RuntimeException("ERROR: Class does not exist.");
+
+                    if (!existingFunction)
+                        throw new RuntimeException("ERROR: No functions existed with the given function name");
+                    if (!sameFunction)
+                        throw new RuntimeException("ERROR: No function with the given parameters exists");
+
+                    return dataType;
                 }
-                else
-                    throw new RuntimeException("ERROR: Class does not exist.");
-
-                if (!existingFunction)
-                    throw new RuntimeException("ERROR: No functions existed with the given function name");
-                if (!sameFunction)
-                    throw new RuntimeException("ERROR: No function with the given parameters exists");
-
-                return dataType;
             }
         }
         return null;
