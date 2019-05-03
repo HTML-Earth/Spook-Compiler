@@ -5,29 +5,29 @@ import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
 public class BoolOperationExtendNode implements ASTnode {
-    private Enums.boolOperator boolOperator;
-    private Enums.boolOperator optionalNOT;
+    private Enums.BoolOperator boolOperator;
+    private Enums.BoolOperator optionalNOT;
     private BoolOperationNode boolOperationNode;
 
 
-    public BoolOperationExtendNode(Enums.boolOperator boolOperator, BoolOperationNode boolOperationNode) {
+    public BoolOperationExtendNode(Enums.BoolOperator boolOperator, BoolOperationNode boolOperationNode) {
         this.boolOperator = boolOperator;
         this.boolOperationNode = boolOperationNode;
     }
 
-    public BoolOperationExtendNode(Enums.boolOperator boolOperator, Enums.boolOperator optionalNOT, BoolOperationNode boolOperationNode) {
-        if (optionalNOT != Enums.boolOperator.NOT)
+    public BoolOperationExtendNode(Enums.BoolOperator boolOperator, Enums.BoolOperator optionalNOT, BoolOperationNode boolOperationNode) {
+        if (optionalNOT != Enums.BoolOperator.NOT)
             throw new IllegalArgumentException("Boolean operator should be !");
         this.boolOperator = boolOperator;
         this.optionalNOT = optionalNOT;
         this.boolOperationNode = boolOperationNode;
     }
 
-    public Enums.boolOperator getBoolOperator() {
+    public Enums.BoolOperator getBoolOperator() {
         return boolOperator;
     }
 
-    public Enums.boolOperator getOptionalNOT() {
+    public Enums.BoolOperator getOptionalNOT() {
         return optionalNOT;
     }
 

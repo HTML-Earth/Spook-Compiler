@@ -9,7 +9,6 @@ import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
@@ -221,7 +220,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolOperations(SpookParser.BoolOperationsContext ctx) {
-        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        Enums.BoolOperator optionalNOT = Enums.BoolOperator.NOT;
         BoolOperationNode boolOperationNode = ((BoolOperationNode) visitBoolOperation(ctx.boolOperation()));
         ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = new ArrayList<>();
 
@@ -250,8 +249,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx) {
-        Enums.boolOperator boolOperator = getBoolOperator(ctx.boolOperator());
-        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        Enums.BoolOperator boolOperator = getBoolOperator(ctx.boolOperator());
+        Enums.BoolOperator optionalNOT = Enums.BoolOperator.NOT;
         BoolOperationNode boolOperationNode = ((BoolOperationNode) visitBoolOperation(ctx.boolOperation()));
 
         if (ctx.boolOperation() != null && ctx.boolOperator() != null & ctx.NOT() != null) {
@@ -883,25 +882,25 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return operator;
     }
 
-    private  Enums.boolOperator getBoolOperator (SpookParser.BoolOperatorContext ctx) {
-        Enums.boolOperator boolOperator;
+    private Enums.BoolOperator getBoolOperator (SpookParser.BoolOperatorContext ctx) {
+        Enums.BoolOperator boolOperator;
 
         if (ctx.AND() != null)
-            boolOperator = Enums.boolOperator.AND;
+            boolOperator = Enums.BoolOperator.AND;
         else if (ctx.EQUAL() != null)
-            boolOperator = Enums.boolOperator.EQUAL;
+            boolOperator = Enums.BoolOperator.EQUAL;
         else if (ctx.GREATER_OR_EQUAL() != null)
-            boolOperator = Enums.boolOperator.GREATER_OR_EQUAL;
+            boolOperator = Enums.BoolOperator.GREATER_OR_EQUAL;
         else if (ctx.GREATER_THAN() != null)
-            boolOperator = Enums.boolOperator.GREATER_THAN;
+            boolOperator = Enums.BoolOperator.GREATER_THAN;
         else if (ctx.LESS_OR_EQUAL() != null)
-            boolOperator = Enums.boolOperator.LESS_OR_EQUAL;
+            boolOperator = Enums.BoolOperator.LESS_OR_EQUAL;
         else if (ctx.LESS_THAN() != null)
-            boolOperator = Enums.boolOperator.LESS_THAN;
+            boolOperator = Enums.BoolOperator.LESS_THAN;
         else if (ctx.NOT_EQUAL() != null)
-            boolOperator = Enums.boolOperator.NOT_EQUAL;
+            boolOperator = Enums.BoolOperator.NOT_EQUAL;
         else if (ctx.OR() != null)
-            boolOperator = Enums.boolOperator.OR;
+            boolOperator = Enums.BoolOperator.OR;
         else throw new CompilerException("Boolean operator is unknown", getCodePosition(ctx));
         return boolOperator;
     }
