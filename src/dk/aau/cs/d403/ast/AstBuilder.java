@@ -799,8 +799,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             ArithExpressionNode fixedExpressionNode = new ArithExpressionNode(new LowPrecedenceNode(highPrecedenceNodes));
 
-            if (expressionNode1.getIntegerNumberNode() != null) {
-                fixedExpressionNode1 = new ForLoopExpressionNode(new IntegerNumberNode((int)expr1));
+            if (expressionNode1.getRealNumberNode() != null) {
+                fixedExpressionNode1 = new ForLoopExpressionNode(new RealNumberNode(expr1));
             }
             else if (expressionNode1.getVariableDeclarationNode() != null) {
                 if (expressionNode1.getVariableDeclarationNode().getAssignmentNode() != null) {
@@ -818,7 +818,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 ));
             }
 
-            ForLoopExpressionNode fixedExpressionNode2 = new ForLoopExpressionNode(new IntegerNumberNode((int)expr1));
+            ForLoopExpressionNode fixedExpressionNode2 = new ForLoopExpressionNode(new RealNumberNode(expr1));
 
             if (ctx.statement() != null) {
                 statementNode = (StatementNode) visitStatement(ctx.statement());
@@ -844,14 +844,20 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitForLoopExpression(SpookParser.ForLoopExpressionContext ctx) {
         if (ctx.assignment() != null)
             return new ForLoopExpressionNode((AssignmentNode) visitAssignment(ctx.assignment()));
-        else if (ctx.DIGIT() != null)
-            return new ForLoopExpressionNode(new IntegerNumberNode(Integer.valueOf(ctx.DIGIT().getSymbol().getText())));
+        else if (ctx.realNumber() != null)
+            return new ForLoopExpressionNode((RealNumberNode) visitRealNumber(ctx.realNumber()));
         else if (ctx.variableName() != null)
             return new ForLoopExpressionNode(ctx.variableName().getText());
         else if (ctx.variableDecl() != null)
             return new ForLoopExpressionNode((VariableDeclarationNode) visitVariableDecl(ctx.variableDecl()));
         else
             throw new CompilerException("Invalid ForLoop expression", getCodePosition(ctx));
+    }
+
+    @Override
+    public ASTnode visitRealNumber(SpookParser.RealNumberContext ctx) {
+        float value = getRealNumberValue(ctx);
+        return new RealNumberNode(value);
     }
 
     private float getRealNumberValue(SpookParser.RealNumberContext ctx) {
@@ -972,8 +978,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private float evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
         if (expressionNode.getAssignmentNode() != null)
             return evaluateAssignment(expressionNode.getAssignmentNode());
-        else if (expressionNode.getIntegerNumberNode() != null)
-            return expressionNode.getIntegerNumberNode().getNumber();
+        else if (expressionNode.getRealNumberNode() != null)
+            return expressionNode.getRealNumberNode().getNumber();
         else if (expressionNode.getVariableDeclarationNode() != null)
             return evaluateVariableDeclaration(expressionNode.getVariableDeclarationNode());
         else if (expressionNode.getVariableName() != null)

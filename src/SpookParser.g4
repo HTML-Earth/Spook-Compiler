@@ -172,7 +172,7 @@ iterativeStatement
 forStatement
     : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
 
-forLoopExpression: (DIGIT | variableDecl | variableName | assignment);
+forLoopExpression: (realNumber | variableDecl | variableName | assignment);
 
 
 
