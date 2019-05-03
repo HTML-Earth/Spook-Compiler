@@ -128,7 +128,7 @@ public class CodeGenerator {
         else if (statementNode instanceof DeclarationNode)
             statementNodes.add(visitDeclaration((DeclarationNode)statementNode));
         else if (statementNode instanceof IfElseStatementNode)
-            statementNodes.add(statementNode); //TODO: visitIfElseStatement((IfElseStatementNode)statementNode);
+            statementNodes.add(visitIfElseStatement((IfElseStatementNode)statementNode));
         else if (statementNode instanceof ObjectFunctionCallNode)
             statementNodes.add(visitObjectFunctionCall((ObjectFunctionCallNode)statementNode));
         else if (statementNode instanceof ReturnNode)
@@ -179,6 +179,95 @@ public class CodeGenerator {
         else
             return forLoopExpressionNode;
     }
+
+    private IfElseStatementNode visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
+
+        IfStatementNode ifStatementNode = visitIfStatementNode(ifElseStatementNode.getIfStatementNode());
+        ElseStatementNode elseStatementNode = null;
+        ArrayList<ElseIfStatementNode> elseIfStatementNodes = new ArrayList<>();
+
+        if (ifElseStatementNode.getElseIfStatementNodes() != null) {
+            for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()) {
+                elseIfStatementNodes.add(visitElseIfStatementNode(elseIfStatementNode));
+            }
+        }
+
+        if (ifElseStatementNode.getElseStatementNode() != null) {
+            elseStatementNode = visitElseStatementNode(ifElseStatementNode.getElseStatementNode());
+        }
+
+        if (elseIfStatementNodes != null) {
+            if (elseStatementNode != null) {
+                return new IfElseStatementNode(ifStatementNode, elseIfStatementNodes, elseStatementNode);
+            }
+            else
+                return new IfElseStatementNode(ifStatementNode, elseIfStatementNodes);
+        }
+        else if (elseStatementNode != null) {
+            return new IfElseStatementNode(ifStatementNode, elseStatementNode);
+        }
+        else
+            return new IfElseStatementNode(ifStatementNode);
+    }
+
+    private IfStatementNode visitIfStatementNode(IfStatementNode ifStatementNode) {
+        BoolExpressionNode boolExpressionNode = null;
+        BlockNode blockNode;
+        StatementNode statementNode;
+
+        if (ifStatementNode.getIfBool() != null) {
+            boolExpressionNode = visitBoolExpression(ifStatementNode.getIfBool());
+        }
+
+        if (ifStatementNode.getIfBlock() != null) {
+            blockNode = visitBlock(ifStatementNode.getIfBlock());
+            return new IfStatementNode(boolExpressionNode, blockNode);
+        }
+        else if (ifStatementNode.getIfStatement() != null){
+            statementNode = visitStatement(ifStatementNode.getIfStatement()).get(0); //TODO fix get(0) in this function and the 2 next.
+            return new IfStatementNode(boolExpressionNode, statementNode);
+        }
+        else
+            throw new CompilerException("Invalid if-statement", ifStatementNode.getCodePosition());
+    }
+
+    private ElseStatementNode visitElseStatementNode(ElseStatementNode elseStatementNode) {
+        BlockNode blockNode;
+        StatementNode statementNode;
+
+        if (elseStatementNode.getElseBlock() != null) {
+            blockNode = visitBlock(elseStatementNode.getElseBlock());
+            return new ElseStatementNode(blockNode);
+        }
+        else if (elseStatementNode.getElseStatement() != null) {
+            statementNode = visitStatement(elseStatementNode.getElseStatement()).get(0);
+            return new ElseStatementNode(statementNode);
+        }
+        else
+            throw new CompilerException("Invalid else-statement", elseStatementNode.getCodePosition());
+    }
+
+    private ElseIfStatementNode visitElseIfStatementNode(ElseIfStatementNode elseIfStatementNode) {
+        BoolExpressionNode boolExpressionNode = null;
+        BlockNode blockNode;
+        StatementNode statementNode;
+
+        if (elseIfStatementNode.getElseIfBool() != null) {
+            boolExpressionNode = visitBoolExpression(elseIfStatementNode.getElseIfBool());
+        }
+
+        if (elseIfStatementNode.getElseIfBlock() != null) {
+            blockNode = visitBlock(elseIfStatementNode.getElseIfBlock());
+            return new ElseIfStatementNode(boolExpressionNode, blockNode);
+        }
+        else if (elseIfStatementNode.getElseIfStatement() != null){
+            statementNode = visitStatement(elseIfStatementNode.getElseIfStatement()).get(0); //TODO fix get(0) in this function and the 2 next.
+            return new ElseIfStatementNode(boolExpressionNode, statementNode);
+        }
+        else
+            throw new CompilerException("Invalid else-if-statement", elseIfStatementNode.getCodePosition());
+    }
+
 
     private AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
         ExpressionNode expressionNode = visitExpression(assignmentNode.getExpressionNode());
