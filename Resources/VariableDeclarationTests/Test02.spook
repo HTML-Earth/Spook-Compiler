@@ -1,0 +1,4 @@
+Shader {
+    Int var1;
+    Int var1;
+}
