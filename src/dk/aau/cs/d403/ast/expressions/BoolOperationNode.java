@@ -38,7 +38,7 @@ public class BoolOperationNode implements ASTnode {
         return boolOperationsNode;
     }
 
-    public boolean getBoolLiteral() {
+    public Boolean getBoolLiteral() {
         return boolLiteral;
     }
 
