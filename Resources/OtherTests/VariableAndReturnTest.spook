@@ -1,15 +1,9 @@
 Shader{}
 
+Num test() {
+Num i = 1;
+return i;
+#Hej
 
-Num pdsa(){
-
-    Num afe = 1;
-
-    if (true)
-        return afe;
-    else
-        return afe - 1;
-
-    return 10;
-};
+}
 

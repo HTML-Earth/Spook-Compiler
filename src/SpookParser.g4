@@ -8,7 +8,7 @@ options { tokenVocab=SpookLexer; }
 // Comments, Classes and functions can be declared outside (under) of the main function
 // variableName to catch errors
 program
-    : main (comment | classDecl | functionDecl | variableName)*;
+    : main (classDecl | functionDecl | variableName)*;
 
 
 
@@ -19,11 +19,7 @@ main
     : MAIN block;
 
 // Main block
-block: LEFT_BRACKET (statement | comment)* RIGHT_BRACKET;
-
-// Comment: Single-line
-comment
-    : COMMENT_STRING;
+block: LEFT_BRACKET (statement)* RIGHT_BRACKET;
 
 // Statements
 statement
@@ -185,7 +181,7 @@ classDecl
     : CLASS className ((EXTENDS | IMPLEMENTS) className)? classBlock;
 
 // Class block
-classBlock: LEFT_BRACKET (declaration | constructor | functionDecl | comment)* RIGHT_BRACKET;
+classBlock: LEFT_BRACKET (declaration | constructor | functionDecl)* RIGHT_BRACKET;
 
 // Class constructor
 constructor: className LEFT_PAREN functionArgs? RIGHT_PAREN constructorBlock;
@@ -207,7 +203,7 @@ functionArg
     : (dataType | className) variableName;
 
 // Function block
-functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
+functionBlock: LEFT_BRACKET (statement)* returnStatement RIGHT_BRACKET;
 
 // Return statement
 returnStatement: RETURN expression SEMICOLON;

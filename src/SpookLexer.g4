@@ -93,5 +93,5 @@ fragment COLOR_SWIZZLE_MASK_RULE
     | 'a';
 
 // MISC
-COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')*;
+COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')* -> skip;
 WS: [ \t\r\n]+ -> skip;
