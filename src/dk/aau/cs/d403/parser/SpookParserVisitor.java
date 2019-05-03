@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -28,12 +28,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBlock(SpookParser.BlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#comment}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComment(SpookParser.CommentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#statement}.
 	 * @param ctx the parse tree
