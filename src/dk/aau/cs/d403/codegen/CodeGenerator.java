@@ -84,15 +84,16 @@ public class CodeGenerator {
             }
         }
 
+
         for (SpookObject object : scene.getChildren()) {
             sb.append("\t");
             sb.append(object.getDeclaration());
             sb.append("\n\n");
         }
 
-        for (SpookObject object : scene.getChildren()) {
+        for(int i = scene.getChildren().size()-1; i >= 0; i--) {
             sb.append("\t");
-            sb.append(((Shape)object).getCheckCall());
+            sb.append(((Shape)scene.getChildren().get(i)).getCheckCall());
             sb.append("\n\n");
         }
 
