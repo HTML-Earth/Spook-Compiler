@@ -129,8 +129,7 @@ objectFunctionCall
 
 // Object arguments
 objectArgs
-    : objectArg COMMA objectArgs
-    | objectArg;
+    : objectArg (COMMA objectArg)*;
 objectArg
     : lowPrecedence;
 
