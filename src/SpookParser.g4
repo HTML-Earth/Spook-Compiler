@@ -55,7 +55,6 @@ assignment
 
 expression
     : arithExpression
-    | boolExpression
     | ternaryOperator
     | functionCall;
 
@@ -91,17 +90,17 @@ lowOperator
 
 // Recursive boolean operations
 boolOperations
-    : NOT? boolOperation boolOperationExtend*;
+    : NOT? boolOperation boolOperationExtend*
+    | NOT? arithExpression boolOperationExtend+;
 
 // Boolean operations
 boolOperation
     : BOOL_LITERAL
-    | variableName
-    | LEFT_PAREN boolOperations RIGHT_PAREN
-    | realNumber;
+    | functionCall
+    | LEFT_PAREN boolOperations RIGHT_PAREN;
 
 boolOperationExtend
-    : boolOperator NOT? boolOperation;
+    : boolOperator NOT? (boolOperation | arithExpression);
 
 // Swizzling
 swizzle
