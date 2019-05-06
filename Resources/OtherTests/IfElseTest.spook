@@ -1,8 +1,12 @@
 Shader{
     Circle circle = (50, Color.black());
     if (true) {
+    #Hej
         circle.setPosition(500, 500);
     }
+    Rectangle rec = (50, 100, Color.yellow());
+    rec.setPosition(500, 500);
     Scene.add(circle);
+    Scene.add(rec);
 
 }
