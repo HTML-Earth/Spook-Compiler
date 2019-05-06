@@ -11,17 +11,6 @@ Shader {
 
     Num swayFace = -sin(Time * 0.2 - 2) * -8;
 
-    Circle eye1 = (20, Color.black());
-    Circle eye2 = (15, Color.black());
-    eye1.setPosition(xPos + 100 + swayFace, yPos + 220 + hoverEyes);
-    eye2.setPosition(xPos + 140 + swayFace, yPos + 230 + hoverEyes);
-    Scene.add(eye1);
-    Scene.add(eye2);
-
-    Circle moufHole = (35, Color.black());
-    moufHole.setPosition(xPos + 190 + swayFace, yPos + 130 + hoverMouf);
-    Scene.add(moufHole);
-
     Circle top1 = (40, Color.white());
     Circle top2 = (40, Color.white());
     top1.setPosition(xPos + 130, yPos + 250);
@@ -43,6 +32,17 @@ Shader {
         tip.setPosition(xPos + 200 + sin(frac - 1) * 150, yPos + 128 - cos(frac * 1.5 - 1) * 90 + hoverTips);
         Scene.add(tip1);
     }
+
+    Circle eye1 = (20, Color.black());
+    Circle eye2 = (15, Color.black());
+    eye1.setPosition(xPos + 100 + swayFace, yPos + 220 + hoverEyes);
+    eye2.setPosition(xPos + 140 + swayFace, yPos + 230 + hoverEyes);
+    Scene.add(eye1);
+    Scene.add(eye2);
+
+    Circle moufHole = (35, Color.black());
+    moufHole.setPosition(xPos + 190 + swayFace, yPos + 130 + hoverMouf);
+    Scene.add(moufHole);
 
     Scene.setColor(Color.black());
 }
