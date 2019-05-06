@@ -176,7 +176,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("Invalid expression", getCodePosition(ctx));
     }
 
-
+    @Override
     public ASTnode visitArithExpression(SpookParser.ArithExpressionContext ctx) {
         return new ArithExpressionNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
     }
