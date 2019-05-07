@@ -42,6 +42,10 @@ public class Vector2 {
         return new Vector2(x,y);
     }
 
+    public static Vector2 add(Vector2 a, Vector2 b) {
+        return new Vector2(ObjectArgumentNode.add(a.getX(), b.getX()), ObjectArgumentNode.add(a.getY(), b.getY()));
+    }
+
     public static String GLSLPrint(Vector2 vector) {
         return "(" +
                 vector.getX().prettyPrint(0) + ", " +

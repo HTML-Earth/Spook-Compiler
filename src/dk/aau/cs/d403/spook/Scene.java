@@ -31,6 +31,13 @@ public class Scene extends SpookObject implements Colorable {
         throw new RuntimeException("Scene rotation cannot be changed");
     }
 
+    @Override
+    public void setParent(SpookObject parent)
+    {
+        throw new RuntimeException("Cannot set Scene's parent");
+    }
+
+    @Override
     public SpookObject getParent() {
         return null;
     }
