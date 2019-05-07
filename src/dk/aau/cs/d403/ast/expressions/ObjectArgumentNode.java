@@ -40,4 +40,20 @@ public class ObjectArgumentNode implements ASTnode {
     public static ObjectArgumentNode add(ObjectArgumentNode a, ObjectArgumentNode b) {
         return new ObjectArgumentNode(LowPrecedenceNode.add(a.getLowPrecedence(), b.getLowPrecedence()));
     }
+
+    public static ObjectArgumentNode subtract(ObjectArgumentNode a, ObjectArgumentNode b) {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    public static ObjectArgumentNode multiply(ObjectArgumentNode a, ObjectArgumentNode b) {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    public static ObjectArgumentNode divide(ObjectArgumentNode a, ObjectArgumentNode b) {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    public static ObjectArgumentNode mod(ObjectArgumentNode a, ObjectArgumentNode b) {
+        throw new RuntimeException("Not yet implemented");
+    }
 }

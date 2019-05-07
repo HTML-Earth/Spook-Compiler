@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.AssignmentNode;
@@ -37,9 +38,36 @@ public class PrintGLSL {
         if (expressionNode instanceof ArithExpressionNode)
             return printArithExpression((ArithExpressionNode)expressionNode);
         else if (expressionNode instanceof BoolExpressionNode)
-            throw new RuntimeException("Not yet implemented");
+            throw new CompilerException("Not yet implemented", expressionNode.getCodePosition());
+        else if (expressionNode instanceof Vector4ExpressionNode)
+            return printVector4Expression((Vector4ExpressionNode)expressionNode);
+        else if (expressionNode instanceof Vector3ExpressionNode)
+            return printVector3Expression((Vector3ExpressionNode)expressionNode);
+        else if (expressionNode instanceof Vector2ExpressionNode)
+            return printVector2Expression((Vector2ExpressionNode)expressionNode);
         else
-            throw new RuntimeException("Invalid Expression");
+            throw new CompilerException("Invalid Expression", expressionNode.getCodePosition());
+    }
+
+    public static String printVector2Expression(Vector2ExpressionNode vector4ExpressionNode) {
+        return "vec2(" +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode1()) + ", " +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode2()) + ")";
+    }
+
+    public static String printVector3Expression(Vector3ExpressionNode vector4ExpressionNode) {
+        return "vec3(" +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode1()) + ", " +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode2()) + ", " +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode3()) + ")";
+    }
+
+    public static String printVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
+        return "vec4(" +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode1()) + ", " +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode2()) + ", " +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode3()) + ", " +
+                printArithExpression(vector4ExpressionNode.getArithExpressionNode4()) + ")";
     }
 
     public static String printArithExpression(ArithExpressionNode arithExpressionNode) {

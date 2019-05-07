@@ -23,9 +23,9 @@ Shader {
     Circle shadow = (shadowSize, shadowColor);
 
     #Shiny ball gradient
-    CircleGradient shiny = (Color.white(), ballSize/2);
-    shiny.setPosition(ballSize/2, ballSize/2);
-    ball.add(shiny);
+    #CircleGradient shiny = (Color.white(), ballSize/2);
+    #shiny.setPosition(ballSize/2, ballSize/2);
+    #shiny.setParent(ball);
 
     #Object positions
     ball.setPosition(xPos, yPos);
