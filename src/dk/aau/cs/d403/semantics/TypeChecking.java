@@ -212,7 +212,7 @@ public class TypeChecking {
             if (retrieveSymbol(variableName) == null)
                 throw new RuntimeException("ERROR: Variable on left side of assignment is not initialized.");
 
-            if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
+            if (assignmentNode.getExpressionNode() != null && assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
                 Enums.DataType assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
                     throw new RuntimeException("ERROR: Incompatible types.");
@@ -550,63 +550,65 @@ public class TypeChecking {
         for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
             for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
-                // Operand: Variable name
-                if (atomPrecedenceNode.getOperand().getVariableName() != null) {
-                    String variableName = atomPrecedenceNode.getOperand().getVariableName();
+                if (atomPrecedenceNode.getOperand() != null) {
+                    // Operand: Variable name
+                    if (atomPrecedenceNode.getOperand().getVariableName() != null) {
+                        String variableName = atomPrecedenceNode.getOperand().getVariableName();
 
-                    visitVariableName(variableName);
-                    VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
-                    if (variableDeclarationNode != null)
-                        return variableDeclarationNode.getDataType();
-                }
+                        visitVariableName(variableName);
+                        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+                        if (variableDeclarationNode != null)
+                            return variableDeclarationNode.getDataType();
+                    }
 
-                // Operand: Non-object function Call
-                if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
-                    NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
-                    visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
+                    // Operand: Non-object function Call
+                    if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
+                        NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
+                        visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
 
-                    // The reason for not checking all functions is because a function with a given name can only have one return type.
-                    // It is not legal to have another function with the same name but with a different return type.
-                    FunctionDeclarationNode functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(nonObjectFunctionCallNode.getFunctionName());
-                    if (functionDeclarationNode != null)
-                        return functionDeclarationNode.getReturnType();
-                }
+                        // The reason for not checking all functions is because a function with a given name can only have one return type.
+                        // It is not legal to have another function with the same name but with a different return type.
+                        FunctionDeclarationNode functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(nonObjectFunctionCallNode.getFunctionName());
+                        if (functionDeclarationNode != null)
+                            return functionDeclarationNode.getReturnType();
+                    }
 
-                // Operand: Object function Call
-                if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
-                    ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
-                    return visitObjectFunctionCall(objectFunctionCallNode);
-                }
+                    // Operand: Object function Call
+                    if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
+                        ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
+                        return visitObjectFunctionCall(objectFunctionCallNode);
+                    }
 
-                // Operand: Swizzle
-                if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
-                    SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
-                    visitSwizzle(swizzleNode);
-                    int swizzleLength;
+                    // Operand: Swizzle
+                    if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
+                        SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
+                        visitSwizzle(swizzleNode);
+                        int swizzleLength;
 
-                    if (swizzleNode.getCoordinateSwizzle() != null)
-                        swizzleLength = swizzleNode.getCoordinateSwizzle().getSwizzle().length();
-                    else
-                        swizzleLength = swizzleNode.getColorSwizzle().getSwizzle().length();
+                        if (swizzleNode.getCoordinateSwizzle() != null)
+                            swizzleLength = swizzleNode.getCoordinateSwizzle().getSwizzle().length();
+                        else
+                            swizzleLength = swizzleNode.getColorSwizzle().getSwizzle().length();
 
-                    if (swizzleLength == 4)
-                        return Enums.DataType.VEC4;
-                    else if (swizzleLength == 3)
-                        return Enums.DataType.VEC3;
-                    else if (swizzleLength == 2)
-                        return Enums.DataType.VEC2;
-                    else if (swizzleLength == 1)
+                        if (swizzleLength == 4)
+                            return Enums.DataType.VEC4;
+                        else if (swizzleLength == 3)
+                            return Enums.DataType.VEC3;
+                        else if (swizzleLength == 2)
+                            return Enums.DataType.VEC2;
+                        else if (swizzleLength == 1)
+                            return Enums.DataType.NUM;
+                        else
+                            throw new RuntimeException("ERROR: Too long swizzle");
+                    }
+
+                    if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
                         return Enums.DataType.NUM;
-                    else
-                        throw new RuntimeException("ERROR: Too long swizzle");
+
+                    // Operand: Low precedence
+                    if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+                        return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
                 }
-
-                if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
-                    return Enums.DataType.NUM;
-
-                // Operand: Low precedence
-                if (atomPrecedenceNode.getLowPrecedenceNode() != null)
-                    return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
             }
         }
         return null;
@@ -742,7 +744,7 @@ public class TypeChecking {
     /*      MISC         */
     private void visitVariableName(String variableName) {
         if (retrieveSymbol(variableName) == null)
-            throw new RuntimeException("ERROR: Variable is not declared");
+            throw new RuntimeException("ERROR: Variable, " + variableName + " is not declared");
         else if (retrieveSymbol(variableName) != null) {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
