@@ -15,10 +15,10 @@ public class Vector3 {
         this.z = z;
     }
 
-    public Vector3(float x, float y, float z) {
-        this.x = NumberPacking.getObjectArgumentFromFloat(x);
-        this.y = NumberPacking.getObjectArgumentFromFloat(y);
-        this.z = NumberPacking.getObjectArgumentFromFloat(z);
+    public Vector3(double x, double y, double z) {
+        this.x = NumberPacking.getObjectArgumentFromDouble(x);
+        this.y = NumberPacking.getObjectArgumentFromDouble(y);
+        this.z = NumberPacking.getObjectArgumentFromDouble(z);
     }
 
     public ObjectArgumentNode getX() {

@@ -84,23 +84,35 @@ public class CodeGenerator {
             }
         }
 
-        for (SpookObject object : scene.getChildren()) {
-            sb.append("\t");
-            sb.append(object.getDeclaration());
-            sb.append("\n\n");
-        }
+        generateDeclarations(scene);
 
-        for (SpookObject object : scene.getChildren()) {
-            sb.append("\t");
-            sb.append(((Shape)object).getCheckCall());
-            sb.append("\n\n");
-        }
+        generateChecks(scene);
 
         sb.append("\tfragColor = vec4");
         sb.append(PrintGLSL.printVector4(scene.getColor()));
         sb.append(";\n");
 
         sb.append("}\n\n");
+    }
+
+    private void generateDeclarations(SpookObject parent) {
+        for (SpookObject object : parent.getChildren()) {
+            generateDeclarations(object);
+
+            sb.append("\t");
+            sb.append(object.getDeclaration());
+            sb.append("\n\n");
+        }
+    }
+
+    private void generateChecks(SpookObject parent) {
+        for(int i = parent.getChildren().size()-1; i >= 0; i--) {
+            generateChecks(parent.getChildren().get(i));
+
+            sb.append("\t");
+            sb.append(((Shape)parent.getChildren().get(i)).getCheckCall());
+            sb.append("\n\n");
+        }
     }
 
     private ProgramNode visitProgram(ProgramNode programNode) {
@@ -539,16 +551,16 @@ public class CodeGenerator {
                         ObjectArgumentNode y = argumentNodes.get(1);
                         object.setPosition(new Vector2(x, y));
                         break;
-                    case "add":
-                        String objectName = argumentNodes.get(0)
+                    case "setParent":
+                        String parentName = argumentNodes.get(0)
                                 .getLowPrecedence()
                                 .getHighPrecedenceNodes().get(0)
                                 .getAtomPrecedenceNodes().get(0)
                                 .getOperand()
                                 .getVariableName();
-                        SpookObject childObject = spookObjects.get(objectName);
-                        if (childObject != null)
-                            object.add(childObject);
+                        SpookObject parentObject = spookObjects.get(parentName);
+                        if (parentObject != null)
+                            object.setParent(parentObject);
                         break;
                     default:
                         throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);

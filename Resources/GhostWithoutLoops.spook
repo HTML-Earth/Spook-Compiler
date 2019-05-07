@@ -2,8 +2,8 @@ Shader {
     Num sway = sin(Time * 0.2) * 50;
     Num hover = sin(Time) * 15;
 
-    Num xPos = 50 + sway;
-    Num yPos = 20 + hover;
+    Num xPos = 150 + sway;
+    Num yPos = 210 + hover;
 
     Num hoverTips = sin(Time) * -5;
     Num hoverEyes = sin(Time - 0.1) * 5;
@@ -11,47 +11,47 @@ Shader {
 
     Num swayFace = -sin(Time * 0.2 - 2) * -8;
 
-    Circle eye1 = (20, Color.black());
-    Circle eye2 = (15, Color.black());
-    eye1.setPosition(xPos + 100 + swayFace, yPos + 220 + hoverEyes);
-    eye2.setPosition(xPos + 140 + swayFace, yPos + 230 + hoverEyes);
-    Scene.add(eye1);
-    Scene.add(eye2);
-
-    Circle moufHole = (35, Color.black());
-    moufHole.setPosition(xPos + 190 + swayFace, yPos + 130 + hoverMouf);
-    Scene.add(moufHole);
+    Circle hed = (80, Color.white());
+    hed.setPosition(xPos, yPos);
+    Scene.add(hed);
 
     Circle top1 = (40, Color.white());
     Circle top2 = (40, Color.white());
-    top1.setPosition(xPos + 130, yPos + 250);
-    top2.setPosition(xPos + 100, yPos + 240);
-    Scene.add(top1);
-    Scene.add(top2);
-
-    Circle hed = (80, Color.white());
-    hed.setPosition(xPos + 100, yPos + 190);
-    Scene.add(hed);
+    top1.setPosition(30, 60);
+    top2.setPosition(0, 50);
+    top1.setParent(hed);
+    top2.setParent(hed);
 
     Circle mouf = (90, Color.white());
-    mouf.setPosition(xPos + 150, yPos + 130);
-    Scene.add(mouf);
+    mouf.setPosition(50, -60);
+    mouf.setParent(hed);
 
     Circle tip1 = (15, Color.white());
     Circle tip2 = (15, Color.white());
     Circle tip3 = (15, Color.white());
     Circle tip4 = (15, Color.white());
     Circle tip5 = (15, Color.white());
-    tip1.setPosition(xPos + 70, yPos + 78 + hoverTips);
-    tip2.setPosition(xPos + 85, yPos + 58 + hoverTips);
-    tip3.setPosition(xPos + 110, yPos + 48 + hoverTips);
-    tip4.setPosition(xPos + 135, yPos + 43 + hoverTips);
-    tip5.setPosition(xPos + 160, yPos + 38 + hoverTips);
-    Scene.add(tip1);
-    Scene.add(tip2);
-    Scene.add(tip3);
-    Scene.add(tip4);
-    Scene.add(tip5);
+    tip1.setPosition(-30, -112 + hoverTips);
+    tip2.setPosition(-15, -132 + hoverTips);
+    tip3.setPosition(10, -142 + hoverTips);
+    tip4.setPosition(35, -147 + hoverTips);
+    tip5.setPosition(60, -152 + hoverTips);
+    tip1.setParent(hed);
+    tip2.setParent(hed);
+    tip3.setParent(hed);
+    tip4.setParent(hed);
+    tip5.setParent(hed);
+
+    Circle eye1 = (20, Color.black());
+    Circle eye2 = (15, Color.black());
+    eye1.setPosition(swayFace, 30 + hoverEyes);
+    eye2.setPosition(swayFace + 40, 40 + hoverEyes);
+    eye1.setParent(hed);
+    eye2.setParent(hed);
+
+    Circle moufHole = (35, Color.black());
+    moufHole.setPosition(swayFace + 90, -60 + hoverMouf);
+    moufHole.setParent(hed);
 
     Scene.setColor(Color.black());
 }
