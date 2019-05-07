@@ -2,20 +2,21 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
+import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 
 public class BoolOperationNode implements ASTnode {
-    private String variableName;
-    private RealNumberNode realNumberNode;
     private BoolOperationsNode boolOperationsNode;
     private Boolean boolLiteral;
+    private NonObjectFunctionCallNode nonObjectFunctionCallNode;
+    private ObjectFunctionCallNode objectFunctionCallNode;
 
-    public BoolOperationNode(String variableName) {
-        this.variableName = variableName;
+    public BoolOperationNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.nonObjectFunctionCallNode = nonObjectFunctionCallNode;
     }
 
-    public BoolOperationNode(RealNumberNode realNumberNode) {
-        this.realNumberNode = realNumberNode;
+    public BoolOperationNode(ObjectFunctionCallNode objectFunctionCallNode) {
+        this.objectFunctionCallNode = objectFunctionCallNode;
     }
 
     public BoolOperationNode(BoolOperationsNode boolOperationsNode) {
@@ -26,12 +27,12 @@ public class BoolOperationNode implements ASTnode {
         this.boolLiteral = boolLiteral;
     }
 
-    public String getVariableName() {
-        return variableName;
+    public ObjectFunctionCallNode getObjectFunctionCallNode() {
+        return objectFunctionCallNode;
     }
 
-    public RealNumberNode getRealNumberNode() {
-        return realNumberNode;
+    public NonObjectFunctionCallNode getNonObjectFunctionCallNode() {
+        return nonObjectFunctionCallNode;
     }
 
     public BoolOperationsNode getBoolOperationsNode() {
@@ -44,10 +45,10 @@ public class BoolOperationNode implements ASTnode {
 
     @Override
     public String prettyPrint() {
-        if (variableName != null)
-            return variableName;
-        else if (realNumberNode != null)
-            return realNumberNode.prettyPrint();
+        if (objectFunctionCallNode != null)
+            return objectFunctionCallNode.prettyPrint();
+        else if (nonObjectFunctionCallNode != null)
+            return nonObjectFunctionCallNode.prettyPrint();
         else if (boolOperationsNode != null)
             return boolOperationsNode.prettyPrint();
         else if (boolLiteral != null)

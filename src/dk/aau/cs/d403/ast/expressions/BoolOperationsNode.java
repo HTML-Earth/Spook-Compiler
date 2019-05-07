@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class BoolOperationsNode implements ASTnode {
     private BoolOperationNode boolOperationNode;
+    private ArithExpressionNode arithExpressionNode;
     private ArrayList<BoolOperationExtendNode> boolOperationExtendNodes;
     private Enums.boolOperator optionalNOT;
 
@@ -31,11 +32,18 @@ public class BoolOperationsNode implements ASTnode {
         this.boolOperationExtendNodes = boolOperationExtendNodes;
     }
 
-    public BoolOperationNode getBoolOperationNode() {
-        return boolOperationNode;
+    public BoolOperationsNode(ArithExpressionNode arithExpressionNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes, Enums.boolOperator optionalNOT) {
+        this.arithExpressionNode = arithExpressionNode;
+        this.boolOperationExtendNodes = boolOperationExtendNodes;
+        this.optionalNOT = optionalNOT;
     }
 
-    public BoolOperationNode getBoolOperationsNode() {
+    public BoolOperationsNode(ArithExpressionNode arithExpressionNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes) {
+        this.arithExpressionNode = arithExpressionNode;
+        this.boolOperationExtendNodes = boolOperationExtendNodes;
+    }
+
+    public BoolOperationNode getBoolOperationNode() {
         return boolOperationNode;
     }
 
@@ -45,6 +53,10 @@ public class BoolOperationsNode implements ASTnode {
 
     public Enums.boolOperator getOptionalNOT() {
         return optionalNOT;
+    }
+
+    public ArithExpressionNode getArithExpressionNode() {
+        return arithExpressionNode;
     }
 
     @Override
@@ -67,6 +79,12 @@ public class BoolOperationsNode implements ASTnode {
         //Case bool
         else if (boolOperationNode != null)
             return boolOperationNode.prettyPrint();
+        //Case !arith extend
+        else if (arithExpressionNode != null && boolOperationExtendNodes != null && optionalNOT != null)
+            return Enums.boolOperatorToString(optionalNOT) + arithExpressionNode.prettyPrint() + sb;
+        //Case arith extend
+        else if (arithExpressionNode != null && boolOperationExtendNodes != null)
+            return arithExpressionNode.prettyPrint() + sb;
         else
             return "Invalid Boolean Operations Node";
     }

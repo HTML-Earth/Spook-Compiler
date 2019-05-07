@@ -8,6 +8,7 @@ public class BoolOperationExtendNode implements ASTnode {
     private Enums.boolOperator boolOperator;
     private Enums.boolOperator optionalNOT;
     private BoolOperationNode boolOperationNode;
+    private ArithExpressionNode arithExpressionNode;
 
 
     public BoolOperationExtendNode(Enums.boolOperator boolOperator, BoolOperationNode boolOperationNode) {
@@ -23,6 +24,17 @@ public class BoolOperationExtendNode implements ASTnode {
         this.boolOperationNode = boolOperationNode;
     }
 
+    public BoolOperationExtendNode(Enums.boolOperator boolOperator, Enums.boolOperator optionalNOT, ArithExpressionNode arithExpressionNode) {
+        this.boolOperator = boolOperator;
+        this.optionalNOT = optionalNOT;
+        this.arithExpressionNode = arithExpressionNode;
+    }
+
+    public BoolOperationExtendNode(Enums.boolOperator boolOperator, ArithExpressionNode arithExpressionNode) {
+        this.boolOperator = boolOperator;
+        this.arithExpressionNode = arithExpressionNode;
+    }
+
     public Enums.boolOperator getBoolOperator() {
         return boolOperator;
     }
@@ -35,6 +47,10 @@ public class BoolOperationExtendNode implements ASTnode {
         return boolOperationNode;
     }
 
+    public ArithExpressionNode getArithExpressionNode() {
+        return arithExpressionNode;
+    }
+
     @Override
     public String prettyPrint() {
         //Case of operator !bool
@@ -44,7 +60,16 @@ public class BoolOperationExtendNode implements ASTnode {
         //Case of operator bool
         else if (boolOperator != null && boolOperationNode != null) {
             return " " + Enums.boolOperatorToString(boolOperator)+ " " + boolOperationNode.prettyPrint();
-        } else return "Invalid Boolean Operation Extension";
+        }
+        //Case of operator arith
+        else if (boolOperator != null && optionalNOT != null && arithExpressionNode != null) {
+            return " " + Enums.boolOperatorToString(boolOperator) + " " + Enums.boolOperatorToString(optionalNOT) + arithExpressionNode.prettyPrint();
+        }
+        //Case of operator !arith
+        else if (boolOperator != null && arithExpressionNode != null) {
+            return " " + Enums.boolOperatorToString(boolOperator) + " " + arithExpressionNode.prettyPrint();
+        }
+        else return "Invalid Boolean Operation Extension";
     }
 
     private CodePosition codePosition;

@@ -55,6 +55,7 @@ assignment
 
 expression
     : arithExpression
+    | boolExpression
     | ternaryOperator
     | functionCall;
 
