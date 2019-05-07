@@ -780,8 +780,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         ForLoopExpressionNode expressionNode1 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(0));
         ForLoopExpressionNode expressionNode2 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(1));
 
-        float expr1 = evaluateForLoopExpression(expressionNode1);
-        float expr2 = evaluateForLoopExpression(expressionNode2);
+        double expr1 = evaluateForLoopExpression(expressionNode1);
+        double expr2 = evaluateForLoopExpression(expressionNode2);
 
         boolean countDown = false;
         if (expr1 > expr2)
@@ -975,7 +975,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     // FOR LOOP EVALUATION
 
-    private float evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
+    private double evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
         if (expressionNode.getAssignmentNode() != null)
             return evaluateAssignment(expressionNode.getAssignmentNode());
         else if (expressionNode.getRealNumberNode() != null)
@@ -988,7 +988,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("Invalid for loop expression", expressionNode.getCodePosition());
     }
 
-    private float evaluateVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
+    private double evaluateVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
         if (variableDeclarationNode.getDataType() == Enums.DataType.NUM) {
             AssignmentNode assignmentNode = variableDeclarationNode.getAssignmentNode();
 
@@ -1001,14 +1001,14 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("For loop variable is not Num", variableDeclarationNode.getCodePosition());
     }
 
-    private float evaluateAssignment(AssignmentNode assignmentNode) {
+    private double evaluateAssignment(AssignmentNode assignmentNode) {
         if (assignmentNode.getSwizzleNode() != null)
             throw new CompilerException("This assignment node probably shouldn't have a swizzle node", assignmentNode.getCodePosition());
 
         return evaluateExpression(assignmentNode.getExpressionNode());
     }
 
-    private float evaluateVariable(String variableName) {
+    private double evaluateVariable(String variableName) {
         VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
         if (variableDeclarationNode != null)
             return evaluateVariableDeclaration(variableDeclarationNode);
@@ -1016,7 +1016,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new RuntimeException("Variable " + variableName + " not found");
     }
 
-    private float evaluateExpression(ExpressionNode expressionNode) {
+    private double evaluateExpression(ExpressionNode expressionNode) {
         if (expressionNode instanceof ArithExpressionNode) {
             ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
             return evaluateLowPrecedence(arithExpressionNode.getLowPrecedenceNode());
@@ -1025,13 +1025,13 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("For loop expression is not arith expression", expressionNode.getCodePosition());
     }
 
-    private float evaluateLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
-        float result = evaluateHighPrecedence(lowPrecedenceNode.getHighPrecedenceNodes().get(0));
+    private double evaluateLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
+        double result = evaluateHighPrecedence(lowPrecedenceNode.getHighPrecedenceNodes().get(0));
 
         if (lowPrecedenceNode.getOperators() != null) {
             int operatorAmt = lowPrecedenceNode.getOperators().size();
             for (int i = 0; i < operatorAmt; i++) {
-                float operand = evaluateHighPrecedence(lowPrecedenceNode.getHighPrecedenceNodes().get(i+1));
+                double operand = evaluateHighPrecedence(lowPrecedenceNode.getHighPrecedenceNodes().get(i+1));
                 result = evaluateOperation(lowPrecedenceNode.getOperators().get(i), result, operand);
             }
         }
@@ -1039,13 +1039,13 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return result;
     }
 
-    private float evaluateHighPrecedence(HighPrecedenceNode highPrecedenceNode) {
-        float result = evaluateAtomPrecedence(highPrecedenceNode.getAtomPrecedenceNodes().get(0));
+    private double evaluateHighPrecedence(HighPrecedenceNode highPrecedenceNode) {
+        double result = evaluateAtomPrecedence(highPrecedenceNode.getAtomPrecedenceNodes().get(0));
 
         if (highPrecedenceNode.getOperators() != null) {
             int operatorAmt = highPrecedenceNode.getOperators().size();
             for (int i = 0; i < operatorAmt; i++) {
-                float operand = evaluateAtomPrecedence(highPrecedenceNode.getAtomPrecedenceNodes().get(i+1));
+                double operand = evaluateAtomPrecedence(highPrecedenceNode.getAtomPrecedenceNodes().get(i+1));
                 result = evaluateOperation(highPrecedenceNode.getOperators().get(i), result, operand);
             }
         }
@@ -1053,7 +1053,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return result;
     }
 
-    private float evaluateAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {
+    private double evaluateAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {
         if (atomPrecedenceNode.getLowPrecedenceNode() != null)
             return evaluateLowPrecedence(atomPrecedenceNode.getLowPrecedenceNode());
         else if (atomPrecedenceNode.getOperator() != null) {
@@ -1068,7 +1068,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return evaluateArithOperand(atomPrecedenceNode.getOperand());
     }
 
-    private float evaluateArithOperand(ArithOperandNode arithOperandNode) {
+    private double evaluateArithOperand(ArithOperandNode arithOperandNode) {
         RealNumberNode realNumberNode = arithOperandNode.getRealNumberNode();
         NonObjectFunctionCallNode nonObjectFunctionCallNode = arithOperandNode.getNonObjectFunctionCallNode();
         ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
@@ -1094,7 +1094,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             throw new CompilerException("Invalid Arith Operand", arithOperandNode.getCodePosition());
     }
 
-    private float evaluateOperation(Enums.Operator operator, float left, float right) {
+    private double evaluateOperation(Enums.Operator operator, double left, double right) {
         switch (operator) {
             case ADD:
                 return left + right;
@@ -1111,7 +1111,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         }
     }
 
-    private float evaluateSwizzle(SwizzleNode swizzleNode) {
+    private double evaluateSwizzle(SwizzleNode swizzleNode) {
         String swizzle;
         if (swizzleNode.getCoordinateSwizzle() != null) {
             swizzle = swizzleNode.getCoordinateSwizzle().getSwizzle();

@@ -5,7 +5,7 @@ import dk.aau.cs.d403.ast.expressions.*;
 import java.util.ArrayList;
 
 public class NumberPacking {
-    public static ObjectArgumentNode getObjectArgumentFromFloat(float number) {
+    public static ObjectArgumentNode getObjectArgumentFromDouble(double number) {
         return getObjectArgumentFromRealNumber(new RealNumberNode(number));
     }
 
