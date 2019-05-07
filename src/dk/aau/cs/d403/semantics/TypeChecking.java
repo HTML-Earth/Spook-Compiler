@@ -166,7 +166,7 @@ public class TypeChecking {
         if (retrievedNode == null)
             enterSymbol(variableName, variableDeclarationNode);
         else
-            throw new RuntimeException("ERROR: A variable with the same name already exists.");
+            throw new RuntimeException("ERROR: A variable (" + variableName + ") with the same name already exists.");
 
         if (variableDeclarationNode.getAssignmentNode() != null)
             visitAssignment(variableDeclarationNode.getAssignmentNode());
@@ -185,7 +185,7 @@ public class TypeChecking {
         // Check if the class is custom and check if that class is declared
         if (!listOfPredefinedClasses.contains(objectType)) {
             if (retrieveSymbol(objectType) == null)
-                throw new RuntimeException("ERROR: An object is declared with a non-existing class.");
+                throw new RuntimeException("ERROR: An object (" + objectType + ") is declared with a non-existing class.");
         }
 
         if (retrieveSymbol(variableName) == null)
@@ -193,7 +193,7 @@ public class TypeChecking {
         else if (retrievedNode != null && !retrievedNode.getObjectType().equals(objectType))
             enterSymbol(variableName, objectDeclarationNode);
         else
-            throw new RuntimeException("ERROR: An object is already declared with the same name and type.");
+            throw new RuntimeException("ERROR: An object (" + variableName + ") is already declared with the same name and type.");
     }
 
     private void visitAssignment(AssignmentNode assignmentNode) {
@@ -210,12 +210,12 @@ public class TypeChecking {
                 dataType = null;
 
             if (retrieveSymbol(variableName) == null)
-                throw new RuntimeException("ERROR: Variable on left side of assignment is not initialized.");
+                throw new RuntimeException("ERROR: Variable (" + variableName + ") on left side of assignment is not declared.");
 
             if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
                 Enums.DataType assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
-                    throw new RuntimeException("ERROR: Incompatible types.");
+                    throw new RuntimeException("ERROR: Incompatible types.(" + dataType + " and " + assignedDataType + ")");
             }
         }
         else if (assignmentNode.getSwizzleNode() != null) {
@@ -235,7 +235,7 @@ public class TypeChecking {
         else
             retrievedFunctions = null;
 
-        if (retrievedFunctions != null) {
+        if (retrievedFunctions.size() > 0) {
             boolean matchingSize = true;
             boolean argumentMatch = true;
             for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
@@ -289,12 +289,12 @@ public class TypeChecking {
                 }
             }
             if (!matchingSize)
-                throw new RuntimeException("ERROR: The amount of given arguments for the Non-Object function call does not match the amount of required parameters for the function.");
+                throw new RuntimeException("ERROR: The amount of given arguments (" + objectArgumentNodes.size() + ") for the Non-Object function call (" + functionName + ") does \nnot match the amount of required parameters for the function.");
             if (!argumentMatch)
-                throw new RuntimeException("ERROR: The given arguments for the Non-object function call does not match the parameters for the function.");
+                throw new RuntimeException("ERROR: The given arguments for the Non-object function call (" + functionName + ") does \nnot match the parameters for the function.");
         }
         else {
-            throw new RuntimeException("ERROR: Non-object function does not exist.");
+            throw new RuntimeException("ERROR: Non-object function (" + functionName + ") does not exist.");
         }
     }
 
@@ -310,12 +310,12 @@ public class TypeChecking {
             // Check if variable is declared and initialized
             if (retrieveSymbol(variableName) != null) {
                 if (!(retrieveSymbol(variableName) instanceof ObjectDeclarationNode))
-                    throw new RuntimeException("ERROR: Variable is not an object declaration.");
+                    throw new RuntimeException("ERROR: Variable (" + variableName + ") is not an object declaration.");
                 else
                     objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
             }
             else
-                throw new RuntimeException("ERROR: Variable is not declared.");
+                throw new RuntimeException("ERROR: Variable (" + variableName + ") is not declared.");
 
             if (objectDeclarationNode != null) {
 
@@ -352,12 +352,12 @@ public class TypeChecking {
                         }
                     }
                     else
-                        throw new RuntimeException("ERROR: Class does not exist.");
+                        throw new RuntimeException("ERROR: Class (" + classDeclarationNode.getClassName() + ") does not exist.");
 
                     if (!existingFunction)
-                        throw new RuntimeException("ERROR: No functions existed with the given function name");
+                        throw new RuntimeException("ERROR: No functions existed with the given function name (" + functionName + ")");
                     if (!sameFunction)
-                        throw new RuntimeException("ERROR: No function with the given parameters exists");
+                        throw new RuntimeException("ERROR: No function with the given parameters exists for (" + functionName + ")");
 
                     return dataType;
                 }
@@ -477,11 +477,11 @@ public class TypeChecking {
             }
 
             if (sameFunctionArgs)
-                throw new RuntimeException("ERROR: A function with the same name and arguments already exists.");
+                throw new RuntimeException("ERROR: A function with the same name (" + functionName + ") and arguments already exists.");
             if (!sameReturnType)
-                throw new RuntimeException("ERROR: A function with the same name with a different return type already exists.");
+                throw new RuntimeException("ERROR: A function with the same name (" + functionName + ") with a different return type already exists.");
             if (sameAmountOfArgs)
-                throw new RuntimeException("ERROR: A function with the same name already exists.");
+                throw new RuntimeException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.");
 
             enterSymbol(functionName, functionDeclarationNode);
         }
@@ -523,7 +523,7 @@ public class TypeChecking {
         else if (expressionNode instanceof  Vector2ExpressionNode && returnType.equals(Enums.DataType.VEC2))
             visitExpression(expressionNode);
         else
-            throw new RuntimeException("ERROR: Return statement does not match the return type of the function");
+            throw new RuntimeException("ERROR: Return statement does not match the return type (" + returnType + ") of the function");
     }
 // ternary operator, bool
     /*      Expressions      */
@@ -680,14 +680,14 @@ public class TypeChecking {
                 if (!(dataType.equals(Enums.DataType.VEC3))) {
                     if (!(dataType.equals(Enums.DataType.VEC2))) {
                         if (!(dataType.equals(Enums.DataType.NUM)))
-                        throw new RuntimeException("ERROR: Variable is not of a vector type");
+                        throw new RuntimeException("ERROR: Variable (" + variableName + ") is not of a vector type");
                     }
                 }
             }
         }
         // Not used - is checked in visitVariableName
         else
-            throw new RuntimeException("Variable is not declared.");
+            throw new RuntimeException("Variable (" + variableName + ") is not declared.");
 
         if (swizzleNode.getCoordinateSwizzle() != null) {
             coordinateSwizzleNode = swizzleNode.getCoordinateSwizzle();
@@ -720,7 +720,7 @@ public class TypeChecking {
         if (retrieveSymbol(className) == null && !this.listOfPredefinedClasses.contains(className))
             enterSymbol(className, classDeclarationNode);
         else
-            throw new RuntimeException("ERROR: Class name is already in use.");
+            throw new RuntimeException("ERROR: Class name (" + className + ") is already in use.");
 
         visitClassBlock(classDeclarationNode.getClassBlockNode());
     }
@@ -742,12 +742,12 @@ public class TypeChecking {
     /*      MISC         */
     private void visitVariableName(String variableName) {
         if (retrieveSymbol(variableName) == null)
-            throw new RuntimeException("ERROR: Variable is not declared");
+            throw new RuntimeException("ERROR: Variable (" + variableName + ") is not declared");
         else if (retrieveSymbol(variableName) != null) {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
             if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() == null)
-                throw new RuntimeException("ERROR: Variable, " + variableName + " is not initialized");
+                throw new RuntimeException("ERROR: Variable (" + variableName + ") is not initialized");
         }
     }
 }
