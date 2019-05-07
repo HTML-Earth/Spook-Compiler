@@ -16,7 +16,7 @@ Shader {
 
     #Shadow color
     Num shadowDarkness = shadowSize * 0.005;
-    Vec4 shadowColor = bgColor - shadowDarkness.xxxx;
+    Vec4 shadowColor = (0, 0, 0, shadowDarkness);
 
     #Objects
     Circle ball   = (ballSize, ballColor);
