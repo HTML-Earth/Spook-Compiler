@@ -44,8 +44,8 @@ public class Circle extends Shape {
         return "Circle " + name + " = Circle(\n\t\t" +
                 PrintGLSL.printObjArgNode(radius) + ",\n\t\t" +
                 "vec2(" +
-                PrintGLSL.printObjArgNode(position.getX()) + ", " +
-                PrintGLSL.printObjArgNode(position.getY()) + "),\n\t\t" +
+                PrintGLSL.printObjArgNode(getWorldPosition().getX()) + ", " +
+                PrintGLSL.printObjArgNode(getWorldPosition().getY()) + "),\n\t\t" +
                 "vec4(" +
                 PrintGLSL.printObjArgNode(color.getX()) + ", " +
                 PrintGLSL.printObjArgNode(color.getY()) + ", " +

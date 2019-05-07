@@ -75,4 +75,32 @@ public class LowPrecedenceNode implements ASTnode {
     public CodePosition getCodePosition() {
         return codePosition;
     }
+
+    public static LowPrecedenceNode add(LowPrecedenceNode a, LowPrecedenceNode b) {
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+        ArrayList<Enums.Operator> operators = new ArrayList<>();
+
+
+        highPrecedenceNodes.add(a.getHighPrecedenceNodes().get(0));
+        if (a.getOperators() != null) {
+            int operatorAmt = a.getOperators().size();
+            for (int i = 0; i < operatorAmt; i++) {
+                operators.add(a.getOperators().get(i));
+                highPrecedenceNodes.add(a.getHighPrecedenceNodes().get(i+1));
+            }
+        }
+
+        operators.add(Enums.Operator.ADD);
+
+        highPrecedenceNodes.add(b.getHighPrecedenceNodes().get(0));
+        if (b.getOperators() != null) {
+            int operatorAmt = b.getOperators().size();
+            for (int i = 0; i < operatorAmt; i++) {
+                operators.add(b.getOperators().get(i));
+                highPrecedenceNodes.add(b.getHighPrecedenceNodes().get(i+1));
+            }
+        }
+
+        return new LowPrecedenceNode(highPrecedenceNodes, operators);
+    }
 }

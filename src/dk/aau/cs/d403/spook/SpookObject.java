@@ -28,6 +28,13 @@ public abstract class SpookObject {
         return position;
     }
 
+    public Vector2 getWorldPosition() {
+        if (getParent() != null)
+            return Vector2.add(getPosition(), getParent().getWorldPosition());
+        else
+            return getPosition();
+    }
+
     public void setPosition(Vector2 position) {
         this.position = position;
     }
@@ -40,6 +47,17 @@ public abstract class SpookObject {
         this.rotation = rotation;
     }
 
+    public void setParent(SpookObject parent)
+    {
+        this.parent = parent;
+        parent.add(this);
+    }
+
+    public void add(SpookObject spookObject) {
+        if (!children.contains(spookObject))
+            children.add(spookObject);
+    }
+
     public SpookObject getParent() {
         return parent;
     }
@@ -48,9 +66,6 @@ public abstract class SpookObject {
         return children;
     }
 
-    public void add(SpookObject spookObject) {
-        children.add(spookObject);
-    }
 
     public abstract String getDeclaration();
 
