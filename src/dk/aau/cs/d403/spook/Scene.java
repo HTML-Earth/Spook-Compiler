@@ -24,7 +24,7 @@ public class Scene extends SpookObject implements Colorable {
     }
 
     public ObjectArgumentNode getRotation() {
-        return NumberPacking.getObjectArgumentFromFloat(0);
+        return NumberPacking.getObjectArgumentFromDouble(0);
     }
 
     public void setRotation(ObjectArgumentNode rotation) {

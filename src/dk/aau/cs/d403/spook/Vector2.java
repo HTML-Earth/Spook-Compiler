@@ -14,9 +14,9 @@ public class Vector2 {
     }
 
 
-    public Vector2(float x, float y) {
-        this.x = NumberPacking.getObjectArgumentFromFloat(x);
-        this.y = NumberPacking.getObjectArgumentFromFloat(y);
+    public Vector2(double x, double y) {
+        this.x = NumberPacking.getObjectArgumentFromDouble(x);
+        this.y = NumberPacking.getObjectArgumentFromDouble(y);
     }
 
     public ObjectArgumentNode getX() {
