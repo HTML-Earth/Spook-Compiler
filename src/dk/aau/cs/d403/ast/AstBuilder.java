@@ -633,7 +633,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             atomOperandNode.setCodePosition(getCodePosition(ctx));
             AtomPrecedenceNode atomPrecedenceNode = new AtomPrecedenceNode(atomOperandNode);
             atomOperandNode.setCodePosition(getCodePosition(ctx));
-            return atomPrecedenceNode   ;
+            return atomPrecedenceNode;
         }
         //return (lowprecedence) AtomNode
         else if (ctx.lowPrecedence() != null) {
