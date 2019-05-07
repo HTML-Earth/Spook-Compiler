@@ -71,7 +71,7 @@ COLOR_SWIZZLE_MASK
     : COLOR_SWIZZLE_MASK_RULE+;
 
 // Identifier - chars and non-negative digits
-ID: (LETTER | DIGIT)+;
+ID: LETTER (LETTER | DIGIT)*;
 
 // Fragment rules
 fragment LETTER: [A-z];
