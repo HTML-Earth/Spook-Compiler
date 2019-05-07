@@ -76,6 +76,10 @@ public class CodeGenerator {
     private void generateMain() {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
 
+        sb.append("\tfragColor = vec4");
+        sb.append(PrintGLSL.printVector4(scene.getColor()));
+        sb.append(";\n");
+
         LinkedList<String> list = new LinkedList<>(usedVariables);
         Iterator<String> itr = list.iterator();
         while(itr.hasNext()) {
@@ -92,10 +96,6 @@ public class CodeGenerator {
 
         generateChecks(scene);
 
-        sb.append("\tfragColor = vec4");
-        sb.append(PrintGLSL.printVector4(scene.getColor()));
-        sb.append(";\n");
-
         sb.append("}\n\n");
     }
 
@@ -110,7 +110,7 @@ public class CodeGenerator {
     }
 
     private void generateChecks(SpookObject parent) {
-        for(int i = parent.getChildren().size()-1; i >= 0; i--) {
+        for (int i = 0; i < parent.getChildren().size(); i++) {
             generateChecks(parent.getChildren().get(i));
 
             sb.append("\t");

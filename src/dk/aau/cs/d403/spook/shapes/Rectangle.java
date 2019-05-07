@@ -59,9 +59,6 @@ public class Rectangle extends Shape {
 
     @Override
     public String getCheckCall() {
-        return "if (RectangleCheck(fragCoord, " + name + ")) {\n\t\t" +
-                "fragColor = " + name + ".color;\n\t\t" +
-                "return;\n\t" +
-                "}";
+        return "if (RectangleCheck(fragCoord, " + name + "))" + getColorApplication();
     }
 }

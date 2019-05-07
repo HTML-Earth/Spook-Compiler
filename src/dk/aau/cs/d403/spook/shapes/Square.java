@@ -57,9 +57,6 @@ public class Square extends Shape {
 
     @Override
     public String getCheckCall() {
-        return "if (SquareCheck(fragCoord, " + name + ")) {\n\t\t" +
-                "fragColor = " + name + ".color;\n\t\t" +
-                "return;\n\t" +
-                "}";
+        return "if (SquareCheck(fragCoord, " + name + "))" + getColorApplication();
     }
 }

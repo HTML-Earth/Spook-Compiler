@@ -56,9 +56,6 @@ public class Circle extends Shape {
 
     @Override
     public String getCheckCall() {
-        return "if (CircleCheck(fragCoord, " + name + ")) {\n\t\t" +
-                "fragColor = " + name + ".color;\n\t\t" +
-                "return;\n\t" +
-                "}";
+        return "if (CircleCheck(fragCoord, " + name + "))" + getColorApplication();
     }
 }
