@@ -332,7 +332,9 @@ public class CodeGenerator {
     }
 
     private ArithExpressionNode visitArithExpression(ArithExpressionNode arithExpressionNode) {
-        return new ArithExpressionNode(visitLowPrecedence(arithExpressionNode.getLowPrecedenceNode()));
+        ArithExpressionNode newArithExpressionNode = new ArithExpressionNode(visitLowPrecedence(arithExpressionNode.getLowPrecedenceNode()));
+        newArithExpressionNode.setCodePosition(arithExpressionNode.getCodePosition());
+        return newArithExpressionNode;
     }
 
     private LowPrecedenceNode visitLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
