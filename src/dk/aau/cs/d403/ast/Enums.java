@@ -33,11 +33,11 @@ public class Enums {
             case BOOL:
                 return "bool";
             case VEC2:
-                return "vector2";
+                return "vec2";
             case VEC3:
-                return "vector3";
+                return "vec3";
             case VEC4:
-                return "vector4";
+                return "vec4";
             default:
                 return "InvalidType";
         }

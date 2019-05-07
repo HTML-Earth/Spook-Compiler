@@ -19,8 +19,12 @@ public class CodeGenerator {
 
     private HashMap<String, SpookObject> spookObjects;
     private HashSet<String> usedClasses;
-    private HashMap<String, VariableDeclarationNode> variables;
+    private static HashMap<String, VariableDeclarationNode> variables;
     private LinkedHashSet<String> usedVariables;
+
+    public static HashMap<String, VariableDeclarationNode> getVariables(){
+        return variables;
+    }
 
     public String GenerateGLSL(ProgramNode ast) {
         sb = new StringBuilder();
@@ -480,7 +484,7 @@ public class CodeGenerator {
                 object = new Triangle(variableName, argumentNodes);
                 break;
             default:
-                throw new RuntimeException("Invalid object declaration");
+                throw new CompilerException("Invalid object declaration", objectDeclarationNode.getCodePosition());
         }
 
         spookObjects.put(variableName, object);

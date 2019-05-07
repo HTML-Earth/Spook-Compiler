@@ -1,11 +1,15 @@
 package dk.aau.cs.d403.spook.color;
 
+import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.ast.expressions.HighPrecedenceNode;
 import dk.aau.cs.d403.ast.expressions.LowPrecedenceNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
+import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class Color {
     public static Vector4 clear() {
@@ -86,14 +90,8 @@ public class Color {
 
 
     public static Vector4 getColorArgument(ObjectArgumentNode objectArgumentNode) {
-        LowPrecedenceNode lowPrecedenceNode = objectArgumentNode.getLowPrecedence();
-
-        if (lowPrecedenceNode != null) {
-            return getColorProperty(lowPrecedenceNode.getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes().get(0).getOperand().getObjectFunctionCallNode());
-        }
-        else {
-            throw new RuntimeException("Invalid color argument");
-        }
+        return Vector4.evaluateLowPrecedence(objectArgumentNode.getLowPrecedence());
+        //return getColorProperty(highPrecedenceNodes.get(0).getAtomPrecedenceNodes().get(0).getOperand().getObjectFunctionCallNode());
     }
 
     public static Vector4 getColorProperty(ObjectFunctionCallNode objectFunctionCallNode) {
