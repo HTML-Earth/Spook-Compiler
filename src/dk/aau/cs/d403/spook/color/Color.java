@@ -8,8 +8,14 @@ import dk.aau.cs.d403.spook.Vector4;
 import java.lang.reflect.Method;
 
 public class Color {
+    public static Vector4 clear() {
+        return new Vector4(0,0,0,0);
+    }
     public static Vector4 black() {
         return new Vector4(0,0,0,1);
+    }
+    public static Vector4 gray() {
+        return new Vector4(0.5,0.5,0.5,0.5);
     }
     public static Vector4 white() {
         return new Vector4(1,1,1,1);
@@ -32,9 +38,52 @@ public class Color {
     public static Vector4 yellow() {
         return new Vector4(1,1,0,1);
     }
-    public static Vector4 invisible() {
-        return new Vector4(0,0,0,0);
+    public static Vector4 orange() {
+        return new Vector4(1,0.5,0,1);
     }
+    public static Vector4 purple() {
+        return new Vector4(0.5,0,0.5,1);
+    }
+    public static Vector4 brown() {
+        return new Vector4(0.59,0.29,0,1);
+    }
+    public static Vector4 tan() {
+        return new Vector4(0.82,0.71,0.55,1);
+    }
+    public static Vector4 olive() {
+        return new Vector4(0.5,0.5,0,1);
+    }
+    public static Vector4 maroon() {
+        return new Vector4(0.5,0,0,1);
+    }
+    public static Vector4 navy() {
+        return new Vector4(0,0,0.5,1);
+    }
+    public static Vector4 aquamarine() {
+        return new Vector4(0.5,1,0.83,1);
+    }
+    public static Vector4 turqoise() {
+        return new Vector4(0.25,0.88,0.82,1);
+    }
+    public static Vector4 silver() {
+        return new Vector4(0.75,0.75,0.75,1);
+    }
+    public static Vector4 lime() {
+        return new Vector4(0.75,1,0,1);
+    }
+    public static Vector4 teal() {
+        return new Vector4(0,0.5,0.5,1);
+    }
+    public static Vector4 indigo() {
+        return new Vector4(0.25,0,1,1);
+    }
+    public static Vector4 violet() {
+        return new Vector4(0.5,0,1,1);
+    }
+    public static Vector4 pink() {
+        return new Vector4(1,0.75,0.8,1);
+    }
+
 
     public static Vector4 getColorArgument(ObjectArgumentNode objectArgumentNode) {
         LowPrecedenceNode lowPrecedenceNode = objectArgumentNode.getLowPrecedence();

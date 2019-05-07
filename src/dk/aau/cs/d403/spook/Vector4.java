@@ -17,11 +17,11 @@ public class Vector4 {
         this.w = w;
     }
 
-    public Vector4(float x, float y, float z, float w) {
-        this.x = NumberPacking.getObjectArgumentFromFloat(x);
-        this.y = NumberPacking.getObjectArgumentFromFloat(y);
-        this.z = NumberPacking.getObjectArgumentFromFloat(z);
-        this.w = NumberPacking.getObjectArgumentFromFloat(w);
+    public Vector4(double x, double y, double z, double w) {
+        this.x = NumberPacking.getObjectArgumentFromDouble(x);
+        this.y = NumberPacking.getObjectArgumentFromDouble(y);
+        this.z = NumberPacking.getObjectArgumentFromDouble(z);
+        this.w = NumberPacking.getObjectArgumentFromDouble(w);
     }
 
     public ObjectArgumentNode getX() {

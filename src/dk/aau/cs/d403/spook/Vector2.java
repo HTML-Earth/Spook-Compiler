@@ -14,9 +14,9 @@ public class Vector2 {
     }
 
 
-    public Vector2(float x, float y) {
-        this.x = NumberPacking.getObjectArgumentFromFloat(x);
-        this.y = NumberPacking.getObjectArgumentFromFloat(y);
+    public Vector2(double x, double y) {
+        this.x = NumberPacking.getObjectArgumentFromDouble(x);
+        this.y = NumberPacking.getObjectArgumentFromDouble(y);
     }
 
     public ObjectArgumentNode getX() {
@@ -40,6 +40,10 @@ public class Vector2 {
         ObjectArgumentNode x = NumberPacking.getObjectArgumentFromRealNumber(zero);
         ObjectArgumentNode y = NumberPacking.getObjectArgumentFromRealNumber(zero);
         return new Vector2(x,y);
+    }
+
+    public static Vector2 add(Vector2 a, Vector2 b) {
+        return new Vector2(ObjectArgumentNode.add(a.getX(), b.getX()), ObjectArgumentNode.add(a.getY(), b.getY()));
     }
 
     public static String GLSLPrint(Vector2 vector) {

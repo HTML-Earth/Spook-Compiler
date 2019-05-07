@@ -4,13 +4,13 @@ import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 
 public class RealNumberNode implements ASTnode {
-    private float number;
+    private double number;
 
-    public RealNumberNode(float number) {
+    public RealNumberNode(double number) {
         this.number = number;
     }
 
-    public float getNumber() {
+    public double getNumber() {
         return number;
     }
 
