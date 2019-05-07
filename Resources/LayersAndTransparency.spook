@@ -1,0 +1,20 @@
+Shader {
+    Scene.setColor(Color.gray());
+
+    Num timeSin = sin(Time) * 100;
+    Num timeCos = cos(Time) * 100;
+    Vec4 shadowColor = (0, 0, 0, 0.5);
+
+    Circle redCircle = (50, Color.red());
+    redCircle.setPosition(timeSin + 150, timeCos + 200);
+
+    Circle shadowCircle = (60, shadowColor);
+    shadowCircle.setPosition(timeCos + 150, timeSin + 200);
+
+    Rectangle blueRect = (80, 60, Color.blue());
+    blueRect.setPosition(timeSin + 200, 200);
+
+    Scene.add(redCircle);
+    Scene.add(shadowCircle);
+    Scene.add(blueRect);
+}
