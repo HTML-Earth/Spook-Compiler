@@ -42,6 +42,13 @@ public class Vector2 {
         return new Vector2(x,y);
     }
 
+    public static Vector2 one(){
+        RealNumberNode one = new RealNumberNode(1);
+        ObjectArgumentNode x = NumberPacking.getObjectArgumentFromRealNumber(one);
+        ObjectArgumentNode y = NumberPacking.getObjectArgumentFromRealNumber(one);
+        return new Vector2(x,y);
+    }
+
     public static Vector2 add(Vector2 a, Vector2 b) {
         return new Vector2(ObjectArgumentNode.add(a.getX(), b.getX()), ObjectArgumentNode.add(a.getY(), b.getY()));
     }

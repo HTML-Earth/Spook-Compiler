@@ -12,6 +12,7 @@ public abstract class SpookObject {
     protected String name;
     protected Vector2 position;
     protected ObjectArgumentNode rotation;
+    protected Vector2 scale;
 
     protected SpookObject parent;
     protected ArrayList<SpookObject> children = new ArrayList<>();
@@ -41,6 +42,14 @@ public abstract class SpookObject {
 
     public ObjectArgumentNode getRotation() {
         return rotation;
+    }
+
+    public void setScale(Vector2 scale) {
+        this.scale = scale;
+    }
+
+    public Vector2 getScale() {
+        return scale;
     }
 
     public void setRotation(ObjectArgumentNode rotation) {

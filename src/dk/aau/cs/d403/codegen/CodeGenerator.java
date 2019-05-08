@@ -65,6 +65,9 @@ public class CodeGenerator {
         sb.append(Shape.getRotationFunctionSignature2D());
         sb.append(";\n");
 
+        sb.append(Shape.getScaleFunctionSignature2D());
+        sb.append(";\n");
+
         sb.append("\n");
     }
 
@@ -80,12 +83,17 @@ public class CodeGenerator {
         sb.append("{\n\t");
         sb.append(Shape.getRotationFunctionBody2D());
         sb.append("\n}\n");
+
+        sb.append(Shape.getScaleFunctionSignature2D());
+        sb.append("{\n\t");
+        sb.append(Shape.getScaleFunctionBody2D());
+        sb.append("\n}\n");
     }
 
     private void generateMain() {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
 
-        sb.append("\tfragColor = vec4");
+        sb.append("\tfragColor = ");
         sb.append(PrintGLSL.printVector4(scene.getColor()));
         sb.append(";\n");
 
@@ -131,9 +139,15 @@ public class CodeGenerator {
                 sb.append(" = ").append(parent.getName()).append("Space;\n\t");
 
             sb.append(newSpace).append(" -= ").append(objectName).append(".pos;\n\t");
-            sb.append(newSpace).append(" = rotate2D(");
-            sb.append(PrintGLSL.printObjArgNode(parent.getChildren().get(i).getRotation()));
+
+            sb.append(newSpace).append(" = scale2D(");
+            sb.append(objectName).append(".scale");
             sb.append(") * ").append(newSpace).append(";\n\t");
+
+            sb.append(newSpace).append(" = rotate2D(");
+            sb.append(objectName).append(".rot");
+            sb.append(") * ").append(newSpace).append(";\n\t");
+
             sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
 
             sb.append(((Shape)parent.getChildren().get(i)).getCheckCall(newSpace));
@@ -577,13 +591,18 @@ public class CodeGenerator {
 
                 switch (functionName) {
                     case "setPosition":
-                        ObjectArgumentNode x = argumentNodes.get(0);
-                        ObjectArgumentNode y = argumentNodes.get(1);
-                        object.setPosition(new Vector2(x, y));
+                        ObjectArgumentNode xPos = argumentNodes.get(0);
+                        ObjectArgumentNode yPos = argumentNodes.get(1);
+                        object.setPosition(new Vector2(xPos, yPos));
                         break;
                     case "setRotation":
                         ObjectArgumentNode rot = argumentNodes.get(0);
                         object.setRotation(rot);
+                        break;
+                    case "setScale":
+                        ObjectArgumentNode xScale = argumentNodes.get(0);
+                        ObjectArgumentNode yScale = argumentNodes.get(1);
+                        object.setScale(new Vector2(xScale, yScale));
                         break;
                     case "setParent":
                         String parentName = argumentNodes.get(0)

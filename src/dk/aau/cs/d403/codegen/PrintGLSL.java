@@ -213,20 +213,20 @@ public class PrintGLSL {
     }
 
     public static String printVector2(Vector2 vector){
-        return "(" +
+        return "vec2(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ")";
     }
 
     public static String printVector3(Vector3 vector){
-        return "(" +
+        return "vec3(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ", " +
                 printObjArgNode(vector.getZ()) + ")";
     }
 
     public static String printVector4(Vector4 vector){
-        return "(" +
+        return "vec4(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ", " +
                 printObjArgNode(vector.getZ()) + ", " +

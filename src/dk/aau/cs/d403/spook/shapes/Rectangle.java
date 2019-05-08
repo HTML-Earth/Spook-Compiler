@@ -17,6 +17,7 @@ public class Rectangle extends Shape {
         this.name = name;
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
+        this.scale = Vector2.one();
 
         if (argumentNodes.size() == 3) {
             this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
@@ -28,6 +29,8 @@ public class Rectangle extends Shape {
         return "struct Rectangle {\n\t" +
                 "vec2 size;\n\t" +
                 "vec2 pos;\n\t" +
+                "vec2 scale;\n\t" +
+                "float rot;\n\t" +
                 "vec4 color;\n" +
                 "};";
     }
@@ -44,17 +47,11 @@ public class Rectangle extends Shape {
     @Override
     public String getDeclaration() {
         return "Rectangle " + name + " = Rectangle(\n\t\t" +
-                "vec2(" +
-                PrintGLSL.printObjArgNode(size.getX()) + ", " +
-                PrintGLSL.printObjArgNode(size.getY()) + "),\n\t\t" +
-                "vec2(" +
-                PrintGLSL.printObjArgNode(getWorldPosition().getX()) + ", " +
-                PrintGLSL.printObjArgNode(getWorldPosition().getY()) + "),\n\t\t" +
-                "vec4(" +
-                PrintGLSL.printObjArgNode(color.getX()) + ", " +
-                PrintGLSL.printObjArgNode(color.getY()) + ", " +
-                PrintGLSL.printObjArgNode(color.getZ()) + ", " +
-                PrintGLSL.printObjArgNode(color.getW()) + ")\n\t" +
+                PrintGLSL.printVector2(size) + ",\n\t\t" +
+                PrintGLSL.printVector2(getWorldPosition()) + ",\n\t\t" +
+                PrintGLSL.printVector2(scale) + ",\n\t\t" +
+                PrintGLSL.printObjArgNode(rotation) + ",\n\t\t" +
+                PrintGLSL.printVector4(color) + "\n\t" +
                 ");";
     }
 
