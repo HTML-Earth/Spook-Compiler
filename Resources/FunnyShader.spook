@@ -1,25 +1,71 @@
 Shader{
 
-Num blinkMove = sin(Time) * 100;
+Num xPos = Screen.x / 2;
+Num yPos = Screen.y / 2;
+Num blinkMove = sin(Time) * 80;
+Vec4 whiteTransparent = (1, 1, 1, 0.5);
+
+Circle middle = (10, Color.clear());
+
+Circle bag1 = (100, Color.purple());
+Circle bag2 = (100, Color.purple());
+bag1.setParent(middle);
+bag2.setParent(middle);
+bag1.setPosition(xPos - 150, yPos - 10);
+bag2.setPosition(xPos + 150, yPos - 10);
 
 Circle circle1 = (100, Color.white());
 Circle circle2 = (100, Color.white());
+circle1.setParent(middle);
+circle2.setParent(middle);
+circle1.setPosition(xPos - 150, yPos);
+circle2.setPosition(xPos + 150, yPos);
 
-Circle circleEye1 = (50, Color.black());
-Circle circleEye2 = (50, Color.black());
+Circle circleEye1 = (55, Color.black());
+Circle circleEye2 = (55, Color.black());
+circleEye1.setParent(circle1);
+circleEye2.setParent(circle2);
+circleEye1.setPosition(20 + cos(Time) * 20, sin(Time) * 20);
+circleEye2.setPosition(-20 + cos(Time) * 20, sin(Time) * 20);
 
-Rectangle rec1 = (1000, 300, Color.magenta());
+Circle shine1 = (30, whiteTransparent);
+Circle shine2 = (30, whiteTransparent);
+shine1.setScale (0.5, 1);
+shine2.setScale(0.5, 1);
+shine1.setParent(circleEye1);
+shine2.setParent(circleEye2);
+shine1.setPosition(20, 30);
+shine2.setPosition(20, 30);
 
-circle1.setPosition(800,400);
-circle2.setPosition(1200,400);
-circleEye1.setPosition(800,450);
-circleEye2.setPosition(1225,425);
-rec1.setPosition(800, 550 + blinkMove);
+Circle mover = (10, Color.clear());
+mover.setPosition(xPos, yPos + 120 + blinkMove);
 
-Scene.add(rec1);
-Scene.add(circleEye1);
-Scene.add(circleEye2);
-Scene.add(circle1);
-Scene.add(circle2);
+Rectangle eyelid1 = (200, 300, Color.purple());
+Rectangle eyelid2 = (200, 300, Color.purple());
+eyelid1.setParent(mover);
+eyelid2.setParent(mover);
+eyelid1.setPosition(150, 0);
+eyelid2.setPosition(-150, 0);
+#eyelid1.setScale(abs(cos(Time)) + 0.1, 1);
+#eyelid2.setScale(abs(cos(Time)) + 0.1, 1);
+Rectangle rec1 = (200, 305, Color.magenta());
+Rectangle rec2 = (200, 305, Color.magenta());
+rec1.setParent(mover);
+rec2.setParent(mover);
+rec1.setPosition(150, 15);
+rec2.setPosition(-150, 15);
+
+Circle mouth = (50, Color.black());
+mouth.setPosition(xPos, yPos - 120);
+mouth.setScale(1,0.4);
+
+Circle tongue = (30, Color.red());
+tongue.setParent(mouth);
+tongue.setPosition(0, -35);
+tongue.setScale(1,0.6);
+
+Scene.add(middle);
+Scene.add(mover);
+Scene.add(mouth);
 
 }
