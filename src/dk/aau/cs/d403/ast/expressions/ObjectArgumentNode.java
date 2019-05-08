@@ -37,6 +37,10 @@ public class ObjectArgumentNode implements ASTnode {
         return codePosition;
     }
 
+    public static ObjectArgumentNode zero() {
+        return new ObjectArgumentNode(LowPrecedenceNode.zero());
+    }
+
     public static ObjectArgumentNode add(ObjectArgumentNode a, ObjectArgumentNode b) {
         return new ObjectArgumentNode(LowPrecedenceNode.add(a.getLowPrecedence(), b.getLowPrecedence()));
     }

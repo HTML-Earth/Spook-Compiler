@@ -38,6 +38,12 @@ public class HighPrecedenceNode implements ASTnode {
         return operators;
     }
 
+    public static HighPrecedenceNode zero() {
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+        atomPrecedenceNodes.add(AtomPrecedenceNode.zero());
+        return new HighPrecedenceNode(atomPrecedenceNodes);
+    }
+
     @Override
     public String prettyPrint(int indent) {
         int matchAtom = 0;

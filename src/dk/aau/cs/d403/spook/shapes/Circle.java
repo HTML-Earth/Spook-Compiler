@@ -16,6 +16,7 @@ public class Circle extends Shape {
 
         this.name = name;
         this.position = Vector2.zero();
+        this.rotation = ObjectArgumentNode.zero();
 
         if (argumentNodes.size() == 2) {
             this.radius = argumentNodes.get(0);
@@ -55,7 +56,7 @@ public class Circle extends Shape {
     }
 
     @Override
-    public String getCheckCall() {
-        return "if (CircleCheck(fragCoord, " + name + "))" + getColorApplication();
+    public String getCheckCall(String spaceName) {
+        return "if (CircleCheck(" + spaceName + ", " + name + "))" + getColorApplication();
     }
 }

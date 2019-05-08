@@ -38,6 +38,7 @@ public class CodeGenerator {
 
         ProgramNode program = visitProgram(ast);
 
+        sb.append("const float PI = 3.1415926535897932384626433832795;\n\n");
         generateStructs();
         generatePrototypes();
         generateMain();
@@ -61,6 +62,9 @@ public class CodeGenerator {
             sb.append(";\n");
         }
 
+        sb.append(Shape.getRotationFunctionSignature2D());
+        sb.append(";\n");
+
         sb.append("\n");
     }
 
@@ -71,6 +75,11 @@ public class CodeGenerator {
             sb.append(getClassCode(type, "getCheckFunctionBody"));
             sb.append("\n}\n");
         }
+
+        sb.append(Shape.getRotationFunctionSignature2D());
+        sb.append("{\n\t");
+        sb.append(Shape.getRotationFunctionBody2D());
+        sb.append("\n}\n");
     }
 
     private void generateMain() {
@@ -111,11 +120,26 @@ public class CodeGenerator {
 
     private void generateChecks(SpookObject parent) {
         for (int i = 0; i < parent.getChildren().size(); i++) {
-            generateChecks(parent.getChildren().get(i));
+            String objectName = parent.getChildren().get(i).getName();
+            String newSpace = objectName + "Space";
 
-            sb.append("\t");
-            sb.append(((Shape)parent.getChildren().get(i)).getCheckCall());
+            sb.append("\tvec2 ").append(newSpace);
+
+            if (parent instanceof Scene)
+                sb.append(" = fragCoord;\n\t");
+            else
+                sb.append(" = ").append(parent.getName()).append("Space;\n\t");
+
+            sb.append(newSpace).append(" -= ").append(objectName).append(".pos;\n\t");
+            sb.append(newSpace).append(" = rotate2D(");
+            sb.append(PrintGLSL.printObjArgNode(parent.getChildren().get(i).getRotation()));
+            sb.append(") * ").append(newSpace).append(";\n\t");
+            sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
+
+            sb.append(((Shape)parent.getChildren().get(i)).getCheckCall(newSpace));
             sb.append("\n\n");
+
+            generateChecks(parent.getChildren().get(i));
         }
     }
 
@@ -556,6 +580,10 @@ public class CodeGenerator {
                         ObjectArgumentNode x = argumentNodes.get(0);
                         ObjectArgumentNode y = argumentNodes.get(1);
                         object.setPosition(new Vector2(x, y));
+                        break;
+                    case "setRotation":
+                        ObjectArgumentNode rot = argumentNodes.get(0);
+                        object.setRotation(rot);
                         break;
                     case "setParent":
                         String parentName = argumentNodes.get(0)

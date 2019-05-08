@@ -16,6 +16,7 @@ public class Square extends Shape {
 
         this.name = name;
         this.position = Vector2.zero();
+        this.rotation = ObjectArgumentNode.zero();
 
         if (argumentNodes.size() == 2) {
             this.size = argumentNodes.get(0);
@@ -56,7 +57,7 @@ public class Square extends Shape {
     }
 
     @Override
-    public String getCheckCall() {
-        return "if (SquareCheck(fragCoord, " + name + "))" + getColorApplication();
+    public String getCheckCall(String spaceName) {
+        return "if (SquareCheck(" + spaceName + ", " + name + "))" + getColorApplication();
     }
 }
