@@ -523,6 +523,9 @@ public class CodeGenerator {
             case "Triangle":
                 object = new Triangle(variableName, argumentNodes);
                 break;
+            case "Polygon":
+                object = new Polygon(variableName, argumentNodes);
+                break;
             default:
                 throw new CompilerException("Invalid object declaration", objectDeclarationNode.getCodePosition());
         }
