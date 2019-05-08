@@ -53,6 +53,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitObjectDecl(SpookParser.ObjectDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#objectConstructor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectConstructor(SpookParser.ObjectConstructorContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#assignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

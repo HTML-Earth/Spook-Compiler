@@ -27,8 +27,7 @@ statement
     | assignment SEMICOLON
     | functionCall SEMICOLON
     | conditionalStatement
-    | iterativeStatement
-    | returnStatement;
+    | iterativeStatement;
 
 
 
@@ -42,22 +41,27 @@ declaration
 variableDecl
     : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
 
-// Object declaration
+// Object declaration TODO
 objectDecl
-    : className objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
+    : className objectVariableName (ASSIGN objectConstructor)?;
 
-
+//TODO
+objectConstructor
+    : LEFT_PAREN objectArgs? RIGHT_PAREN
+    | functionCall;
 
 
 /*      ASSIGNMENT       */
 assignment
     : (variableName | swizzle) ASSIGN expression;
 
+
 expression
     : arithExpression
     | boolExpression
-    | ternaryOperator
-    | functionCall;
+    | ternaryOperator;
+
+
 
 // Expressions
 arithExpression: lowPrecedence;
@@ -65,7 +69,8 @@ vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: boolOperations;
-ternaryOperator: boolExpression QUESTION expression COLON expression;
+//TODO FIX AST
+ternaryOperator: (boolExpression | variableName | functionCall) QUESTION expression COLON expression;
 
 arithOperand
     : realNumber | variableName | functionCall | swizzle | vector2Expression | vector3Expression | vector4Expression;
@@ -97,7 +102,6 @@ boolOperations
 // Boolean operations
 boolOperation
     : BOOL_LITERAL
-    | functionCall
     | LEFT_PAREN boolOperations RIGHT_PAREN;
 
 boolOperationExtend
@@ -148,14 +152,14 @@ elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock
 elseStatement: ELSE elseBlock;
 
 // Expressions
-ifBoolExpression: boolExpression;
-elseifBoolExpression: boolExpression;
+ifBoolExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
+elseifBoolExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
 
 // Blocks
 ifBlock: conditionalBlock;
 elseIfBlock: conditionalBlock;
 elseBlock: conditionalBlock;
-conditionalBlock: block | statement;
+conditionalBlock: block | statement | returnStatement;
 
 
 /*      LOOPS        */
@@ -198,8 +202,8 @@ functionArgs
 functionArg
     : (dataType | className) variableName;
 
-// Function block
-functionBlock: LEFT_BRACKET (statement)* returnStatement RIGHT_BRACKET;
+// Function block TODO: check function has reachable return either in an else or at the end of the function also fix AST
+functionBlock: LEFT_BRACKET (statement)* returnStatement? RIGHT_BRACKET;
 
 // Return statement
 returnStatement: RETURN expression SEMICOLON;
