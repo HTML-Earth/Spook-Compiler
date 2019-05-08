@@ -95,6 +95,7 @@ public class Enums {
         RECTANGLE,
         SQUARE,
         TRIANGLE,
+        POLYGON,
         SHAPE,
         COLOR
     }

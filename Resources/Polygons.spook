@@ -1,0 +1,13 @@
+Shader {
+    Vec2 p1 = (-100,10);
+    Vec2 p2 = (10,100);
+    Vec2 p3 = (20,-10);
+    Vec2 p4 = (-20,-20);
+
+    Polygon poly = (p1, p2, p3, p4, Color.white());
+    poly.setPosition(sin(Time) * 100 + 200, cos(Time * 4) * 100 + 200);
+    poly.setRotation(sin(Time) * 180);
+
+    Scene.setColor(Color.black());
+    Scene.add(poly);
+}
