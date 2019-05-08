@@ -14,6 +14,7 @@ public class Triangle extends Shape {
         this.name = name;
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
+        this.scale = Vector2.one();
 
         throw new RuntimeException("Not yet implemented");
     }
@@ -22,6 +23,8 @@ public class Triangle extends Shape {
         return "struct Triangle {\n\t" +
                 "vec2 size;\n\t" +
                 "vec2 pos;\n\t" +
+                "vec2 scale;\n\t" +
+                "float rot;\n\t" +
                 "vec4 color;\n" +
                 "};";
     }

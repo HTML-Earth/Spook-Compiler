@@ -17,6 +17,7 @@ public class Circle extends Shape {
         this.name = name;
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
+        this.scale = Vector2.one();
 
         if (argumentNodes.size() == 2) {
             this.radius = argumentNodes.get(0);
@@ -28,6 +29,8 @@ public class Circle extends Shape {
         return "struct Circle {\n\t" +
                 "float radius;\n\t" +
                 "vec2 pos;\n\t" +
+                "vec2 scale;\n\t" +
+                "float rot;\n\t" +
                 "vec4 color;\n" +
                 "};";
     }
@@ -44,14 +47,10 @@ public class Circle extends Shape {
     public String getDeclaration() {
         return "Circle " + name + " = Circle(\n\t\t" +
                 PrintGLSL.printObjArgNode(radius) + ",\n\t\t" +
-                "vec2(" +
-                PrintGLSL.printObjArgNode(getWorldPosition().getX()) + ", " +
-                PrintGLSL.printObjArgNode(getWorldPosition().getY()) + "),\n\t\t" +
-                "vec4(" +
-                PrintGLSL.printObjArgNode(color.getX()) + ", " +
-                PrintGLSL.printObjArgNode(color.getY()) + ", " +
-                PrintGLSL.printObjArgNode(color.getZ()) + ", " +
-                PrintGLSL.printObjArgNode(color.getW()) + ")\n\t" +
+                PrintGLSL.printVector2(getWorldPosition()) + ",\n\t\t" +
+                PrintGLSL.printVector2(scale) + ",\n\t\t" +
+                PrintGLSL.printObjArgNode(rotation) + ",\n\t\t" +
+                PrintGLSL.printVector4(color) + "\n\t" +
                 ");";
     }
 
