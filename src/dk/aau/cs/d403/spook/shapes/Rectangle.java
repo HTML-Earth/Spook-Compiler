@@ -16,6 +16,7 @@ public class Rectangle extends Shape {
 
         this.name = name;
         this.position = Vector2.zero();
+        this.rotation = ObjectArgumentNode.zero();
 
         if (argumentNodes.size() == 3) {
             this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
@@ -58,7 +59,7 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public String getCheckCall() {
-        return "if (RectangleCheck(fragCoord, " + name + "))" + getColorApplication();
+    public String getCheckCall(String spaceName) {
+        return "if (RectangleCheck(" + spaceName + ", " + name + "))" + getColorApplication();
     }
 }

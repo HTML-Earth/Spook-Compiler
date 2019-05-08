@@ -13,6 +13,7 @@ public class Triangle extends Shape {
 
         this.name = name;
         this.position = Vector2.zero();
+        this.rotation = ObjectArgumentNode.zero();
 
         throw new RuntimeException("Not yet implemented");
     }
@@ -35,7 +36,7 @@ public class Triangle extends Shape {
     }
 
     @Override
-    public String getCheckCall() {
+    public String getCheckCall(String spaceName) {
         return null;
     }
 }

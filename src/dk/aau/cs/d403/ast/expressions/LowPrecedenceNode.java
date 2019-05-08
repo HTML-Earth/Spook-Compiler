@@ -76,6 +76,12 @@ public class LowPrecedenceNode implements ASTnode {
         return codePosition;
     }
 
+    public static LowPrecedenceNode zero() {
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+        highPrecedenceNodes.add(HighPrecedenceNode.zero());
+        return new LowPrecedenceNode(highPrecedenceNodes);
+    }
+
     public static LowPrecedenceNode add(LowPrecedenceNode a, LowPrecedenceNode b) {
         ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
         ArrayList<Enums.Operator> operators = new ArrayList<>();

@@ -37,6 +37,10 @@ public class AtomPrecedenceNode implements ASTnode {
         return operator;
     }
 
+    public static AtomPrecedenceNode zero() {
+        return new AtomPrecedenceNode(ArithOperandNode.zero());
+    }
+
     @Override
     public String prettyPrint(int indent) {
         //Print -operand
