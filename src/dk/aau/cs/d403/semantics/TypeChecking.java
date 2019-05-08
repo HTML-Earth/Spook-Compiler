@@ -29,6 +29,7 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Color");
         this.listOfPredefinedClasses.add("CircleGradient");
         this.listOfPredefinedClasses.add("LineGradient");
+        this.listOfPredefinedClasses.add("Polygon");
         this.listOfPredefinedClasses.add("Scene");
 
         this.listOfPredefinedVariables = new ArrayList<>();
