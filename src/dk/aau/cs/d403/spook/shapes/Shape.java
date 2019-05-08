@@ -19,7 +19,23 @@ public abstract class Shape extends SpookObject implements Colorable {
         this.color = color;
     }
 
-    public abstract String getCheckCall();
+    public abstract String getCheckCall(String spaceName);
+
+    public static String getRotationFunctionSignature2D() {
+        return "mat2 rotate2D(float angle)";
+    }
+
+    public static String getRotationFunctionBody2D() {
+        return "float rad = -angle * PI / 180.0;\n\treturn mat2(cos(rad), -sin(rad), sin(rad), cos(rad));";
+    }
+
+    public static String getScaleFunctionSignature2D() {
+        return "mat2 scale2D(vec2 scale)";
+    }
+
+    public static String getScaleFunctionBody2D() {
+        return "return mat2(1.0/scale.x, 0.0, 0.0, 1.0/scale.y);";
+    }
 
     protected String getColorApplication() {
         //IF ALPHA IS FULL (1)

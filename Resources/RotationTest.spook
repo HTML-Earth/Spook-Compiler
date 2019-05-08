@@ -1,0 +1,56 @@
+Shader {
+    Num rotation = sin(Time) * 15;
+    Num circleScale = max(sin(Time * 0.25), 0.25) * 3;
+
+    Rectangle rec1 = (50, 50, Color.black());
+    rec1.setPosition(50, 50);
+    rec1.setRotation(rotation);
+
+    Rectangle rec2 = (50, 50, Color.yellow());
+    rec2.setPosition(50, 50);
+    rec2.setParent(rec1);
+    rec2.setRotation(rotation);
+
+    Rectangle rec3 = (50, 50, Color.yellow());
+    rec3.setPosition(50, 50);
+    rec3.setParent(rec2);
+    rec3.setRotation(rotation);
+
+    Rectangle rec4 = (50, 50, Color.yellow());
+    rec4.setPosition(50, 50);
+    rec4.setParent(rec3);
+    rec4.setRotation(rotation);
+
+    Rectangle rec5 = (50, 50, Color.yellow());
+    rec5.setPosition(50, 50);
+    rec5.setParent(rec4);
+    rec5.setRotation(rotation);
+
+    Circle circle1 = (25, Color.teal());
+    circle1.setPosition(50, 50);
+    circle1.setParent(rec1);
+    circle1.setScale(circleScale * sin(Time), circleScale * cos(Time));
+
+    Circle circle2 = (25, Color.teal());
+    circle2.setPosition(50, 50);
+    circle2.setParent(rec2);
+    circle2.setScale(circleScale * sin(Time), circleScale * cos(Time));
+
+    Circle circle3 = (25, Color.teal());
+    circle3.setPosition(50, 50);
+    circle3.setParent(rec3);
+    circle3.setScale(circleScale * sin(Time), circleScale * cos(Time));
+
+    Circle circle4 = (25, Color.teal());
+    circle4.setPosition(50, 50);
+    circle4.setParent(rec4);
+    circle4.setScale(circleScale * sin(Time), circleScale * cos(Time));
+
+    Circle circle5 = (25, Color.teal());
+    circle5.setPosition(50, 50);
+    circle5.setParent(rec5);
+    circle5.setScale(circleScale * sin(Time), circleScale * cos(Time));
+
+    Scene.setColor(Color.red());
+    Scene.add(rec1);
+}

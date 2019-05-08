@@ -50,6 +50,10 @@ public class ArithOperandNode implements ASTnode {
 
     public SwizzleNode getSwizzleNode() {return swizzleNode; }
 
+    public static ArithOperandNode zero() {
+        return new ArithOperandNode(new RealNumberNode(0));
+    }
+
     @Override
     public String prettyPrint(int indent) {
         if (realNumberNode != null) {
