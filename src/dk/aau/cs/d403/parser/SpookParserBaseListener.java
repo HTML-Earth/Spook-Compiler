@@ -100,6 +100,18 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterObjectConstructor(SpookParser.ObjectConstructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitObjectConstructor(SpookParser.ObjectConstructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssignment(SpookParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
