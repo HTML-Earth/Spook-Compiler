@@ -71,22 +71,19 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitStatement(SpookParser.StatementContext ctx) {
-        ArrayList<StatementNode> statementNodes = new ArrayList<>();
-
         if (ctx.declaration() != null)
-            statementNodes.add((StatementNode)visitDeclaration(ctx.declaration()));
+            return visitDeclaration(ctx.declaration());
         else if (ctx.assignment() != null)
-            statementNodes.add((StatementNode)visitAssignment(ctx.assignment()));
+            return visitAssignment(ctx.assignment());
         else if (ctx.functionCall() != null)
-            statementNodes.add((StatementNode)visitFunctionCall(ctx.functionCall()));
+            return visitFunctionCall(ctx.functionCall());
         else if (ctx.conditionalStatement() != null)
-            statementNodes.add((StatementNode)visitIfElseStatement(ctx.conditionalStatement().ifElseStatement()));
+            return visitIfElseStatement(ctx.conditionalStatement().ifElseStatement());
         else if (ctx.iterativeStatement() != null)
-            statementNodes.addAll(((BlockNode)visitForStatement(ctx.iterativeStatement().forStatement())).getStatementNodes());
-        else
+            return visitForStatement(ctx.iterativeStatement().forStatement());
+        else {
             throw new CompilerException("Statement is of unknown type", getCodePosition(ctx));
-
-        return new BlockNode(statementNodes);
+        }
     }
 
     @Override
