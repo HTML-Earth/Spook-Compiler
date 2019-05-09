@@ -1,0 +1,19 @@
+Shader {
+
+    #Swizzling tests
+    Vec4 vec = (1, 2, 3, 4);
+    Vec4 vec1 = vec.xxxy;
+
+    Vec3 vec3 = (1, 2, 3);
+    vec3 = vec1.xxy;
+
+    #Reserved Tokens test
+    Num x = 1;
+    Num y = 2;
+    Num z = 3;
+
+
+
+
+
+}
