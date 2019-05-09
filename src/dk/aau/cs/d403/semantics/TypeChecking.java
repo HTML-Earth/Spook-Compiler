@@ -173,7 +173,7 @@ public class TypeChecking {
     }
 
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
-        String objectType = objectDeclarationNode.getObjectType();
+        String objectType = objectDeclarationNode.getClassName();
         String variableName = objectDeclarationNode.getVariableName();
 
         ObjectDeclarationNode retrievedNode;
@@ -190,7 +190,7 @@ public class TypeChecking {
 
         if (retrieveSymbol(variableName) == null)
             enterSymbol(variableName, objectDeclarationNode);
-        else if (retrievedNode != null && !retrievedNode.getObjectType().equals(objectType))
+        else if (retrievedNode != null && !retrievedNode.getClassName().equals(objectType))
             enterSymbol(variableName, objectDeclarationNode);
         else
             throw new RuntimeException("ERROR: An object (" + variableName + ") is already declared with the same name and type.");
@@ -320,8 +320,8 @@ public class TypeChecking {
             if (objectDeclarationNode != null) {
 
                 // If it is a custom object function call
-                if (!(listOfPredefinedClasses.contains(objectDeclarationNode.getObjectType()))) {
-                    classDeclarationNode = (ClassDeclarationNode) retrieveSymbol(objectDeclarationNode.getObjectType());
+                if (!(listOfPredefinedClasses.contains(objectDeclarationNode.getClassName()))) {
+                    classDeclarationNode = (ClassDeclarationNode) retrieveSymbol(objectDeclarationNode.getClassName());
                     boolean existingFunction = false;
                     boolean sameFunction = true;
                     Enums.DataType dataType = null;
@@ -370,29 +370,29 @@ public class TypeChecking {
         IfStatementNode ifStatementNode = ifElseStatementNode.getIfStatementNode();
 
         // Make sure its boolean expression and block/statement is well typed
-        visitExpression(ifStatementNode.getIfBool());
+        visitExpression(ifStatementNode.getIfBool().getBoolExpressionNode());
         if (ifStatementNode.getIfBlock() != null)
-            visitBlock(ifStatementNode.getIfBlock());
+            visitBlock(ifStatementNode.getIfBlock().getBlockNode());
         else
-            visitStatement(ifStatementNode.getIfStatement());
+            visitStatement(ifStatementNode.getIfBlock().getStatementNode());
 
         // Check if there are any Else-if statements and do the same for Else-if statements as for If statements
         if (ifElseStatementNode.getElseIfStatementNodes() != null) {
             for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()) {
-                visitExpression(elseIfStatementNode.getElseIfBool());
+                visitExpression(elseIfStatementNode.getElseIfBool().getBoolExpressionNode());
                 if (elseIfStatementNode.getElseIfBlock() != null)
-                    visitBlock(elseIfStatementNode.getElseIfBlock());
+                    visitBlock(elseIfStatementNode.getElseIfBlock().getBlockNode());
                 else
-                    visitStatement(elseIfStatementNode.getElseIfStatement());
+                    visitStatement(elseIfStatementNode.getElseIfBlock().getStatementNode());
             }
         }
 
         // Check if there are an Else statements and do the same for it as for Else-if and If
         if (ifElseStatementNode.getElseStatementNode() != null) {
             if (ifElseStatementNode.getElseStatementNode().getElseBlock() != null)
-                visitBlock(ifElseStatementNode.getElseStatementNode().getElseBlock());
+                visitBlock(ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode());
             else
-                visitStatement(ifElseStatementNode.getElseStatementNode().getElseStatement());
+                visitStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode());
         }
     }
 
@@ -618,24 +618,6 @@ public class TypeChecking {
 
         BoolOperationNode boolOperationNode = boolOperationsNode.getBoolOperationNode();
         ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = boolOperationsNode.getBoolOperationExtendNodes();
-
-        // Negation and real number
-        if (boolOperationsNode.getOptionalNOT() != null && boolOperationNode.getRealNumberNode() != null)
-            throw new RuntimeException("ERROR: Can't negate a real number");
-        if (boolOperationNode.getRealNumberNode() != null && boolOperationExtendNodes == null)
-            throw new RuntimeException("ERROR: Boolean can't be a real number");
-
-        for (BoolOperationExtendNode boolOperationExtendNode : boolOperationExtendNodes) {
-            if (booleanOperatorList.contains(boolOperationExtendNode.getBoolOperator()) && boolOperationExtendNode.getBoolOperationNode().getBoolLiteral() != null)
-                throw new RuntimeException("ERROR: Can't use number operator for booleans");
-            if (numberOperatorList.contains(boolOperationExtendNode.getBoolOperator()) && boolOperationExtendNode.getBoolOperationNode().getRealNumberNode() != null)
-                throw new RuntimeException("ERROR: Can't use boolean operator for numbers");
-            /*
-            if (boolOperationExtendNode.getBoolOperationNode().getBoolOperationsNode() != null) {
-                //visitBoolExpression(boolOperationExtendNode.getBoolOperationNode().getBoolOperationsNode());
-            }
-             */
-        }
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {

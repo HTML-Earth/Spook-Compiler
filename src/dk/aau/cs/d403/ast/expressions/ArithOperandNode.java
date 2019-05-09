@@ -95,13 +95,13 @@ public class ArithOperandNode implements ASTnode {
             return swizzleNode.prettyPrint(indent);
         }
         else if (vector2ExpressionNode != null) {
-            return vector2ExpressionNode.prettyPrint();
+            return vector2ExpressionNode.prettyPrint(indent);
         }
         else if (vector3ExpressionNode != null) {
-            return vector3ExpressionNode.prettyPrint();
+            return vector3ExpressionNode.prettyPrint(indent);
         }
         else if (vector4ExpressionNode != null) {
-            vector4ExpressionNode.prettyPrint();
+            vector4ExpressionNode.prettyPrint(indent);
         }
         //else
         return "Invalid Operand";

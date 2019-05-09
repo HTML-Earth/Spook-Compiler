@@ -53,17 +53,17 @@ public class ConditionalExpressionNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (boolExpressionNode != null)
-            return boolExpressionNode.prettyPrint();
+            return boolExpressionNode.prettyPrint(indent);
         else if (boolLiteral != null)
             return boolLiteral.toString();
         else if (variableName != null)
             return variableName;
         else if (nonObjectFunctionCallNode != null)
-            return nonObjectFunctionCallNode.prettyPrint();
+            return nonObjectFunctionCallNode.prettyPrint(indent);
         else if (objectFunctionCallNode != null)
-            return objectFunctionCallNode.prettyPrint();
+            return objectFunctionCallNode.prettyPrint(indent);
         else
             return "Invalid Conditional Expression";
     }
