@@ -444,11 +444,13 @@ public class CodeGenerator {
     private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
 
-        for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectArgumentNodes()) {
+        for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectContructorNode().getObjectArgumentNodePlural().getObjectArgumentNodes()) {
             argumentNodes.add(visitArgumentNode(argumentNode));
         }
+        ObjectArgumentNodePlural objectArgumentNodePlural = new ObjectArgumentNodePlural(argumentNodes);
+        ObjectContructorNode objectContructorNode = new ObjectContructorNode(objectArgumentNodePlural);
 
-        String objectType = objectDeclarationNode.getObjectType();
+        String objectType = objectDeclarationNode.getClassName();
         usedClasses.add(objectType);
 
         String variableName = objectDeclarationNode.getVariableName();
@@ -474,7 +476,7 @@ public class CodeGenerator {
         spookObjects.put(variableName, object);
 
         if (argumentNodes.size() > 0)
-            return new ObjectDeclarationNode(objectType, variableName, argumentNodes);
+            return new ObjectDeclarationNode(objectType, variableName, objectContructorNode);
         else
             return new ObjectDeclarationNode(objectType, variableName);
     }

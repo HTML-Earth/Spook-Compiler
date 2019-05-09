@@ -11,6 +11,9 @@ public class ArithOperandNode implements ASTnode {
     private ObjectFunctionCallNode objectFunctionCallNode;
     private String variableName;
     private SwizzleNode swizzleNode;
+    private Vector2ExpressionNode vector2ExpressionNode;
+    private Vector3ExpressionNode vector3ExpressionNode;
+    private Vector4ExpressionNode vector4ExpressionNode;
 
     public ArithOperandNode(RealNumberNode realNumberNode) {
         this.realNumberNode = realNumberNode;
@@ -32,6 +35,18 @@ public class ArithOperandNode implements ASTnode {
         this.variableName = variableName;
     }
 
+    public ArithOperandNode(Vector2ExpressionNode vector2ExpressionNode) {
+        this.vector2ExpressionNode = vector2ExpressionNode;
+    }
+
+    public ArithOperandNode(Vector3ExpressionNode vector3ExpressionNode) {
+        this.vector3ExpressionNode = vector3ExpressionNode;
+    }
+
+    public ArithOperandNode(Vector4ExpressionNode vector4ExpressionNode) {
+        this.vector4ExpressionNode = vector4ExpressionNode;
+    }
+
     public RealNumberNode getRealNumberNode() {
         return realNumberNode;
     }
@@ -50,6 +65,18 @@ public class ArithOperandNode implements ASTnode {
 
     public SwizzleNode getSwizzleNode() {return swizzleNode; }
 
+    public Vector2ExpressionNode getVector2ExpressionNode() {
+        return vector2ExpressionNode;
+    }
+
+    public Vector3ExpressionNode getVector3ExpressionNode() {
+        return vector3ExpressionNode;
+    }
+
+    public Vector4ExpressionNode getVector4ExpressionNode() {
+        return vector4ExpressionNode;
+    }
+
     @Override
     public String prettyPrint(int indent) {
         if (realNumberNode != null) {
@@ -67,8 +94,17 @@ public class ArithOperandNode implements ASTnode {
         else if (swizzleNode != null) {
             return swizzleNode.prettyPrint(indent);
         }
-        else
-            return "Invalid Operand";
+        else if (vector2ExpressionNode != null) {
+            return vector2ExpressionNode.prettyPrint();
+        }
+        else if (vector3ExpressionNode != null) {
+            return vector3ExpressionNode.prettyPrint();
+        }
+        else if (vector4ExpressionNode != null) {
+            vector4ExpressionNode.prettyPrint();
+        }
+        //else
+        return "Invalid Operand";
     }
 
     private CodePosition codePosition;
