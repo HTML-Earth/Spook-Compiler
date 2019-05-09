@@ -2,21 +2,10 @@ package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.Enums;
 
 public class BoolOperationNode implements ASTnode {
-    private String variableName;
-    private RealNumberNode realNumberNode;
     private BoolOperationsNode boolOperationsNode;
     private Boolean boolLiteral;
-
-    public BoolOperationNode(String variableName) {
-        this.variableName = variableName;
-    }
-
-    public BoolOperationNode(RealNumberNode realNumberNode) {
-        this.realNumberNode = realNumberNode;
-    }
 
     public BoolOperationNode(BoolOperationsNode boolOperationsNode) {
         this.boolOperationsNode = boolOperationsNode;
@@ -24,14 +13,6 @@ public class BoolOperationNode implements ASTnode {
 
     public BoolOperationNode(boolean boolLiteral) {
         this.boolLiteral = boolLiteral;
-    }
-
-    public String getVariableName() {
-        return variableName;
-    }
-
-    public RealNumberNode getRealNumberNode() {
-        return realNumberNode;
     }
 
     public BoolOperationsNode getBoolOperationsNode() {
@@ -44,11 +25,7 @@ public class BoolOperationNode implements ASTnode {
 
     @Override
     public String prettyPrint(int indent) {
-        if (variableName != null)
-            return variableName;
-        else if (realNumberNode != null)
-            return realNumberNode.prettyPrint(indent);
-        else if (boolOperationsNode != null)
+        if (boolOperationsNode != null)
             return boolOperationsNode.prettyPrint(indent);
         else if (boolLiteral != null)
             return boolLiteral.toString();

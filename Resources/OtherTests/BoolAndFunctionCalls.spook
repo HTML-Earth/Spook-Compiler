@@ -1,0 +1,171 @@
+Shader{
+
+    # Get true and false through function call
+    Bool truer;
+    Bool falser;
+    truer = getTrue;
+    falser = getFalse;
+
+    # Function call to check for true or false
+    Bool flag;
+    if (trueChecker(falser)) {
+        flag = false;
+    }
+    if (trueChecker(truer)) {
+        flag = true;
+    }
+
+    # Function call to create a yellow rectangle
+    Rectangle rec = ();
+    rec = createYellowRectangle(100, 400);
+
+    # Check if number is over 9000
+    Bool test;
+    Num number = 4891;
+    test = over9000Checker(number);
+
+    # Function communicating
+    bygMaHouse();
+
+    # Function that returns 21;
+    Num NinePlusTen;
+    NinePlusTen = get21;
+
+    # Boolean function to check if over 9000
+    Bool isOver9000;
+    Num powerLevel = 500;
+    isOver9000 = isOver9000Checker(powerLevel);
+
+    # Boolean decides which function to run based on riste value
+    Bool makeDecision;
+    Num risteValue = 30;
+    makeDecision = getDecisionBasedOnValue(risteValue);
+
+    if (makeDecision != true)
+        stay();
+    else if (makeDecision)
+        goHome();
+
+    # Standard bool value false
+    Bool empty;
+    Bool isEmpty;
+    isEmpty = checkIfEmpty(empty);
+
+    # Big bool oof (long bool statement)
+    Bool oof1 = true;
+    Bool oof2 = false;
+    Bool oof3 = true;
+    Bool oof4 = false;
+    Bool oof5 = true;
+    Bool bigOof;
+
+    if (oof1 && oof2 || oof3 && oof4 || oof5)
+        bigOof = true;
+
+    # yeetus deletus (function in bool statement)
+    Num aimBot = 10;
+    Num wallHack = 2;
+    if (aimBot >= wallHack)
+        aimBot = deletus();
+
+    if (aimBot == deletus())
+        useWallhack();
+
+    # object in function
+    Circle bobFace = createBobFace();
+    Rectangle bobBody = createBobBody(bobFace);
+
+    #
+
+
+}
+
+Bool getTrue() { return true; }
+
+Bool getFalse() { return false;}
+
+Num get21() { return 21; }
+
+Bool trueChecker(Bool bool) {
+    if (bool == true)
+        return true;
+    else
+        return false;
+}
+
+Rectangle createYellowRectangle (Num height, Num width) {
+    Rectangle rec = (height, width, Color.yellow());
+    rec.setPosition(400, 400);
+    return rec;
+}
+
+Bool over9000Checker (Num number) {
+    if (number > 9000)
+        return true;
+    else
+        return false;
+}
+
+Void bygMaHouse() {
+    Square house = ();
+    Circle roundRoof = ();
+    Rectangle door = ();
+    house = makeHouse();
+    roundRoof = makeRoundRoof();
+    door = makeDoor();
+}
+
+Square makeHouse() {
+    Square house = ();
+    return house;
+}
+
+Circle makeRoundRoof() {
+    Circle roof = ();
+    return roof;
+}
+
+Rectangle makeDoor() {
+    Rectangle door = ();
+    return door;
+}
+
+Bool getDecisionBasedOnValue(Num value) {
+    Bool isBiggerThan50;
+
+    if (value > 50)
+        isBiggerThan50 = true;
+    else
+        isBiggerThan50 = false;
+
+    if (isBiggerThan50)
+        return true;
+    else
+        return false;
+}
+
+Bool checkIfEmpty(Bool bool) {
+    if (bool)
+        return false;
+    else
+        return true;
+}
+
+Num deletus() {
+    return 0;
+}
+
+Void useWallhack() {
+
+}
+
+Circle createBob() {
+    Circle bobFace;
+    return bobFace;
+}
+
+Rectangle createBobBody(Circle bobFace) {
+    Rectangle bobBody;
+    return bobBody;
+}
+
