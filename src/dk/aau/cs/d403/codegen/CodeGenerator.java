@@ -574,7 +574,7 @@ public class CodeGenerator {
                                 .getVariableName();
                         SpookObject object = spookObjects.get(objectName);
                         if (object != null)
-                            scene.add(object);
+                            object.setParent(scene);
                         break;
                     case "setColor":
                         scene.setColor(Color.getColorArgument(argumentNodes.get(0)));

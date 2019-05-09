@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.semantics;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
@@ -167,7 +168,7 @@ public class TypeChecking {
         if (retrievedNode == null)
             enterSymbol(variableName, variableDeclarationNode);
         else
-            throw new RuntimeException("ERROR: A variable with the same name already exists.");
+            throw new CompilerException("ERROR: A variable with the same name already exists. (" + variableName + ")");
 
         if (variableDeclarationNode.getAssignmentNode() != null)
             visitAssignment(variableDeclarationNode.getAssignmentNode());

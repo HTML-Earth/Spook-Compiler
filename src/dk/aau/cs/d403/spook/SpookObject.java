@@ -14,7 +14,7 @@ public abstract class SpookObject {
     protected ObjectArgumentNode rotation;
     protected Vector2 scale;
 
-    protected SpookObject parent;
+    protected SpookObject parent = null;
     protected ArrayList<SpookObject> children = new ArrayList<>();
 
     public Enums.ClassType getClassType() {
@@ -58,13 +58,24 @@ public abstract class SpookObject {
 
     public void setParent(SpookObject parent)
     {
-        this.parent = parent;
-        parent.add(this);
+        if (parent != this.parent) {
+            if (this.parent != null) {
+                this.parent.remove(this);
+            }
+
+            this.parent = parent;
+            parent.add(this);
+        }
     }
 
     public void add(SpookObject spookObject) {
         if (!children.contains(spookObject))
             children.add(spookObject);
+    }
+
+    public void remove(SpookObject spookObject) {
+        if (children.contains(spookObject))
+            children.remove(spookObject);
     }
 
     public SpookObject getParent() {
