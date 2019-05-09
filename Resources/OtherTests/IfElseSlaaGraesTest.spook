@@ -1,0 +1,85 @@
+Shader{
+    Num WeatherTemp = 10;
+    Bool slaaGraes;
+    Bool rain;
+    Bool wet;
+    Bool hot;
+
+
+CreateSun;
+CreateGrass;
+
+rain = RainDecider(5)
+
+rain = rainStopped();
+hot = Sunned;
+
+if (rain)
+    wet = GrassIsWet;
+else if (!rain)
+    wet = GrassIsNotWet;
+
+
+if (wet && hot)
+    slaaGraes = true;
+    if (slaaGraes == GrassHasGrown && !rain)
+        GraesSlaaet;
+
+}
+
+
+Void GraesSlaaet(){
+}
+
+Void CreateGrass(){
+    Square lawn = (200,400,Color.green);
+    Square straw = (1,2,Color.yellow);
+
+    Scene.add(lawn);
+    Scene.add(straw);
+}
+
+Void CreateSun(){
+    Circle sun = (10,Color.yellow);
+    Scene.add(sun);
+}
+
+Bool RainDecider(Num temp){
+    Bool rain;
+
+    if (temp < 10)
+        rain = true;
+    else
+        rain = false;
+
+    return rain;
+}
+
+Bool GrassIsWet(){
+    Bool wet = true;
+
+    return wet;
+}
+
+Bool GrassIsNotWet(){
+    Bool wet = false;
+
+    return wet;
+}
+
+Bool Sunned(){
+    Bool hot = true;
+
+    return hot;
+}
+
+Bool GrassHasGrown(){
+    Bool grown = true;
+
+    return grown;
+}
+
+Bool rainStopped(){
+    Bool rain = false;
+    return rain;
+}

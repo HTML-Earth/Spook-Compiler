@@ -1,8 +1,0 @@
-Shader{
-    Circle circle = (50, Color.black());
-    if (true) {
-        circle.setPosition(500, 500);
-    }
-    Scene.add(circle);
-
-}
