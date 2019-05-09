@@ -202,8 +202,8 @@ public class SymbolTableFilling implements SymbolTable{
 
         /* Check if the object is of a predefined class or a custom class */
         String objectType = null;
-        if(objectDeclarationNode.getObjectType() != null)
-            objectType = objectDeclarationNode.getObjectType();
+        if(objectDeclarationNode.getClassName() != null)
+            objectType = objectDeclarationNode.getClassName();
 
         // Check if the custom class exists
         boolean customClassTypeExisting = false;

@@ -1,8 +1,6 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
-import dk.aau.cs.d403.ast.structure.BlockNode;
 
 import java.util.ArrayList;
 

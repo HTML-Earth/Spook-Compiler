@@ -1,44 +1,28 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
-import dk.aau.cs.d403.ast.structure.BlockNode;
+import dk.aau.cs.d403.ast.expressions.ConditionalExpressionNode;
 
 public class IfStatementNode extends StatementNode {
-    private BoolExpressionNode ifBool;
-    private BlockNode ifBlock;
-    private StatementNode ifStatement;
+    private ConditionalExpressionNode ifBool;
+    private ConditionalBlockNode ifBlock;
 
-    public IfStatementNode(BoolExpressionNode ifBool, StatementNode ifStatement) {
-        this.ifBool = ifBool;
-        this.ifStatement = ifStatement;
-    }
-
-    public IfStatementNode(BoolExpressionNode ifBool, BlockNode ifBlock) {
+    public IfStatementNode(ConditionalExpressionNode ifBool, ConditionalBlockNode ifBlock) {
         this.ifBool = ifBool;
         this.ifBlock = ifBlock;
     }
 
-    public BoolExpressionNode getIfBool() {
+    public ConditionalExpressionNode getIfBool() {
         return ifBool;
     }
 
-    public BlockNode getIfBlock() {
+    public ConditionalBlockNode getIfBlock() {
         return ifBlock;
-    }
-
-    public StatementNode getIfStatement() {
-        return ifStatement;
     }
 
     @Override
     public String prettyPrint() {
-        if (ifBlock != null)
-            return "if (" + ifBool.prettyPrint() + ") " + ifBlock.prettyPrint();
-        else if (ifStatement != null)
-            return "if (" + ifBool.prettyPrint() + ")\n\t" + ifStatement.prettyPrint();
-        else
-            return "Invalid If-statement";
+        return "if (" + ifBool.prettyPrint() + ") " + ifBlock.prettyPrint();
     }
 
     private CodePosition codePosition;

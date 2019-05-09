@@ -2,7 +2,6 @@ package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.expressions.ExpressionNode;
-import dk.aau.cs.d403.ast.expressions.RealNumberNode;
 
 public class ReturnNode extends StatementNode {
     private ExpressionNode expressionNode;

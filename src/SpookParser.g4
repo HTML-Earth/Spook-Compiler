@@ -18,7 +18,7 @@ program
 main
     : MAIN block;
 
-// Main block
+// Main block (Block with return statement is functionBlock)
 block: LEFT_BRACKET (statement)* RIGHT_BRACKET;
 
 // Statements
@@ -41,11 +41,10 @@ declaration
 variableDecl
     : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
 
-// Object declaration TODO
+// Object declaration
 objectDecl
     : className objectVariableName (ASSIGN objectConstructor)?;
 
-//TODO
 objectConstructor
     : LEFT_PAREN objectArgs? RIGHT_PAREN
     | functionCall;
@@ -69,7 +68,6 @@ vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: boolOperations;
-//TODO FIX AST
 ternaryOperator: (boolExpression | variableName | functionCall) QUESTION expression COLON expression;
 
 arithOperand
@@ -159,7 +157,7 @@ elseifBoolExpression: boolExpression | BOOL_LITERAL | variableName | functionCal
 ifBlock: conditionalBlock;
 elseIfBlock: conditionalBlock;
 elseBlock: conditionalBlock;
-conditionalBlock: block | statement | returnStatement;
+conditionalBlock: functionBlock | statement | returnStatement;
 
 
 /*      LOOPS        */
