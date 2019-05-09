@@ -388,55 +388,15 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitElseStatement(SpookParser.ElseStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SpookParser#ifBoolExpression}.
+	 * Enter a parse tree produced by {@link SpookParser#conditionalExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterIfBoolExpression(SpookParser.IfBoolExpressionContext ctx);
+	void enterConditionalExpression(SpookParser.ConditionalExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SpookParser#ifBoolExpression}.
+	 * Exit a parse tree produced by {@link SpookParser#conditionalExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitIfBoolExpression(SpookParser.IfBoolExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#elseifBoolExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#elseifBoolExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#ifBlock}.
-	 * @param ctx the parse tree
-	 */
-	void enterIfBlock(SpookParser.IfBlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#ifBlock}.
-	 * @param ctx the parse tree
-	 */
-	void exitIfBlock(SpookParser.IfBlockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#elseIfBlock}.
-	 * @param ctx the parse tree
-	 */
-	void enterElseIfBlock(SpookParser.ElseIfBlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#elseIfBlock}.
-	 * @param ctx the parse tree
-	 */
-	void exitElseIfBlock(SpookParser.ElseIfBlockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#elseBlock}.
-	 * @param ctx the parse tree
-	 */
-	void enterElseBlock(SpookParser.ElseBlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#elseBlock}.
-	 * @param ctx the parse tree
-	 */
-	void exitElseBlock(SpookParser.ElseBlockContext ctx);
+	void exitConditionalExpression(SpookParser.ConditionalExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#conditionalBlock}.
 	 * @param ctx the parse tree
@@ -547,16 +507,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionArg(SpookParser.FunctionArgContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#functionBlock}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunctionBlock(SpookParser.FunctionBlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#functionBlock}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunctionBlock(SpookParser.FunctionBlockContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#returnStatement}.
 	 * @param ctx the parse tree

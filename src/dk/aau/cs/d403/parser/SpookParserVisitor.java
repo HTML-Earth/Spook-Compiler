@@ -239,35 +239,11 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElseStatement(SpookParser.ElseStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifBoolExpression}.
+	 * Visit a parse tree produced by {@link SpookParser#conditionalExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfBoolExpression(SpookParser.IfBoolExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseifBoolExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfBlock(SpookParser.IfBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseIfBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseIfBlock(SpookParser.ElseIfBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseBlock(SpookParser.ElseBlockContext ctx);
+	T visitConditionalExpression(SpookParser.ConditionalExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#conditionalBlock}.
 	 * @param ctx the parse tree
@@ -334,12 +310,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionArg(SpookParser.FunctionArgContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#functionBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionBlock(SpookParser.FunctionBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#returnStatement}.
 	 * @param ctx the parse tree

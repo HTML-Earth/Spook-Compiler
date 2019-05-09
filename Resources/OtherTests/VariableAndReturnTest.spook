@@ -1,9 +1,5 @@
-Shader{}
-
-Num test() {
-Num i = 1;
-return i;
-#Hej
-
+Shader{
+Num x;
+Vec4 vec = (1, 2, 3, 4);
+Vec4 vec1 = vec.xxxy;
 }
-
