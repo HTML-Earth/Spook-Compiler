@@ -66,7 +66,7 @@ public class Color {
     public static Vector4 aquamarine() {
         return new Vector4(0.5,1,0.83,1);
     }
-    public static Vector4 turqoise() {
+    public static Vector4 turquoise() {
         return new Vector4(0.25,0.88,0.82,1);
     }
     public static Vector4 silver() {
