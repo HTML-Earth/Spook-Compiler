@@ -771,7 +771,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
             return conditionalExpressionNode;
         } else if (ctx.boolExpression() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode((BoolOperationsNode) visitBoolExpression(ctx.boolExpression()));
+            BoolExpressionNode boolExpressionNode = (BoolExpressionNode) visitBoolExpression(ctx.boolExpression());
             conditionalExpressionNode = new ConditionalExpressionNode(boolExpressionNode);
             conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
             return conditionalExpressionNode;
@@ -801,7 +801,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
             return conditionalExpressionNode;
         } else if (ctx.boolExpression() != null) {
-            BoolExpressionNode boolExpressionNode = new BoolExpressionNode((BoolOperationsNode) visitBoolExpression(ctx.boolExpression()));
+            BoolExpressionNode boolExpressionNode = (BoolExpressionNode) visitBoolExpression(ctx.boolExpression());
             conditionalExpressionNode = new ConditionalExpressionNode(boolExpressionNode);
             conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
             return conditionalExpressionNode;
