@@ -1,46 +1,29 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
-import dk.aau.cs.d403.ast.structure.BlockNode;
+import dk.aau.cs.d403.ast.expressions.ConditionalExpressionNode;
 
 public class ElseIfStatementNode extends StatementNode {
-    private BoolExpressionNode elseIfBool;
-    private BlockNode elseIfBlock;
-    private StatementNode elseIfStatement;
+    private ConditionalExpressionNode elseIfBool;
+    private ConditionalBlockNode elseIfBlock;
 
-    public ElseIfStatementNode(BoolExpressionNode elseIfBool, StatementNode elseIfStatement) {
-        this.elseIfBool = elseIfBool;
-        this.elseIfStatement = elseIfStatement;
-    }
-
-    public ElseIfStatementNode(BoolExpressionNode elseIfBool, BlockNode elseIfBlock) {
+    public ElseIfStatementNode(ConditionalExpressionNode elseIfBool, ConditionalBlockNode elseIfBlock) {
         this.elseIfBool = elseIfBool;
         this.elseIfBlock = elseIfBlock;
     }
 
-    public BoolExpressionNode getElseIfBool() {
+    public ConditionalExpressionNode getElseIfBool() {
         return elseIfBool;
     }
 
-    public BlockNode getElseIfBlock() {
+    public ConditionalBlockNode getElseIfBlock() {
         return elseIfBlock;
-    }
-
-    public StatementNode getElseIfStatement() {
-        return elseIfStatement;
     }
 
     @Override
     public String prettyPrint() {
-        if (elseIfBlock != null) {
-            return "else if (" + elseIfBool.prettyPrint() + ") " + elseIfBlock.prettyPrint();
-        }
-        else if (elseIfStatement != null) {
-            return "else if (" + elseIfBool.prettyPrint() + ")\n\t" + elseIfStatement.prettyPrint();
-        }
-        else
-            return "Invalid ElseIf statement";
+        //TODO: Check if newline and indents work
+        return "else if (" + elseIfBool.prettyPrint() + ") " + elseIfBlock.prettyPrint();
     }
 
     private CodePosition codePosition;

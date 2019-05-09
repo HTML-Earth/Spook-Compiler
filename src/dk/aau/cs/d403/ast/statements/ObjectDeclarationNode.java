@@ -1,65 +1,53 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
-import dk.aau.cs.d403.ast.Enums;
-import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
-
-import java.util.ArrayList;
-
-import static dk.aau.cs.d403.ast.Enums.classTypeToString;
 
 public class ObjectDeclarationNode extends DeclarationNode {
-    private String objectType;
+    private String className;
     private String variableName;
+    private ObjectContructorNode objectContructorNode;
 
-    private ArrayList<ObjectArgumentNode> objectArgumentNodes;
-
-    public ObjectDeclarationNode(String objectType, String variableName) {
-        this.objectType = objectType;
+    public ObjectDeclarationNode(String className, String variableName) {
+        this.className = className;
         this.variableName = variableName;
     }
 
-    public ObjectDeclarationNode(String objectType, String variableName, ArrayList<ObjectArgumentNode> objectArgumentNodes) {
-        this.objectType = objectType;
+    public ObjectDeclarationNode(String className, String variableName, ObjectContructorNode objectContructorNode) {
+        this.className = className;
         this.variableName = variableName;
-        this.objectArgumentNodes = objectArgumentNodes;
+        this.objectContructorNode = objectContructorNode;
     }
 
-    public String getObjectType() {
-        return objectType;
+    public String getClassName() {
+        return className;
     }
 
     public String getVariableName() {
         return variableName;
     }
 
-    public ArrayList<ObjectArgumentNode> getObjectArgumentNodes() {
-        return objectArgumentNodes;
+    public ObjectContructorNode getObjectContructorNode() {
+        return objectContructorNode;
     }
 
     @Override
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder();
-        sb.append(objectType);
-        sb.append(" ");
-        sb.append(variableName);
-        sb.append(" = ");
-        sb.append("(");
 
-        if (objectArgumentNodes != null) {
-            //Print ',' before each arg except the first
-            boolean firstArg = true;
-            for (ObjectArgumentNode arg : objectArgumentNodes) {
-                if (!firstArg)
-                    sb.append(", ");
-                else
-                    firstArg = false;
-                sb.append(arg.prettyPrint());
+        //Print type and name
+        if (className != null && variableName != null) {
+            sb.append(className);
+            sb.append(" ");
+            sb.append(variableName);
+
+            //if initialized print construction
+            if (objectContructorNode != null) {
+                sb.append(" = ");
+                sb.append(objectContructorNode.prettyPrint());
             }
-        }
-
-        sb.append(")");
-        return sb.toString();
+            return sb.toString();
+        } else
+            return "Invalid Object declaration";
     }
 
     private CodePosition codePosition;

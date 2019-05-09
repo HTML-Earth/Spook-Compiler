@@ -249,7 +249,7 @@ public class CodeGenerator {
             argumentNodes.add(visitArgumentNode(argumentNode));
         }
 
-        String objectType = objectDeclarationNode.getObjectType();
+        String objectType = objectDeclarationNode.getClassName();
         usedClasses.add(objectType);
 
         String variableName = objectDeclarationNode.getVariableName();

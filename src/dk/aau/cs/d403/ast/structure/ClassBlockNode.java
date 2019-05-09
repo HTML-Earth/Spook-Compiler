@@ -3,7 +3,6 @@ package dk.aau.cs.d403.ast.structure;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.statements.DeclarationNode;
-import dk.aau.cs.d403.ast.statements.StatementNode;
 
 import java.util.ArrayList;
 

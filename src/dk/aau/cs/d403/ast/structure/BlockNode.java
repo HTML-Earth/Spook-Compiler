@@ -7,6 +7,7 @@ import dk.aau.cs.d403.ast.statements.StatementNode;
 
 import java.util.ArrayList;
 
+//Both Block & functionBlock
 public class BlockNode implements ASTnode {
     private ArrayList<StatementNode> statementNodes;
     private ReturnNode returnNode;

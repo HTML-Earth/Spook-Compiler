@@ -23,12 +23,14 @@ public class ObjectArgumentNodePlural implements ASTnode {
             return objectArgumentNodes.get(0).prettyPrint();
         } else if (objectArgumentNodes.size() > 1) {
             StringBuilder sb = new StringBuilder();
+            sb.append("(");
             for (ObjectArgumentNode objectArgumentNode : objectArgumentNodes) {
                 sb.append(objectArgumentNode.prettyPrint());
                 //Append COMMA unless last node
                 if (objectArgumentNode != objectArgumentNodes.get(objectArgumentNodes.size()-1))
                     sb.append(',');
             }
+            sb.append(")");
             return sb.toString();
         }
         else
