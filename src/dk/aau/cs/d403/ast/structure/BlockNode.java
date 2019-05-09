@@ -47,7 +47,7 @@ public class BlockNode implements ASTnode {
         }
         if (returnNode != null) {
             sb.append("\n");
-            sb.append(returnNode.prettyPrint(indent + 1) + ";");
+            sb.append(returnNode.prettyPrint(indent + 1));
         }
 
         sb.append("\n");
