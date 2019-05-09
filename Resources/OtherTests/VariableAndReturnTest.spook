@@ -1,9 +1,8 @@
-Shader{}
+Shader{
 
-Num test() {
-Num i = 1;
-return i;
-#Hej
+    Num i = 5;
+
+    if (i == 5)
+        i = 0;
 
 }
-
