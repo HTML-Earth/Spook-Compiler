@@ -59,8 +59,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitBlock(SpookParser.BlockContext ctx) {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
-        for (SpookParser.StatementContext statement: ctx.statement()) {
-            statementNodes.addAll(((BlockNode)visitStatement(statement)).getStatementNodes());
+        for (SpookParser.StatementContext statement : ctx.statement()) {
+            statementNodes.add((StatementNode) visitStatement(statement));
         }
 
         BlockNode blockNode = new BlockNode(statementNodes);
