@@ -101,7 +101,7 @@ public class ArithOperandNode implements ASTnode {
             return vector3ExpressionNode.prettyPrint();
         }
         else if (vector4ExpressionNode != null) {
-            vector4ExpressionNode.prettyPrint();
+            return vector4ExpressionNode.prettyPrint();
         }
         //else
         return "Invalid Operand";

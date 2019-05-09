@@ -472,61 +472,13 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfBoolExpression(SpookParser.IfBoolExpressionContext ctx) { }
+	@Override public void enterConditionalExpression(SpookParser.ConditionalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfBoolExpression(SpookParser.IfBoolExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIfBlock(SpookParser.IfBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIfBlock(SpookParser.IfBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElseIfBlock(SpookParser.ElseIfBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElseIfBlock(SpookParser.ElseIfBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElseBlock(SpookParser.ElseBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElseBlock(SpookParser.ElseBlockContext ctx) { }
+	@Override public void exitConditionalExpression(SpookParser.ConditionalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -659,18 +611,6 @@ public class SpookParserBaseListener implements SpookParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunctionArg(SpookParser.FunctionArgContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFunctionBlock(SpookParser.FunctionBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFunctionBlock(SpookParser.FunctionBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

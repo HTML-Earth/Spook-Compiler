@@ -134,10 +134,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         if (ctx.variableName() != null) {
             String variableName = ctx.variableName().getText();
             if (ctx.colorSwizzle() != null) {
-                return new SwizzleNode(variableName, new ColorSwizzleNode(ctx.colorSwizzle().getText()));
+                return new SwizzleNode(variableName, new ColorSwizzleNode(ctx.colorSwizzle().getText().substring(1)));
             }
             else if (ctx.coordinateSwizzle() != null) {
-                return new SwizzleNode(variableName, new CoordinateSwizzleNode(ctx.coordinateSwizzle().getText()));
+                return new SwizzleNode(variableName, new CoordinateSwizzleNode(ctx.coordinateSwizzle().getText().substring(1)));
             }
             else
                 throw new CompilerException("Expected Color- or Coordinate swizzle", getCodePosition(ctx));
@@ -408,22 +408,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             if (ctx.functionArgs() != null) {
                 ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
 
-                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), functionArgNodes, (BlockNode)visitFunctionBlock(ctx.functionBlock()));
-                functionDeclarationNode.setCodePosition(getCodePosition(ctx));
-
-                return functionDeclarationNode;
-            }
-            else {
-                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), (BlockNode)visitFunctionBlock(ctx.functionBlock()));
-                functionDeclarationNode.setCodePosition(getCodePosition(ctx));
-
-                return functionDeclarationNode;
-            }
-        }
-        else if (getReturnType(ctx.returnType()) == Enums.ReturnType.VOID) {
-            if (ctx.functionArgs() != null) {
-                ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
-
                 FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(returnType, ctx.functionName().getText(), functionArgNodes, (BlockNode)visitBlock(ctx.block()));
                 functionDeclarationNode.setCodePosition(getCodePosition(ctx));
 
@@ -439,22 +423,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         else {
             throw new CompilerException("Invalid function declaration", getCodePosition(ctx));
         }
-    }
-
-    @Override
-    public ASTnode visitFunctionBlock(SpookParser.FunctionBlockContext ctx) {
-        ArrayList<StatementNode> statementNodes = new ArrayList<>();
-
-        if (ctx.statement() != null) {
-            for (SpookParser.StatementContext statement : ctx.statement()) {
-                statementNodes.add((StatementNode) visitStatement(statement));
-            }
-        }
-
-        BlockNode blockNode = new BlockNode(statementNodes, (ReturnNode) visitReturnStatement(ctx.returnStatement()));
-        blockNode.setCodePosition(getCodePosition(ctx));
-
-        return blockNode;
     }
 
     @Override
@@ -683,7 +651,24 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             return arithOperandNode;
         }
-
+        else if (ctx.vector2Expression() != null) {
+            Vector2ExpressionNode vector2ExpressionNode = (Vector2ExpressionNode) visitVector2Expression(ctx.vector2Expression());
+            ArithOperandNode arithOperandNode = new ArithOperandNode(vector2ExpressionNode);
+            arithOperandNode.setCodePosition(getCodePosition(ctx));
+            return arithOperandNode;
+        }
+        else if (ctx.vector3Expression() != null) {
+            Vector3ExpressionNode vector3ExpressionNode = (Vector3ExpressionNode) visitVector3Expression(ctx.vector3Expression());
+            ArithOperandNode arithOperandNode = new ArithOperandNode(vector3ExpressionNode);
+            arithOperandNode.setCodePosition(getCodePosition(ctx));
+            return arithOperandNode;
+        }
+        else if (ctx.vector4Expression() != null) {
+            Vector4ExpressionNode vector4ExpressionNode = (Vector4ExpressionNode) visitVector4Expression(ctx.vector4Expression());
+            ArithOperandNode arithOperandNode = new ArithOperandNode(vector4ExpressionNode);
+            arithOperandNode.setCodePosition(getCodePosition(ctx));
+            return arithOperandNode;
+        }
         else
             throw new CompilerException("Invalid Operand", getCodePosition(ctx));
     }
@@ -756,45 +741,16 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitIfStatement(SpookParser.IfStatementContext ctx) {
         //Does not need if checks as there is only 1 option, and therefore cannot vary (Parser does this null check)
-        ConditionalExpressionNode ifBool = (ConditionalExpressionNode) visitConditionalExpression(ctx.ifBoolExpression());
-        ConditionalBlockNode ifBlock = (ConditionalBlockNode) visitConditionalBlock(ctx.ifBlock().conditionalBlock());
+        ConditionalExpressionNode ifBool = (ConditionalExpressionNode) visitConditionalExpression(ctx.conditionalExpression());
+        ConditionalBlockNode ifBlock = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
         IfStatementNode ifStatement = new IfStatementNode(ifBool, ifBlock);
         ifStatement.setCodePosition(getCodePosition(ctx));
         return ifStatement;
     }
 
     //Visit ifBoolExpression & elseifBoolExpression
-    private ASTnode visitConditionalExpression(SpookParser.IfBoolExpressionContext ctx) {
-        ConditionalExpressionNode conditionalExpressionNode;
-        if (ctx.BOOL_LITERAL() != null) {
-            conditionalExpressionNode = new ConditionalExpressionNode(getBooleanValue(ctx.BOOL_LITERAL()));
-            conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-            return conditionalExpressionNode;
-        } else if (ctx.boolExpression() != null) {
-            BoolExpressionNode boolExpressionNode = (BoolExpressionNode) visitBoolExpression(ctx.boolExpression());
-            conditionalExpressionNode = new ConditionalExpressionNode(boolExpressionNode);
-            conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-            return conditionalExpressionNode;
-        } else if (ctx.variableName() != null) {
-            conditionalExpressionNode = new ConditionalExpressionNode(ctx.variableName().getText());
-            conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-            return conditionalExpressionNode;
-        } else if (ctx.functionCall() != null) {
-            ASTnode functioncall = visitFunctionCall(ctx.functionCall());
-            if (functioncall instanceof NonObjectFunctionCallNode) {
-                conditionalExpressionNode = new ConditionalExpressionNode((NonObjectFunctionCallNode) functioncall);
-                conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-                return conditionalExpressionNode;
-            } else if (functioncall instanceof ObjectFunctionCallNode) {
-                conditionalExpressionNode = new ConditionalExpressionNode((ObjectFunctionCallNode) functioncall);
-                conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-                return conditionalExpressionNode;
-            }
-        }
-        //If nothing matches
-        throw new CompilerException("Invalid Conditional Expression", getCodePosition(ctx));
-    }
-    private ASTnode visitConditionalExpression(SpookParser.ElseifBoolExpressionContext ctx) {
+    @Override
+    public ASTnode visitConditionalExpression(SpookParser.ConditionalExpressionContext ctx) {
         ConditionalExpressionNode conditionalExpressionNode;
         if (ctx.BOOL_LITERAL() != null) {
             conditionalExpressionNode = new ConditionalExpressionNode(getBooleanValue(ctx.BOOL_LITERAL()));
@@ -840,12 +796,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             conditionalBlockNode.setCodePosition(getCodePosition(ctx));
             return conditionalBlockNode;
         }
-        else if (ctx.returnStatement() != null) {
-            ReturnNode returnNode = (ReturnNode) visitReturnStatement(ctx.returnStatement());
-            conditionalBlockNode = new ConditionalBlockNode(returnNode);
-            conditionalBlockNode.setCodePosition(getCodePosition(ctx));
-            return conditionalBlockNode;
-        }
         else
             throw new CompilerException("Invalid Conditional Block", getCodePosition(ctx));
     }
@@ -853,8 +803,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitElseIfStatement(SpookParser.ElseIfStatementContext ctx) {
         //Only 1 option, parser does the null check
-        ConditionalExpressionNode elseifBool = (ConditionalExpressionNode) visitConditionalExpression(ctx.elseifBoolExpression());
-        ConditionalBlockNode elseifBlock = (ConditionalBlockNode) visitConditionalBlock(ctx.elseIfBlock().conditionalBlock());
+        ConditionalExpressionNode elseifBool = (ConditionalExpressionNode) visitConditionalExpression(ctx.conditionalExpression());
+        ConditionalBlockNode elseifBlock = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
         ElseIfStatementNode elseifStatement = new ElseIfStatementNode(elseifBool, elseifBlock);
         elseifStatement.setCodePosition(getCodePosition(ctx));
         return elseifStatement;
@@ -863,7 +813,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitElseStatement(SpookParser.ElseStatementContext ctx) {
         //Does not need if checks as there is only 1 option, and therefore cannot vary (Parser does this null check)
-        ConditionalBlockNode elseBlock = (ConditionalBlockNode) visitConditionalBlock(ctx.elseBlock().conditionalBlock());
+        ConditionalBlockNode elseBlock = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
         ElseStatementNode elseStatement = new ElseStatementNode(elseBlock);
         elseStatement.setCodePosition(getCodePosition(ctx));
         return elseStatement;
@@ -876,25 +826,19 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         ForLoopExpressionNode forLoopExpressionNode1 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(0));
         ForLoopExpressionNode forLoopExpressionNode2 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(1));
+        ConditionalBlockNode conditionalBlockNode = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
 
-        if (ctx.statement() != null) {
-            statementNode = (StatementNode) visitStatement(ctx.statement());
-            return new ForLoopStatementNode(forLoopExpressionNode1, forLoopExpressionNode2, statementNode);
-        }
-        else if (ctx.block() != null) {
-            blockNode = (BlockNode) visitBlock(ctx.block());
-            return new ForLoopStatementNode(forLoopExpressionNode1, forLoopExpressionNode2, blockNode);
-        }
-        else
-            throw new CompilerException("Invalid ForLoop Statement", getCodePosition(ctx));
+        ForLoopStatementNode forLoopStatementNode = new ForLoopStatementNode(forLoopExpressionNode1, forLoopExpressionNode2, conditionalBlockNode);
+        forLoopStatementNode.setCodePosition(getCodePosition(ctx));
+        return forLoopStatementNode;
     }
 
     @Override
     public ASTnode visitForLoopExpression(SpookParser.ForLoopExpressionContext ctx) {
         if (ctx.assignment() != null)
             return new ForLoopExpressionNode((AssignmentNode) visitAssignment(ctx.assignment()));
-        else if (ctx.DIGIT() != null)
-            return new ForLoopExpressionNode(new IntegerNumberNode(Integer.valueOf(ctx.DIGIT().getSymbol().getText())));
+        else if (ctx.realNumber() != null)
+            return new ForLoopExpressionNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
         else if (ctx.variableName() != null)
             return new ForLoopExpressionNode(ctx.variableName().getText());
         else if (ctx.variableDecl() != null)
