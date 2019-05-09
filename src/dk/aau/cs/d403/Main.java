@@ -2,7 +2,6 @@ package dk.aau.cs.d403;
 
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
-import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.TypeChecking;
@@ -95,8 +94,8 @@ public class Main {
         typeChecking.visitProgram(ast);
 
         // CODE GENERATION
-        CodeGenerator codeGenerator = new CodeGenerator();
-        generatedCode = codeGenerator.GenerateGLSL(ast);
+       // CodeGenerator codeGenerator = new CodeGenerator();
+       // generatedCode = codeGenerator.GenerateGLSL(ast);
 
         // Pretty printing
         if (prettyPrint) {

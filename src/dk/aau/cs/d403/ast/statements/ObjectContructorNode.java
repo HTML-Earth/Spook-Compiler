@@ -34,13 +34,13 @@ public class ObjectContructorNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (objectArgumentNodePlural != null)
-            return objectArgumentNodePlural.prettyPrint();
+            return objectArgumentNodePlural.prettyPrint(indent);
         else if (nonObjectFunctionCallNode != null)
-            return nonObjectFunctionCallNode.prettyPrint();
+            return nonObjectFunctionCallNode.prettyPrint(indent);
         else if (objectFunctionCallNode != null)
-            return objectFunctionCallNode.prettyPrint();
+            return objectFunctionCallNode.prettyPrint(indent);
         else
             return "Invalid Object constructor";
     }

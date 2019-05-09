@@ -5,6 +5,7 @@ import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.parser.SpookParser;
+import dk.aau.cs.d403.parser.SpookParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -221,7 +222,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolOperations(SpookParser.BoolOperationsContext ctx) {
-        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        Enums.BoolOperator optionalNOT = Enums.BoolOperator.NOT;
         ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = new ArrayList<>();
 
         //Visit all Extend nodes and add them to the list
@@ -274,8 +275,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitBoolOperationExtend(SpookParser.BoolOperationExtendContext ctx) {
-        Enums.boolOperator boolOperator = getBoolOperator(ctx.boolOperator());
-        Enums.boolOperator optionalNOT = Enums.boolOperator.NOT;
+        Enums.BoolOperator boolOperator = getBoolOperator(ctx.boolOperator());
+        Enums.BoolOperator optionalNOT = Enums.BoolOperator.NOT;
 
         //Needs boolOperator for all cases
         if (ctx.boolOperator() != null) {
@@ -835,8 +836,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitConditionalBlock(SpookParser.ConditionalBlockContext ctx) {
         ConditionalBlockNode conditionalBlockNode;
-        if (ctx.block() != null) {
-            BlockNode blockNode = (BlockNode) visitBlock(ctx.block());
+        if (ctx.functionBlock() != null) {
+            BlockNode blockNode = (BlockNode) visitFunctionBlock(ctx.functionBlock());
             conditionalBlockNode = new ConditionalBlockNode(blockNode);
             conditionalBlockNode.setCodePosition(getCodePosition(ctx));
             return conditionalBlockNode;

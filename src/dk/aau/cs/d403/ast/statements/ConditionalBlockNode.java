@@ -34,13 +34,13 @@ public class ConditionalBlockNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (blockNode != null)
-            return blockNode.prettyPrint();
+            return blockNode.prettyPrint(indent);
         else if (statementNode != null)
-            return statementNode.prettyPrint();
+            return statementNode.prettyPrint(indent);
         else if (returnNode != null)
-            return returnNode.prettyPrint();
+            return returnNode.prettyPrint(indent);
         else
             return "Invalid Conditional Block";
     }
