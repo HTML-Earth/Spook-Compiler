@@ -11,6 +11,7 @@ import java.util.*;
 public class TypeChecking {
     private Stack<HashMap<String, ASTnode>> hashMapStack;
     private Integer functionCounter = 1;
+    private FunctionDeclarationNode currentFuncNode;
 
     private ArrayList<String> listOfPredefinedClasses;
     private ArrayList<VariableDeclarationNode> listOfPredefinedVariables;
@@ -371,28 +372,34 @@ public class TypeChecking {
 
         // Make sure its boolean expression and block/statement is well typed
         visitExpression(ifStatementNode.getIfBool().getBoolExpressionNode());
-        if (ifStatementNode.getIfBlock() != null)
+        if (ifStatementNode.getIfBlock().getBlockNode() != null)
             visitBlock(ifStatementNode.getIfBlock().getBlockNode());
-        else
+        else if (ifStatementNode.getIfBlock().getStatementNode() != null)
             visitStatement(ifStatementNode.getIfBlock().getStatementNode());
+        else if (ifStatementNode.getIfBlock().getReturnNode() != null)
+            visitReturnStatement(ifStatementNode.getIfBlock().getReturnNode(), currentFuncNode);
 
         // Check if there are any Else-if statements and do the same for Else-if statements as for If statements
         if (ifElseStatementNode.getElseIfStatementNodes() != null) {
             for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()) {
                 visitExpression(elseIfStatementNode.getElseIfBool().getBoolExpressionNode());
-                if (elseIfStatementNode.getElseIfBlock() != null)
+                if (elseIfStatementNode.getElseIfBlock().getBlockNode() != null)
                     visitBlock(elseIfStatementNode.getElseIfBlock().getBlockNode());
-                else
+                else if (elseIfStatementNode.getElseIfBlock().getStatementNode() != null)
                     visitStatement(elseIfStatementNode.getElseIfBlock().getStatementNode());
+                else if (elseIfStatementNode.getElseIfBlock().getReturnNode() != null)
+                    visitReturnStatement(elseIfStatementNode.getElseIfBlock().getReturnNode(), currentFuncNode);
             }
         }
 
-        // Check if there are an Else statements and do the same for it as for Else-if and If
+        // Check if there are Else statements and do the same for it as for Else-if and If
         if (ifElseStatementNode.getElseStatementNode() != null) {
-            if (ifElseStatementNode.getElseStatementNode().getElseBlock() != null)
+            if (ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode() != null)
                 visitBlock(ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode());
-            else
+            else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode() != null)
                 visitStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode());
+            else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getReturnNode() != null)
+                visitReturnStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getReturnNode(), currentFuncNode);
         }
     }
 
@@ -494,8 +501,10 @@ public class TypeChecking {
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
         }
-        if (returnType != null)
+        if (returnType != null) {
+            this.currentFuncNode = functionDeclarationNode;
             visitReturnStatement(blockNode.getReturnNode(), functionDeclarationNode);
+        }
         closeScope();
     }
 
