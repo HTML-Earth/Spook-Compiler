@@ -164,7 +164,7 @@ iterativeStatement
 forStatement
     : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN conditionalBlock;
 
-forLoopExpression: (realNumber | variableDecl | variableName | assignment);
+forLoopExpression: (atomPrecedence | variableDecl | variableName | assignment);
 
 
 

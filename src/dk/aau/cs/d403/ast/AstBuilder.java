@@ -837,8 +837,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitForLoopExpression(SpookParser.ForLoopExpressionContext ctx) {
         if (ctx.assignment() != null)
             return new ForLoopExpressionNode((AssignmentNode) visitAssignment(ctx.assignment()));
-        else if (ctx.realNumber() != null)
-            return new ForLoopExpressionNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+        else if (ctx.atomPrecedence() != null) {
+            AtomPrecedenceNode atomPrecedenceNode = (AtomPrecedenceNode) visitAtomPrecedence(ctx.atomPrecedence());
+            return new ForLoopExpressionNode(atomPrecedenceNode);
+        }
         else if (ctx.variableName() != null)
             return new ForLoopExpressionNode(ctx.variableName().getText());
         else if (ctx.variableDecl() != null)
