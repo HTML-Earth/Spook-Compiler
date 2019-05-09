@@ -211,7 +211,7 @@ public class SymbolTableFilling implements SymbolTable{
             customClassTypeExisting = true;
 
         // Check if there are arguments
-        ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectArgumentNodes();
+        ArrayList<ObjectArgumentNode> objectArguments = objectDeclarationNode.getObjectContructorNode().getObjectArgumentNodePlural().getObjectArgumentNodes();
 
         // SCOPE CHECK: If a variable doesn't exist
         if (retrieveSymbol(variableName) == null) {
