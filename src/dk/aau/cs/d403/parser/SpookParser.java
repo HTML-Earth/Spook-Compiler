@@ -2977,8 +2977,8 @@ public class SpookParser extends Parser {
 	}
 
 	public static class ForLoopExpressionContext extends ParserRuleContext {
-		public RealNumberContext realNumber() {
-			return getRuleContext(RealNumberContext.class,0);
+		public AtomPrecedenceContext atomPrecedence() {
+			return getRuleContext(AtomPrecedenceContext.class,0);
 		}
 		public VariableDeclContext variableDecl() {
 			return getRuleContext(VariableDeclContext.class,0);
@@ -3020,7 +3020,7 @@ public class SpookParser extends Parser {
 			case 1:
 				{
 				setState(406);
-				realNumber();
+				atomPrecedence();
 				}
 				break;
 			case 2:
@@ -4283,7 +4283,7 @@ public class SpookParser extends Parser {
 		"\u018c\u018b\3\2\2\2\u018dQ\3\2\2\2\u018e\u018f\5T+\2\u018fS\3\2\2\2\u0190"+
 		"\u0191\7\21\2\2\u0191\u0192\7\32\2\2\u0192\u0193\5V,\2\u0193\u0194\7\22"+
 		"\2\2\u0194\u0195\5V,\2\u0195\u0196\7\33\2\2\u0196\u0197\5P)\2\u0197U\3"+
-		"\2\2\2\u0198\u019d\5h\65\2\u0199\u019d\5\f\7\2\u019a\u019d\5v<\2\u019b"+
+		"\2\2\2\u0198\u019d\5(\25\2\u0199\u019d\5\f\7\2\u019a\u019d\5v<\2\u019b"+
 		"\u019d\5\22\n\2\u019c\u0198\3\2\2\2\u019c\u0199\3\2\2\2\u019c\u019a\3"+
 		"\2\2\2\u019c\u019b\3\2\2\2\u019dW\3\2\2\2\u019e\u019f\7\n\2\2\u019f\u01a2"+
 		"\5x=\2\u01a0\u01a1\t\4\2\2\u01a1\u01a3\5x=\2\u01a2\u01a0\3\2\2\2\u01a2"+
