@@ -111,12 +111,7 @@ boolOperationExtend
 
 // Swizzling DOT is part of the coordinate/color swizzle and is removed in astbuilder
 swizzle
-    : variableName coordinateSwizzle
-    | variableName colorSwizzle;
-
-coordinateSwizzle: COORDINATE_SWIZZLE_MASK;
-colorSwizzle: COLOR_SWIZZLE_MASK;
-
+    : objectVariableName DOT functionName;
 
 
 /*      FUNCTION CALLS       */

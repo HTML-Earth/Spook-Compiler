@@ -61,15 +61,6 @@ GREATER_OR_EQUAL: '>=';
 LESS_THAN: '<';
 LESS_OR_EQUAL: '<=';
 
-// Swizzle masks DOT moved from parser to lexer in order to have ID = x, this dot is removed in astbuilder
-// Coordinate swizzle mask
-COORDINATE_SWIZZLE_MASK
-    : DOT COORDINATE_SWIZZLE_MASK_RULE+;
-
-// Color swizzle mask
-COLOR_SWIZZLE_MASK
-    : DOT COLOR_SWIZZLE_MASK_RULE+;
-
 // Identifier - chars and non-negative digits
 ID: (LETTER | DIGIT)+;
 
@@ -80,17 +71,6 @@ fragment DIGIT_RULE
     : '0'
     | '1'..'9' '0'..'9'*;
 fragment DIGIT_NEGATIVE_RULE: '(-'('1'..'9') ('0'..'9')*')';
-
-fragment COORDINATE_SWIZZLE_MASK_RULE
-    : 'x'
-    | 'y'
-    | 'z'
-    | 'w';
-fragment COLOR_SWIZZLE_MASK_RULE
-    : 'r'
-    | 'g'
-    | 'b'
-    | 'a';
 
 // MISC
 COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')* -> skip;
