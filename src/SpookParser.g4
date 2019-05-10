@@ -109,7 +109,6 @@ boolOperation
 boolOperationExtend
     : boolOperator NOT? (boolOperation | arithExpression);
 
-// Swizzling DOT is part of the coordinate/color swizzle and is removed in astbuilder
 swizzle
     : objectVariableName DOT functionName;
 

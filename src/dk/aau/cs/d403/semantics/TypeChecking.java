@@ -595,12 +595,10 @@ public class TypeChecking {
                 if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
                     SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
                     visitSwizzle(swizzleNode);
-                    int swizzleLength;
+                    int swizzleLength = 0;
 
-                    if (swizzleNode.getCoordinateSwizzle() != null)
-                        swizzleLength = swizzleNode.getCoordinateSwizzle().getSwizzle().length();
-                    else
-                        swizzleLength = swizzleNode.getColorSwizzle().getSwizzle().length();
+                    if (swizzleNode.getSwizzle() != null)
+                        swizzleLength = swizzleNode.getSwizzle().length();
 
                     if (swizzleLength == 4)
                         return Enums.DataType.VEC4;
@@ -660,8 +658,7 @@ public class TypeChecking {
     private void visitSwizzle(SwizzleNode swizzleNode) {
         String variableName = swizzleNode.getVariableName();
         Enums.DataType dataType;
-        CoordinateSwizzleNode coordinateSwizzleNode;
-        ColorSwizzleNode colorSwizzleNode;
+        String swizzle;
 
         // Check if variable is declared and initialized
         visitVariableName(variableName);
@@ -675,7 +672,7 @@ public class TypeChecking {
                 if (!(dataType.equals(Enums.DataType.VEC3))) {
                     if (!(dataType.equals(Enums.DataType.VEC2))) {
                         if (!(dataType.equals(Enums.DataType.NUM)))
-                        throw new RuntimeException("ERROR: Variable (" + variableName + ") is not of a vector type");
+                        throw new RuntimeException("ERROR: Variable (" + variableName + ") is not of a vector or num type");
                     }
                 }
             }
@@ -684,27 +681,26 @@ public class TypeChecking {
         else
             throw new RuntimeException("Variable (" + variableName + ") is not declared.");
 
-        if (swizzleNode.getCoordinateSwizzle() != null) {
-            coordinateSwizzleNode = swizzleNode.getCoordinateSwizzle();
-            String swizzleString = coordinateSwizzleNode.getSwizzle();
+        if (swizzleNode.getSwizzle() != null) {
+            swizzle = swizzleNode.getSwizzle();
 
-            if (dataType.equals(Enums.DataType.VEC3) && swizzleString.contains("w"))
-                throw new RuntimeException("ERROR: vec3, w");
-            else if (dataType.equals(Enums.DataType.VEC2) && (swizzleString.contains("w") || swizzleString.contains("z")))
-                throw new RuntimeException("ERROR: vec2, w,z");
-            else if (dataType.equals(Enums.DataType.NUM) && (swizzleString.contains("w") || swizzleString.contains("z") || swizzleString.contains("y")))
-                throw new RuntimeException("ERROR: num, y, w, z");
-        }
-        else if (swizzleNode.getColorSwizzle() != null) {
-            colorSwizzleNode = swizzleNode.getColorSwizzle();
-            String swizzleString = colorSwizzleNode.getSwizzle();
+            if (swizzle.contains("w") || swizzle.contains("a")) {
+                if (!dataType.equals(Enums.DataType.VEC4)) {
+                    throw new RuntimeException("ERROR: w or a in swizzle, but it's not a Vec4.");
+                }
+            }
 
-            if (dataType.equals(Enums.DataType.VEC3) && swizzleString.contains("a"))
-                throw new RuntimeException("ERROR: vec3, a");
-            else if (dataType.equals(Enums.DataType.VEC2) && (swizzleString.contains("a") || swizzleString.contains("b")))
-                throw new RuntimeException("ERROR: vec2, a, b");
-            else if (dataType.equals(Enums.DataType.NUM) && (swizzleString.contains("a") || swizzleString.contains("b") || swizzleString.contains("g")))
-                throw new RuntimeException("ERROR: num, a, b, g");
+            if (swizzle.contains("z") || swizzle.contains("b")) {
+                if (!dataType.equals(Enums.DataType.VEC3) && !dataType.equals(Enums.DataType.VEC4)) {
+                    throw new RuntimeException("ERROR: z or b in swizzle, but it's not a Vec3 or Vec4.");
+                }
+            }
+
+            if (swizzle.contains("y") || swizzle.contains("g")) {
+                if (dataType.equals(Enums.DataType.NUM)) {
+                    throw new RuntimeException("ERROR: y or g in swizzle, but it's a Num.");
+                }
+            }
         }
     }
 

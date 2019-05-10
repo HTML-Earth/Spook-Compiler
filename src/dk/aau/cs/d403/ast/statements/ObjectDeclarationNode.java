@@ -33,7 +33,8 @@ public class ObjectDeclarationNode extends DeclarationNode {
     @Override
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
-
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
         //Print type and name
         if (className != null && variableName != null) {
             sb.append(className);

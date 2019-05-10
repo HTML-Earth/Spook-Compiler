@@ -1,6 +1,12 @@
 Shader {
   Rectangle rec = (50, 50, Color.black());
-  rec.setPosition(25, 75);
+
+  Vec2 swizzlePosizzle = (25, 75);
+
+  Num xPos = swizzlePosizzle.x;
+  Num yPos = swizzlePosizzle.y;
+
+  rec.setPosition(xPos, yPos);
 
   Rectangle rec2 = (50, 50, Color.yellow());
   rec2.setPosition(75, 25);
