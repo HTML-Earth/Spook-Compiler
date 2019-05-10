@@ -27,7 +27,8 @@ statement
     | assignment SEMICOLON
     | functionCall SEMICOLON
     | conditionalStatement
-    | iterativeStatement;
+    | iterativeStatement
+    | returnStatement; //Typechecking
 
 
 
@@ -39,7 +40,10 @@ declaration
 
 // Variable declaration
 variableDecl
-    : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
+    : dataType variableDeclInit (COMMA variableDeclInit)*;
+
+variableDeclInit
+    : variableName | assignment;
 
 // Object declaration
 objectDecl
@@ -105,13 +109,13 @@ boolOperation
 boolOperationExtend
     : boolOperator NOT? (boolOperation | arithExpression);
 
-// Swizzling
+// Swizzling DOT is part of the coordinate/color swizzle and is removed in astbuilder
 swizzle
-    : variableName DOT (coordinateSwizzle | colorSwizzle);
+    : variableName coordinateSwizzle
+    | variableName colorSwizzle;
 
 coordinateSwizzle: COORDINATE_SWIZZLE_MASK;
 colorSwizzle: COLOR_SWIZZLE_MASK;
-
 
 
 
@@ -144,19 +148,15 @@ conditionalStatement
 ifElseStatement:  ifStatement elseIfStatement* elseStatement?;
 
 // Statements
-ifStatement: IF LEFT_PAREN ifBoolExpression RIGHT_PAREN ifBlock;
-elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock;
-elseStatement: ELSE elseBlock;
+ifStatement: IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditionalBlock;
+elseIfStatement: ELSE_IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditionalBlock;
+elseStatement: ELSE conditionalBlock;
 
 // Expressions
-ifBoolExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
-elseifBoolExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
+conditionalExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
 
 // Blocks
-ifBlock: conditionalBlock;
-elseIfBlock: conditionalBlock;
-elseBlock: conditionalBlock;
-conditionalBlock: functionBlock | statement | returnStatement;
+conditionalBlock: statement | block;
 
 
 /*      LOOPS        */
@@ -165,9 +165,9 @@ iterativeStatement
 
 // For loop
 forStatement
-    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
+    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN conditionalBlock;
 
-forLoopExpression: (realNumber | variableDecl | variableName | assignment);
+forLoopExpression: (atomPrecedence | variableDecl | variableName | assignment);
 
 
 
@@ -191,16 +191,14 @@ constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 /* Function declaration */
 functionDecl
     : VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
-    | dataType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock;
+    | dataType functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+
 
 functionArgs
     : functionArg COMMA functionArgs
     | functionArg;
 functionArg
     : (dataType | className) variableName;
-
-// Function block TODO: check function has reachable return either in an else or at the end of the function also fix AST
-functionBlock: LEFT_BRACKET (statement)* returnStatement? RIGHT_BRACKET;
 
 // Return statement
 returnStatement: RETURN expression SEMICOLON;
