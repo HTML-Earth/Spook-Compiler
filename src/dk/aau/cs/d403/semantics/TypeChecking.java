@@ -377,6 +377,8 @@ public class TypeChecking {
     private void visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
         IfStatementNode ifStatementNode = ifElseStatementNode.getIfStatementNode();
 
+        //TODO: Fix bug with initializing variables (File: IfElseSlaaGraesTest.spook)
+
         // Make sure its boolean expression and block/statement is well typed
         visitExpression(ifStatementNode.getIfBool().getBoolExpressionNode());
         if (ifStatementNode.getIfBlock().getBlockNode() != null)
@@ -508,7 +510,13 @@ public class TypeChecking {
         }
         if (returnType != null) {
             this.currentFuncNode = functionDeclarationNode;
-            visitReturnStatement(blockNode.getReturnNode(), functionDeclarationNode);
+            for (StatementNode statementNode : blockNode.getStatementNodes()) {
+                if (statementNode instanceof ReturnNode) {
+                    visitReturnStatement((ReturnNode) statementNode, functionDeclarationNode);
+                }
+            }
+            //TODO: check if last statement is returnStatement
+
         }
         closeScope();
     }

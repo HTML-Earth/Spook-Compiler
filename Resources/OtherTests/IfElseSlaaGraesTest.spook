@@ -6,24 +6,24 @@ Shader{
     Bool hot;
 
 
-CreateSun;
-CreateGrass;
+CreateSun();
+CreateGrass();
 
-rain = RainDecider(5)
+rain = RainDecider(5);
 
 rain = rainStopped();
-hot = Sunned;
+hot = Sunned();
 
 if (rain)
-    wet = GrassIsWet;
-else if (!rain)
-    wet = GrassIsNotWet;
+    wet = GrassIsWet();
+#else if (!rain)
+#    wet = GrassIsNotWet();
 
 
 if (wet && hot)
     slaaGraes = true;
-    if (slaaGraes == GrassHasGrown && !rain)
-        GraesSlaaet;
+    if (slaaGraes == GrassHasGrown() && !rain)
+        GraesSlaaet();
 
 }
 
