@@ -40,7 +40,7 @@ public class ForLoopExpressionNode extends ExpressionNode {
         return assignmentNode;
     }
 
-    public AtomPrecedenceNode atomPrecedenceNode() {
+    public AtomPrecedenceNode getAtomPrecedenceNode() {
         return atomPrecedenceNode;
     }
 

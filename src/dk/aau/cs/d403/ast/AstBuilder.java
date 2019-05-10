@@ -10,10 +10,15 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
+    private HashMap<String, VariableDeclarationNode> variables;
+
     @Override
     public ASTnode visitProgram(SpookParser.ProgramContext ctx) {
+        variables = new HashMap<>();
+
         //Main shader function
         MainNode mainNode = (MainNode)visitMain(ctx.main());
         ArrayList<ClassDeclarationNode> classDeclarationNodes = new ArrayList<>();
@@ -55,7 +60,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
         for (SpookParser.StatementContext statement: ctx.statement()) {
-            statementNodes.add((StatementNode) visitStatement(statement));
+            statementNodes.addAll(((BlockNode) visitStatement(statement)).getStatementNodes());
         }
 
         BlockNode blockNode = new BlockNode(statementNodes);
@@ -64,6 +69,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return blockNode;
     }
 
+    //RETURNS A BLOCK NODE WITH A STATEMENT LIST
     @Override
     public ASTnode visitStatement(SpookParser.StatementContext ctx) {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
@@ -90,10 +96,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
-        if (ctx.variableDecl() != null)
+        if (ctx.variableDecl() != null) {
+            VariableDeclarationNode visitedVariableDeclarationNode = (VariableDeclarationNode)visitVariableDecl(ctx.variableDecl());
+            for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
+                variables.put(varDeclInitNode.getVariableName(), visitedVariableDeclarationNode);
+            }
             return visitVariableDecl(ctx.variableDecl());
-        else if (ctx.objectDecl() != null)
+        }
+        else if (ctx.objectDecl() != null) {
+
             return visitObjectDecl(ctx.objectDecl());
+        }
         else
             throw new CompilerException("Declaration is of unknown type", getCodePosition(ctx));
     }
@@ -758,10 +771,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         }
         else
             throw new CompilerException("Invalid Boolean expression in Ternary operator", getCodePosition(ctx));
-
-        TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(boolExpression, expression1, expression2);
-        ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
-        return ternaryOperatorNode;
     }
 
     @Override
@@ -837,7 +846,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return conditionalBlockNode;
         }
         else if (ctx.statement() != null) {
-            StatementNode statementNode = (StatementNode) visitStatement(ctx.statement());
+            StatementNode statementNode = ((BlockNode) visitStatement(ctx.statement())).getStatementNodes().get(0);
             conditionalBlockNode = new ConditionalBlockNode(statementNode);
             conditionalBlockNode.setCodePosition(getCodePosition(ctx));
             return conditionalBlockNode;
@@ -867,8 +876,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitForStatement(SpookParser.ForStatementContext ctx) {
-        BlockNode blockNode;
-        StatementNode statementNode;
+        ArrayList<StatementNode> forLoopStatementNodes = new ArrayList<>();
+
+        ConditionalBlockNode conditionalBlockNode;
 
         ForLoopExpressionNode expressionNode1 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(0));
         ForLoopExpressionNode expressionNode2 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(1));
@@ -885,23 +895,46 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             ForLoopExpressionNode fixedExpressionNode1 = expressionNode1;
 
             ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
-            atomPrecedenceNodes.add(new AtomPrecedenceNode(new ArithOperandNode(new RealNumberNode(expr1))));
+            atomPrecedenceNodes.add(
+                new AtomPrecedenceNode(
+                    new ArithOperandNode(
+                        new RealNumberNode(expr1)
+                    )
+                )
+            );
 
             ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
             highPrecedenceNodes.add(new HighPrecedenceNode(atomPrecedenceNodes));
 
-            ArithExpressionNode fixedExpressionNode = new ArithExpressionNode(new LowPrecedenceNode(highPrecedenceNodes));
+            ArithExpressionNode fixedExpressionNode = new ArithExpressionNode(
+                new LowPrecedenceNode(highPrecedenceNodes)
+            );
+
             fixedExpressionNode.setCodePosition(getCodePosition(ctx));
 
-            if (expressionNode1.getRealNumberNode() != null) {
-                fixedExpressionNode1 = new ForLoopExpressionNode(new RealNumberNode(expr1));
+            if (expressionNode1.getAtomPrecedenceNode() != null) {
+                fixedExpressionNode1 = new ForLoopExpressionNode(
+                    new AtomPrecedenceNode(
+                        new ArithOperandNode(
+                            new RealNumberNode(expr1)
+                        )
+                    )
+                );
             }
             else if (expressionNode1.getVariableDeclarationNode() != null) {
-                if (expressionNode1.getVariableDeclarationNode().getAssignmentNode() != null) {
-                    AssignmentNode assignmentNode = expressionNode1.getVariableDeclarationNode().getAssignmentNode();
+                if (expressionNode1.getVariableDeclarationNode().getVarDeclInitNodes() != null) {
+                    ArrayList<VarDeclInitNode> varDeclInitNodes = expressionNode1.getVariableDeclarationNode().getVarDeclInitNodes();
+                    AssignmentNode assignmentNode = varDeclInitNodes.get(0).getAssignmentNode();
+
+                    ArrayList<VarDeclInitNode> fixedVarDeclInitNodes = new ArrayList<>();
+                    fixedVarDeclInitNodes.add(
+                        new VarDeclInitNode(
+                            new AssignmentNode(assignmentNode.getVariableName(), fixedExpressionNode)
+                        )
+                    );
+
                     fixedExpressionNode1 = new ForLoopExpressionNode(new VariableDeclarationNode(
-                        expressionNode1.getVariableDeclarationNode().getDataType(),
-                        new AssignmentNode(assignmentNode.getVariableName(), fixedExpressionNode)
+                        expressionNode1.getVariableDeclarationNode().getDataType(), fixedVarDeclInitNodes
                     ));
                 }
             }
@@ -912,15 +945,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 ));
             }
 
-            ForLoopExpressionNode fixedExpressionNode2 = new ForLoopExpressionNode(new RealNumberNode(expr1));
+            ForLoopExpressionNode fixedExpressionNode2 = new ForLoopExpressionNode(
+                new AtomPrecedenceNode(
+                    new ArithOperandNode(
+                        new RealNumberNode(expr1)
+                    )
+                )
+            );
 
-            if (ctx.statement() != null) {
-                statementNode = (StatementNode) visitStatement(ctx.statement());
-                forLoopStatementNodes.add(new ForLoopStatementNode(fixedExpressionNode1, fixedExpressionNode2, statementNode));
-            }
-            else if (ctx.block() != null) {
-                blockNode = (BlockNode) visitBlock(ctx.block());
-                forLoopStatementNodes.add(new ForLoopStatementNode(fixedExpressionNode1, fixedExpressionNode2, blockNode));
+            if (ctx.conditionalBlock() != null) {
+                conditionalBlockNode = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
+                forLoopStatementNodes.add(new ForLoopStatementNode(fixedExpressionNode1, fixedExpressionNode2, conditionalBlockNode));
             }
             else
                 throw new CompilerException("Invalid ForLoopStatement", getCodePosition(ctx));
@@ -934,15 +969,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         BlockNode newBlockNode = new BlockNode(forLoopStatementNodes);
         newBlockNode.setCodePosition(getCodePosition(ctx));
         return newBlockNode;
-
-        //Simons kode
-        //ForLoopExpressionNode forLoopExpressionNode1 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(0));
-        //ForLoopExpressionNode forLoopExpressionNode2 = (ForLoopExpressionNode) visitForLoopExpression(ctx.forLoopExpression(1));
-        //ConditionalBlockNode conditionalBlockNode = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
-
-        //ForLoopStatementNode forLoopStatementNode = new ForLoopStatementNode(forLoopExpressionNode1, forLoopExpressionNode2, conditionalBlockNode);
-        //forLoopStatementNode.setCodePosition(getCodePosition(ctx));
-        //return forLoopStatementNode;
     }
 
     @Override
@@ -1098,8 +1124,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private double evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
         if (expressionNode.getAssignmentNode() != null)
             return evaluateAssignment(expressionNode.getAssignmentNode());
-        else if (expressionNode.getRealNumberNode() != null)
-            return expressionNode.getRealNumberNode().getNumber();
+        else if (expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode() != null)
+            return expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode().getNumber();
         else if (expressionNode.getVariableDeclarationNode() != null)
             return evaluateVariableDeclaration(expressionNode.getVariableDeclarationNode());
         else if (expressionNode.getVariableName() != null)
@@ -1110,12 +1136,12 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     private double evaluateVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
         if (variableDeclarationNode.getDataType() == Enums.DataType.NUM) {
-            AssignmentNode assignmentNode = variableDeclarationNode.getAssignmentNode();
+            AssignmentNode assignmentNode = variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode();
 
             if (assignmentNode != null)
-                return evaluateAssignment(variableDeclarationNode.getAssignmentNode());
+                return evaluateAssignment(variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode());
             else
-                return evaluateVariable(variableDeclarationNode.getVariableName());
+                return evaluateVariable(variableDeclarationNode.getVarDeclInitNodes().get(0).getVariableName());
         }
         else
             throw new CompilerException("For loop variable is not Num", variableDeclarationNode.getCodePosition());
@@ -1232,21 +1258,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     }
 
     private double evaluateSwizzle(SwizzleNode swizzleNode) {
-        String swizzle;
-        if (swizzleNode.getCoordinateSwizzle() != null) {
-            swizzle = swizzleNode.getCoordinateSwizzle().getSwizzle();
-        }
-        else if (swizzleNode.getColorSwizzle() != null) {
-            swizzle = swizzleNode.getColorSwizzle().getSwizzle();
-        }
-        else {
-            throw new CompilerException("Invalid swizzle", swizzleNode.getCodePosition());
-        }
-
-        if (swizzle.length() == 1) {
-            throw new CompilerException("Swizzle not yet implemented", swizzleNode.getCodePosition());
-        }
-        else
-            throw new CompilerException("Swizzle does not result in Num", swizzleNode.getCodePosition());
+        throw new CompilerException("Swizzle not yet implemented", swizzleNode.getCodePosition());
     }
 }
