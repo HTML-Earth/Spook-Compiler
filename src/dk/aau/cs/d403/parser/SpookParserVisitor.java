@@ -1,4 +1,4 @@
-// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -29,12 +29,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(SpookParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#comment}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComment(SpookParser.CommentContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -53,11 +47,23 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#variableDeclInit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableDeclInit(SpookParser.VariableDeclInitContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#objectDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitObjectDecl(SpookParser.ObjectDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpookParser#objectConstructor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectConstructor(SpookParser.ObjectConstructorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#assignment}.
 	 * @param ctx the parse tree
@@ -167,18 +173,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSwizzle(SpookParser.SwizzleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#coordinateSwizzle}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCoordinateSwizzle(SpookParser.CoordinateSwizzleContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#colorSwizzle}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColorSwizzle(SpookParser.ColorSwizzleContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SpookParser#functionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -239,35 +233,11 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElseStatement(SpookParser.ElseStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifBoolExpression}.
+	 * Visit a parse tree produced by {@link SpookParser#conditionalExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfBoolExpression(SpookParser.IfBoolExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseifBoolExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseifBoolExpression(SpookParser.ElseifBoolExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#ifBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfBlock(SpookParser.IfBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseIfBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseIfBlock(SpookParser.ElseIfBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#elseBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElseBlock(SpookParser.ElseBlockContext ctx);
+	T visitConditionalExpression(SpookParser.ConditionalExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#conditionalBlock}.
 	 * @param ctx the parse tree
@@ -334,12 +304,6 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionArg(SpookParser.FunctionArgContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SpookParser#functionBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionBlock(SpookParser.FunctionBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpookParser#returnStatement}.
 	 * @param ctx the parse tree

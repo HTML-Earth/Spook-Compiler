@@ -8,7 +8,7 @@ options { tokenVocab=SpookLexer; }
 // Comments, Classes and functions can be declared outside (under) of the main function
 // variableName to catch errors
 program
-    : main (comment | classDecl | functionDecl | variableName)*;
+    : main (classDecl | functionDecl | variableName)*;
 
 
 
@@ -18,12 +18,8 @@ program
 main
     : MAIN block;
 
-// Main block
-block: LEFT_BRACKET (statement | comment)* RIGHT_BRACKET;
-
-// Comment: Single-line
-comment
-    : COMMENT_STRING;
+// Main block (Block with return statement is functionBlock)
+block: LEFT_BRACKET (statement)* RIGHT_BRACKET;
 
 // Statements
 statement
@@ -31,7 +27,8 @@ statement
     | assignment SEMICOLON
     | functionCall SEMICOLON
     | conditionalStatement
-    | iterativeStatement;
+    | iterativeStatement
+    | returnStatement; //Typechecking
 
 
 
@@ -43,27 +40,31 @@ declaration
 
 // Variable declaration
 variableDecl
-    : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
+    : dataType variableDeclInit (COMMA variableDeclInit)*;
+
+variableDeclInit
+    : variableName | assignment;
 
 // Object declaration
 objectDecl
-    : className objectVariableName ASSIGN LEFT_PAREN objectArgs? RIGHT_PAREN;
+    : className objectVariableName (ASSIGN objectConstructor)?;
 
-
+objectConstructor
+    : LEFT_PAREN objectArgs? RIGHT_PAREN
+    | functionCall;
 
 
 /*      ASSIGNMENT       */
 assignment
     : (variableName | swizzle) ASSIGN expression;
 
+
 expression
     : arithExpression
-    | vector2Expression
-    | vector3Expression
-    | vector4Expression
     | boolExpression
-    | ternaryOperator
-    | functionCall;
+    | ternaryOperator;
+
+
 
 // Expressions
 arithExpression: lowPrecedence;
@@ -71,10 +72,10 @@ vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: boolOperations;
-ternaryOperator: boolExpression QUESTION expression COLON expression;
+ternaryOperator: (boolExpression | variableName | functionCall) QUESTION expression COLON expression;
 
 arithOperand
-    : realNumber | variableName | functionCall | swizzle;
+    : realNumber | variableName | functionCall | swizzle | vector2Expression | vector3Expression | vector4Expression;
 
 //Precedence, goes through low to high, ends at atom
 lowPrecedence
@@ -97,26 +98,19 @@ lowOperator
 
 // Recursive boolean operations
 boolOperations
-    : NOT? boolOperation boolOperationExtend*;
+    : NOT? boolOperation boolOperationExtend*
+    | NOT? arithExpression boolOperationExtend+;
 
 // Boolean operations
 boolOperation
     : BOOL_LITERAL
-    | variableName
-    | LEFT_PAREN boolOperations RIGHT_PAREN
-    | realNumber;
+    | LEFT_PAREN boolOperations RIGHT_PAREN;
 
 boolOperationExtend
-    : boolOperator NOT? boolOperation;
+    : boolOperator NOT? (boolOperation | arithExpression);
 
-// Swizzling
 swizzle
-    : variableName DOT (coordinateSwizzle | colorSwizzle);
-
-coordinateSwizzle: COORDINATE_SWIZZLE_MASK;
-colorSwizzle: COLOR_SWIZZLE_MASK;
-
-
+    : objectVariableName DOT functionName;
 
 
 /*      FUNCTION CALLS       */
@@ -135,8 +129,7 @@ objectFunctionCall
 
 // Object arguments
 objectArgs
-    : objectArg COMMA objectArgs
-    | objectArg;
+    : objectArg (COMMA objectArg)*;
 objectArg
     : lowPrecedence;
 
@@ -149,19 +142,15 @@ conditionalStatement
 ifElseStatement:  ifStatement elseIfStatement* elseStatement?;
 
 // Statements
-ifStatement: IF LEFT_PAREN ifBoolExpression RIGHT_PAREN ifBlock;
-elseIfStatement: ELSE_IF LEFT_PAREN elseifBoolExpression RIGHT_PAREN elseIfBlock;
-elseStatement: ELSE elseBlock;
+ifStatement: IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditionalBlock;
+elseIfStatement: ELSE_IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditionalBlock;
+elseStatement: ELSE conditionalBlock;
 
 // Expressions
-ifBoolExpression: boolExpression;
-elseifBoolExpression: boolExpression;
+conditionalExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
 
 // Blocks
-ifBlock: conditionalBlock;
-elseIfBlock: conditionalBlock;
-elseBlock: conditionalBlock;
-conditionalBlock: block | statement;
+conditionalBlock: statement | block;
 
 
 /*      LOOPS        */
@@ -170,9 +159,9 @@ iterativeStatement
 
 // For loop
 forStatement
-    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN (block | statement);
+    : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN conditionalBlock;
 
-forLoopExpression: (realNumber | variableDecl | variableName | assignment);
+forLoopExpression: (atomPrecedence | variableDecl | variableName | assignment);
 
 
 
@@ -183,7 +172,7 @@ classDecl
     : CLASS className ((EXTENDS | IMPLEMENTS) className)? classBlock;
 
 // Class block
-classBlock: LEFT_BRACKET (declaration | constructor | functionDecl | comment)* RIGHT_BRACKET;
+classBlock: LEFT_BRACKET (declaration | constructor | functionDecl)* RIGHT_BRACKET;
 
 // Class constructor
 constructor: className LEFT_PAREN functionArgs? RIGHT_PAREN constructorBlock;
@@ -196,16 +185,14 @@ constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 /* Function declaration */
 functionDecl
     : VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
-    | dataType functionName LEFT_PAREN functionArgs? RIGHT_PAREN functionBlock;
+    | dataType functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+
 
 functionArgs
     : functionArg COMMA functionArgs
     | functionArg;
 functionArg
     : (dataType | className) variableName;
-
-// Function block
-functionBlock: LEFT_BRACKET (statement | comment)* returnStatement RIGHT_BRACKET;
 
 // Return statement
 returnStatement: RETURN expression SEMICOLON;

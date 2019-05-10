@@ -3,46 +3,37 @@ package dk.aau.cs.d403.ast.statements;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
 
+import java.util.ArrayList;
+
 public class VariableDeclarationNode extends DeclarationNode {
     private Enums.DataType dataType;
-    private String variableName;
-    private AssignmentNode assignmentNode;
+    private ArrayList<VarDeclInitNode> varDeclInitNodes;
 
-    public VariableDeclarationNode(Enums.DataType dataType, String variableName) {
+    public VariableDeclarationNode(Enums.DataType dataType, ArrayList<VarDeclInitNode> varDeclInitNodes) {
         this.dataType = dataType;
-        this.variableName = variableName;
-    }
-
-    public VariableDeclarationNode(Enums.DataType dataType, AssignmentNode assignmentNode) {
-        this.dataType = dataType;
-        this.variableName = assignmentNode.getVariableName();
-        this.assignmentNode = assignmentNode;
+        this.varDeclInitNodes = varDeclInitNodes;
     }
 
     public Enums.DataType getDataType() {
         return dataType;
     }
 
-    public String getVariableName() {
-        return variableName;
-    }
-
-    public AssignmentNode getAssignmentNode() {
-        return assignmentNode;
+    public ArrayList<VarDeclInitNode> getVarDeclInitNodes() {
+        return varDeclInitNodes;
     }
 
     @Override
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
-
         for (int i = 0; i < indent; i++)
             sb.append("\t");
-
-        if (assignmentNode != null)
-            sb.append(Enums.dataTypeToStringSpook(dataType) + " " + assignmentNode.prettyPrint(0));
-        else
-            sb.append(Enums.dataTypeToStringSpook(dataType) + " " + variableName);
-
+        sb.append(Enums.dataTypeToStringSpook(dataType)).append(" ");
+        for (int i = 0; i < varDeclInitNodes.size(); i++) {
+            sb.append(varDeclInitNodes.get(i).prettyPrint(0));
+            if (i != varDeclInitNodes.size()-1) {
+                sb.append(", ");
+            }
+        }
         return sb.toString();
     }
 

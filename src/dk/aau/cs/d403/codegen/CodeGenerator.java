@@ -174,6 +174,19 @@ public class CodeGenerator {
         return new BlockNode(statementNodes);
     }
 
+    private ConditionalBlockNode visitConditionalBlock(ConditionalBlockNode conditionalBlockNode) {
+        ConditionalBlockNode newConditionalBlockNode;
+
+        if (conditionalBlockNode.getStatementNode() != null) {
+            newConditionalBlockNode = new ConditionalBlockNode(visitStatement(conditionalBlockNode.getStatementNode()).get(0));
+        }
+        else {
+            newConditionalBlockNode = new ConditionalBlockNode(visitBlock(conditionalBlockNode.getBlockNode()));
+        }
+
+        return conditionalBlockNode;
+    }
+
     private ArrayList<StatementNode> visitStatement(StatementNode statementNode) {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
@@ -209,11 +222,13 @@ public class CodeGenerator {
             statementNodes.add(expressionNode1.getAssignmentNode());
         }
 
-        if (forLoopStatementNode.getStatementNode() != null) {
-            statementNodes.addAll(visitStatement(forLoopStatementNode.getStatementNode()));
-        }
-        else if (forLoopStatementNode.getBlockNode() != null) {
-            statementNodes.addAll(visitBlock(forLoopStatementNode.getBlockNode()).getStatementNodes());
+        if (forLoopStatementNode.getConditionalBlockNode() != null) {
+            if (forLoopStatementNode.getConditionalBlockNode().getStatementNode() != null) {
+                statementNodes.add(visitConditionalBlock(forLoopStatementNode.getConditionalBlockNode()).getStatementNode());
+            }
+            else {
+                statementNodes.addAll(visitConditionalBlock(forLoopStatementNode.getConditionalBlockNode()).getBlockNode().getStatementNodes());
+            }
         }
         else
             throw new CompilerException("Invalid for loop", forLoopStatementNode.getCodePosition());
@@ -224,8 +239,8 @@ public class CodeGenerator {
     private ForLoopExpressionNode visitForLoopExpressionNode(ForLoopExpressionNode forLoopExpressionNode) {
         if (forLoopExpressionNode.getAssignmentNode() != null)
             return new ForLoopExpressionNode(visitAssignment(forLoopExpressionNode.getAssignmentNode()));
-        else if (forLoopExpressionNode.getRealNumberNode() != null)
-            return new ForLoopExpressionNode(forLoopExpressionNode.getRealNumberNode());
+        else if (forLoopExpressionNode.getAtomPrecedenceNode() != null)
+            return new ForLoopExpressionNode(forLoopExpressionNode.getAtomPrecedenceNode());
         else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
             return new ForLoopExpressionNode((VariableDeclarationNode)visitDeclaration(forLoopExpressionNode.getVariableDeclarationNode()));
         else if (forLoopExpressionNode.getVariableName() != null)
@@ -265,58 +280,44 @@ public class CodeGenerator {
     }
 
     private IfStatementNode visitIfStatementNode(IfStatementNode ifStatementNode) {
-        BoolExpressionNode boolExpressionNode = null;
-        BlockNode blockNode;
-        StatementNode statementNode;
+        ConditionalExpressionNode conditionalExpressionNode = null;
+        ConditionalBlockNode conditionalBlockNode;
 
         if (ifStatementNode.getIfBool() != null) {
-            boolExpressionNode = visitBoolExpression(ifStatementNode.getIfBool());
+            conditionalExpressionNode = visitConditionalExpression(ifStatementNode.getIfBool());
         }
 
         if (ifStatementNode.getIfBlock() != null) {
-            blockNode = visitBlock(ifStatementNode.getIfBlock());
-            return new IfStatementNode(boolExpressionNode, blockNode);
-        }
-        else if (ifStatementNode.getIfStatement() != null){
-            statementNode = visitStatement(ifStatementNode.getIfStatement()).get(0); //TODO fix get(0) in this function and the 2 next.
-            return new IfStatementNode(boolExpressionNode, statementNode);
+            conditionalBlockNode = visitConditionalBlock(ifStatementNode.getIfBlock());
+            return new IfStatementNode(conditionalExpressionNode, conditionalBlockNode);
         }
         else
             throw new CompilerException("Invalid if-statement", ifStatementNode.getCodePosition());
     }
 
     private ElseStatementNode visitElseStatementNode(ElseStatementNode elseStatementNode) {
-        BlockNode blockNode;
-        StatementNode statementNode;
+        ConditionalBlockNode conditionalBlockNode;
 
         if (elseStatementNode.getElseBlock() != null) {
-            blockNode = visitBlock(elseStatementNode.getElseBlock());
-            return new ElseStatementNode(blockNode);
-        }
-        else if (elseStatementNode.getElseStatement() != null) {
-            statementNode = visitStatement(elseStatementNode.getElseStatement()).get(0);
-            return new ElseStatementNode(statementNode);
+            conditionalBlockNode = visitConditionalBlock(elseStatementNode.getElseBlock());
+            return new ElseStatementNode(conditionalBlockNode);
         }
         else
             throw new CompilerException("Invalid else-statement", elseStatementNode.getCodePosition());
     }
 
     private ElseIfStatementNode visitElseIfStatementNode(ElseIfStatementNode elseIfStatementNode) {
-        BoolExpressionNode boolExpressionNode = null;
-        BlockNode blockNode;
+        ConditionalExpressionNode conditionalExpressionNode = null;
+        ConditionalBlockNode conditionalBlockNode;
         StatementNode statementNode;
 
         if (elseIfStatementNode.getElseIfBool() != null) {
-            boolExpressionNode = visitBoolExpression(elseIfStatementNode.getElseIfBool());
+            conditionalExpressionNode = visitConditionalExpression(elseIfStatementNode.getElseIfBool());
         }
 
         if (elseIfStatementNode.getElseIfBlock() != null) {
-            blockNode = visitBlock(elseIfStatementNode.getElseIfBlock());
-            return new ElseIfStatementNode(boolExpressionNode, blockNode);
-        }
-        else if (elseIfStatementNode.getElseIfStatement() != null){
-            statementNode = visitStatement(elseIfStatementNode.getElseIfStatement()).get(0); //TODO fix get(0) in this function and the 2 next.
-            return new ElseIfStatementNode(boolExpressionNode, statementNode);
+            conditionalBlockNode = visitConditionalBlock(elseIfStatementNode.getElseIfBlock());
+            return new ElseIfStatementNode(conditionalExpressionNode, conditionalBlockNode);
         }
         else
             throw new CompilerException("Invalid else-if-statement", elseIfStatementNode.getCodePosition());
@@ -359,6 +360,10 @@ public class CodeGenerator {
         else {
             return expressionNode;
         }
+    }
+
+    private ConditionalExpressionNode visitConditionalExpression(ConditionalExpressionNode conditionalExpressionNode) {
+        return conditionalExpressionNode;
     }
 
     private BoolExpressionNode visitBoolExpression(BoolExpressionNode boolExpressionNode) {
@@ -431,8 +436,10 @@ public class CodeGenerator {
                     usedVariables.add(variableName);
 
                     if (variables.get(variableName) != null) {
-                        if (variables.get(variableName).getAssignmentNode() != null)
-                            visitAssignment(variables.get(variableName).getAssignmentNode());
+                        if (variables.get(variableName).getVarDeclInitNodes() != null){
+                            for (VarDeclInitNode varDeclInitNode : variables.get(variableName).getVarDeclInitNodes())
+                                visitAssignment(varDeclInitNode.getAssignmentNode());
+                        }
                     }
 
                     return arithOperandNode;
@@ -455,10 +462,8 @@ public class CodeGenerator {
                 variableName = swizzleNode.getVariableName();
         }
 
-        if (swizzleNode.getColorSwizzle() != null)
-            return new SwizzleNode(variableName, swizzleNode.getColorSwizzle());
-        else if (swizzleNode.getCoordinateSwizzle() != null)
-            return new SwizzleNode(variableName, swizzleNode.getCoordinateSwizzle());
+        if (swizzleNode.getSwizzle() != null)
+            return new SwizzleNode(variableName, swizzleNode.getSwizzle());
         else
             return swizzleNode;
     }
@@ -477,7 +482,9 @@ public class CodeGenerator {
             VariableDeclarationNode visitedVariableDeclarationNode = visitVariableDeclaration(variableDeclarationNode);
 
             //Add variable declaration to HashMap
-            variables.put(visitedVariableDeclarationNode.getVariableName(), visitedVariableDeclarationNode);
+            for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
+                variables.put(varDeclInitNode.getVariableName(), visitedVariableDeclarationNode);
+            }
 
             return visitedVariableDeclarationNode;
         }
@@ -489,28 +496,35 @@ public class CodeGenerator {
 
     private VariableDeclarationNode visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
         Enums.DataType dataType = variableDeclarationNode.getDataType();
-        String variableName = variableDeclarationNode.getVariableName();
-        AssignmentNode assignmentNode = variableDeclarationNode.getAssignmentNode();
+        ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
 
-        if (assignmentNode != null)
-            return new VariableDeclarationNode(dataType, visitAssignment(assignmentNode));
-        return new VariableDeclarationNode(dataType, variableName);
+        for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
+            String variableName = varDeclInitNode.getVariableName();
+            AssignmentNode assignmentNode = varDeclInitNode.getAssignmentNode();
+
+            if (assignmentNode != null)
+                varDeclInitNodes.add(new VarDeclInitNode(visitAssignment(assignmentNode)));
+            else
+                varDeclInitNodes.add(new VarDeclInitNode(variableName));
+        }
+
+        return new VariableDeclarationNode(dataType, varDeclInitNodes);
     }
 
     private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
 
-        for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectArgumentNodes()) {
+        for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectContructorNode().getObjectArgumentNodePlural().getObjectArgumentNodes()) {
             argumentNodes.add(visitArgumentNode(argumentNode));
         }
 
-        String objectType = objectDeclarationNode.getObjectType();
-        usedClasses.add(objectType);
+        String className = objectDeclarationNode.getClassName();
+        usedClasses.add(className);
 
         String variableName = objectDeclarationNode.getVariableName();
         SpookObject object;
 
-        switch (objectType) {
+        switch (className) {
             case "Circle":
                 object = new Circle(variableName, argumentNodes);
                 break;
@@ -533,9 +547,9 @@ public class CodeGenerator {
         spookObjects.put(variableName, object);
 
         if (argumentNodes.size() > 0)
-            return new ObjectDeclarationNode(objectType, variableName, argumentNodes);
+            return new ObjectDeclarationNode(className, variableName, new ObjectContructorNode(new ObjectArgumentNodePlural(argumentNodes)));
         else
-            return new ObjectDeclarationNode(objectType, variableName);
+            return new ObjectDeclarationNode(className, variableName);
     }
 
     private NonObjectFunctionCallNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
