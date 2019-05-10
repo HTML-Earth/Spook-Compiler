@@ -76,6 +76,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return visitIfElseStatement(ctx.conditionalStatement().ifElseStatement());
         else if (ctx.iterativeStatement() != null)
             return visitForStatement(ctx.iterativeStatement().forStatement());
+        else if (ctx.returnStatement() != null)
+            return visitReturnStatement(ctx.returnStatement());
         else {
             throw new CompilerException("Statement is of unknown type", getCodePosition(ctx));
         }
@@ -748,6 +750,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         ElseStatementNode elseStatementNode = null;
 
         if (ctx.elseIfStatement() != null) {
+            elseIfStatementNode = new ArrayList<>();
             for (SpookParser.ElseIfStatementContext elseIfStatement : ctx.elseIfStatement()) {
                 elseIfStatementNode.add((ElseIfStatementNode) visitElseIfStatement(elseIfStatement));
             }

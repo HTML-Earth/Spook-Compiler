@@ -502,6 +502,7 @@ public class TypeChecking {
 
     private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
+        //TODO: add arguments as VariableDecl
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
         }
