@@ -12,6 +12,7 @@ Shader {
     Num y = 2;
     Num z = 3;
 
+    Num a, r, g = 3, b, x = 2;
 
 
 
