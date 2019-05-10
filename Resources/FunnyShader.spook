@@ -64,8 +64,27 @@ tongue.setParent(mouth);
 tongue.setPosition(0, -35);
 tongue.setScale(1,0.6);
 
+Vec2 point1 = (0, 0);
+Vec2 point2 = (125, 25);
+Vec2 point3 = (250, 0);
+Vec2 point4 = (250, 50);
+Vec2 point5 = (125, 75);
+Vec2 point6 = (0, 50);
+
+Polygon eyeBrow1 = (point1,  point3, point4, point5, point6, Color.purple());
+Polygon eyeBrow2 = (point1, point3, point4, point5, point6, Color.purple());
+Polygon eyeBrowFix1 = (point1, point3, point2, Color.magenta());
+Polygon eyeBrowFix2 = (point1, point3, point2, Color.magenta());
+eyeBrow1.setPosition(xPos - 275, yPos + 100);
+eyeBrow2.setPosition(xPos + 25, yPos + 100);
+eyeBrowFix1.setPosition(xPos - 275, yPos + 100);
+eyeBrowFix2.setPosition(xPos + 25, yPos + 100);
+
 Scene.add(middle);
 Scene.add(mover);
 Scene.add(mouth);
-
+Scene.add(eyeBrow1);
+Scene.add(eyeBrow2);
+Scene.add(eyeBrowFix1);
+Scene.add(eyeBrowFix2);
 }
