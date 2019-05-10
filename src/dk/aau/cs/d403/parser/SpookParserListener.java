@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Marcus-Laptop/Documents/GitHub/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -277,26 +277,6 @@ public interface SpookParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSwizzle(SpookParser.SwizzleContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#coordinateSwizzle}.
-	 * @param ctx the parse tree
-	 */
-	void enterCoordinateSwizzle(SpookParser.CoordinateSwizzleContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#coordinateSwizzle}.
-	 * @param ctx the parse tree
-	 */
-	void exitCoordinateSwizzle(SpookParser.CoordinateSwizzleContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SpookParser#colorSwizzle}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorSwizzle(SpookParser.ColorSwizzleContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SpookParser#colorSwizzle}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorSwizzle(SpookParser.ColorSwizzleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpookParser#functionCall}.
 	 * @param ctx the parse tree
