@@ -61,14 +61,14 @@ GREATER_OR_EQUAL: '>=';
 LESS_THAN: '<';
 LESS_OR_EQUAL: '<=';
 
-/* Swizzle masks */
+// Swizzle masks DOT moved from parser to lexer in order to have ID = x, this dot is removed in astbuilder
 // Coordinate swizzle mask
 COORDINATE_SWIZZLE_MASK
-    : COORDINATE_SWIZZLE_MASK_RULE+;
+    : DOT COORDINATE_SWIZZLE_MASK_RULE+;
 
 // Color swizzle mask
 COLOR_SWIZZLE_MASK
-    : COLOR_SWIZZLE_MASK_RULE+;
+    : DOT COLOR_SWIZZLE_MASK_RULE+;
 
 // Identifier - chars and non-negative digits
 ID: (LETTER | DIGIT)+;

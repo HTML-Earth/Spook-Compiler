@@ -8,15 +8,15 @@ public class ForLoopExpressionNode extends ExpressionNode {
     private VariableDeclarationNode variableDeclarationNode;
     private String variableName;
     private AssignmentNode assignmentNode;
-    private RealNumberNode realNumberNode;
+    private AtomPrecedenceNode atomPrecedenceNode;
 
     // Constructors
     public ForLoopExpressionNode(AssignmentNode assignmentNode) {
         this.assignmentNode = assignmentNode;
     }
 
-    public ForLoopExpressionNode(RealNumberNode realNumberNode) {
-        this.realNumberNode = realNumberNode;
+    public ForLoopExpressionNode(AtomPrecedenceNode atomPrecedenceNode) {
+        this.atomPrecedenceNode = atomPrecedenceNode;
     }
 
     public ForLoopExpressionNode(VariableDeclarationNode variableDeclarationNode) {
@@ -40,8 +40,8 @@ public class ForLoopExpressionNode extends ExpressionNode {
         return assignmentNode;
     }
 
-    public RealNumberNode getRealNumberNode() {
-        return realNumberNode;
+    public AtomPrecedenceNode atomPrecedenceNode() {
+        return atomPrecedenceNode;
     }
 
     @Override
@@ -52,8 +52,8 @@ public class ForLoopExpressionNode extends ExpressionNode {
             return variableName;
         else if (assignmentNode != null)
             return assignmentNode.prettyPrint(indent);
-        else if (realNumberNode != null)
-            return realNumberNode.prettyPrint(indent);
+        else if (atomPrecedenceNode != null)
+            return atomPrecedenceNode.prettyPrint(indent);
         else
             return "Invalid ForLoop Expression";
     }
