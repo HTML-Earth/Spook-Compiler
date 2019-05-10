@@ -25,14 +25,16 @@ public class VariableDeclarationNode extends DeclarationNode {
     @Override
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
-        for (VarDeclInitNode varDeclInitNode : varDeclInitNodes) {
-            sb.append(varDeclInitNode.prettyPrint(indent));
-            if (!varDeclInitNode.equals(varDeclInitNodes.get(varDeclInitNodes.size()-1))); {
-                //This body is not empty
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+        sb.append(Enums.dataTypeToStringSpook(dataType)).append(" ");
+        for (int i = 0; i < varDeclInitNodes.size(); i++) {
+            sb.append(varDeclInitNodes.get(i).prettyPrint(indent));
+            if (i != varDeclInitNodes.size()-1) {
                 sb.append(", ");
             }
         }
-        return Enums.dataTypeToStringSpook(dataType) + " " + sb.toString();
+        return sb.toString();
     }
 
     private CodePosition codePosition;

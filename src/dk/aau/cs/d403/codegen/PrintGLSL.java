@@ -2,10 +2,7 @@ package dk.aau.cs.d403.codegen;
 
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
-import dk.aau.cs.d403.ast.statements.AssignmentNode;
-import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
-import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
@@ -21,10 +18,13 @@ public class PrintGLSL {
         StringBuilder sb = new StringBuilder();
         sb.append(Enums.dataTypeToStringGLSL(variableDeclarationNode.getDataType()));
         sb.append(" ");
-        if (variableDeclarationNode.getAssignmentNode() != null)
-            sb.append(printAssignment(variableDeclarationNode.getAssignmentNode()));
-        else
-            sb.append(variableDeclarationNode.getVariableName() + ";");
+        for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
+            if (varDeclInitNode.getAssignmentNode() != null)
+                sb.append(printAssignment(varDeclInitNode.getAssignmentNode()));
+            else
+                sb.append(varDeclInitNode.getVariableName()).append(";");
+        }
+
 
         return sb.toString();
     }
