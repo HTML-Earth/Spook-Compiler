@@ -247,29 +247,30 @@ public class TypeChecking {
             boolean matchingSize = true;
             boolean argumentMatch = true;
             for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
-                if (retrievedNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
-                    if (retrievedNode.getFunctionArgNodes().size() != objectArgumentNodes.size())
-                        matchingSize = false;
-                    else {
-                        // Check parameters
-                        outerLoop:
-                        for (int i = 0; i < objectArgumentNodes.size(); i++) {
+                if (retrievedNode != null) { //TODO: Find reason why this is neccesary (File: IfElseSlaaGraesTest)
+                    if (retrievedNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
+                        if (retrievedNode.getFunctionArgNodes().size() != objectArgumentNodes.size())
+                            matchingSize = false;
+                        else {
+                            // Check parameters
+                            outerLoop:
+                            for (int i = 0; i < objectArgumentNodes.size(); i++) {
 
-                            // Check Ints and Floats
-                            if (objectArgumentNodes.get(i).getLowPrecedence() != null) {
-                                LowPrecedenceNode lowPrecedenceNode = objectArgumentNodes.get(i).getLowPrecedence();
-                                for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
-                                    for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
+                                // Check Ints and Floats
+                                if (objectArgumentNodes.get(i).getLowPrecedence() != null) {
+                                    LowPrecedenceNode lowPrecedenceNode = objectArgumentNodes.get(i).getLowPrecedence();
+                                    for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
+                                        for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
-                                        if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
-                                            if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.NUM)) {
-                                                argumentMatch = false;
-                                                break outerLoop;
+                                            if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
+                                                if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.NUM)) {
+                                                    argumentMatch = false;
+                                                    break outerLoop;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
                             /* Not yet implemented in the AST
                             if (objectArgumentNodes.get(i).getNonObjectFunctionCallNode() != null) {
                                 visitNonObjectFunctionCall(objectArgumentNodes.get(i).getNonObjectFunctionCallNode());
@@ -287,13 +288,13 @@ public class TypeChecking {
                                 }
                             }
                              */
+                            }
                         }
+                    } else if (retrievedNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
+                        enterSymbol(functionName, nonObjectFunctionCallNode);
+                        matchingSize = true;
+                        break;
                     }
-                }
-                else if (retrievedNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
-                    enterSymbol(functionName, nonObjectFunctionCallNode);
-                    matchingSize = true;
-                    break;
                 }
             }
             if (!matchingSize)
