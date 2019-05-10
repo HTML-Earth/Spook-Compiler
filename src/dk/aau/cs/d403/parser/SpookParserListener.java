@@ -68,6 +68,16 @@ public interface SpookParserListener extends ParseTreeListener {
 	 */
 	void exitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpookParser#variableDeclInit}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDeclInit(SpookParser.VariableDeclInitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpookParser#variableDeclInit}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDeclInit(SpookParser.VariableDeclInitContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpookParser#objectDecl}.
 	 * @param ctx the parse tree
 	 */

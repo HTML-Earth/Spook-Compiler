@@ -93,16 +93,32 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitVariableDecl(SpookParser.VariableDeclContext ctx) {
+        ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
 
-        if (ctx.assignment(0) != null) {
-            return new VariableDeclarationNode(getDataType(ctx.dataType()), (AssignmentNode)visitAssignment(ctx.assignment(0)));
+        for (SpookParser.VariableDeclInitContext variableDeclInit : ctx.variableDeclInit()) {
+            varDeclInitNodes.add((VarDeclInitNode) visitVariableDeclInit(variableDeclInit));
         }
-        else if (ctx.variableName(0) != null) {
-            return new VariableDeclarationNode(getDataType(ctx.dataType()), ctx.variableName(0).getText());
+
+        VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(getDataType(ctx.dataType()), varDeclInitNodes);
+        variableDeclarationNode.setCodePosition(getCodePosition(ctx));
+        return variableDeclarationNode;
+    }
+
+    @Override
+    public ASTnode visitVariableDeclInit(SpookParser.VariableDeclInitContext ctx) {
+        if (ctx.assignment() != null) {
+            AssignmentNode assignmentNode = (AssignmentNode) visitAssignment(ctx.assignment());
+            VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
+            varDeclInitNode.setCodePosition(getCodePosition(ctx));
+            return varDeclInitNode;
         }
-        else {
-            throw new CompilerException("Expected variable name or assignment in declaration", getCodePosition(ctx));
+        else if (ctx.variableName() != null) {
+            VarDeclInitNode varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText());
+            varDeclInitNode.setCodePosition(getCodePosition(ctx));
+            return varDeclInitNode;
         }
+        else
+            throw new CompilerException("Missing Variable Declaration initialization", getCodePosition(ctx));
     }
 
     @Override
