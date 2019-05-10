@@ -14,6 +14,7 @@ public class VarDeclInitNode implements ASTnode {
 
     public VarDeclInitNode(AssignmentNode assignmentNode) {
         this.assignmentNode = assignmentNode;
+        this.variableName = assignmentNode.getVariableName();
     }
 
     public String getVariableName() {
@@ -25,11 +26,11 @@ public class VarDeclInitNode implements ASTnode {
     }
 
     @Override
-    public String prettyPrint() {
+    public String prettyPrint(int indent) {
         if (variableName != null)
             return variableName;
         else if (assignmentNode != null)
-            return assignmentNode.prettyPrint();
+            return assignmentNode.prettyPrint(indent);
         else
             throw new CompilerException("Invalid Variable Declaration initialization", codePosition);
     }

@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
+import dk.aau.cs.d403.ast.expressions.ArithExpressionNode;
 import dk.aau.cs.d403.ast.expressions.ExpressionNode;
 import dk.aau.cs.d403.ast.expressions.SwizzleNode;
 
@@ -40,7 +41,10 @@ public class AssignmentNode extends StatementNode {
 
         if (swizzleNode != null)
             sb.append(swizzleNode.prettyPrint(0) + " = " + expressionNode.prettyPrint(0));
-        else if (variableName != null)
+        else if (variableName != null && expressionNode != null)
+            if (expressionNode instanceof ArithExpressionNode) {
+                ArithExpressionNode arithExpressionNode = (ArithExpressionNode) expressionNode;
+            }
             sb.append(variableName + " = " + expressionNode.prettyPrint(0));
 
         return sb.toString();

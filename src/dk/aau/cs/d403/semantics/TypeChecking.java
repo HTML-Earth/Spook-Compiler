@@ -33,8 +33,13 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Scene");
 
         this.listOfPredefinedVariables = new ArrayList<>();
-        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.VEC2, new AssignmentNode("Screen", new Vector2ExpressionNode())));
-        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, "Time"));
+        ArrayList<VarDeclInitNode> screenVarDeclInitList = new ArrayList<>();
+        screenVarDeclInitList.add(new VarDeclInitNode("Screen"));
+        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.VEC2, screenVarDeclInitList));
+
+        ArrayList<VarDeclInitNode> timeVarDeclInitList = new ArrayList<>();
+        timeVarDeclInitList.add(new VarDeclInitNode("Time"));
+        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, timeVarDeclInitList));
 
         this.booleanOperatorList = new ArrayList<>();
         this.booleanOperatorList.add(Enums.BoolOperator.AND);
@@ -116,8 +121,8 @@ public class TypeChecking {
         openScope();
 
         // Enter global variables for every block to use
-        enterSymbol(this.listOfPredefinedVariables.get(0).getVariableName(), this.listOfPredefinedVariables.get(0));
-        enterSymbol(this.listOfPredefinedVariables.get(1).getVariableName(), this.listOfPredefinedVariables.get(1));
+        enterSymbol(this.listOfPredefinedVariables.get(0).getVarDeclInitNodes().get(0).getVariableName(), this.listOfPredefinedVariables.get(0));
+        enterSymbol(this.listOfPredefinedVariables.get(1).getVarDeclInitNodes().get(0).getVariableName(), this.listOfPredefinedVariables.get(1));
 
         for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes())
             visitFunctionDeclaration(functionDeclaration);
@@ -158,7 +163,9 @@ public class TypeChecking {
 
     /*      STATEMENTS       */
     private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
-        String variableName = variableDeclarationNode.getVariableName();
+
+        //TODO: make for each for get variable name and also assignment node
+        String variableName = variableDeclarationNode.getVarDeclInitNodes().get(0).getVariableName();
 
         VariableDeclarationNode retrievedNode = null;
         if (retrieveSymbol(variableName) != null)
@@ -169,8 +176,8 @@ public class TypeChecking {
         else
             throw new RuntimeException("ERROR: A variable (" + variableName + ") with the same name already exists.");
 
-        if (variableDeclarationNode.getAssignmentNode() != null)
-            visitAssignment(variableDeclarationNode.getAssignmentNode());
+        if (variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode() != null)
+            visitAssignment(variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode());
     }
 
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
@@ -411,10 +418,10 @@ public class TypeChecking {
         visitForLoopExpression(forLoopExpression1);
         visitForLoopExpression(forLoopExpression2);
 
-        if (forLoopStatementNode.getBlockNode() != null)
-            visitBlock(forLoopStatementNode.getBlockNode());
-        else if (forLoopStatementNode.getStatementNode() != null)
-            visitStatement(forLoopStatementNode.getStatementNode());
+        if (forLoopStatementNode.getConditionalBlockNode().getBlockNode() != null)
+            visitBlock(forLoopStatementNode.getConditionalBlockNode().getBlockNode());
+        else if (forLoopStatementNode.getConditionalBlockNode().getStatementNode() != null)
+            visitStatement(forLoopStatementNode.getConditionalBlockNode().getStatementNode());
     }
 
     private void visitForLoopExpression(ForLoopExpressionNode forLoopExpressionNode) {
@@ -432,14 +439,11 @@ public class TypeChecking {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(forLoopExpressionNode.getVariableName());
             if (variableDeclarationNode == null)
                 throw new RuntimeException("ERROR: Variable in ForLoop is not declared.");
-            else if (variableDeclarationNode.getAssignmentNode() == null)
+            else if (variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode() == null)
                 throw new RuntimeException("ERROR: Variable in ForLoop is not initialized.");
             else if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM)) {
                 throw new RuntimeException("ERROR: Variable is of an illegal type for the ForLoop.");
             }
-        }
-        else if (forLoopExpressionNode.getRealNumberNode() != null) {
-            // do nothing
         }
         else
             throw new RuntimeException("ERROR: Invalid ForLoop expression");
@@ -737,7 +741,13 @@ public class TypeChecking {
         else if (retrieveSymbol(variableName) != null) {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
-            if (variableDeclarationNode != null && variableDeclarationNode.getAssignmentNode() == null)
+            if (variableDeclarationNode != null)
+                for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
+                    if (varDeclInitNode.getAssignmentNode() != null) {
+                        if (varDeclInitNode.getAssignmentNode().getVariableName().equals(variableName))
+                            return;
+                    }
+                }
                 throw new RuntimeException("ERROR: Variable (" + variableName + ") is not initialized");
         }
     }
