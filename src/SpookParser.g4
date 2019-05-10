@@ -40,7 +40,10 @@ declaration
 
 // Variable declaration
 variableDecl
-    : dataType (variableName | assignment) (COMMA (variableName | assignment))*;
+    : dataType variableDeclInit (COMMA variableDeclInit)*;
+
+variableDeclInit
+    : variableName | assignment;
 
 // Object declaration
 objectDecl

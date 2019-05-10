@@ -47,6 +47,12 @@ public interface SpookParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariableDecl(SpookParser.VariableDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpookParser#variableDeclInit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableDeclInit(SpookParser.VariableDeclInitContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpookParser#objectDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

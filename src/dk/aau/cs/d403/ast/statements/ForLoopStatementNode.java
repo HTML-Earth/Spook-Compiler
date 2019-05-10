@@ -2,7 +2,6 @@ package dk.aau.cs.d403.ast.statements;
 
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.expressions.ForLoopExpressionNode;
-import dk.aau.cs.d403.ast.structure.BlockNode;
 
 public class ForLoopStatementNode extends StatementNode {
     private ForLoopExpressionNode forLoopExpressionNode1;
