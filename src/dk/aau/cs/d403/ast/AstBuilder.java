@@ -147,13 +147,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitSwizzle(SpookParser.SwizzleContext ctx) {
-        if (ctx.variableName() != null) {
-            String variableName = ctx.variableName().getText();
-            if (ctx.colorSwizzle() != null) {
-                return new SwizzleNode(variableName, new ColorSwizzleNode(ctx.colorSwizzle().getText().substring(1)));
-            }
-            else if (ctx.coordinateSwizzle() != null) {
-                return new SwizzleNode(variableName, new CoordinateSwizzleNode(ctx.coordinateSwizzle().getText().substring(1)));
+        if (ctx.objectVariableName() != null) {
+            String variableName = ctx.objectVariableName().getText();
+            if (ctx.functionName() != null) {
+                return new SwizzleNode(variableName, ctx.functionName().getText());
             }
             else
                 throw new CompilerException("Expected Color- or Coordinate swizzle", getCodePosition(ctx));
