@@ -27,10 +27,11 @@ public class VarDeclInitNode implements ASTnode {
 
     @Override
     public String prettyPrint(int indent) {
-        if (variableName != null)
-            return variableName;
-        else if (assignmentNode != null)
+
+        if (assignmentNode != null)
             return assignmentNode.prettyPrint(indent);
+        else if (variableName != null)
+            return variableName;
         else
             throw new CompilerException("Invalid Variable Declaration initialization", codePosition);
     }

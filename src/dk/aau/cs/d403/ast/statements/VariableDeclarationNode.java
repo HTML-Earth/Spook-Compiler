@@ -29,7 +29,7 @@ public class VariableDeclarationNode extends DeclarationNode {
             sb.append("\t");
         sb.append(Enums.dataTypeToStringSpook(dataType)).append(" ");
         for (int i = 0; i < varDeclInitNodes.size(); i++) {
-            sb.append(varDeclInitNodes.get(i).prettyPrint(indent));
+            sb.append(varDeclInitNodes.get(i).prettyPrint(0));
             if (i != varDeclInitNodes.size()-1) {
                 sb.append(", ");
             }
