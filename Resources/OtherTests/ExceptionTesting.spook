@@ -1,0 +1,33 @@
+Shader {
+
+
+
+    # does not give the correct exception (function variables are not visited)
+    #Num i = 0;
+    #Num k = 0;
+    #yeet(i, k, l);
+
+    # Cannot test yet
+    #Bool meme = true;
+    #Num test = meme;
+
+
+    # should proberbly not work
+    #Circle circle = (10, Color.green());
+    #Rectangle rec = (circle);
+
+
+
+    # giver typechecking error
+    #Num test;
+    #Circle hi = (19, 10, Color.green());
+    #test = hi;
+
+}
+
+Num yeet () {
+return true;
+}
+
+
+

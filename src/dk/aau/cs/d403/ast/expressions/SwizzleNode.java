@@ -4,37 +4,25 @@ import dk.aau.cs.d403.ast.CodePosition;
 
 public class SwizzleNode extends ExpressionNode {
     private String variableName;
-    private ColorSwizzleNode colorSwizzle;
-    private CoordinateSwizzleNode coordinateSwizzle;
+    private String swizzle;
 
-    public SwizzleNode(String variableName, CoordinateSwizzleNode coordinateSwizzle) {
+    public SwizzleNode(String variableName, String swizzle) {
         this.variableName = variableName;
-        this.coordinateSwizzle = coordinateSwizzle;
-    }
-
-    public SwizzleNode(String variableName, ColorSwizzleNode colorSwizzle) {
-        this.variableName = variableName;
-        this.colorSwizzle = colorSwizzle;
+        this.swizzle = swizzle;
     }
 
     public String getVariableName() {
         return variableName;
     }
 
-    public ColorSwizzleNode getColorSwizzle() {
-        return colorSwizzle;
-    }
-
-    public CoordinateSwizzleNode getCoordinateSwizzle() {
-        return coordinateSwizzle;
+    public String getSwizzle() {
+        return swizzle;
     }
 
     @Override
     public String prettyPrint(int indent) {
-        if (colorSwizzle != null)
-            return variableName + "." + colorSwizzle.prettyPrint(indent);
-        else if (coordinateSwizzle != null)
-            return variableName + "." + coordinateSwizzle.prettyPrint(indent);
+        if (swizzle != null)
+            return variableName + "." + swizzle;
         else
             return "Invalid swizzle";
     }

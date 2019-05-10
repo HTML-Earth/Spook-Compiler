@@ -1,5 +1,6 @@
 Shader {
     Num length = 100;
+    Bool hej = true;
     if (length > 10 && length < 200) {
         Circle circ = (20, Color.white());
     }

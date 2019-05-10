@@ -47,7 +47,7 @@ public class ProgramNode implements ASTnode {
             sb.append("\n\n");
 
             for (FunctionDeclarationNode funcDec : functionDeclarationNodes) {
-                sb.append(funcDec.prettyPrint(indent));
+                sb.append(funcDec.prettyPrint(indent)).append("\n\n");
             }
         }
 
