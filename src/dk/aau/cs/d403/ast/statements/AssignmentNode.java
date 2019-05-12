@@ -45,6 +45,18 @@ public class AssignmentNode extends StatementNode {
                 ArithExpressionNode arithExpressionNode = (ArithExpressionNode) expressionNode;
                 sb.append(variableName + " = " + arithExpressionNode.prettyPrint(0));
             }
+            else if (expressionNode instanceof Vector2ExpressionNode) {
+                Vector2ExpressionNode vector2ExpressionNode = (Vector2ExpressionNode) expressionNode;
+                sb.append(variableName + " = " + vector2ExpressionNode.prettyPrint(0));
+            }
+            else if (expressionNode instanceof Vector3ExpressionNode) {
+                Vector3ExpressionNode vector3ExpressionNode = (Vector3ExpressionNode) expressionNode;
+                sb.append(variableName + " = " + vector3ExpressionNode.prettyPrint(0));
+            }
+            else if (expressionNode instanceof Vector4ExpressionNode) {
+                Vector4ExpressionNode vector4ExpressionNode = (Vector4ExpressionNode) expressionNode;
+                sb.append(variableName + " = " + vector4ExpressionNode.prettyPrint(0));
+            }
             else if (expressionNode instanceof BoolExpressionNode) {
                 BoolExpressionNode boolExpressionNode = (BoolExpressionNode) expressionNode;
                 sb.append(variableName + " = " + boolExpressionNode.prettyPrint(0));

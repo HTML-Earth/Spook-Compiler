@@ -19,7 +19,7 @@ public class Color {
         return new Vector4(0,0,0,1);
     }
     public static Vector4 gray() {
-        return new Vector4(0.5,0.5,0.5,0.5);
+        return new Vector4(0.5,0.5,0.5,1);
     }
     public static Vector4 white() {
         return new Vector4(1,1,1,1);

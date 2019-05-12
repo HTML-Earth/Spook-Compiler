@@ -16,6 +16,7 @@ public class TypeChecking {
     private FunctionDeclarationNode currentFuncNode;
 
     private ArrayList<String> listOfPredefinedClasses;
+    private ArrayList<String> listOfPredefinedFunctions;
     private ArrayList<VariableDeclarationNode> listOfPredefinedVariables;
     private ArrayList<Enums.BoolOperator> booleanOperatorList;
     private ArrayList<Enums.BoolOperator> numberOperatorList;
@@ -34,6 +35,55 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("LineGradient");
         this.listOfPredefinedClasses.add("Polygon");
         this.listOfPredefinedClasses.add("Scene");
+
+        this.listOfPredefinedFunctions = new ArrayList<>();
+        this.listOfPredefinedFunctions.add("abs");
+        this.listOfPredefinedFunctions.add("acos");
+        this.listOfPredefinedFunctions.add("acosh");
+        this.listOfPredefinedFunctions.add("asin");
+        this.listOfPredefinedFunctions.add("asinh");
+        this.listOfPredefinedFunctions.add("atan");
+        this.listOfPredefinedFunctions.add("atanh");
+        this.listOfPredefinedFunctions.add("ceil");
+        this.listOfPredefinedFunctions.add("clamp");
+        this.listOfPredefinedFunctions.add("cos");
+        this.listOfPredefinedFunctions.add("cosh");
+        this.listOfPredefinedFunctions.add("cross");
+        this.listOfPredefinedFunctions.add("degrees");
+        this.listOfPredefinedFunctions.add("distance");
+        this.listOfPredefinedFunctions.add("dot");
+        this.listOfPredefinedFunctions.add("exp");
+        this.listOfPredefinedFunctions.add("exp2");
+        this.listOfPredefinedFunctions.add("floor");
+        this.listOfPredefinedFunctions.add("fract");
+        this.listOfPredefinedFunctions.add("fwidth");
+        this.listOfPredefinedFunctions.add("fwidthCoarse");
+        this.listOfPredefinedFunctions.add("fwidthFine");
+        this.listOfPredefinedFunctions.add("inversesqrt");
+        this.listOfPredefinedFunctions.add("length");
+        this.listOfPredefinedFunctions.add("log");
+        this.listOfPredefinedFunctions.add("log2");
+        this.listOfPredefinedFunctions.add("max");
+        this.listOfPredefinedFunctions.add("min");
+        this.listOfPredefinedFunctions.add("mix");
+        this.listOfPredefinedFunctions.add("mod");
+        this.listOfPredefinedFunctions.add("normalize");
+        this.listOfPredefinedFunctions.add("outerProduct");
+        this.listOfPredefinedFunctions.add("pow");
+        this.listOfPredefinedFunctions.add("radians");
+        this.listOfPredefinedFunctions.add("reflect");
+        this.listOfPredefinedFunctions.add("refract");
+        this.listOfPredefinedFunctions.add("round");
+        this.listOfPredefinedFunctions.add("roundEven");
+        this.listOfPredefinedFunctions.add("sign");
+        this.listOfPredefinedFunctions.add("sin");
+        this.listOfPredefinedFunctions.add("sinh");
+        this.listOfPredefinedFunctions.add("smoothstep");
+        this.listOfPredefinedFunctions.add("sqrt");
+        this.listOfPredefinedFunctions.add("step");
+        this.listOfPredefinedFunctions.add("tan");
+        this.listOfPredefinedFunctions.add("tanh");
+        this.listOfPredefinedFunctions.add("trunc");
 
         ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
 
@@ -310,7 +360,11 @@ public class TypeChecking {
                 throw new RuntimeException("ERROR: The given arguments for the Non-object function call (" + functionName + ") does \nnot match the parameters for the function.");
         }
         else {
-            throw new RuntimeException("ERROR: Non-object function (" + functionName + ") does not exist.");
+            if (listOfPredefinedFunctions.contains(functionName)) {
+                // predefined function
+            }
+            else
+                throw new RuntimeException("ERROR: Non-object function (" + functionName + ") does not exist.");
         }
     }
 
