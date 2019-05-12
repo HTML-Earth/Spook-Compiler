@@ -6,6 +6,7 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
+import dk.aau.cs.d403.spook.Vector2;
 
 import java.util.*;
 
@@ -34,13 +35,17 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Polygon");
         this.listOfPredefinedClasses.add("Scene");
 
+        ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
+
         this.listOfPredefinedVariables = new ArrayList<>();
         ArrayList<VarDeclInitNode> screenVarDeclInitList = new ArrayList<>();
-        screenVarDeclInitList.add(new VarDeclInitNode("Screen"));
+        AssignmentNode screenAssignmentNode = new AssignmentNode("Screen", new Vector2ExpressionNode(zeroNode, zeroNode));
+        screenVarDeclInitList.add(new VarDeclInitNode(screenAssignmentNode));
         this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.VEC2, screenVarDeclInitList));
 
         ArrayList<VarDeclInitNode> timeVarDeclInitList = new ArrayList<>();
-        timeVarDeclInitList.add(new VarDeclInitNode("Time"));
+        AssignmentNode timeAssignmentNode = new AssignmentNode("Time", zeroNode);
+        timeVarDeclInitList.add(new VarDeclInitNode(timeAssignmentNode));
         this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, timeVarDeclInitList));
 
         this.booleanOperatorList = new ArrayList<>();

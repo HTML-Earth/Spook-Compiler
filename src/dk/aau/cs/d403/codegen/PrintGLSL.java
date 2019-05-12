@@ -185,6 +185,9 @@ public class PrintGLSL {
         ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
         String variableName = arithOperandNode.getVariableName();
         SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
+        Vector2ExpressionNode vector2ExpressionNode = arithOperandNode.getVector2ExpressionNode();
+        Vector3ExpressionNode vector3ExpressionNode = arithOperandNode.getVector3ExpressionNode();
+        Vector4ExpressionNode vector4ExpressionNode = arithOperandNode.getVector4ExpressionNode();
 
         if (realNumberNode != null) {
             return printRealNumber(realNumberNode);
@@ -200,6 +203,15 @@ public class PrintGLSL {
         }
         else if (swizzleNode != null) {
             return swizzleNode.prettyPrint(0);
+        }
+        else if (vector2ExpressionNode != null) {
+            return vector2ExpressionNode.prettyPrint(0);
+        }
+        else if (vector3ExpressionNode != null) {
+            return vector3ExpressionNode.prettyPrint(0);
+        }
+        else if (vector4ExpressionNode != null) {
+            return vector4ExpressionNode.prettyPrint(0);
         }
         else throw new RuntimeException("Invalid arith operand");
     }

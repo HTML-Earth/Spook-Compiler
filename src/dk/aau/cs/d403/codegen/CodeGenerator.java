@@ -428,6 +428,15 @@ public class CodeGenerator {
             return new ArithOperandNode(visitNonObjectFunctionCall(arithOperandNode.getNonObjectFunctionCallNode()));
         else if (arithOperandNode.getObjectFunctionCallNode() != null)
             return new ArithOperandNode(visitObjectFunctionCall(arithOperandNode.getObjectFunctionCallNode()));
+        else if (arithOperandNode.getVector2ExpressionNode() != null) {
+            return new ArithOperandNode((Vector2ExpressionNode)visitExpression(arithOperandNode.getVector2ExpressionNode()));
+        }
+        else if (arithOperandNode.getVector3ExpressionNode() != null) {
+            return new ArithOperandNode((Vector3ExpressionNode)visitExpression(arithOperandNode.getVector3ExpressionNode()));
+        }
+        else if (arithOperandNode.getVector4ExpressionNode() != null) {
+            return new ArithOperandNode((Vector4ExpressionNode)visitExpression(arithOperandNode.getVector4ExpressionNode()));
+        }
         else if (variableName != null) {
             switch (variableName) {
                 case "Time":
@@ -569,11 +578,14 @@ public class CodeGenerator {
         String functionName = objectFunctionCallNode.getFunctionName();
 
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
+        int argumentAmount = 0;
 
         if (objectFunctionCallNode.getObjectArguments() != null) {
             for (ObjectArgumentNode argumentNode : objectFunctionCallNode.getObjectArguments()) {
                 argumentNodes.add(visitArgumentNode(argumentNode));
             }
+
+            argumentAmount = argumentNodes.size();
         }
 
         switch (objectVariableName) {
@@ -608,18 +620,13 @@ public class CodeGenerator {
 
                 switch (functionName) {
                     case "setPosition":
-                        ObjectArgumentNode xPos = argumentNodes.get(0);
-                        ObjectArgumentNode yPos = argumentNodes.get(1);
-                        object.setPosition(new Vector2(xPos, yPos));
+                        object.setPosition(argumentNodes);
                         break;
                     case "setRotation":
-                        ObjectArgumentNode rot = argumentNodes.get(0);
-                        object.setRotation(rot);
+                        object.setRotation(argumentNodes);
                         break;
                     case "setScale":
-                        ObjectArgumentNode xScale = argumentNodes.get(0);
-                        ObjectArgumentNode yScale = argumentNodes.get(1);
-                        object.setScale(new Vector2(xScale, yScale));
+                        object.setScale(argumentNodes);
                         break;
                     case "setParent":
                         String parentName = argumentNodes.get(0)
