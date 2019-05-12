@@ -1045,8 +1045,10 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
         if (ctx.DIGIT() != null)
             value = Integer.valueOf(ctx.DIGIT().getSymbol().getText());
-        else if (ctx.DIGIT_NEGATIVE() != null)
-            value = Integer.valueOf(ctx.DIGIT_NEGATIVE().getSymbol().getText());
+        else if (ctx.DIGIT_NEGATIVE() != null) {
+            String negativeNumberString = ctx.DIGIT_NEGATIVE().getSymbol().getText();
+            value = Integer.valueOf(negativeNumberString.substring(1, negativeNumberString.length() - 1));
+        }
         else
             value = 0;
 
