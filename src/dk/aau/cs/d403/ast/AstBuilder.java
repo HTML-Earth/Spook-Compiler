@@ -182,7 +182,28 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitExpression(SpookParser.ExpressionContext ctx) {
         if (ctx.arithExpression() != null)
+        {
+            // Simplify AST for vector expressions
+            // (Directly returns vector expression instead of going through precedence in arithmetic expression)
+            if (ctx.arithExpression().lowPrecedence().highPrecedence().size() == 1) {
+                if (ctx.arithExpression().lowPrecedence().highPrecedence().get(0).atomPrecedence().size() == 1) {
+                    SpookParser.ArithOperandContext arithOperandContext = ctx.arithExpression().lowPrecedence().highPrecedence(0).atomPrecedence(0).arithOperand();
+                    if (arithOperandContext != null) {
+                        if (arithOperandContext.vector2Expression() != null) {
+                            return visitVector2Expression(arithOperandContext.vector2Expression());
+                        }
+                        if (arithOperandContext.vector3Expression() != null) {
+                            return visitVector3Expression(arithOperandContext.vector3Expression());
+                        }
+                        if (arithOperandContext.vector4Expression() != null) {
+                            return visitVector4Expression(arithOperandContext.vector4Expression());
+                        }
+                    }
+                }
+            }
+
             return visitArithExpression(ctx.arithExpression());
+        }
         else if (ctx.boolExpression() != null)
             return visitBoolExpression(ctx.boolExpression());
         else if (ctx.ternaryOperator() != null)
