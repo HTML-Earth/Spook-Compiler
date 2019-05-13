@@ -4,6 +4,7 @@ import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 
 import java.util.ArrayList;
 
@@ -14,8 +15,6 @@ public class LowPrecedenceNode implements ASTnode {
     private ArrayList<Enums.Operator> operators;
 
     //Low -> High
-
-
     public LowPrecedenceNode(ArrayList<HighPrecedenceNode> highPrecedenceNodes) {
         this.highPrecedenceNodes = highPrecedenceNodes;
     }
@@ -28,6 +27,17 @@ public class LowPrecedenceNode implements ASTnode {
         }
         this.highPrecedenceNodes = highPrecedenceNodes;
         this.operators = operators;
+    }
+
+
+    public LowPrecedenceNode(Vector2ExpressionNode vector2ExpressionNode) {
+        this.highPrecedenceNodes = new ArrayList<>();
+        this.highPrecedenceNodes.add(new HighPrecedenceNode(vector2ExpressionNode));
+    }
+
+    public LowPrecedenceNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.highPrecedenceNodes = new ArrayList<>();
+        this.highPrecedenceNodes.add(new HighPrecedenceNode(nonObjectFunctionCallNode));
     }
 
     public ArrayList<HighPrecedenceNode> getHighPrecedenceNodes() {
@@ -83,27 +93,56 @@ public class LowPrecedenceNode implements ASTnode {
     }
 
     public static LowPrecedenceNode add(LowPrecedenceNode a, LowPrecedenceNode b) {
+        return LowPrecedenceNode.operate(a,b, Enums.Operator.ADD);
+    }
+
+    public static LowPrecedenceNode sub(LowPrecedenceNode a, LowPrecedenceNode b) {
+        return LowPrecedenceNode.operate(a,b, Enums.Operator.SUB);
+    }
+
+    public static LowPrecedenceNode mod(LowPrecedenceNode a, LowPrecedenceNode b) {
+        return LowPrecedenceNode.operate(a,b, Enums.Operator.MOD);
+    }
+
+    public static LowPrecedenceNode div(LowPrecedenceNode a, LowPrecedenceNode b) {
+        return LowPrecedenceNode.operate(a,b, Enums.Operator.DIV);
+    }
+
+    public static LowPrecedenceNode mul(LowPrecedenceNode a, LowPrecedenceNode b) {
+        return LowPrecedenceNode.operate(a,b, Enums.Operator.MUL);
+    }
+
+    public static LowPrecedenceNode operate(LowPrecedenceNode a, LowPrecedenceNode b, Enums.Operator operator) {
         ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
         ArrayList<Enums.Operator> operators = new ArrayList<>();
 
-
-        highPrecedenceNodes.add(a.getHighPrecedenceNodes().get(0));
-        if (a.getOperators() != null) {
-            int operatorAmt = a.getOperators().size();
-            for (int i = 0; i < operatorAmt; i++) {
-                operators.add(a.getOperators().get(i));
-                highPrecedenceNodes.add(a.getHighPrecedenceNodes().get(i+1));
+        ArrayList<HighPrecedenceNode> highPrecedenceNodesA = a.getHighPrecedenceNodes();
+        if (highPrecedenceNodesA != null) {
+            if (highPrecedenceNodesA.size() > 0) {
+                highPrecedenceNodes.add(highPrecedenceNodesA.get(0));
+                if (a.getOperators() != null) {
+                    int operatorAmt = a.getOperators().size();
+                    for (int i = 0; i < operatorAmt; i++) {
+                        operators.add(a.getOperators().get(i));
+                        highPrecedenceNodes.add(highPrecedenceNodesA.get(i+1));
+                    }
+                }
             }
         }
 
-        operators.add(Enums.Operator.ADD);
+        operators.add(operator);
 
-        highPrecedenceNodes.add(b.getHighPrecedenceNodes().get(0));
-        if (b.getOperators() != null) {
-            int operatorAmt = b.getOperators().size();
-            for (int i = 0; i < operatorAmt; i++) {
-                operators.add(b.getOperators().get(i));
-                highPrecedenceNodes.add(b.getHighPrecedenceNodes().get(i+1));
+        ArrayList<HighPrecedenceNode> highPrecedenceNodesB = b.getHighPrecedenceNodes();
+        if (highPrecedenceNodesB != null) {
+            if (highPrecedenceNodesB.size() > 0) {
+                highPrecedenceNodes.add(highPrecedenceNodesB.get(0));
+                if (b.getOperators() != null) {
+                    int operatorAmt = b.getOperators().size();
+                    for (int i = 0; i < operatorAmt; i++) {
+                        operators.add(b.getOperators().get(i));
+                        highPrecedenceNodes.add(highPrecedenceNodesB.get(i+1));
+                    }
+                }
             }
         }
 
