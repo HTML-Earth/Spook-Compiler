@@ -3,6 +3,7 @@ package dk.aau.cs.d403.ast.expressions;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 
 import static dk.aau.cs.d403.ast.Enums.Operator.SUB;
 
@@ -23,6 +24,14 @@ public class AtomPrecedenceNode implements ASTnode {
 
     public AtomPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
         this.lowPrecedenceNode = lowPrecedenceNode;
+    }
+
+    public AtomPrecedenceNode(Vector2ExpressionNode vector2ExpressionNode) {
+        this.operand = new ArithOperandNode(vector2ExpressionNode);
+    }
+
+    public AtomPrecedenceNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.operand = new ArithOperandNode(nonObjectFunctionCallNode);
     }
 
     public ArithOperandNode getOperand() {

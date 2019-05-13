@@ -152,7 +152,7 @@ public class Vector4 {
                 throw new CompilerException("Object function call on unrecognized object: " + objectFunctionCallNode.getObjectVariableName(), arithOperandNode.getCodePosition());
         }
         else if (variableName != null) {
-            return evaluateExpression(CodeGenerator.getVariables().get(variableName).getAssignmentNode().getExpressionNode());
+            return evaluateExpression(CodeGenerator.getVariables().get(variableName).getVarDeclInitNodes().get(0).getAssignmentNode().getExpressionNode());
         }
         else if (swizzleNode != null) {
             throw new CompilerException("Evaluation not yet implemented", arithOperandNode.getCodePosition());

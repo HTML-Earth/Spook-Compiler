@@ -58,7 +58,11 @@ public class FunctionDeclarationNode implements ASTnode {
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(Enums.dataTypeToStringSpook(returnType));
+        if (returnType == null)
+            sb.append("Void");
+        else
+            sb.append(Enums.dataTypeToStringSpook(returnType));
+
         sb.append(" ");
         sb.append(functionName);
         sb.append("(");

@@ -7,21 +7,12 @@ import dk.aau.cs.d403.ast.structure.BlockNode;
 public class ForLoopStatementNode extends StatementNode {
     private ForLoopExpressionNode forLoopExpressionNode1;
     private ForLoopExpressionNode forLoopExpressionNode2;
-    private BlockNode blockNode;
-    private StatementNode statementNode;
+    private ConditionalBlockNode conditionalBlockNode;
 
-    // ForLoop with a single statement
-    public ForLoopStatementNode(ForLoopExpressionNode forLoopExpressionNode1, ForLoopExpressionNode forLoopExpressionNode2, StatementNode statementNode) {
+    public ForLoopStatementNode(ForLoopExpressionNode forLoopExpressionNode1, ForLoopExpressionNode forLoopExpressionNode2, ConditionalBlockNode conditionalBlockNode) {
         this.forLoopExpressionNode1 = forLoopExpressionNode1;
         this.forLoopExpressionNode2 = forLoopExpressionNode2;
-        this.statementNode = statementNode;
-    }
-
-    // ForLoop with block
-    public ForLoopStatementNode(ForLoopExpressionNode forLoopExpressionNode1, ForLoopExpressionNode forLoopExpressionNode2, BlockNode blockNode) {
-        this.forLoopExpressionNode1 = forLoopExpressionNode1;
-        this.forLoopExpressionNode2 = forLoopExpressionNode2;
-        this.blockNode = blockNode;
+        this.conditionalBlockNode = conditionalBlockNode;
     }
 
     public ForLoopExpressionNode getForLoopExpressionNode1() {
@@ -32,36 +23,20 @@ public class ForLoopStatementNode extends StatementNode {
         return forLoopExpressionNode2;
     }
 
-    public BlockNode getBlockNode() {
-        return blockNode;
-    }
-
-    public StatementNode getStatementNode() {
-        return statementNode;
+    public ConditionalBlockNode getConditionalBlockNode() {
+        return conditionalBlockNode;
     }
 
     @Override
     public String prettyPrint(int indent) {
-        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < indent; i++)
-            sb.append("\t");
-
-        sb.append("for (");
-        sb.append(forLoopExpressionNode1.prettyPrint(0));
-        sb.append(" to ");
-        sb.append(forLoopExpressionNode2.prettyPrint(0));
-        sb.append(") ");
-
-        if (blockNode != null) {
-            sb.append(blockNode.prettyPrint(indent));
-        }
-        else if (statementNode != null) {
-            sb.append("\n");
-            sb.append(statementNode.prettyPrint(indent + 1));
-        }
-
-        return sb.toString();
+        return "for (" +
+                forLoopExpressionNode1.prettyPrint(indent) +
+                " to " +
+                forLoopExpressionNode2.prettyPrint(indent) +
+                ") " +
+                "\n" +
+                conditionalBlockNode.prettyPrint(indent);
     }
 
     private CodePosition codePosition;
