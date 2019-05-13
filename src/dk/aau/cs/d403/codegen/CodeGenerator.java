@@ -97,10 +97,7 @@ public class CodeGenerator {
         sb.append(PrintGLSL.printVector4(scene.getColor()));
         sb.append(";\n");
 
-        LinkedList<String> list = new LinkedList<>(usedVariables);
-        Iterator<String> itr = list.iterator();
-        while(itr.hasNext()) {
-            String varDecl = itr.next();
+        for (String varDecl : usedVariables) {
             VariableDeclarationNode variableDeclarationNode = variables.get(varDecl);
             if (variableDeclarationNode != null) {
                 sb.append("\t");
@@ -356,6 +353,9 @@ public class CodeGenerator {
         else if (expressionNode instanceof TernaryOperatorNode) {
             return visitTernaryOperator((TernaryOperatorNode)expressionNode);
         }
+        else if (expressionNode instanceof SwizzleNode) {
+            return visitSwizzleNode((SwizzleNode)expressionNode);
+        }
         //TODO: if expressionNode is FunctionCall
         else {
             return expressionNode;
@@ -442,15 +442,7 @@ public class CodeGenerator {
                 case "Time":
                     return new ArithOperandNode("iTime");
                 default:
-                    usedVariables.add(variableName);
-
-                    if (variables.get(variableName) != null) {
-                        if (variables.get(variableName).getVarDeclInitNodes() != null){
-                            for (VarDeclInitNode varDeclInitNode : variables.get(variableName).getVarDeclInitNodes())
-                                visitAssignment(varDeclInitNode.getAssignmentNode());
-                        }
-                    }
-
+                    visitVariableName(variableName);
                     return arithOperandNode;
             }
         }
@@ -468,13 +460,26 @@ public class CodeGenerator {
                 variableName = "iResolution";
                 break;
             default:
-                variableName = swizzleNode.getVariableName();
+                variableName = visitVariableName(swizzleNode.getVariableName());
         }
 
         if (swizzleNode.getSwizzle() != null)
             return new SwizzleNode(variableName, swizzleNode.getSwizzle());
         else
             return swizzleNode;
+    }
+
+    private String visitVariableName(String variableName) {
+        usedVariables.add(variableName);
+
+        if (variables.get(variableName) != null) {
+            if (variables.get(variableName).getVarDeclInitNodes() != null){
+                for (VarDeclInitNode varDeclInitNode : variables.get(variableName).getVarDeclInitNodes())
+                    visitAssignment(varDeclInitNode.getAssignmentNode());
+            }
+        }
+
+        return variableName;
     }
 
     private ObjectArgumentNode visitArgumentNode(ObjectArgumentNode argumentNode) {
@@ -578,14 +583,11 @@ public class CodeGenerator {
         String functionName = objectFunctionCallNode.getFunctionName();
 
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
-        int argumentAmount = 0;
 
         if (objectFunctionCallNode.getObjectArguments() != null) {
             for (ObjectArgumentNode argumentNode : objectFunctionCallNode.getObjectArguments()) {
                 argumentNodes.add(visitArgumentNode(argumentNode));
             }
-
-            argumentAmount = argumentNodes.size();
         }
 
         switch (objectVariableName) {
