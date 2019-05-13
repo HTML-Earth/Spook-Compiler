@@ -202,6 +202,8 @@ public class CodeGenerator {
             statementNodes.add(statementNode); //TODO: visitReturn((ReturnNode)statementNode);
         else if (statementNode instanceof ForLoopStatementNode)
             statementNodes.addAll(visitForLoopStatement((ForLoopStatementNode)statementNode));
+        else if (statementNode instanceof NonObjectFunctionCallNode)
+            statementNodes.add(visitNonObjectFunctionCall((NonObjectFunctionCallNode)statementNode));
         else {
             throw new RuntimeException("Statement is of unknown type: " + statementNode.prettyPrint(0));
         }

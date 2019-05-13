@@ -72,7 +72,7 @@ Shader {
 
 
     #if in void function
-    doNothing(i);
+    #doNothing(i);
 
     #if in return function
     i = giveMeNewI(i);
