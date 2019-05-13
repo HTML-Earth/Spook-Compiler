@@ -1,0 +1,13 @@
+Shader{}
+
+Void func2(Num positionX) {}
+
+Void func2(Bool bool) {}
+
+Void func2(Num test, Num test2) {}
+
+Void func2(Bool bool, Bool bool1) {}
+
+Void func2(Circle circle) {}
+
+# Throws a NullPointerException because "Circle" is not a dataType yet.

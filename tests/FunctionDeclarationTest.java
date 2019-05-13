@@ -6,6 +6,7 @@ import dk.aau.cs.d403.semantics.TypeChecking;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class FunctionDeclarationTest {
 
     // Testing function declarations.
     @Test
-    void scopeRuleClassSetter01() {
+    void equalFunctionsDifferentArgumentName() {
         try {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/FunctionDeclarationTests/FunctionDeclaration01.spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
@@ -29,7 +30,21 @@ public class FunctionDeclarationTest {
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
 
-            typeChecking.visitProgram(programNode);
+            Assertions.assertThrows(RuntimeException.class, () -> {typeChecking.visitProgram(programNode);});
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void sameNameDifferentArguments() {
+        try {
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/FunctionDeclarationTests/FunctionDeclaration02.spook"));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+
+            AstBuilder astBuilder = new AstBuilder();
+            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+
         }catch (IOException e) {
             e.printStackTrace();
         }

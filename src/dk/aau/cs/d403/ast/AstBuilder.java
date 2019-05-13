@@ -1071,6 +1071,8 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private Enums.DataType getDataType(SpookParser.DataTypeContext ctx) {
         Enums.DataType dataType;
 
+        // TODO: Class like "Circle" does not work as a function argument.
+
         if (ctx.NUM() != null)
             dataType = Enums.DataType.NUM;
         else if (ctx.BOOL() != null)
