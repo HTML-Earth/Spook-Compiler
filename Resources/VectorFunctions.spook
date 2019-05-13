@@ -1,0 +1,51 @@
+Shader {
+    #Background
+    Vec4 bgColor = (0.3, 0.3, 0.3, 1);
+    Scene.setColor(bgColor);
+
+    Num hLineHeight = Screen.y / 2;
+    Num unitHeight = Screen.y / 4;
+
+    #Grid lines
+    Rectangle hLine = (Screen.x, 5, Color.gray());
+    hLine.setPosition(Screen.x / 2, hLineHeight);
+    Scene.add(hLine);
+
+    Rectangle vLine1 = (10, Screen.y, Color.gray());
+    vLine1.setPosition(0, hLineHeight);
+    Scene.add(vLine1);
+
+    Rectangle vLine2 = (5, Screen.y, Color.gray());
+    vLine2.setPosition(Screen.x / 4, hLineHeight);
+    Scene.add(vLine2);
+
+    Rectangle vLine3 = (5, Screen.y, Color.gray());
+    vLine3.setPosition(Screen.x - Screen.x / 2, hLineHeight);
+    Scene.add(vLine3);
+
+    Rectangle vLine4 = (5, Screen.y, Color.gray());
+    vLine4.setPosition(Screen.x - Screen.x / 4, hLineHeight);
+    Scene.add(vLine4);
+
+    #Dots
+    Num dotSize = 15;
+    Num repeatingTime = mod(Time, 1);
+    Num dotX = repeatingTime * Screen.x * 0.25;
+    Num dotX2 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.25;
+    Num dotX3 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.5;
+    Num dotX4 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.75;
+
+    #Vector functions
+    Num n11 = cross();
+    Num n14 = dot();
+    Num n13 = distance();
+    Num n23 = length();
+    Num n30 = normalize();
+    Num n31 = outerProduct();
+    Num n34 = reflect();
+    Num n35 = refract();
+
+    #Deg/Rad
+    Num n12 = degrees();
+    Num n33 = radians();
+}
