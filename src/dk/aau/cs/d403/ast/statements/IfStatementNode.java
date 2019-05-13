@@ -22,7 +22,7 @@ public class IfStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint(int indent) {
-        return "if (" + ifBool.prettyPrint(indent) + ")\n " + ifBlock.prettyPrint(indent);
+        return "if (" + ifBool.prettyPrint(indent) + ") " + ifBlock.prettyPrint(indent);
     }
 
     private CodePosition codePosition;

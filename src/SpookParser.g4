@@ -127,7 +127,7 @@ nonObjectFunctionCall
 objectFunctionCall
     :objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
 
-// Object arguments
+// Object arguments TODO: bør have bools?
 objectArgs
     : objectArg (COMMA objectArg)*;
 objectArg

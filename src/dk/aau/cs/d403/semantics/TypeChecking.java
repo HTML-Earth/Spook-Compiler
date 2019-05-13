@@ -221,20 +221,19 @@ public class TypeChecking {
     /*      STATEMENTS       */
     private void visitVariableDeclaration(VariableDeclarationNode variableDeclarationNode) {
 
-        //TODO: make for each for get variable name and also assignment node
-        String variableName = variableDeclarationNode.getVarDeclInitNodes().get(0).getVariableName();
+        for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
+            VariableDeclarationNode retrievedNode = null;
+            if (retrieveSymbol(varDeclInitNode.getVariableName()) != null)
+                retrievedNode = (VariableDeclarationNode) retrieveSymbol(varDeclInitNode.getVariableName());
 
-        VariableDeclarationNode retrievedNode = null;
-        if (retrieveSymbol(variableName) != null)
-            retrievedNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+            if (retrievedNode == null)
+                enterSymbol(varDeclInitNode.getVariableName(), variableDeclarationNode);
+            else
+                throw new RuntimeException("ERROR: A variable (" + varDeclInitNode.getVariableName() + ") with the same name already exists.");
 
-        if (retrievedNode == null)
-            enterSymbol(variableName, variableDeclarationNode);
-        else
-            throw new RuntimeException("ERROR: A variable (" + variableName + ") with the same name already exists.");
-
-        if (variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode() != null)
-            visitAssignment(variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode());
+            if (varDeclInitNode.getAssignmentNode() != null)
+                visitAssignment(varDeclInitNode.getAssignmentNode());
+        }
     }
 
     private void visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
@@ -566,7 +565,17 @@ public class TypeChecking {
 
     private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
-        //TODO: add arguments as VariableDecl
+
+        //Visit all function arguments and add them as Variable Declarations in the new scope
+        for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
+
+            //Initialize VarDecl to null, as it should already be checked
+            AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
+            VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
+            VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
+            visitVariableDeclaration(variableDeclarationNode);
+        }
+
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
         }
@@ -577,7 +586,13 @@ public class TypeChecking {
                     visitReturnStatement((ReturnNode) statementNode, functionDeclarationNode);
                 }
             }
-            //TODO: check if last statement is returnStatement
+            //check if last statement is returnStatement
+            if (blockNode.getStatementNodes().get(blockNode.getStatementNodes().size()-1) instanceof ReturnNode) {
+                ReturnNode finalReturn = (ReturnNode) blockNode.getStatementNodes().get(blockNode.getStatementNodes().size()-1);
+                visitReturnStatement(finalReturn, functionDeclarationNode);
+            }
+            else
+                throw new RuntimeException("ERROR: Last statement of non-void function (" + functionDeclarationNode.getFunctionName() + ") has to be return");
 
         }
         closeScope();
