@@ -3,8 +3,9 @@ Shader {
     # Bool var2 = false == 1;
     # Bool var3 = !1;
     # Bool var4 = 1 && false;
+    Num i, Hej = 0, k = Hej;
 
-    Num var2 = giveMeTen(10);
+    Num var2 = giveMeTen(10, 2);
 }
 
 Num giveMeTen() {

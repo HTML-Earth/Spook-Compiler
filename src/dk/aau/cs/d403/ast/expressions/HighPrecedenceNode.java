@@ -14,8 +14,6 @@ public class HighPrecedenceNode implements ASTnode {
     private ArrayList<Enums.Operator> operators;
 
     //High -> Atom
-
-
     public HighPrecedenceNode(ArrayList<AtomPrecedenceNode> atomPrecedenceNodes) {
         this.atomPrecedenceNodes = atomPrecedenceNodes;
     }

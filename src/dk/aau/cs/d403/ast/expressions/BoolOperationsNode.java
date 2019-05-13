@@ -32,6 +32,10 @@ public class BoolOperationsNode implements ASTnode {
         this.boolOperationExtendNodes = boolOperationExtendNodes;
     }
 
+    public BoolOperationsNode(BoolOperationNode boolOperationNode) {
+        this.boolOperationNode = boolOperationNode;
+    }
+
     public BoolOperationsNode(ArithExpressionNode arithExpressionNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes, Enums.BoolOperator optionalNOT) {
         this.arithExpressionNode = arithExpressionNode;
         this.boolOperationExtendNodes = boolOperationExtendNodes;

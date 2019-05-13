@@ -299,6 +299,14 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             boolOperationsNode.setCodePosition(getCodePosition(ctx));
             return boolOperationsNode;
         }
+        //Case bool
+        else if (ctx.boolOperation() != null) {
+            BoolOperationNode boolOperationNode = (BoolOperationNode) visitBoolOperation(ctx.boolOperation());
+
+            BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode);
+            boolOperationsNode.setCodePosition(getCodePosition(ctx));
+            return boolOperationsNode;
+        }
         //Case !arith extend
         else if (ctx.NOT() != null && ctx.arithExpression() != null && ctx.boolOperationExtend() != null) {
             ArithExpressionNode arithExpressionNode = (ArithExpressionNode) visitArithExpression(ctx.arithExpression());
