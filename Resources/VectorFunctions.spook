@@ -35,17 +35,58 @@ Shader {
     Num dotX3 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.5;
     Num dotX4 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.75;
 
-    #Vector functions
-    Num n11 = cross();
-    Num n14 = dot();
-    Num n13 = distance();
-    Num n23 = length();
-    Num n30 = normalize();
-    Num n31 = outerProduct();
-    Num n34 = reflect();
-    Num n35 = refract();
+    Num rotation = Time * 10;
+    Vec2 center = (Screen.x / 2, Screen.y / 2);
+    Vec2 pointerVector = (sin(radians(rotation)) * 200, cos(radians(rotation)) * 200);
 
-    #Deg/Rad
-    Num n12 = degrees();
-    Num n33 = radians();
+    Rectangle pointer = (8, 200, Color.black());
+    pointer.setPosition(center.x + pointerVector.x * 0.5, center.y + pointerVector.y * 0.5);
+    pointer.setRotation(rotation);
+    Scene.add(pointer);
+
+    Circle tip = (10, Color.black());
+    tip.setPosition(center + pointerVector);
+    Scene.add(tip);
+
+    Circle sinDot = (5, Color.black());
+    sinDot.setPosition(center.x + pointerVector.x, center.y);
+    Scene.add(sinDot);
+
+    Circle cosDot = (5, Color.black());
+    cosDot.setPosition(center.x, center.y + pointerVector.y);
+    Scene.add(cosDot);
+
+    Vec2 upVector = (0,1);
+
+    Vec2 refractPointerVector = refract(pointerVector, upVector, sin(Time) + 1);
+    Num refractRotation = degrees(acos(dot(normalize(refractPointerVector), upVector))) * sign(refractPointerVector.x);
+    Vec4 refractColor = (sin(Time) + 1, 0, cos(Time) + 1, 0.25 + sin(Time) * 0.25);
+
+    Rectangle refractPointer = (2.5, length(refractPointerVector), refractColor);
+    refractPointer.setPosition(center.x + refractPointerVector.x * 0.5, center.y + refractPointerVector.y * 0.5);
+    refractPointer.setRotation(refractRotation);
+    Scene.add(refractPointer);
+
+    Circle refractTip = (5, refractColor);
+    refractTip.setPosition(center + refractPointerVector);
+    Scene.add(refractTip);
+
+    Vec2 reflectPointerVector = reflect(pointerVector, upVector);
+    Num reflectRotation = degrees(acos(dot(normalize(reflectPointerVector), upVector))) * sign(reflectPointerVector.x);
+    Vec4 transparent = (0,0,0,0.5);
+
+    Rectangle reflectPointer = (8, 200, transparent);
+    reflectPointer.setPosition(center.x + reflectPointerVector.x * 0.5, center.y + reflectPointerVector.y * 0.5);
+    reflectPointer.setRotation(reflectRotation);
+    Scene.add(reflectPointer);
+
+    Circle reflectTip = (10, transparent);
+    reflectTip.setPosition(center + reflectPointerVector);
+    Scene.add(reflectTip);
+
+    Vec2 distanceCirclePoint = (center.x + pointerVector.x, Screen.y / 2);
+    Vec4 distanceCircleColor = (sin(Time) * 0.5 + 0.5, cos(Time) * 0.5 + 0.5, 1, 0.25);
+    Circle distanceCircle = (distance(pointerVector, reflectPointerVector) * 0.5, distanceCircleColor);
+    distanceCircle.setPosition(distanceCirclePoint);
+    Scene.add(distanceCircle);
 }
