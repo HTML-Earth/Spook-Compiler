@@ -61,15 +61,6 @@ GREATER_OR_EQUAL: '>=';
 LESS_THAN: '<';
 LESS_OR_EQUAL: '<=';
 
-/* Swizzle masks */
-// Coordinate swizzle mask
-COORDINATE_SWIZZLE_MASK
-    : COORDINATE_SWIZZLE_MASK_RULE+;
-
-// Color swizzle mask
-COLOR_SWIZZLE_MASK
-    : COLOR_SWIZZLE_MASK_RULE+;
-
 // Identifier - chars and non-negative digits
 ID: LETTER (LETTER | DIGIT)*;
 
@@ -81,17 +72,6 @@ fragment DIGIT_RULE
     | '1'..'9' '0'..'9'*;
 fragment DIGIT_NEGATIVE_RULE: '(-'('1'..'9') ('0'..'9')*')';
 
-fragment COORDINATE_SWIZZLE_MASK_RULE
-    : 'x'
-    | 'y'
-    | 'z'
-    | 'w';
-fragment COLOR_SWIZZLE_MASK_RULE
-    : 'r'
-    | 'g'
-    | 'b'
-    | 'a';
-
 // MISC
-COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')*;
+COMMENT_STRING: '#' ~( '\r' | '\n' | '\t')* -> skip;
 WS: [ \t\r\n]+ -> skip;

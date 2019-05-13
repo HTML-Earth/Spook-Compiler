@@ -1,0 +1,65 @@
+Shader {
+    #Background
+    Vec4 bgColor = (0.3, 0.3, 0.3, 1);
+    Scene.setColor(bgColor);
+
+    Num hLineHeight = Screen.y / 2;
+    Num unitHeight = Screen.y / 4;
+
+    #Grid lines
+    Rectangle hLine = (Screen.x, 5, Color.gray());
+    hLine.setPosition(Screen.x / 2, hLineHeight);
+    Scene.add(hLine);
+
+    Rectangle vLine1 = (10, Screen.y, Color.gray());
+    vLine1.setPosition(0, hLineHeight);
+    Scene.add(vLine1);
+
+    Rectangle vLine2 = (5, Screen.y, Color.gray());
+    vLine2.setPosition(Screen.x / 3, hLineHeight);
+    Scene.add(vLine2);
+
+    Rectangle vLine3 = (5, Screen.y, Color.gray());
+    vLine3.setPosition(Screen.x - Screen.x / 3, hLineHeight);
+    Scene.add(vLine3);
+
+    #Dots
+    Num dotSize = 15;
+    Num dotX = mod(Time * Screen.x * 0.33, Screen.x);
+    Num dotX2 = mod(Time * Screen.x * 0.33 + Screen.x * 0.33, Screen.x);
+    Num dotX3 = mod(Time * Screen.x * 0.33 + Screen.x * 0.66, Screen.x);
+
+    #sin and abs(sin)
+    Circle sineDot = (dotSize, Color.teal());
+    sineDot.setPosition(dotX, hLineHeight + sin(Time * 2) * unitHeight);
+    Scene.add(sineDot);
+
+    Circle absSineDot = (dotSize / 2, Color.cyan());
+    absSineDot.setPosition(dotX, hLineHeight + abs(sin(Time * 2) * unitHeight));
+    Scene.add(absSineDot);
+
+    #cos and abs(cos)
+    Circle cosineDot = (dotSize, Color.brown());
+    cosineDot.setPosition(dotX2, hLineHeight + cos(Time * 2) * unitHeight);
+    Scene.add(cosineDot);
+
+    Circle absCosineDot = (dotSize / 2, Color.orange());
+    absCosineDot.setPosition(dotX2, hLineHeight + abs(cos(Time * 2) * unitHeight));
+    Scene.add(absCosineDot);
+
+    #tan and abs(tan)
+    Circle tangentDot = (dotSize, Color.magenta());
+    tangentDot.setPosition(dotX3, hLineHeight + tan(Time * 2) * unitHeight);
+    Scene.add(tangentDot);
+
+    Circle absTangentDot = (dotSize / 2, Color.pink());
+    absTangentDot.setPosition(dotX3, hLineHeight + abs(tan(Time * 2) * unitHeight));
+    Scene.add(absTangentDot);
+
+    #More sin/cos/tan
+    Num moreMath = acos(acosh(cosh(asin(asinh(sinh(atan(atanh(tanh(Time)))))))));
+
+    Circle mathDot = (dotSize, Color.black());
+    mathDot.setPosition(moreMath, 0);
+    Scene.add(mathDot);
+}

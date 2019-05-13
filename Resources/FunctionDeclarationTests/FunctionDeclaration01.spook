@@ -1,7 +1,18 @@
-Shader{}
+Shader{
+    numFunc(2);
+}
 
 Void func1(Num positionX) {}
 
 Void func2(Num positionX) {}
 
 Void func2(Num positionY) {}
+
+# Throws a Runtime-exception because two functions of func2 with same argument-type exists.
+
+#Void func2(Num positionY) {}
+
+Num numFunc(Num hej) {
+    Num ny = hej;
+    return ny;
+}

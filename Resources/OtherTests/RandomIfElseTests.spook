@@ -1,0 +1,117 @@
+Shader {
+
+    #If in main without brackets
+    Num i = 0;
+
+    if (i == 0)
+        i = 1;
+
+    #If in main with brackets
+    if (i == 1) {
+        i = 2;
+    }
+
+    #If in main with Else-block without brackets
+    if (i == 1) {
+        i = 2;
+    }
+    else
+        i = 3;
+
+    #If in main with Else-block with brackets
+    if (i == 2) {
+        i = 4;
+    }
+    else {
+        i = 5;
+    }
+
+    #If in main with If-Else without brackets
+    if (i == 5)
+        i = 6;
+    else if (i == 4)
+        i = 5;
+
+    #If in main with If-Else and with brackets
+    if (i == 6) {
+        i = 7;
+    }
+    else if (i == 5) {
+        i = 8;
+    }
+
+    #If in main with If-Else and Else-block without brackets
+    if (i == 2)
+        i = 3;
+    else if (i == 6)
+        i = 9;
+    else
+        i = 19;
+
+    #If in main with If-Else and Else-block with brackets
+    if (i == 2) {
+            i = 3;
+        }
+    else if (i == 6) {
+        i = 9;
+    }
+    else {
+        i = 1;
+    }
+
+    #If inside If inside main with If-Else and Else-block without brackets
+    if (i == 4)
+        if (i == 4)
+            i = 3;
+    else if (i == 7)
+        if (i == 2)
+            i = 1;
+    else
+        if (i == 3)
+            i = 1;
+
+
+    #if in void function
+    #doNothing(i);
+
+    #if in return function
+    i = giveMeNewI(i);
+
+    #if and else return function
+    i = ifAndElse(i);
+
+    #if and else if and else in return function
+    i = ifAndElseIfAndElse(i);
+
+}
+
+Void doNothing(Num i) {
+    if (i == 4)
+        i = 1;
+}
+
+Num giveMeNewI(Num i) {
+    if (i == 3)
+        return i + 1;
+    return i;
+}
+
+Num ifAndElse(Num i) {
+    if (i == 6)
+        return i + 1;
+    else
+        return i + 6;
+
+    return 0;
+}
+
+Num ifAndElseIfAndElse(Num i) {
+    if (i == 3)
+        return i + 2;
+    else if (i == 1)
+        return i + 5;
+    else
+        return i + 4;
+
+    return 0;
+}

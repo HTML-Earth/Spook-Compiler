@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.spook.shapes.Rectangle;
@@ -40,6 +41,30 @@ public abstract class SpookObject {
         this.position = position;
     }
 
+    public void setPosition(ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+        if (objectArgumentNodes != null){
+            if (objectArgumentNodes.size() == 1){
+                setPosition(Vector2.evaluateLowPrecedence(objectArgumentNodes.get(0).getLowPrecedence()));
+            }
+            else if (objectArgumentNodes.size() == 2) {
+                ObjectArgumentNode xPos = objectArgumentNodes.get(0);
+                ObjectArgumentNode yPos = objectArgumentNodes.get(1);
+                setPosition(new Vector2(xPos, yPos));
+            }
+            else {
+                if (objectArgumentNodes.size() > 0) {
+                    throw new CompilerException("Invalid amount of arguments for setPosition() (" + objectArgumentNodes.size() + ")", objectArgumentNodes.get(0).getCodePosition());
+                }
+                else {
+                    throw new CompilerException("Invalid amount of arguments for setPosition() (" + objectArgumentNodes.size() + ")");
+                }
+            }
+        }
+        else {
+            throw new CompilerException("Argument list for setPosition is null");
+        }
+    }
+
     public ObjectArgumentNode getRotation() {
         return rotation;
     }
@@ -48,12 +73,55 @@ public abstract class SpookObject {
         this.scale = scale;
     }
 
+    public void setScale(ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+        if (objectArgumentNodes != null){
+            if (objectArgumentNodes.size() == 1){
+                setScale(Vector2.evaluateLowPrecedence(objectArgumentNodes.get(0).getLowPrecedence()));
+            }
+            else if (objectArgumentNodes.size() == 2) {
+                ObjectArgumentNode xPos = objectArgumentNodes.get(0);
+                ObjectArgumentNode yPos = objectArgumentNodes.get(1);
+                setScale(new Vector2(xPos, yPos));
+            }
+            else {
+                if (objectArgumentNodes.size() > 0) {
+                    throw new CompilerException("Invalid amount of arguments for setScale() (" + objectArgumentNodes.size() + ")", objectArgumentNodes.get(0).getCodePosition());
+                }
+                else {
+                    throw new CompilerException("Invalid amount of arguments for setScale() (" + objectArgumentNodes.size() + ")");
+                }
+            }
+        }
+        else {
+            throw new CompilerException("Argument list for setScale is null");
+        }
+    }
+
     public Vector2 getScale() {
         return scale;
     }
 
     public void setRotation(ObjectArgumentNode rotation) {
         this.rotation = rotation;
+    }
+
+    public void setRotation(ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+        if (objectArgumentNodes != null){
+            if (objectArgumentNodes.size() == 1){
+                setRotation(objectArgumentNodes.get(0));
+            }
+            else {
+                if (objectArgumentNodes.size() > 0) {
+                    throw new CompilerException("Invalid amount of arguments for setRotation() (" + objectArgumentNodes.size() + ")", objectArgumentNodes.get(0).getCodePosition());
+                }
+                else {
+                    throw new CompilerException("Invalid amount of arguments for setRotation() (" + objectArgumentNodes.size() + ")");
+                }
+            }
+        }
+        else {
+            throw new CompilerException("Argument list for setRotation is null");
+        }
     }
 
     public void setParent(SpookObject parent)

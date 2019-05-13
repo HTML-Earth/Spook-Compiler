@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class BoolOperationsNode implements ASTnode {
     private BoolOperationNode boolOperationNode;
+    private ArithExpressionNode arithExpressionNode;
     private ArrayList<BoolOperationExtendNode> boolOperationExtendNodes;
     private Enums.BoolOperator optionalNOT;
 
@@ -31,6 +32,21 @@ public class BoolOperationsNode implements ASTnode {
         this.boolOperationExtendNodes = boolOperationExtendNodes;
     }
 
+    public BoolOperationsNode(BoolOperationNode boolOperationNode) {
+        this.boolOperationNode = boolOperationNode;
+    }
+
+    public BoolOperationsNode(ArithExpressionNode arithExpressionNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes, Enums.BoolOperator optionalNOT) {
+        this.arithExpressionNode = arithExpressionNode;
+        this.boolOperationExtendNodes = boolOperationExtendNodes;
+        this.optionalNOT = optionalNOT;
+    }
+
+    public BoolOperationsNode(ArithExpressionNode arithExpressionNode, ArrayList<BoolOperationExtendNode> boolOperationExtendNodes) {
+        this.arithExpressionNode = arithExpressionNode;
+        this.boolOperationExtendNodes = boolOperationExtendNodes;
+    }
+
     public BoolOperationNode getBoolOperationNode() {
         return boolOperationNode;
     }
@@ -41,6 +57,10 @@ public class BoolOperationsNode implements ASTnode {
 
     public Enums.BoolOperator getOptionalNOT() {
         return optionalNOT;
+    }
+
+    public ArithExpressionNode getArithExpressionNode() {
+        return arithExpressionNode;
     }
 
     @Override
@@ -63,6 +83,13 @@ public class BoolOperationsNode implements ASTnode {
         //Case bool
         else if (boolOperationNode != null)
             return boolOperationNode.prettyPrint(indent);
+
+        //Case !arith extend
+        else if (arithExpressionNode != null && boolOperationExtendNodes != null && optionalNOT != null)
+            return Enums.boolOperatorToString(optionalNOT) + arithExpressionNode.prettyPrint(indent) + sb;
+        //Case arith extend
+        else if (arithExpressionNode != null && boolOperationExtendNodes != null)
+            return arithExpressionNode.prettyPrint(indent) + sb;
         else
             return "Invalid Boolean Operations Node";
     }

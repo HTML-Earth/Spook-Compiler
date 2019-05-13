@@ -3,10 +3,7 @@ package dk.aau.cs.d403.codegen;
 import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
-import dk.aau.cs.d403.ast.statements.AssignmentNode;
-import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
-import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
-import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
+import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
@@ -22,10 +19,13 @@ public class PrintGLSL {
         StringBuilder sb = new StringBuilder();
         sb.append(Enums.dataTypeToStringGLSL(variableDeclarationNode.getDataType()));
         sb.append(" ");
-        if (variableDeclarationNode.getAssignmentNode() != null)
-            sb.append(printAssignment(variableDeclarationNode.getAssignmentNode()));
-        else
-            sb.append(variableDeclarationNode.getVariableName() + ";");
+        for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
+            if (varDeclInitNode.getAssignmentNode() != null)
+                sb.append(printAssignment(varDeclInitNode.getAssignmentNode()));
+            else
+                sb.append(varDeclInitNode.getVariableName()).append(";");
+        }
+
 
         return sb.toString();
     }
@@ -185,6 +185,9 @@ public class PrintGLSL {
         ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
         String variableName = arithOperandNode.getVariableName();
         SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
+        Vector2ExpressionNode vector2ExpressionNode = arithOperandNode.getVector2ExpressionNode();
+        Vector3ExpressionNode vector3ExpressionNode = arithOperandNode.getVector3ExpressionNode();
+        Vector4ExpressionNode vector4ExpressionNode = arithOperandNode.getVector4ExpressionNode();
 
         if (realNumberNode != null) {
             return printRealNumber(realNumberNode);
@@ -201,6 +204,15 @@ public class PrintGLSL {
         else if (swizzleNode != null) {
             return swizzleNode.prettyPrint(0);
         }
+        else if (vector2ExpressionNode != null) {
+            return vector2ExpressionNode.prettyPrint(0);
+        }
+        else if (vector3ExpressionNode != null) {
+            return vector3ExpressionNode.prettyPrint(0);
+        }
+        else if (vector4ExpressionNode != null) {
+            return vector4ExpressionNode.prettyPrint(0);
+        }
         else throw new RuntimeException("Invalid arith operand");
     }
 
@@ -213,7 +225,10 @@ public class PrintGLSL {
     }
 
     public static String printVector2(Vector2 vector){
-        return "vec2(" +
+        if (vector.getLowPrecedenceNode() != null) {
+            return "vec2" + printLowPrecedence(vector.getLowPrecedenceNode());
+        }
+        else return "vec2(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ")";
     }

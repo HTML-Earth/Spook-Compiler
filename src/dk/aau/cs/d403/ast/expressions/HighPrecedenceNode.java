@@ -4,6 +4,7 @@ import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 
 import java.util.ArrayList;
 
@@ -14,8 +15,6 @@ public class HighPrecedenceNode implements ASTnode {
     private ArrayList<Enums.Operator> operators;
 
     //High -> Atom
-
-
     public HighPrecedenceNode(ArrayList<AtomPrecedenceNode> atomPrecedenceNodes) {
         this.atomPrecedenceNodes = atomPrecedenceNodes;
     }
@@ -28,6 +27,16 @@ public class HighPrecedenceNode implements ASTnode {
         }
         this.atomPrecedenceNodes = atomPrecedenceNodes;
         this.operators = operators;
+    }
+
+    public HighPrecedenceNode(Vector2ExpressionNode vector2ExpressionNode) {
+        this.atomPrecedenceNodes = new ArrayList<>();
+        this.atomPrecedenceNodes.add(new AtomPrecedenceNode(vector2ExpressionNode));
+    }
+
+    public HighPrecedenceNode(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.atomPrecedenceNodes = new ArrayList<>();
+        this.atomPrecedenceNodes.add(new AtomPrecedenceNode(nonObjectFunctionCallNode));
     }
 
     public ArrayList<AtomPrecedenceNode> getAtomPrecedenceNodes() {
