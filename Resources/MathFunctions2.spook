@@ -1,0 +1,77 @@
+Shader {
+    #Background
+    Vec4 bgColor = (0.3, 0.3, 0.3, 1);
+    Scene.setColor(bgColor);
+
+    Num hLineHeight = Screen.y / 2;
+    Num unitHeight = Screen.y / 4;
+
+    #Grid lines
+    Rectangle hLine = (Screen.x, 5, Color.gray());
+    hLine.setPosition(Screen.x / 2, hLineHeight);
+    Scene.add(hLine);
+
+    Rectangle vLine1 = (10, Screen.y, Color.gray());
+    vLine1.setPosition(0, hLineHeight);
+    Scene.add(vLine1);
+
+    Rectangle vLine2 = (5, Screen.y, Color.gray());
+    vLine2.setPosition(Screen.x / 4, hLineHeight);
+    Scene.add(vLine2);
+
+    Rectangle vLine3 = (5, Screen.y, Color.gray());
+    vLine3.setPosition(Screen.x - Screen.x / 2, hLineHeight);
+    Scene.add(vLine3);
+
+    Rectangle vLine4 = (5, Screen.y, Color.gray());
+    vLine4.setPosition(Screen.x - Screen.x / 4, hLineHeight);
+    Scene.add(vLine4);
+
+    #Dots
+    Num dotSize = 15;
+    Num repeatingTime = mod(Time, 1);
+    Num dotX = repeatingTime * Screen.x * 0.25;
+    Num dotX2 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.25;
+    Num dotX3 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.5;
+    Num dotX4 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.75;
+
+    #exp
+    Circle expDot = (dotSize, Color.teal());
+    expDot .setPosition(dotX, hLineHeight + exp(repeatingTime * 8));
+    Scene.add(expDot);
+
+    Circle exp2Dot = (dotSize / 2, Color.cyan());
+    exp2Dot .setPosition(dotX, hLineHeight + exp2(repeatingTime * 8));
+    Scene.add(exp2Dot);
+
+    #log
+    Circle logDot = (dotSize, Color.brown());
+    logDot.setPosition(dotX2, hLineHeight + log(repeatingTime * 2) * unitHeight);
+    Scene.add(logDot);
+
+    Circle log2Dot = (dotSize / 2, Color.orange());
+    log2Dot.setPosition(dotX2, hLineHeight + log2(repeatingTime * 2) * unitHeight);
+    Scene.add(log2Dot);
+
+    #pow and sqrt
+    Circle powDot = (dotSize, Color.purple());
+    powDot.setPosition(dotX3, hLineHeight + pow(repeatingTime * 2, 2) * unitHeight);
+    Scene.add(powDot);
+
+    Circle sqrtDot = (dotSize / 2, Color.magenta());
+    sqrtDot.setPosition(dotX3, hLineHeight + sqrt(repeatingTime * 2) * unitHeight);
+    Scene.add(sqrtDot);
+
+    Circle inversesqrtDot = (dotSize / 3, Color.pink());
+    inversesqrtDot.setPosition(dotX3, hLineHeight + inversesqrt(repeatingTime * 2) * unitHeight);
+    Scene.add(inversesqrtDot);
+
+    #step
+    Circle smoothstepDot = (dotSize, Color.olive());
+    smoothstepDot.setPosition(dotX4, hLineHeight + smoothstep(1, 3, repeatingTime * 4) * unitHeight);
+    Scene.add(smoothstepDot);
+
+    Circle stepDot = (dotSize / 2, Color.green());
+    stepDot.setPosition(dotX4, hLineHeight + step(2, repeatingTime * 4) * unitHeight);
+    Scene.add(stepDot);
+}

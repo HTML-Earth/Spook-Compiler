@@ -1,0 +1,88 @@
+Shader {
+    #Background
+    Vec4 bgColor = (0.3, 0.3, 0.3, 1);
+    Scene.setColor(bgColor);
+
+    Num hLineHeight = Screen.y / 2;
+    Num unitHeight = Screen.y / 4;
+
+    #Grid lines
+    Rectangle hLine = (Screen.x, 5, Color.gray());
+    hLine.setPosition(Screen.x / 2, hLineHeight);
+    Scene.add(hLine);
+
+    Rectangle vLine1 = (10, Screen.y, Color.gray());
+    vLine1.setPosition(0, hLineHeight);
+    Scene.add(vLine1);
+
+    Rectangle vLine2 = (5, Screen.y, Color.gray());
+    vLine2.setPosition(Screen.x / 4, hLineHeight);
+    Scene.add(vLine2);
+
+    Rectangle vLine3 = (5, Screen.y, Color.gray());
+    vLine3.setPosition(Screen.x - Screen.x / 2, hLineHeight);
+    Scene.add(vLine3);
+
+    Rectangle vLine4 = (5, Screen.y, Color.gray());
+    vLine4.setPosition(Screen.x - Screen.x / 4, hLineHeight);
+    Scene.add(vLine4);
+
+    #Dots
+    Num dotSize = 15;
+    Num repeatingTime = mod(Time, 1);
+    Num dotX = repeatingTime * Screen.x * 0.25;
+    Num dotX2 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.25;
+    Num dotX3 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.5;
+    Num dotX4 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.75;
+
+    #round and fract
+    Circle roundDot = (dotSize, Color.teal());
+    roundDot.setPosition(dotX, hLineHeight + round(repeatingTime * 5) * 30);
+    Scene.add(roundDot);
+
+    Circle roundEvenDot = (dotSize / 2, Color.cyan());
+    roundEvenDot .setPosition(dotX, hLineHeight + roundEven(repeatingTime * 5) * 30);
+    Scene.add(roundEvenDot);
+
+    Circle fractDot = (dotSize / 2, Color.aquamarine());
+    fractDot .setPosition(dotX, hLineHeight - fract(repeatingTime * 5) * 30);
+    Scene.add(fractDot);
+
+    #clamp and trunc
+    Circle clampDot = (dotSize, Color.brown());
+    clampDot.setPosition(dotX2, hLineHeight + clamp(sin(repeatingTime * 6), (-0.25), 0.5) * unitHeight);
+    Scene.add(clampDot);
+
+    Circle truncDot = (dotSize / 2, Color.orange());
+    truncDot.setPosition(dotX2, hLineHeight + trunc(sin(repeatingTime * 6) * 2) * unitHeight);
+    Scene.add(truncDot);
+
+    #ceil, floor and max, min and sign
+    Circle ceilDot = (dotSize / 2, Color.white());
+    ceilDot.setPosition(dotX3, hLineHeight + ceil(sin(repeatingTime * 6) * 2) * unitHeight);
+    Scene.add(ceilDot);
+
+    Circle floorDot = (dotSize / 2, Color.black());
+    floorDot.setPosition(dotX3, hLineHeight + floor(sin(repeatingTime * 6) * 2) * unitHeight);
+    Scene.add(floorDot);
+
+    Circle minDot = (dotSize, Color.black());
+    minDot.setPosition(dotX3, hLineHeight + min(sin(repeatingTime * 6) * 2, 0.5) * unitHeight);
+    Scene.add(minDot);
+
+    Circle maxDot = (dotSize, Color.white());
+    maxDot.setPosition(dotX3, hLineHeight + max(sin(repeatingTime * 6) * 2, -0.5) * unitHeight);
+    Scene.add(maxDot);
+
+    Num signValue = sign(sin(repeatingTime * 6));
+    Vec4 signColor = (signValue, signValue, signValue, 1.0);
+
+    Rectangle signRect = (Screen.x * 0.24, 10, signColor);
+    signRect.setPosition(Screen.x * 0.625, hLineHeight + signValue * Screen.y / 2);
+    Scene.add(signRect);
+
+    #mix
+    Circle mixDot = (dotSize, Color.magenta());
+    mixDot.setPosition(dotX4, hLineHeight + mix(60, (-5), repeatingTime));
+    Scene.add(mixDot);
+}
