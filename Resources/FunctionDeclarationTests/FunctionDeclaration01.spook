@@ -1,7 +1,14 @@
-Shader{}
+Shader{
+    numFunc(2);
+}
 
 Void func1(Num positionX) {}
 
 Void func2(Num positionX) {}
 
-Void func2(Num positionY) {}
+#Void func2(Num positionY) {}
+
+Num numFunc(Num hej) {
+    Num ny = hej;
+    return ny;
+}
