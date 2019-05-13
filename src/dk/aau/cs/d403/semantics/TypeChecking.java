@@ -56,9 +56,6 @@ public class TypeChecking {
         this.listOfPredefinedFunctions.add("exp2");
         this.listOfPredefinedFunctions.add("floor");
         this.listOfPredefinedFunctions.add("fract");
-        this.listOfPredefinedFunctions.add("fwidth");
-        this.listOfPredefinedFunctions.add("fwidthCoarse");
-        this.listOfPredefinedFunctions.add("fwidthFine");
         this.listOfPredefinedFunctions.add("inversesqrt");
         this.listOfPredefinedFunctions.add("length");
         this.listOfPredefinedFunctions.add("log");

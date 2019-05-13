@@ -225,7 +225,10 @@ public class PrintGLSL {
     }
 
     public static String printVector2(Vector2 vector){
-        return "vec2(" +
+        if (vector.getLowPrecedenceNode() != null) {
+            return "vec2" + printLowPrecedence(vector.getLowPrecedenceNode());
+        }
+        else return "vec2(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ")";
     }

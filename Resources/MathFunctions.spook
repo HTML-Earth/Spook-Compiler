@@ -57,46 +57,9 @@ Shader {
     Scene.add(absTangentDot);
 
     #More sin/cos/tan
-    Num n1 = acos(acosh(cosh(asin(asinh(sinh(atan(atanh(tanh(Time)))))))));
+    Num moreMath = acos(acosh(cosh(asin(asinh(sinh(atan(atanh(tanh(Time)))))))));
 
-    #Vectors
-    Num n11 = cross();
-    Num n14 = dot();
-    Num n13 = distance();
-    Num n23 = length();
-    Num n30 = normalize();
-    Num n31 = outerProduct();
-    Num n34 = reflect();
-    Num n35 = refract();
-
-    #Deg/Rad
-    Num n12 = degrees();
-    Num n33 = radians();
-
-    #Standard math
-    Num n42 = sqrt();
-    Num n22 = inversesqrt();
-    Num n15 = exp();
-    Num n16 = exp2();
-    Num n18 = fract();
-    Num n32 = pow();
-    Num n24 = log();
-    Num n25 = log2();
-
-    #Nice math
-    Num n7 = ceil();
-    Num n17 = floor();
-    Num n8 = clamp();
-    Num n46 = trunc();
-    Num n26 = max();
-    Num n27 = min();
-    Num n36 = round();
-    Num n37 = roundEven();
-    Num n28 = mix();
-    Num n38 = sign();
-    Num n41 = smoothstep();
-    Num n43 = step();
-    Num n19 = fwidth();
-    Num n20 = fwidthCoarse();
-    Num n21 = fwidthFine();
+    Circle mathDot = (dotSize, Color.black());
+    mathDot.setPosition(moreMath, 0);
+    Scene.add(mathDot);
 }
