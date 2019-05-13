@@ -567,13 +567,15 @@ public class TypeChecking {
         openScope();
 
         //Visit all function arguments and add them as Variable Declarations in the new scope
-        for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
+        if (functionDeclarationNode.getFunctionArgNodes() != null) {
+            for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
 
-            //Initialize VarDecl to null, as it should already be checked
-            AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
-            VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
-            VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
-            visitVariableDeclaration(variableDeclarationNode);
+                //Initialize VarDecl to null, as it should already be checked
+                AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
+                VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
+                VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
+                visitVariableDeclaration(variableDeclarationNode);
+            }
         }
 
         for (StatementNode statement : blockNode.getStatementNodes()) {
@@ -823,6 +825,7 @@ public class TypeChecking {
         if (retrieveSymbol(variableName) == null)
             throw new RuntimeException("ERROR: Variable (" + variableName + ") is not declared");
         else if (retrieveSymbol(variableName) != null) {
+            //TODO: retrieve all? assignments in ifs
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
             if (variableDeclarationNode != null)
