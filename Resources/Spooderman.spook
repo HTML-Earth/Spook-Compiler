@@ -1,0 +1,58 @@
+Shader{
+    Num xPos = Screen.x / 2;
+    Num yPos = Screen.y / 2;
+
+    Circle head = (425, Color.black());
+    head.setScale(0.8, 1);
+    head.setPosition(xPos, yPos);
+
+    Circle mask = (420, Color.red());
+        mask.setScale(0.8, 1);
+        mask.setPosition(xPos, yPos);
+
+    Vec2 lEyeP1 = (0,0);
+    Vec2 lEyeP2 = (15, -150);
+    Vec2 lEyeP3 = (60, -225);
+    Vec2 lEyeP4 = (150, -240);
+    Vec2 lEyeP5 = (225, -225);
+    Vec2 lEyeP6 = (255, -150);
+
+    Vec2 blEyeP1 = (-5,10);
+    Vec2 blEyeP2 = (10, -155);
+    Vec2 blEyeP3 = (55, -230);
+    Vec2 blEyeP4 = (155, -245);
+    Vec2 blEyeP5 = (230, -230);
+    Vec2 blEyeP6 = (265, -150);
+
+    Vec2 rEyeP1 = (0,0);
+    Vec2 rEyeP2 = (30, -75);
+    Vec2 rEyeP3 = (105, -90);
+    Vec2 rEyeP4 = (195, -75);
+    Vec2 rEyeP5 = (240, 0);
+    Vec2 rEyeP6 = (255, 150);
+
+    Vec2 brEyeP1 = (-5,3);
+    Vec2 brEyeP2 = (25, -80);
+    Vec2 brEyeP3 = (105, -95);
+    Vec2 brEyeP4 = (200, -80);
+    Vec2 brEyeP5 = (245, 0);
+    Vec2 brEyeP6 = (260, 160);
+    Polygon leftEye = (lEyeP1, lEyeP2, lEyeP3, lEyeP4, lEyeP5, lEyeP6, Color.white());
+    Polygon bleftEye = (blEyeP1, blEyeP2, blEyeP3, blEyeP4, blEyeP5, blEyeP6, Color.black());
+    Polygon rightEye = (rEyeP1, rEyeP2, rEyeP3, rEyeP4, rEyeP5, rEyeP6, Color.white());
+    Polygon brightEye = (brEyeP1, brEyeP2, brEyeP3, brEyeP4, brEyeP5, brEyeP6, Color.black());
+    leftEye.setPosition(xPos - 275, yPos + 200);
+    bleftEye.setPosition(xPos - 275, yPos + 200);
+    rightEye.setPosition(xPos + 25, yPos + 50);
+    brightEye.setPosition(xPos + 25, yPos + 50);
+
+    Scene.add(head);
+    Scene.add(mask);
+    Scene.add(bleftEye);
+    Scene.add(leftEye);
+    Scene.add(brightEye);
+    Scene.add(rightEye);
+
+
+}
+
