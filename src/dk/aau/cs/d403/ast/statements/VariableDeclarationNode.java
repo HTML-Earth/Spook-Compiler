@@ -7,11 +7,17 @@ import java.util.ArrayList;
 
 public class VariableDeclarationNode extends DeclarationNode {
     private Enums.DataType dataType;
-    private ArrayList<VarDeclInitNode> varDeclInitNodes;
+    private ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
 
     public VariableDeclarationNode(Enums.DataType dataType, ArrayList<VarDeclInitNode> varDeclInitNodes) {
         this.dataType = dataType;
         this.varDeclInitNodes = varDeclInitNodes;
+    }
+
+    // Only 1 variable in declaration
+    public VariableDeclarationNode(Enums.DataType dataType, VarDeclInitNode varDeclInitNode) {
+        this.dataType = dataType;
+        varDeclInitNodes.add(varDeclInitNode);
     }
 
     public Enums.DataType getDataType() {
