@@ -1027,7 +1027,9 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
             if (ctx.conditionalBlock() != null) {
                 conditionalBlockNode = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
-                forLoopStatementNodes.add(new ForLoopStatementNode(fixedExpressionNode1, fixedExpressionNode2, conditionalBlockNode));
+                ForLoopStatementNode forLoopStatementNode = new ForLoopStatementNode(fixedExpressionNode1, fixedExpressionNode2, conditionalBlockNode);
+                forLoopStatementNode.setCodePosition(getCodePosition(ctx));
+                forLoopStatementNodes.add(forLoopStatementNode);
             }
             else
                 throw new CompilerException("Invalid ForLoopStatement", getCodePosition(ctx));
