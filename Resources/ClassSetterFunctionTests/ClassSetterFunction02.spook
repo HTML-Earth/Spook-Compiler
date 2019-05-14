@@ -7,3 +7,6 @@ Class CustomShape {
         positionX = 2.0;
     }
 }
+
+    # Throws Compiler-exception:
+    # Line 7:8 - ERROR: Variable (positionX) on left side of assignment is not declared.
