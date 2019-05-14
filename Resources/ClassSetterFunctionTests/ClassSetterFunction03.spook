@@ -11,3 +11,6 @@ Class class2 {
         positionX = 2;
     }
 }
+
+    # Throws a Compiler-exception:
+    # Line 11:8 - ERROR: Variable (positionX) on left side of assignment is not declared.

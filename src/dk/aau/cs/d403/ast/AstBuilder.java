@@ -539,9 +539,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitFunctionArg(SpookParser.FunctionArgContext ctx) {
-        FunctionArgNode functionArgNode = new FunctionArgNode(getDataType(ctx.dataType()), ctx.variableName().getText());
-        functionArgNode.setCodePosition(getCodePosition(ctx));
+        FunctionArgNode functionArgNode;
 
+        if (ctx.className() != null)
+            functionArgNode = new FunctionArgNode(ctx.className().getText(), ctx.variableName().getText());
+        else if (ctx.dataType() != null)
+            functionArgNode = new FunctionArgNode(getDataType(ctx.dataType()), ctx.variableName().getText());
+        else
+            throw new CompilerException("Invalid function arg", getCodePosition(ctx));
+
+
+        functionArgNode.setCodePosition(getCodePosition(ctx));
         return functionArgNode;
     }
 
