@@ -91,34 +91,35 @@ public class CodeGenerator {
                 sb.append(getClassCode(type, "getBlendFunctionSignature"));
                 sb.append("{\n\t");
                 sb.append(getClassCode(type, "getBlendFunctionBody"));
-                sb.append("\n}\n");
+                sb.append("\n}\n\n");
             }
             else {
                 sb.append(getClassCode(type, "getCheckFunctionSignature"));
                 sb.append("{\n\t");
                 sb.append(getClassCode(type, "getCheckFunctionBody"));
-                sb.append("\n}\n");
+                sb.append("\n}\n\n");
             }
         }
 
         sb.append(Shape.getRotationFunctionSignature2D());
         sb.append("{\n\t");
         sb.append(Shape.getRotationFunctionBody2D());
-        sb.append("\n}\n");
+        sb.append("\n}\n\n");
 
         sb.append(Shape.getScaleFunctionSignature2D());
         sb.append("{\n\t");
         sb.append(Shape.getScaleFunctionBody2D());
-        sb.append("\n}\n");
+        sb.append("\n}\n\n");
     }
 
     private void generateMain() {
         sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
 
-        sb.append("\tfragColor = ");
-        sb.append(PrintGLSL.printVector4(scene.getColor()));
-        sb.append(";\n");
+        //sb.append("\tfragColor = ");
+        //sb.append(PrintGLSL.printVector4(scene.getColor()));
+        //sb.append(";\n");
 
+        sb.append("\t// Variable Declarations\n");
         for (String varDecl : usedVariables) {
             VariableDeclarationNode variableDeclarationNode = variables.get(varDecl);
             if (variableDeclarationNode != null) {
@@ -128,8 +129,10 @@ public class CodeGenerator {
             }
         }
 
+        sb.append("\t// Object Declarations\n");
         generateDeclarations(scene);
 
+        sb.append("\t// Checks and Drawing\n");
         generateChecks(scene);
 
         sb.append("}\n\n");
@@ -146,6 +149,15 @@ public class CodeGenerator {
     }
 
     private void generateChecks(SpookObject parent) {
+        boolean parentIsScene = false;
+
+        if (parent instanceof Scene) {
+            parentIsScene = true;
+
+            sb.append(scene.getColorApplication("fragCoord"));
+            sb.append("\n");
+        }
+
         for (int i = 0; i < parent.getChildren().size(); i++) {
             SpookObject child = parent.getChildren().get(i);
 
@@ -156,7 +168,7 @@ public class CodeGenerator {
 
                 sb.append("\tvec2 ").append(newSpace);
 
-                if (parent instanceof Scene)
+                if (parentIsScene)
                     sb.append(" = fragCoord;\n\t");
                 else
                     sb.append(" = ").append(parent.getName()).append("Space;\n\t");

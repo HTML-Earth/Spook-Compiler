@@ -82,6 +82,7 @@ public class PrintGLSL {
         if (highPrecedenceNodes != null && operators != null) {
             if (!highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
+                sb.append("(");
                 for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
                     //Get the highNode
                     sb.append(printHighPrecedence(highPrecedenceNode));
@@ -91,13 +92,14 @@ public class PrintGLSL {
                         matchHigh++;
                     }
                 }
+                sb.append(")");
                 return sb.toString();
             } else
                 return "LowPrecedenceNode receives empty list";
         }
         //Single HighNode
         else if (highPrecedenceNodes != null) {
-            return printHighPrecedence(highPrecedenceNodes.get(0));
+            return "(" + printHighPrecedence(highPrecedenceNodes.get(0)) + ")";
         } else
             return "Invalid Low Precedence Operation";
     }
@@ -241,7 +243,10 @@ public class PrintGLSL {
     }
 
     public static String printVector4(Vector4 vector){
-        return "vec4(" +
+        if (vector.getLowPrecedenceNode() != null) {
+            return "vec4" + printLowPrecedence(vector.getLowPrecedenceNode());
+        }
+        else return "vec4(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ", " +
                 printObjArgNode(vector.getZ()) + ", " +

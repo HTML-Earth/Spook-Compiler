@@ -1,32 +1,59 @@
 Shader {
-    Rectangle rect = (Screen.x, Screen.y, Color.black());
-    rect.setPosition(Screen.x / 2, Screen.y / 2);
-    Scene.add(rect);
-    CircleGradient gradient = (Screen.x / 2, Color.black(), Color.olive());
-    gradient.setParent(rect);
-
-    Num pulse = abs(sin(Time));
+    Num pulse = abs(sin(Time * 0.5));
     Num distance = pulse * 50;
     Num size = pulse * Screen.y / 4;
 
     Num triWidth = Screen.y / 8 + size;
     Num triHeight = triWidth * 0.9;
 
+    Num rotation = smoothstep(1, 5, mod(Time, PI * 2)) * 360;
+    Num panWidth = Screen.x * 2;
+    Num panOffset = Screen.x / 2;
+    Num centerPos = Screen.x / 2;
+    Num triforcePan = mod(panOffset + centerPos + smoothstep(1, 5, mod(Time, PI * 2)) * panWidth, panWidth) - panOffset;
+
+    Empty triforce = (triforcePan, Screen.y / 2);
+    Scene.add(triforce);
+
     Triangle triTop = (triWidth, triHeight, Color.yellow());
     triTop.setPosition(0, triHeight / 2 + distance);
+    triTop.setRotation(rotation);
+    triTop.setParent(triforce);
 
     Triangle triLeft = (triWidth, triHeight, Color.yellow());
     triLeft.setPosition(-triWidth / 2 - distance, -triHeight / 2 - distance);
+    triLeft.setRotation(rotation);
+    triLeft.setParent(triforce);
 
     Triangle triRight = (triWidth, triHeight, Color.yellow());
     triRight.setPosition(triWidth / 2 + distance, -triHeight / 2 - distance);
-
-    Empty triforce = (Screen.x / 2, Screen.y / 2);
-    #triforce.setRotation(mod(Time * 90, 360));
-
-    triTop.setParent(triforce);
-    triLeft.setParent(triforce);
+    triRight.setRotation(-rotation);
     triRight.setParent(triforce);
 
-    Scene.add(triforce);
+    #Background Colors
+    Vec4 powerBright   = (0.69, 0.19, 0.19, 1);
+    Vec4 powerDark     = (0.36, 0.10, 0.10, 1);
+    Vec4 wisdomBright  = (0.16, 0.31, 0.78, 1);
+    Vec4 wisdomDark    = (0.07, 0.21, 0.46, 1);
+    Vec4 courageBright = (0.32, 0.78, 0.25, 1);
+    Vec4 courageDark   = (0.18, 0.44, 0.13, 1);
+    Vec4 brightShine   = (1, 1, 0, 1);
+
+    Num bgRotationTime = mod(Time, PI * 6);
+    Num bgRotation1 = smoothstep(2, 4, bgRotationTime);
+    Num bgRotation2 = smoothstep(2 + PI * 2, 4 + PI * 2, bgRotationTime);
+    Num bgRotation3 = smoothstep(2 + PI * 4, 4 + PI * 4, bgRotationTime);
+
+    Vec4 darkRotation2 = mix(courageDark, powerDark, bgRotation3);
+    Vec4 darkRotation1 = mix(wisdomDark, darkRotation2, bgRotation2);
+    Vec4 darkRotation = mix(powerDark, darkRotation1, bgRotation1);
+
+    Vec4 brightRotation3 = mix(courageBright, powerBright, bgRotation3);
+    Vec4 brightRotation2 = mix(wisdomBright, brightRotation3, bgRotation2);
+    Vec4 brightRotation1 = mix(powerBright, brightRotation2, bgRotation1);
+    Vec4 brightRotation = mix(brightRotation1, brightShine, pow(max(sin(Time + 0.5), 0), 3) * 0.5);
+
+    CircleGradient background = (Screen.x / 2, brightRotation, darkRotation);
+    background.setPosition(Screen.x / 2, Screen.y / 2);
+    Scene.add(background);
 }
