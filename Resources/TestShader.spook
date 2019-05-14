@@ -13,6 +13,6 @@ Class CustomShape {
     Num sides = 4;
 }
 
-Float GiveMeTen(Num irrelevant) {
+Num GiveMeTen(Num irrelevant) {
     return 10;
 }

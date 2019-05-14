@@ -185,7 +185,7 @@ constructorBlock: LEFT_BRACKET (assignment SEMICOLON)* RIGHT_BRACKET;
 /* Function declaration */
 functionDecl
     : VOID functionName LEFT_PAREN functionArgs? RIGHT_PAREN block
-    | dataType functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
+    | (dataType | className) functionName LEFT_PAREN functionArgs? RIGHT_PAREN block;
 
 
 functionArgs
