@@ -10,4 +10,5 @@ Void func2(Bool bool, Bool bool1) {}
 
 Void func2(Circle circle) {}
 
-# Throws a NullPointerException because "Circle" is not a dataType yet.
+Void func2(Rectangle circle) {}
+

@@ -5,3 +5,6 @@ CustomShape shape1 = ();
 Class CustomShape {
 
 }
+
+#   Throws a Compiler exception:
+#   Line 2:21 - Invalid Object argument(s) in object constructor

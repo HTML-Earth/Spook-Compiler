@@ -2,3 +2,6 @@ Shader {
     Int var1;
     Int var1;
 }
+
+#   Throws a Compiler exception:
+#   Line 2:4 - ERROR: An object (Int) is declared with a non-existing class.

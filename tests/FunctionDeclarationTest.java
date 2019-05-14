@@ -1,3 +1,4 @@
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.parser.SpookLexer;
@@ -30,7 +31,7 @@ public class FunctionDeclarationTest {
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
 
-            Assertions.assertThrows(RuntimeException.class, () -> {typeChecking.visitProgram(programNode);});
+            Assertions.assertThrows(CompilerException.class, () -> {typeChecking.visitProgram(programNode);});
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +45,8 @@ public class FunctionDeclarationTest {
 
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+
+            typeChecking.visitProgram(programNode);
 
         }catch (IOException e) {
             e.printStackTrace();
