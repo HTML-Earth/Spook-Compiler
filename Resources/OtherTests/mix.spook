@@ -5,178 +5,178 @@ Shader{
     Num blinkMove = sin(Time) * 80;
     Vec4 whiteTransparent = (1, 1, 1, 0.5);
     Num sway = sin(Time * 0.2) * 50;
-            Num hover = sin(Time) * 15;
+    Num hover = sin(Time) * 15;
 
-            Num xPos = 150 + sway;
-            Num yPos = 210 + hover;
+    Num xPos = 150 + sway;
+    Num yPos = 210 + hover;
 
-            Num hoverTips = sin(Time) * -5;
-            Num hoverEyes = sin(Time - 0.1) * 5;
-            Num hoverMouf = sin(Time - 0.2) * 10;
+    Num hoverTips = sin(Time) * -5;
+    Num hoverEyes = sin(Time - 0.1) * 5;
+    Num hoverMouf = sin(Time - 0.2) * 10;
 
-            Num swayFace = -sin(Time * 0.2 - 2) * -8;
+    Num swayFace = -sin(Time * 0.2 - 2) * -8;
 
-            Num rotation = sin(Time) * 15;
-                    Num circleScale = max(sin(Time * 0.25), 0.25) * 3;
+    Num rotation = sin(Time) * 15;
+    Num circleScale = max(sin(Time * 0.25), 0.25) * 3;
 
-                    Vec4 bgColor = (0.3, 0.3, 0.3, 1);
-                        Scene.setColor(bgColor);
+    Vec4 bgColor = (0.3, 0.3, 0.3, 1);
+    Scene.setColor(bgColor);
 
-                        Num hLineHeight = Screen.y / 2;
-                        Num unitHeight = Screen.y / 4;
+    Num hLineHeight = Screen.y / 2;
+    Num unitHeight = Screen.y / 4;
 
-                        #Grid lines
-                        Rectangle hLine = (Screen.x, 5, Color.gray());
-                        hLine.setPosition(Screen.x / 2, hLineHeight);
-                        Scene.add(hLine);
+    #Grid lines
+    Rectangle hLine = (Screen.x, 5, Color.gray());
+    hLine.setPosition(Screen.x / 2, hLineHeight);
+    Scene.add(hLine);
 
-                        Rectangle vLine1 = (10, Screen.y, Color.gray());
-                        vLine1.setPosition(0, hLineHeight);
-                        Scene.add(vLine1);
+    Rectangle vLine1 = (10, Screen.y, Color.gray());
+    vLine1.setPosition(0, hLineHeight);
+    Scene.add(vLine1);
 
-                        Rectangle vLine2 = (5, Screen.y, Color.gray());
-                        vLine2.setPosition(Screen.x / 4, hLineHeight);
-                        Scene.add(vLine2);
+    Rectangle vLine2 = (5, Screen.y, Color.gray());
+    vLine2.setPosition(Screen.x / 4, hLineHeight);
+    Scene.add(vLine2);
 
-                        Rectangle vLine3 = (5, Screen.y, Color.gray());
-                        vLine3.setPosition(Screen.x - Screen.x / 2, hLineHeight);
-                        Scene.add(vLine3);
+    Rectangle vLine3 = (5, Screen.y, Color.gray());
+    vLine3.setPosition(Screen.x - Screen.x / 2, hLineHeight);
+    Scene.add(vLine3);
 
-                        Rectangle vLine4 = (5, Screen.y, Color.gray());
-                        vLine4.setPosition(Screen.x - Screen.x / 4, hLineHeight);
-                        Scene.add(vLine4);
+    Rectangle vLine4 = (5, Screen.y, Color.gray());
+    vLine4.setPosition(Screen.x - Screen.x / 4, hLineHeight);
+    Scene.add(vLine4);
 
-                        #Dots
-                        Num dotSize = 15;
-                        Num repeatingTime = mod(Time, 1);
-                        Num dotX = repeatingTime * Screen.x * 0.25;
-                        Num dotX2 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.25;
-                        Num dotX3 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.5;
-                        Num dotX4 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.75;
+    #Dots
+    Num dotSize = 15;
+    Num repeatingTime = mod(Time, 1);
+    Num dotX = repeatingTime * Screen.x * 0.25;
+    Num dotX2 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.25;
+    Num dotX3 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.5;
+    Num dotX4 = repeatingTime * Screen.x * 0.25 + Screen.x * 0.75;
 
-                        #exp
-                        Circle expDot = (dotSize, Color.teal());
-                        expDot .setPosition(dotX, hLineHeight + exp(repeatingTime * 8));
-                        Scene.add(expDot);
+    #exp
+    Circle expDot = (dotSize, Color.teal());
+    expDot .setPosition(dotX, hLineHeight + exp(repeatingTime * 8));
+    Scene.add(expDot);
 
-                        Circle exp2Dot = (dotSize / 2, Color.cyan());
-                        exp2Dot .setPosition(dotX, hLineHeight + exp2(repeatingTime * 8));
-                        Scene.add(exp2Dot);
+    Circle exp2Dot = (dotSize / 2, Color.cyan());
+    exp2Dot .setPosition(dotX, hLineHeight + exp2(repeatingTime * 8));
+    Scene.add(exp2Dot);
 
-                        #log
-                        Circle logDot = (dotSize, Color.brown());
-                        logDot.setPosition(dotX2, hLineHeight + log(repeatingTime * 2) * unitHeight);
-                        Scene.add(logDot);
+    #log
+    Circle logDot = (dotSize, Color.brown());
+    logDot.setPosition(dotX2, hLineHeight + log(repeatingTime * 2) * unitHeight);
+    Scene.add(logDot);
 
-                        Circle log2Dot = (dotSize / 2, Color.orange());
-                        log2Dot.setPosition(dotX2, hLineHeight + log2(repeatingTime * 2) * unitHeight);
-                        Scene.add(log2Dot);
+    Circle log2Dot = (dotSize / 2, Color.orange());
+    log2Dot.setPosition(dotX2, hLineHeight + log2(repeatingTime * 2) * unitHeight);
+    Scene.add(log2Dot);
 
-                        #pow and sqrt
-                        Circle powDot = (dotSize, Color.purple());
-                        powDot.setPosition(dotX3, hLineHeight + pow(repeatingTime * 2, 2) * unitHeight);
-                        Scene.add(powDot);
+    #pow and sqrt
+    Circle powDot = (dotSize, Color.purple());
+    powDot.setPosition(dotX3, hLineHeight + pow(repeatingTime * 2, 2) * unitHeight);
+    Scene.add(powDot);
 
-                        Circle sqrtDot = (dotSize / 2, Color.magenta());
-                        sqrtDot.setPosition(dotX3, hLineHeight + sqrt(repeatingTime * 2) * unitHeight);
-                        Scene.add(sqrtDot);
+    Circle sqrtDot = (dotSize / 2, Color.magenta());
+    sqrtDot.setPosition(dotX3, hLineHeight + sqrt(repeatingTime * 2) * unitHeight);
+    Scene.add(sqrtDot);
 
-                        Circle inversesqrtDot = (dotSize / 3, Color.pink());
-                        inversesqrtDot.setPosition(dotX3, hLineHeight + inversesqrt(repeatingTime * 2) * unitHeight);
-                        Scene.add(inversesqrtDot);
+    Circle inversesqrtDot = (dotSize / 3, Color.pink());
+    inversesqrtDot.setPosition(dotX3, hLineHeight + inversesqrt(repeatingTime * 2) * unitHeight);
+    Scene.add(inversesqrtDot);
 
-                        #step
-                        Circle smoothstepDot = (dotSize, Color.olive());
-                        smoothstepDot.setPosition(dotX4, hLineHeight + smoothstep(1, 3, repeatingTime * 4) * unitHeight);
-                        Scene.add(smoothstepDot);
+    #step
+    Circle smoothstepDot = (dotSize, Color.olive());
+    smoothstepDot.setPosition(dotX4, hLineHeight + smoothstep(1, 3, repeatingTime * 4) * unitHeight);
+    Scene.add(smoothstepDot);
 
-                        Circle stepDot = (dotSize / 2, Color.green());
-                        stepDot.setPosition(dotX4, hLineHeight + step(2, repeatingTime * 4) * unitHeight);
-                        Scene.add(stepDot);
+    Circle stepDot = (dotSize / 2, Color.green());
+    stepDot.setPosition(dotX4, hLineHeight + step(2, repeatingTime * 4) * unitHeight);
+    Scene.add(stepDot);
 
-            #round and fract
-                Circle roundDot = (dotSize, Color.teal());
-                roundDot.setPosition(dotX, hLineHeight + round(repeatingTime * 5) * 30);
-                Scene.add(roundDot);
+    #round and fract
+    Circle roundDot = (dotSize, Color.teal());
+    roundDot.setPosition(dotX, hLineHeight + round(repeatingTime * 5) * 30);
+    Scene.add(roundDot);
 
-                Circle roundEvenDot = (dotSize / 2, Color.cyan());
-                roundEvenDot .setPosition(dotX, hLineHeight + roundEven(repeatingTime * 5) * 30);
-                Scene.add(roundEvenDot);
+    Circle roundEvenDot = (dotSize / 2, Color.cyan());
+    roundEvenDot .setPosition(dotX, hLineHeight + roundEven(repeatingTime * 5) * 30);
+    Scene.add(roundEvenDot);
 
-                Circle fractDot = (dotSize / 2, Color.aquamarine());
-                fractDot .setPosition(dotX, hLineHeight - fract(repeatingTime * 5) * 30);
-                Scene.add(fractDot);
+    Circle fractDot = (dotSize / 2, Color.aquamarine());
+    fractDot .setPosition(dotX, hLineHeight - fract(repeatingTime * 5) * 30);
+    Scene.add(fractDot);
 
-                #clamp and trunc
-                Circle clampDot = (dotSize, Color.brown());
-                clampDot.setPosition(dotX2, hLineHeight + clamp(sin(repeatingTime * 6), (-0.25), 0.5) * unitHeight);
-                Scene.add(clampDot);
+    #clamp and trunc
+    Circle clampDot = (dotSize, Color.brown());
+    clampDot.setPosition(dotX2, hLineHeight + clamp(sin(repeatingTime * 6), (-0.25), 0.5) * unitHeight);
+    Scene.add(clampDot);
 
-                Circle truncDot = (dotSize / 2, Color.orange());
-                truncDot.setPosition(dotX2, hLineHeight + trunc(sin(repeatingTime * 6) * 2) * unitHeight);
-                Scene.add(truncDot);
+    Circle truncDot = (dotSize / 2, Color.orange());
+    truncDot.setPosition(dotX2, hLineHeight + trunc(sin(repeatingTime * 6) * 2) * unitHeight);
+    Scene.add(truncDot);
 
-                #ceil, floor and max, min and sign
-                Circle ceilDot = (dotSize / 2, Color.white());
-                ceilDot.setPosition(dotX3, hLineHeight + ceil(sin(repeatingTime * 6) * 2) * unitHeight);
-                Scene.add(ceilDot);
+    #ceil, floor and max, min and sign
+    Circle ceilDot = (dotSize / 2, Color.white());
+    ceilDot.setPosition(dotX3, hLineHeight + ceil(sin(repeatingTime * 6) * 2) * unitHeight);
+    Scene.add(ceilDot);
 
-                Circle floorDot = (dotSize / 2, Color.black());
-                floorDot.setPosition(dotX3, hLineHeight + floor(sin(repeatingTime * 6) * 2) * unitHeight);
-                Scene.add(floorDot);
+    Circle floorDot = (dotSize / 2, Color.black());
+    floorDot.setPosition(dotX3, hLineHeight + floor(sin(repeatingTime * 6) * 2) * unitHeight);
+    Scene.add(floorDot);
 
-                Circle minDot = (dotSize, Color.black());
-                minDot.setPosition(dotX3, hLineHeight + min(sin(repeatingTime * 6) * 2, 0.5) * unitHeight);
-                Scene.add(minDot);
+    Circle minDot = (dotSize, Color.black());
+    minDot.setPosition(dotX3, hLineHeight + min(sin(repeatingTime * 6) * 2, 0.5) * unitHeight);
+    Scene.add(minDot);
 
-                Circle maxDot = (dotSize, Color.white());
-                maxDot.setPosition(dotX3, hLineHeight + max(sin(repeatingTime * 6) * 2, -0.5) * unitHeight);
-                Scene.add(maxDot);
+    Circle maxDot = (dotSize, Color.white());
+    maxDot.setPosition(dotX3, hLineHeight + max(sin(repeatingTime * 6) * 2, -0.5) * unitHeight);
+    Scene.add(maxDot);
 
-                Num signValue = sign(sin(repeatingTime * 6));
-                Vec4 signColor = (signValue, signValue, signValue, 1.0);
+    Num signValue = sign(sin(repeatingTime * 6));
+    Vec4 signColor = (signValue, signValue, signValue, 1.0);
 
-                Rectangle signRect = (Screen.x * 0.24, 10, signColor);
-                signRect.setPosition(Screen.x * 0.625, hLineHeight + signValue * Screen.y / 2);
-                Scene.add(signRect);
+    Rectangle signRect = (Screen.x * 0.24, 10, signColor);
+    signRect.setPosition(Screen.x * 0.625, hLineHeight + signValue * Screen.y / 2);
+    Scene.add(signRect);
 
-                #mix
-                Circle mixDot = (dotSize, Color.magenta());
-                mixDot.setPosition(dotX4, hLineHeight + mix(60, (-5), repeatingTime));
-                Scene.add(mixDot);
+    #mix
+    Circle mixDot = (dotSize, Color.magenta());
+    mixDot.setPosition(dotX4, hLineHeight + mix(60, (-5), repeatingTime));
+    Scene.add(mixDot);
 
-            Circle sineDot = (dotSize, Color.teal());
-                sineDot.setPosition(dotX, hLineHeight + sin(Time * 2) * unitHeight);
-                Scene.add(sineDot);
+    Circle sineDot = (dotSize, Color.teal());
+    sineDot.setPosition(dotX, hLineHeight + sin(Time * 2) * unitHeight);
+    Scene.add(sineDot);
 
-                Circle absSineDot = (dotSize / 2, Color.cyan());
-                absSineDot.setPosition(dotX, hLineHeight + abs(sin(Time * 2) * unitHeight));
-                Scene.add(absSineDot);
+    Circle absSineDot = (dotSize / 2, Color.cyan());
+    absSineDot.setPosition(dotX, hLineHeight + abs(sin(Time * 2) * unitHeight));
+    Scene.add(absSineDot);
 
-                #cos and abs(cos)
-                Circle cosineDot = (dotSize, Color.brown());
-                cosineDot.setPosition(dotX2, hLineHeight + cos(Time * 2) * unitHeight);
-                Scene.add(cosineDot);
+    #cos and abs(cos)
+    Circle cosineDot = (dotSize, Color.brown());
+    cosineDot.setPosition(dotX2, hLineHeight + cos(Time * 2) * unitHeight);
+    Scene.add(cosineDot);
 
-                Circle absCosineDot = (dotSize / 2, Color.orange());
-                absCosineDot.setPosition(dotX2, hLineHeight + abs(cos(Time * 2) * unitHeight));
-                Scene.add(absCosineDot);
+    Circle absCosineDot = (dotSize / 2, Color.orange());
+    absCosineDot.setPosition(dotX2, hLineHeight + abs(cos(Time * 2) * unitHeight));
+    Scene.add(absCosineDot);
 
-                #tan and abs(tan)
-                Circle tangentDot = (dotSize, Color.magenta());
-                tangentDot.setPosition(dotX3, hLineHeight + tan(Time * 2) * unitHeight);
-                Scene.add(tangentDot);
+    #tan and abs(tan)
+    Circle tangentDot = (dotSize, Color.magenta());
+    tangentDot.setPosition(dotX3, hLineHeight + tan(Time * 2) * unitHeight);
+    Scene.add(tangentDot);
 
-                Circle absTangentDot = (dotSize / 2, Color.pink());
-                absTangentDot.setPosition(dotX3, hLineHeight + abs(tan(Time * 2) * unitHeight));
-                Scene.add(absTangentDot);
+    Circle absTangentDot = (dotSize / 2, Color.pink());
+    absTangentDot.setPosition(dotX3, hLineHeight + abs(tan(Time * 2) * unitHeight));
+    Scene.add(absTangentDot);
 
-                #More sin/cos/tan
-                Num moreMath = acos(acosh(cosh(asin(asinh(sinh(atan(atanh(tanh(Time)))))))));
+    #More sin/cos/tan
+    Num moreMath = acos(acosh(cosh(asin(asinh(sinh(atan(atanh(tanh(Time)))))))));
 
-                Circle mathDot = (dotSize, Color.black());
-                mathDot.setPosition(moreMath, 0);
-                Scene.add(mathDot);
+    Circle mathDot = (dotSize, Color.black());
+    mathDot.setPosition(moreMath, 0);
+    Scene.add(mathDot);
 
     Circle middle = (10, Color.clear());
 
@@ -261,106 +261,106 @@ Shader{
     Scene.add(eyeBrowFix2);
 
 
-        Circle hed = (80, Color.white());
-        hed.setPosition(xPos, yPos);
-        Scene.add(hed);
+    Circle hed = (80, Color.white());
+    hed.setPosition(xPos, yPos);
+    Scene.add(hed);
 
-        Circle top1 = (40, Color.white());
-        Circle top2 = (40, Color.white());
-        top1.setPosition(30, 60);
-        top2.setPosition(0, 50);
-        top1.setParent(hed);
-        top2.setParent(hed);
+    Circle top1 = (40, Color.white());
+    Circle top2 = (40, Color.white());
+    top1.setPosition(30, 60);
+    top2.setPosition(0, 50);
+    top1.setParent(hed);
+    top2.setParent(hed);
 
-        Circle mouf = (90, Color.white());
-        mouf.setPosition(50, -60);
-        mouf.setParent(hed);
+    Circle mouf = (90, Color.white());
+    mouf.setPosition(50, -60);
+    mouf.setParent(hed);
 
-        Circle tip1 = (15, Color.white());
-        Circle tip2 = (15, Color.white());
-        Circle tip3 = (15, Color.white());
-        Circle tip4 = (15, Color.white());
-        Circle tip5 = (15, Color.white());
-        tip1.setPosition(-30, -112 + hoverTips);
-        tip2.setPosition(-15, -132 + hoverTips);
-        tip3.setPosition(10, -142 + hoverTips);
-        tip4.setPosition(35, -147 + hoverTips);
-        tip5.setPosition(60, -152 + hoverTips);
-        tip1.setParent(hed);
-        tip2.setParent(hed);
-        tip3.setParent(hed);
-        tip4.setParent(hed);
-        tip5.setParent(hed);
+    Circle tip1 = (15, Color.white());
+    Circle tip2 = (15, Color.white());
+    Circle tip3 = (15, Color.white());
+    Circle tip4 = (15, Color.white());
+    Circle tip5 = (15, Color.white());
+    tip1.setPosition(-30, -112 + hoverTips);
+    tip2.setPosition(-15, -132 + hoverTips);
+    tip3.setPosition(10, -142 + hoverTips);
+    tip4.setPosition(35, -147 + hoverTips);
+    tip5.setPosition(60, -152 + hoverTips);
+    tip1.setParent(hed);
+    tip2.setParent(hed);
+    tip3.setParent(hed);
+    tip4.setParent(hed);
+    tip5.setParent(hed);
 
-        Circle eye1 = (20, Color.black());
-        Circle eye2 = (15, Color.black());
-        eye1.setPosition(swayFace, 30 + hoverEyes);
-        eye2.setPosition(swayFace + 40, 40 + hoverEyes);
-        eye1.setParent(hed);
-        eye2.setParent(hed);
+    Circle eye1 = (20, Color.black());
+    Circle eye2 = (15, Color.black());
+    eye1.setPosition(swayFace, 30 + hoverEyes);
+    eye2.setPosition(swayFace + 40, 40 + hoverEyes);
+    eye1.setParent(hed);
+    eye2.setParent(hed);
 
-        Circle moufHole = (35, Color.black());
-        moufHole.setPosition(swayFace + 90, -60 + hoverMouf);
-        moufHole.setParent(hed);
+    Circle moufHole = (35, Color.black());
+    moufHole.setPosition(swayFace + 90, -60 + hoverMouf);
+    moufHole.setParent(hed);
 
-        Rectangle rec1 = (50, 50, Color.black());
-        rec1.setPosition(1100, 50);
-        rec1.setRotation(rotation);
+    Rectangle rec1 = (50, 50, Color.black());
+    rec1.setPosition(1100, 50);
+    rec1.setRotation(rotation);
 
-        Rectangle rec2 = (50, 50, Color.yellow());
-        rec2.setPosition(50, 50);
-        rec2.setParent(rec1);
-        rec2.setRotation(rotation);
+    Rectangle rec2 = (50, 50, Color.yellow());
+    rec2.setPosition(50, 50);
+    rec2.setParent(rec1);
+    rec2.setRotation(rotation);
 
-        Rectangle rec3 = (50, 50, Color.yellow());
-        rec3.setPosition(50, 50);
-        rec3.setParent(rec2);
-        rec3.setRotation(rotation);
+    Rectangle rec3 = (50, 50, Color.yellow());
+    rec3.setPosition(50, 50);
+    rec3.setParent(rec2);
+    rec3.setRotation(rotation);
 
-        Rectangle rec4 = (50, 50, Color.yellow());
-        rec4.setPosition(50, 50);
-        rec4.setParent(rec3);
-        rec4.setRotation(rotation);
+    Rectangle rec4 = (50, 50, Color.yellow());
+    rec4.setPosition(50, 50);
+    rec4.setParent(rec3);
+    rec4.setRotation(rotation);
 
-        Rectangle rec5 = (50, 50, Color.yellow());
-        rec5.setPosition(50, 50);
-        rec5.setParent(rec4);
-        rec5.setRotation(rotation);
+    Rectangle rec5 = (50, 50, Color.yellow());
+    rec5.setPosition(50, 50);
+    rec5.setParent(rec4);
+    rec5.setRotation(rotation);
 
-        Circle circle1 = (25, Color.teal());
-        circle1.setPosition(50, 50);
-        circle1.setParent(rec1);
-        circle1.setScale(circleScale * sin(Time), circleScale * cos(Time));
+    Circle circle1 = (25, Color.teal());
+    circle1.setPosition(50, 50);
+    circle1.setParent(rec1);
+    circle1.setScale(circleScale * sin(Time), circleScale * cos(Time));
 
-        Circle circle2 = (25, Color.teal());
-        circle2.setPosition(50, 50);
-        circle2.setParent(rec2);
-        circle2.setScale(circleScale * sin(Time), circleScale * cos(Time));
+    Circle circle2 = (25, Color.teal());
+    circle2.setPosition(50, 50);
+    circle2.setParent(rec2);
+    circle2.setScale(circleScale * sin(Time), circleScale * cos(Time));
 
-        Circle circle3 = (25, Color.teal());
-        circle3.setPosition(50, 50);
-        circle3.setParent(rec3);
-        circle3.setScale(circleScale * sin(Time), circleScale * cos(Time));
+    Circle circle3 = (25, Color.teal());
+    circle3.setPosition(50, 50);
+    circle3.setParent(rec3);
+    circle3.setScale(circleScale * sin(Time), circleScale * cos(Time));
 
-        Circle circle4 = (25, Color.teal());
-        circle4.setPosition(50, 50);
-        circle4.setParent(rec4);
-        circle4.setScale(circleScale * sin(Time), circleScale * cos(Time));
+    Circle circle4 = (25, Color.teal());
+    circle4.setPosition(50, 50);
+    circle4.setParent(rec4);
+    circle4.setScale(circleScale * sin(Time), circleScale * cos(Time));
 
-        Circle circle5 = (25, Color.teal());
-        circle5.setPosition(50, 50);
-        circle5.setParent(rec5);
-        circle5.setScale(circleScale * sin(Time), circleScale * cos(Time));
+    Circle circle5 = (25, Color.teal());
+    circle5.setPosition(50, 50);
+    circle5.setParent(rec5);
+    circle5.setScale(circleScale * sin(Time), circleScale * cos(Time));
 
-        Scene.add(rec1);
+    Scene.add(rec1);
 
-        Vec2 p1 = (-100,10);
-            Vec2 p2 = (10,100);
-            Vec2 p3 = (20,-10);
-            Vec2 p4 = (-20,-20);
+    Vec2 p1 = (-100,10);
+    Vec2 p2 = (10,100);
+    Vec2 p3 = (20,-10);
+    Vec2 p4 = (-20,-20);
 
-            Polygon poly = (p1, p2, p3, p4, Color.white());
-            poly.setPosition(sin(Time) * 100 + 200, cos(Time * 4) * 100 + 720);
-            poly.setRotation(sin(Time) * 180);
-            Scene.add(poly);
+    Polygon poly = (p1, p2, p3, p4, Color.white());
+    poly.setPosition(sin(Time) * 100 + 200, cos(Time * 4) * 100 + 720);
+    poly.setRotation(sin(Time) * 180);
+    Scene.add(poly);
 }
