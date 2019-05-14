@@ -1,41 +1,11 @@
 Shader {
-    #Ball values
-    Num ballSize = 64;
-    Vec4 ballColor = (0.6, 0, 0, 1);
+    CustomShape custom;
 
-    #Position and size values
-    Num groundHeight = 100;
-    Num jumpHeight   = 150;
-
-    Num xPos = 150;
-
-    #Animation
-    Num jumpTime   = abs(sin(Time * 3));
-    Num yPos = (jumpTime + 1) * jumpHeight;
-    Num shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
-
-    #Shadow color
-    Num shadowDarkness = shadowSize * 0.005;
-    Vec4 shadowColor = (0,0,0,0);
-
-    #Objects
-    Circle ball   = (ballSize, ballColor);
-    Circle shadow = (shadowSize, shadowColor);
-
-    #Shiny ball gradient
-    Circle shiny = (Color.White(), ballSize/2);
-    shiny.setPosition(ballSize/2, ballSize/2);
-    ball.add(shiny);
-
-    #Object positions
+    Circle ball = (GiveMeTen(0), Color.red());
     ball.setPosition(xPos, yPos);
-    shadow.setPosition(xPos, groundHeight);
-
-    #Setup scene
-    Scene.setColor(Color.black());
-
-    Scene.add(shadow);
     Scene.add(ball);
+
+    Scene.setColor(Color.black());
 }
 
 
