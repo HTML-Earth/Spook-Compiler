@@ -25,6 +25,7 @@ public class TypeChecking {
         this.hashMapStack = new Stack<>();
 
         this.listOfPredefinedClasses = new ArrayList<>();
+        this.listOfPredefinedClasses.add("Empty");
         this.listOfPredefinedClasses.add("Circle");
         this.listOfPredefinedClasses.add("Rectangle");
         this.listOfPredefinedClasses.add("Triangle");

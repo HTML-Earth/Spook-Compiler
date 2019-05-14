@@ -12,7 +12,7 @@ public class Circle extends Shape {
     private ObjectArgumentNode radius;
 
     public Circle (String name, ArrayList<ObjectArgumentNode> argumentNodes) {
-        classType = Enums.ClassType.CIRCLE;
+        classType = Enums.ClassType.EMPTY;
 
         this.name = name;
         this.position = Vector2.zero();
