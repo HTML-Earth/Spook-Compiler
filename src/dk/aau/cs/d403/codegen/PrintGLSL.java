@@ -23,7 +23,7 @@ public class PrintGLSL {
             if (varDeclInitNode.getAssignmentNode() != null)
                 sb.append(printAssignment(varDeclInitNode.getAssignmentNode()));
             else
-                sb.append(varDeclInitNode.getVariableName()).append(";");
+                sb.append(varDeclInitNode.getAssignmentNode().getVariableName()).append(";");
         }
 
 

@@ -9,6 +9,7 @@ import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 import java.util.ArrayList;
 
 import static dk.aau.cs.d403.ast.Enums.operatorToString;
+import static dk.aau.cs.d403.ast.Enums.returnTypeToStringGLSL;
 
 public class LowPrecedenceNode implements ASTnode {
     private ArrayList<HighPrecedenceNode> highPrecedenceNodes;
@@ -27,6 +28,16 @@ public class LowPrecedenceNode implements ASTnode {
         }
         this.highPrecedenceNodes = highPrecedenceNodes;
         this.operators = operators;
+    }
+
+    public LowPrecedenceNode(double number) {
+        RealNumberNode realNumberNode = new RealNumberNode(number);
+        ArithOperandNode arithOperandNode = new ArithOperandNode(realNumberNode);
+        AtomPrecedenceNode atomPrecedenceNode = new AtomPrecedenceNode(arithOperandNode);
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+        atomPrecedenceNodes.add(atomPrecedenceNode);
+        this.highPrecedenceNodes = new ArrayList<>();
+        this.highPrecedenceNodes.add(new HighPrecedenceNode(atomPrecedenceNodes));
     }
 
 

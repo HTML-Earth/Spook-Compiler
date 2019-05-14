@@ -3,22 +3,17 @@ package dk.aau.cs.d403.ast.statements;
 import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
+import dk.aau.cs.d403.ast.expressions.ExpressionNode;
 
 public class VarDeclInitNode implements ASTnode {
-    private String variableName;
-    private AssignmentNode assignmentNode;
+    private AssignmentNode assignmentNode; //Is always initialized, if nothing is parsed in becomes 0, false or null as it does in GLSL
 
-    public VarDeclInitNode(String variableName) {
-        this.variableName = variableName;
+    public VarDeclInitNode(String variableName, ExpressionNode expressionNode) {
+        this.assignmentNode = new AssignmentNode(variableName, expressionNode);
     }
 
     public VarDeclInitNode(AssignmentNode assignmentNode) {
         this.assignmentNode = assignmentNode;
-        this.variableName = assignmentNode.getVariableName();
-    }
-
-    public String getVariableName() {
-        return variableName;
     }
 
     public AssignmentNode getAssignmentNode() {
@@ -30,8 +25,6 @@ public class VarDeclInitNode implements ASTnode {
 
         if (assignmentNode != null)
             return assignmentNode.prettyPrint(indent);
-        else if (variableName != null)
-            return variableName;
         else
             throw new CompilerException("Invalid Variable Declaration initialization", codePosition);
     }

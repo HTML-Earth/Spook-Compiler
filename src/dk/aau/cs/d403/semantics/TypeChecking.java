@@ -175,8 +175,8 @@ public class TypeChecking {
         openScope();
 
         // Enter global variables for every block to use
-        enterSymbol(this.listOfPredefinedVariables.get(0).getVarDeclInitNodes().get(0).getVariableName(), this.listOfPredefinedVariables.get(0));
-        enterSymbol(this.listOfPredefinedVariables.get(1).getVarDeclInitNodes().get(0).getVariableName(), this.listOfPredefinedVariables.get(1));
+        enterSymbol(this.listOfPredefinedVariables.get(0).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(0));
+        enterSymbol(this.listOfPredefinedVariables.get(1).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(1));
 
         for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes())
             visitFunctionDeclaration(functionDeclaration);
@@ -220,13 +220,13 @@ public class TypeChecking {
 
         for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
             VariableDeclarationNode retrievedNode = null;
-            if (retrieveSymbol(varDeclInitNode.getVariableName()) != null)
-                retrievedNode = (VariableDeclarationNode) retrieveSymbol(varDeclInitNode.getVariableName());
+            if (retrieveSymbol(varDeclInitNode.getAssignmentNode().getVariableName()) != null)
+                retrievedNode = (VariableDeclarationNode) retrieveSymbol(varDeclInitNode.getAssignmentNode().getVariableName());
 
             if (retrievedNode == null)
-                enterSymbol(varDeclInitNode.getVariableName(), variableDeclarationNode);
+                enterSymbol(varDeclInitNode.getAssignmentNode().getVariableName(), variableDeclarationNode);
             else
-                throw new RuntimeException("ERROR: A variable (" + varDeclInitNode.getVariableName() + ") with the same name already exists.");
+                throw new RuntimeException("ERROR: A variable (" + varDeclInitNode.getAssignmentNode().getVariableName() + ") with the same name already exists.");
 
             if (varDeclInitNode.getAssignmentNode() != null)
                 visitAssignment(varDeclInitNode.getAssignmentNode());
@@ -439,10 +439,16 @@ public class TypeChecking {
 
         // Make sure its boolean expression and block/statement is well typed
         visitExpression(ifStatementNode.getIfBool().getBoolExpressionNode());
-        if (ifStatementNode.getIfBlock().getBlockNode() != null)
+        if (ifStatementNode.getIfBlock().getBlockNode() != null) {
+            //TODO: check if we enter if
+         //   initVariable(ifStatementNode.getIfBlock().getBlockNode().getStatementNodes()); // Return assignments to declarations outside of if
             visitBlock(ifStatementNode.getIfBlock().getBlockNode());
-        else if (ifStatementNode.getIfBlock().getStatementNode() != null)
+        }
+        else if (ifStatementNode.getIfBlock().getStatementNode() != null) {
+            //TODO: check if we enter if
+          //  initVariable(ifStatementNode.getIfBlock().getStatementNode()); // Return assignments to declarations outside of if
             visitStatement(ifStatementNode.getIfBlock().getStatementNode());
+        }
         else if (ifStatementNode.getIfBlock().getReturnNode() != null)
             visitReturnStatement(ifStatementNode.getIfBlock().getReturnNode(), currentFuncNode);
 
@@ -450,10 +456,16 @@ public class TypeChecking {
         if (ifElseStatementNode.getElseIfStatementNodes() != null) {
             for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()) {
                 visitExpression(elseIfStatementNode.getElseIfBool().getBoolExpressionNode());
-                if (elseIfStatementNode.getElseIfBlock().getBlockNode() != null)
+                if (elseIfStatementNode.getElseIfBlock().getBlockNode() != null) {
+                    //TODO: check if we enter if
+           //         initVariable(elseIfStatementNode.getElseIfBlock().getBlockNode().getStatementNodes()); // Return assignments to declarations outside of if
                     visitBlock(elseIfStatementNode.getElseIfBlock().getBlockNode());
-                else if (elseIfStatementNode.getElseIfBlock().getStatementNode() != null)
+                }
+                else if (elseIfStatementNode.getElseIfBlock().getStatementNode() != null) {
+                    //TODO: check if we enter if
+           //         initVariable(elseIfStatementNode.getElseIfBlock().getStatementNode()); // Return assignments to declarations outside of if
                     visitStatement(elseIfStatementNode.getElseIfBlock().getStatementNode());
+                }
                 else if (elseIfStatementNode.getElseIfBlock().getReturnNode() != null)
                     visitReturnStatement(elseIfStatementNode.getElseIfBlock().getReturnNode(), currentFuncNode);
             }
@@ -461,12 +473,40 @@ public class TypeChecking {
 
         // Check if there are Else statements and do the same for it as for Else-if and If
         if (ifElseStatementNode.getElseStatementNode() != null) {
-            if (ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode() != null)
+            if (ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode() != null) {
+                //TODO: check if we enter if
+         //       initVariable(ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode().getStatementNodes()); // Return assignments to declarations outside of if
                 visitBlock(ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode());
-            else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode() != null)
+            }
+            else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode() != null) {
+                //TODO: give random value the value is irrelevant
+       //         initVariable(ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode()); // Return assignments to declarations outside of if
                 visitStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode());
+            }
             else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getReturnNode() != null)
                 visitReturnStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getReturnNode(), currentFuncNode);
+        }
+    }
+
+    private void initVariable(ArrayList<StatementNode> statementNodes) {
+        for (StatementNode statementNode : statementNodes) {
+            initVariable(statementNode);
+        }
+    }
+
+    //Return assignment to declaration
+    private void initVariable(StatementNode statementNode) {
+        if (statementNode instanceof AssignmentNode) {
+            AssignmentNode assignmentNode = (AssignmentNode) statementNode;
+            ASTnode varDecl = retrieveSymbol(assignmentNode.getVariableName());
+            if (varDecl instanceof VariableDeclarationNode) {
+                VarDeclInitNode newAssign = new VarDeclInitNode(assignmentNode);
+                ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
+                varDeclInitNodes.add(newAssign);
+                VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) varDecl;
+                variableDeclarationNode.setVarDeclInitNodes(varDeclInitNodes);
+                enterSymbol(assignmentNode.getVariableName(), variableDeclarationNode);
+            }
         }
     }
 
