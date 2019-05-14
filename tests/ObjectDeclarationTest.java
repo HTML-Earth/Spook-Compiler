@@ -7,6 +7,7 @@ import dk.aau.cs.d403.semantics.TypeChecking;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -30,9 +31,11 @@ public class ObjectDeclarationTest {
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
-            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+            Assertions.assertThrows(CompilerException.class, () -> {
+                ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+                typeChecking.visitProgram(programNode);
+            });
 
-            typeChecking.visitProgram(programNode);
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,9 +49,10 @@ public class ObjectDeclarationTest {
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
-            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
-
-            typeChecking.visitProgram(programNode);
+            Assertions.assertThrows(CompilerException.class, () -> {
+                ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+                typeChecking.visitProgram(programNode);
+            });
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,9 +66,8 @@ public class ObjectDeclarationTest {
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
-            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
-
             assertThrows(CompilerException.class, ()->{
+                ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
                 typeChecking.visitProgram(programNode);
             });
         }catch (IOException e) {

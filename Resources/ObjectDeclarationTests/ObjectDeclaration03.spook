@@ -1,3 +1,6 @@
 Shader {
 CustomShape shape1 = ();
 }
+
+#   Throws a Compiler exception:
+#   Line 2:21 - Invalid Object argument(s) in object constructor
