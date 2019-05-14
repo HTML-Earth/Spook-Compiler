@@ -57,6 +57,6 @@ public class Square extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (SquareCheck(" + spaceName + ", " + name + "))" + getColorApplication();
+        return "if (SquareCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
     }
 }

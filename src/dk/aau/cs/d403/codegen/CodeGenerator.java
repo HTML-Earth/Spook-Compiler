@@ -6,7 +6,9 @@ import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
 import dk.aau.cs.d403.spook.*;
+import dk.aau.cs.d403.spook.fill.CircleGradient;
 import dk.aau.cs.d403.spook.color.Color;
+import dk.aau.cs.d403.spook.fill.Fill;
 import dk.aau.cs.d403.spook.shapes.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -58,8 +60,14 @@ public class CodeGenerator {
 
     private void generatePrototypes() {
         for (String type : usedClasses) {
-            sb.append(getClassCode(type, "getCheckFunctionSignature"));
-            sb.append(";\n");
+            if (type.contains("Gradient")) {
+                sb.append(getClassCode(type, "getBlendFunctionSignature"));
+                sb.append(";\n");
+            }
+            else {
+                sb.append(getClassCode(type, "getCheckFunctionSignature"));
+                sb.append(";\n");
+            }
         }
 
         sb.append(Shape.getRotationFunctionSignature2D());
@@ -73,10 +81,18 @@ public class CodeGenerator {
 
     private void generateFunctions() {
         for (String type : usedClasses) {
-            sb.append(getClassCode(type, "getCheckFunctionSignature"));
-            sb.append("{\n\t");
-            sb.append(getClassCode(type, "getCheckFunctionBody"));
-            sb.append("\n}\n");
+            if (type.contains("Gradient")) {
+                sb.append(getClassCode(type, "getBlendFunctionSignature"));
+                sb.append("{\n\t");
+                sb.append(getClassCode(type, "getBlendFunctionBody"));
+                sb.append("\n}\n");
+            }
+            else {
+                sb.append(getClassCode(type, "getCheckFunctionSignature"));
+                sb.append("{\n\t");
+                sb.append(getClassCode(type, "getCheckFunctionBody"));
+                sb.append("\n}\n");
+            }
         }
 
         sb.append(Shape.getRotationFunctionSignature2D());
@@ -125,32 +141,37 @@ public class CodeGenerator {
 
     private void generateChecks(SpookObject parent) {
         for (int i = 0; i < parent.getChildren().size(); i++) {
-            String objectName = parent.getChildren().get(i).getName();
-            String newSpace = objectName + "Space";
+            SpookObject child = parent.getChildren().get(i);
 
-            sb.append("\tvec2 ").append(newSpace);
+            if (child instanceof Shape) {
+                String objectName = child.getName();
+                String newSpace = objectName + "Space";
 
-            if (parent instanceof Scene)
-                sb.append(" = fragCoord;\n\t");
-            else
-                sb.append(" = ").append(parent.getName()).append("Space;\n\t");
+                sb.append("\tvec2 ").append(newSpace);
 
-            sb.append(newSpace).append(" -= ").append(objectName).append(".pos;\n\t");
+                if (parent instanceof Scene)
+                    sb.append(" = fragCoord;\n\t");
+                else
+                    sb.append(" = ").append(parent.getName()).append("Space;\n\t");
 
-            sb.append(newSpace).append(" = scale2D(");
-            sb.append(objectName).append(".scale");
-            sb.append(") * ").append(newSpace).append(";\n\t");
+                sb.append(newSpace).append(" -= ").append(objectName).append(".pos;\n\t");
 
-            sb.append(newSpace).append(" = rotate2D(");
-            sb.append(objectName).append(".rot");
-            sb.append(") * ").append(newSpace).append(";\n\t");
+                sb.append(newSpace).append(" = scale2D(");
+                sb.append(objectName).append(".scale");
+                sb.append(") * ").append(newSpace).append(";\n\t");
 
-            sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
+                sb.append(newSpace).append(" = rotate2D(");
+                sb.append(objectName).append(".rot");
+                sb.append(") * ").append(newSpace).append(";\n\t");
 
-            sb.append(((Shape)parent.getChildren().get(i)).getCheckCall(newSpace));
-            sb.append("\n\n");
+                sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
 
-            generateChecks(parent.getChildren().get(i));
+                sb.append(((Shape)child).getCheckCall(newSpace));
+
+                sb.append("\n\n");
+
+                generateChecks(parent.getChildren().get(i));
+            }
         }
     }
 
@@ -555,6 +576,9 @@ public class CodeGenerator {
                 break;
             case "Polygon":
                 object = new Polygon(variableName, argumentNodes);
+                break;
+            case "CircleGradient":
+                object = new CircleGradient(variableName, argumentNodes);
                 break;
             default:
                 throw new CompilerException("Invalid object declaration", objectDeclarationNode.getCodePosition());

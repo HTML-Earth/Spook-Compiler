@@ -57,6 +57,6 @@ public class Rectangle extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (RectangleCheck(" + spaceName + ", " + name + "))" + getColorApplication();
+        return "if (RectangleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
     }
 }

@@ -96,6 +96,6 @@ public class Polygon extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (PolygonCheck(" + spaceName + ", " + name + ", " + points.size() + "))" + getColorApplication();
+        return "if (PolygonCheck(" + spaceName + ", " + name + ", " + points.size() + ")) {\n" + getColorApplication(spaceName) + "\t}";
     }
 }

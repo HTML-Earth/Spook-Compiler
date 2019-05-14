@@ -56,6 +56,6 @@ public class Circle extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (CircleCheck(" + spaceName + ", " + name + "))" + getColorApplication();
+        return "if (CircleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
     }
 }
