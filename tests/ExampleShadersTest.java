@@ -114,6 +114,11 @@ public class ExampleShadersTest {
     }
 
     @Test
+    void Triangles() {
+        testShader("Triangles");
+    }
+
+    @Test
     void Uniforms() {
         testShader("Uniforms");
     }

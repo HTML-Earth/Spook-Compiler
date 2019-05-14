@@ -38,7 +38,8 @@ public abstract class Shape extends SpookObject implements Colorable {
         return "return mat2(1.0/scale.x, 0.0, 0.0, 1.0/scale.y);";
     }
 
-    protected String getColorApplication(String spaceName) {
+    @Override
+    public String getColorApplication(String spaceName) {
         StringBuilder childFillColors = new StringBuilder();
         for (SpookObject child : children) {
             if (child instanceof Fill) {
