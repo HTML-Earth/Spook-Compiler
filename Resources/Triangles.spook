@@ -1,0 +1,32 @@
+Shader {
+    Rectangle rect = (Screen.x, Screen.y, Color.black());
+    rect.setPosition(Screen.x / 2, Screen.y / 2);
+    Scene.add(rect);
+    CircleGradient gradient = (Screen.x / 2, Color.black(), Color.olive());
+    gradient.setParent(rect);
+
+    Num pulse = abs(sin(Time));
+    Num distance = pulse * 50;
+    Num size = pulse * Screen.y / 4;
+
+    Num triWidth = Screen.y / 8 + size;
+    Num triHeight = triWidth * 0.9;
+
+    Triangle triTop = (triWidth, triHeight, Color.yellow());
+    triTop.setPosition(0, triHeight / 2 + distance);
+
+    Triangle triLeft = (triWidth, triHeight, Color.yellow());
+    triLeft.setPosition(-triWidth / 2 - distance, -triHeight / 2 - distance);
+
+    Triangle triRight = (triWidth, triHeight, Color.yellow());
+    triRight.setPosition(triWidth / 2 + distance, -triHeight / 2 - distance);
+
+    Empty triforce = (Screen.x / 2, Screen.y / 2);
+    #triforce.setRotation(mod(Time * 90, 360));
+
+    triTop.setParent(triforce);
+    triLeft.setParent(triforce);
+    triRight.setParent(triforce);
+
+    Scene.add(triforce);
+}

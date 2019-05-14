@@ -91,6 +91,7 @@ public class Enums {
     }
 
     public enum ClassType {
+        EMPTY,
         CIRCLE,
         RECTANGLE,
         SQUARE,

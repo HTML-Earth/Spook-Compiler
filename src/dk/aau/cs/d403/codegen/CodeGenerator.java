@@ -60,7 +60,10 @@ public class CodeGenerator {
 
     private void generatePrototypes() {
         for (String type : usedClasses) {
-            if (type.contains("Gradient")) {
+            if (type.equals("Empty")) {
+
+            }
+            else if (type.contains("Gradient")) {
                 sb.append(getClassCode(type, "getBlendFunctionSignature"));
                 sb.append(";\n");
             }
@@ -81,7 +84,10 @@ public class CodeGenerator {
 
     private void generateFunctions() {
         for (String type : usedClasses) {
-            if (type.contains("Gradient")) {
+            if (type.equals("Empty")) {
+
+            }
+            else if (type.contains("Gradient")) {
                 sb.append(getClassCode(type, "getBlendFunctionSignature"));
                 sb.append("{\n\t");
                 sb.append(getClassCode(type, "getBlendFunctionBody"));
@@ -143,7 +149,8 @@ public class CodeGenerator {
         for (int i = 0; i < parent.getChildren().size(); i++) {
             SpookObject child = parent.getChildren().get(i);
 
-            if (child instanceof Shape) {
+            //Shapes and Empty
+            if (!(child instanceof Fill)) {
                 String objectName = child.getName();
                 String newSpace = objectName + "Space";
 
@@ -166,7 +173,10 @@ public class CodeGenerator {
 
                 sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
 
-                sb.append(((Shape)child).getCheckCall(newSpace));
+                //Only Shapes
+                if (child instanceof Shape){
+                    sb.append(((Shape)child).getCheckCall(newSpace));
+                }
 
                 sb.append("\n\n");
 
@@ -562,6 +572,9 @@ public class CodeGenerator {
         SpookObject object;
 
         switch (className) {
+            case "Empty":
+                object = new Empty(variableName, argumentNodes);
+                break;
             case "Circle":
                 object = new Circle(variableName, argumentNodes);
                 break;
