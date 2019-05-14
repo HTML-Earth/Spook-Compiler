@@ -492,18 +492,34 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 return functionDeclarationNode;
             }
         }
+        else if (ctx.className() != null) {
+            String className = ctx.className().getText();
+            if (ctx.functionArgs() != null) {
+                ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
+
+                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(className, ctx.functionName().getText(), functionArgNodes, (BlockNode) visitBlock(ctx.block()));
+                functionDeclarationNode.setCodePosition(getCodePosition(ctx));
+
+                return functionDeclarationNode;
+            } else {
+                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(className, ctx.functionName().getText(), (BlockNode) visitBlock(ctx.block()));
+                functionDeclarationNode.setCodePosition(getCodePosition(ctx));
+
+                return functionDeclarationNode;
+            }
+        }
         else {
             if (ctx.functionArgs() != null) {
                 ArrayList<FunctionArgNode> functionArgNodes = visitAllFunctionArgs(ctx.functionArgs());
 
-                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(null, ctx.functionName().getText(), functionArgNodes, (BlockNode)visitBlock(ctx.block()));
+                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(ctx.functionName().getText(), functionArgNodes, (BlockNode)visitBlock(ctx.block()));
 
                 functionDeclarationNode.setCodePosition(getCodePosition(ctx));
 
                 return functionDeclarationNode;
             }
             else {
-                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(null, ctx.functionName().getText(), (BlockNode)visitBlock(ctx.block()));
+                FunctionDeclarationNode functionDeclarationNode = new FunctionDeclarationNode(ctx.functionName().getText(), (BlockNode)visitBlock(ctx.block()));
                 functionDeclarationNode.setCodePosition(getCodePosition(ctx));
 
                 return functionDeclarationNode;
@@ -972,6 +988,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                         )
                     )
                 );
+                fixedExpressionNode1.setCodePosition(getCodePosition(ctx));
             }
             else if (expressionNode1.getVariableDeclarationNode() != null) {
                 if (expressionNode1.getVariableDeclarationNode().getVarDeclInitNodes() != null) {
@@ -988,6 +1005,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                     fixedExpressionNode1 = new ForLoopExpressionNode(new VariableDeclarationNode(
                         expressionNode1.getVariableDeclarationNode().getDataType(), fixedVarDeclInitNodes
                     ));
+                    fixedExpressionNode1.setCodePosition(getCodePosition(ctx));
                 }
             }
             else if (expressionNode1.getAssignmentNode() != null) {
@@ -995,6 +1013,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 fixedExpressionNode1 = new ForLoopExpressionNode(new AssignmentNode(
                         assignmentNode.getVariableName(), fixedExpressionNode
                 ));
+                fixedExpressionNode1.setCodePosition(getCodePosition(ctx));
             }
 
             ForLoopExpressionNode fixedExpressionNode2 = new ForLoopExpressionNode(
@@ -1004,6 +1023,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                     )
                 )
             );
+            fixedExpressionNode2.setCodePosition(getCodePosition(ctx));
 
             if (ctx.conditionalBlock() != null) {
                 conditionalBlockNode = (ConditionalBlockNode) visitConditionalBlock(ctx.conditionalBlock());
@@ -1180,7 +1200,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     private double evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
         if (expressionNode.getAssignmentNode() != null)
             return evaluateAssignment(expressionNode.getAssignmentNode());
-        else if (expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode() != null)
+        else if (expressionNode.getAtomPrecedenceNode() != null && expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode() != null)
             return expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode().getNumber();
         else if (expressionNode.getVariableDeclarationNode() != null)
             return evaluateVariableDeclaration(expressionNode.getVariableDeclarationNode());

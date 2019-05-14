@@ -9,12 +9,26 @@ import java.util.ArrayList;
 
 public class FunctionDeclarationNode implements ASTnode {
     private Enums.DataType returnType;
+    private String className;
     private String functionName;
     private ArrayList<FunctionArgNode> functionArgNodes;
     private BlockNode blockNode;
 
     public FunctionDeclarationNode(Enums.DataType returnType, String functionName, BlockNode blockNode) {
         this.returnType = returnType;
+        this.functionName = functionName;
+        this.blockNode = blockNode;
+    }
+
+    public FunctionDeclarationNode(String className, String functionName, ArrayList<FunctionArgNode> functionArgNodes, BlockNode blockNode) {
+        this.className = className;
+        this.functionName = functionName;
+        this.functionArgNodes = functionArgNodes;
+        this.blockNode = blockNode;
+    }
+
+    public FunctionDeclarationNode(String className, String functionName, BlockNode blockNode) {
+        this.className = className;
         this.functionName = functionName;
         this.blockNode = blockNode;
     }
@@ -54,12 +68,19 @@ public class FunctionDeclarationNode implements ASTnode {
         return functionArgNodes;
     }
 
+    public String getClassName() {
+        return className;
+    }
+
+    //TODO: kom tilbage
     @Override
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
         if (returnType == null)
             sb.append("Void");
+        else if (className != null)
+            sb.append(className);
         else
             sb.append(Enums.dataTypeToStringSpook(returnType));
 

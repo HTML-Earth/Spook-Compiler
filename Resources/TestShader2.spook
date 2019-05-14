@@ -22,6 +22,7 @@ Shader{
   #Get in Shape
   Rectangle red = (height, length, Color.green());
   Bulletbill billy = (height, length, Color.blue());
+  billy.parent();
   if (true) {
     radius = 46 + 100 / 2 + 4; #Det 100
   } else
@@ -50,15 +51,17 @@ Class Bulletbill extends Shape{
   Color shadow = (105, 105, 105);
 
   #Constructor
-  Bulletbill (Num height, Num length, Color color) {
-    this.height = height;
-    this.length = length;
-    super.color = color;
+  #Bulletbill (Num height, Num length, Color color) {
+  #  this.height = height;
+  #  this.length = length;
+  #  super.color = color;
+  #}
 
-    body = (length, height, super.color);
-    head = (radius, super.color);
-    head.position.x = body.position.x+length;
-    head.position.y = body.position.y+radius;
+  Void parent() {
+      body = (length, height, super.color);
+      head = (radius, super.color);
+      head.setParent(body);
+      head.setPosition(length, height);
   }
 
   #Create shadow func
@@ -73,7 +76,7 @@ Class Bulletbill extends Shape{
     Scale(billShadow.head.y, 0,9);
 
     #Place shadow beneath original figure
-    billShadow.body.position -= billShadow.body.height + 100;
+    billShadow.body.position = billShadow.body.position - billShadow.body.height + 100;
 
     return billShadow;
   }
