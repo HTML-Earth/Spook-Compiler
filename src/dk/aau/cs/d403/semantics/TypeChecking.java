@@ -435,18 +435,12 @@ public class TypeChecking {
     private void visitIfElseStatement(IfElseStatementNode ifElseStatementNode) {
         IfStatementNode ifStatementNode = ifElseStatementNode.getIfStatementNode();
 
-        //TODO: Fix bug with initializing variables (File: IfElseSlaaGraesTest.spook)
-
         // Make sure its boolean expression and block/statement is well typed
         visitExpression(ifStatementNode.getIfBool().getBoolExpressionNode());
         if (ifStatementNode.getIfBlock().getBlockNode() != null) {
-            //TODO: check if we enter if
-         //   initVariable(ifStatementNode.getIfBlock().getBlockNode().getStatementNodes()); // Return assignments to declarations outside of if
             visitBlock(ifStatementNode.getIfBlock().getBlockNode());
         }
         else if (ifStatementNode.getIfBlock().getStatementNode() != null) {
-            //TODO: check if we enter if
-          //  initVariable(ifStatementNode.getIfBlock().getStatementNode()); // Return assignments to declarations outside of if
             visitStatement(ifStatementNode.getIfBlock().getStatementNode());
         }
         else if (ifStatementNode.getIfBlock().getReturnNode() != null)
@@ -457,13 +451,9 @@ public class TypeChecking {
             for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()) {
                 visitExpression(elseIfStatementNode.getElseIfBool().getBoolExpressionNode());
                 if (elseIfStatementNode.getElseIfBlock().getBlockNode() != null) {
-                    //TODO: check if we enter if
-           //         initVariable(elseIfStatementNode.getElseIfBlock().getBlockNode().getStatementNodes()); // Return assignments to declarations outside of if
                     visitBlock(elseIfStatementNode.getElseIfBlock().getBlockNode());
                 }
                 else if (elseIfStatementNode.getElseIfBlock().getStatementNode() != null) {
-                    //TODO: check if we enter if
-           //         initVariable(elseIfStatementNode.getElseIfBlock().getStatementNode()); // Return assignments to declarations outside of if
                     visitStatement(elseIfStatementNode.getElseIfBlock().getStatementNode());
                 }
                 else if (elseIfStatementNode.getElseIfBlock().getReturnNode() != null)
@@ -474,13 +464,9 @@ public class TypeChecking {
         // Check if there are Else statements and do the same for it as for Else-if and If
         if (ifElseStatementNode.getElseStatementNode() != null) {
             if (ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode() != null) {
-                //TODO: check if we enter if
-         //       initVariable(ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode().getStatementNodes()); // Return assignments to declarations outside of if
                 visitBlock(ifElseStatementNode.getElseStatementNode().getElseBlock().getBlockNode());
             }
             else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode() != null) {
-                //TODO: give random value the value is irrelevant
-       //         initVariable(ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode()); // Return assignments to declarations outside of if
                 visitStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getStatementNode());
             }
             else if (ifElseStatementNode.getElseStatementNode().getElseBlock().getReturnNode() != null)
@@ -488,7 +474,8 @@ public class TypeChecking {
         }
     }
 
-    private void initVariable(ArrayList<StatementNode> statementNodes) {
+    //Was used to pull assignments out of if's an return them to variable declarations
+    /*private void initVariable(ArrayList<StatementNode> statementNodes) {
         for (StatementNode statementNode : statementNodes) {
             initVariable(statementNode);
         }
@@ -509,6 +496,7 @@ public class TypeChecking {
             }
         }
     }
+    */
 
     private void visitForLoopStatement(ForLoopStatementNode forLoopStatementNode) {
         ForLoopExpressionNode forLoopExpression1 = forLoopStatementNode.getForLoopExpressionNode1();
