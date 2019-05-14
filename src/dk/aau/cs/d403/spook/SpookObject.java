@@ -159,6 +159,10 @@ public abstract class SpookObject {
 
     public static Class getClassFromClassType(String className) {
         String packagePath = "dk.aau.cs.d403.spook.shapes";
+
+        if (className.contains("Gradient"))
+            packagePath = "dk.aau.cs.d403.spook.fill";
+
         try {
             return Class.forName(packagePath + "." + className);
         } catch (ClassNotFoundException e) {
