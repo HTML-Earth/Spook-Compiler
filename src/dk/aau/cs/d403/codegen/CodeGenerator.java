@@ -499,7 +499,7 @@ public class CodeGenerator {
 
             //Add variable declaration to HashMap
             for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
-                variables.put(varDeclInitNode.getVariableName(), visitedVariableDeclarationNode);
+                variables.put(varDeclInitNode.getAssignmentNode().getVariableName(), visitedVariableDeclarationNode);
             }
 
             return visitedVariableDeclarationNode;
@@ -515,13 +515,23 @@ public class CodeGenerator {
         ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
 
         for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
-            String variableName = varDeclInitNode.getVariableName();
+            String variableName = varDeclInitNode.getAssignmentNode().getVariableName();
             AssignmentNode assignmentNode = varDeclInitNode.getAssignmentNode();
 
             if (assignmentNode != null)
                 varDeclInitNodes.add(new VarDeclInitNode(visitAssignment(assignmentNode)));
-            else
-                varDeclInitNodes.add(new VarDeclInitNode(variableName));
+            else {
+                if (variableDeclarationNode.getDataType() == Enums.DataType.NUM) {
+                    ArithExpressionNode arithExpressionNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                    varDeclInitNodes.add(new VarDeclInitNode(variableName, arithExpressionNode));
+                }
+                else if (variableDeclarationNode.getDataType() == Enums.DataType.BOOL) {
+                    BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new BoolOperationsNode(new BoolOperationNode(false)));
+                    varDeclInitNodes.add(new VarDeclInitNode(variableName, boolExpressionNode));
+                }
+                else
+                    varDeclInitNodes.add(new VarDeclInitNode(variableName, null));
+            }
         }
 
         return new VariableDeclarationNode(dataType, varDeclInitNodes);

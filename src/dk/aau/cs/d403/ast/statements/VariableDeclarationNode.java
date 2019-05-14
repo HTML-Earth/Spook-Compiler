@@ -28,6 +28,10 @@ public class VariableDeclarationNode extends DeclarationNode {
         return varDeclInitNodes;
     }
 
+    public void setVarDeclInitNodes(ArrayList<VarDeclInitNode> varDeclInitNodes) {
+        this.varDeclInitNodes = varDeclInitNodes;
+    }
+
     @Override
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();

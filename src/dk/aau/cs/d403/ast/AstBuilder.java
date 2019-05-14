@@ -99,7 +99,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         if (ctx.variableDecl() != null) {
             VariableDeclarationNode visitedVariableDeclarationNode = (VariableDeclarationNode)visitVariableDecl(ctx.variableDecl());
             for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
-                variables.put(varDeclInitNode.getVariableName(), visitedVariableDeclarationNode);
+                variables.put(varDeclInitNode.getAssignmentNode().getVariableName(), visitedVariableDeclarationNode);
             }
             return visitVariableDecl(ctx.variableDecl());
         }
@@ -116,7 +116,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
 
         for (SpookParser.VariableDeclInitContext variableDeclInit : ctx.variableDeclInit()) {
-            varDeclInitNodes.add((VarDeclInitNode) visitVariableDeclInit(variableDeclInit));
+            varDeclInitNodes.add((VarDeclInitNode) visitVariableDeclInit(variableDeclInit, getDataType(ctx.dataType())));
         }
 
         VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(getDataType(ctx.dataType()), varDeclInitNodes);
@@ -124,18 +124,33 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
         return variableDeclarationNode;
     }
 
-    @Override
-    public ASTnode visitVariableDeclInit(SpookParser.VariableDeclInitContext ctx) {
+    public ASTnode visitVariableDeclInit(SpookParser.VariableDeclInitContext ctx, Enums.DataType dataType) {
         if (ctx.assignment() != null) {
             AssignmentNode assignmentNode = (AssignmentNode) visitAssignment(ctx.assignment());
             VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
             varDeclInitNode.setCodePosition(getCodePosition(ctx));
             return varDeclInitNode;
         }
+        //Given only name -> initialize to 0, false or null as GLSL does
         else if (ctx.variableName() != null) {
-            VarDeclInitNode varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText());
-            varDeclInitNode.setCodePosition(getCodePosition(ctx));
-            return varDeclInitNode;
+            VarDeclInitNode varDeclInitNode;
+            if (dataType == Enums.DataType.NUM) {
+                ArithExpressionNode arithExpressionNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), arithExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else if (dataType == Enums.DataType.BOOL) {
+                BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new BoolOperationsNode(new BoolOperationNode(false)));
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), boolExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else {
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), null);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
         }
         else
             throw new CompilerException("Missing Variable Declaration initialization", getCodePosition(ctx));
@@ -1174,7 +1189,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             if (assignmentNode != null)
                 return evaluateAssignment(variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode());
             else
-                return evaluateVariable(variableDeclarationNode.getVarDeclInitNodes().get(0).getVariableName());
+                return evaluateVariable(variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName());
         }
         else
             throw new CompilerException("For loop variable is not Num", variableDeclarationNode.getCodePosition());

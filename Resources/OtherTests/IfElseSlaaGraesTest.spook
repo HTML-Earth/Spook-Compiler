@@ -83,3 +83,17 @@ Bool rainStopped(){
     Bool rain = false;
     return rain;
 }
+
+Num hej() {
+    Num x;
+    Num y;
+
+    if(true)
+        x = 1;
+    else
+        y = 100000;
+
+    return y;
+}
+
+}
