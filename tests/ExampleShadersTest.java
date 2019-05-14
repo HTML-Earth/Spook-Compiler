@@ -104,11 +104,6 @@ public class ExampleShadersTest {
     }
 
     @Test
-    void TestDeclaration() {
-        testShader("TestDeclaration");
-    }
-
-    @Test
     void TestShader() {
         testShader("TestShader");
     }
