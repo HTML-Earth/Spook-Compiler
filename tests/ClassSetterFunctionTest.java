@@ -1,3 +1,4 @@
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.parser.SpookLexer;
@@ -47,7 +48,7 @@ public class ClassSetterFunctionTest {
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
 
-            assertThrows(RuntimeException.class, ()->{
+            assertThrows(CompilerException.class, ()->{
                 typeChecking.visitProgram(programNode);
             });
         }catch (IOException e) {
@@ -65,7 +66,7 @@ public class ClassSetterFunctionTest {
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
 
-            assertThrows(RuntimeException.class, ()->{
+            assertThrows(CompilerException.class, ()->{
                 typeChecking.visitProgram(programNode);
             });
         }catch (IOException e) {
