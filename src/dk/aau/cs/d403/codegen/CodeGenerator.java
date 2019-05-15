@@ -486,6 +486,8 @@ public class CodeGenerator {
             switch (variableName) {
                 case "Time":
                     return new ArithOperandNode("iTime");
+                case "Pi":
+                    return new ArithOperandNode("PI");
                 default:
                     visitVariableName(variableName);
                     return arithOperandNode;
