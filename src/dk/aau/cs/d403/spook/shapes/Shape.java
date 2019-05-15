@@ -5,6 +5,7 @@ import dk.aau.cs.d403.ast.expressions.HighPrecedenceNode;
 import dk.aau.cs.d403.spook.Vector4;
 import dk.aau.cs.d403.spook.color.Colorable;
 import dk.aau.cs.d403.spook.SpookObject;
+import dk.aau.cs.d403.spook.fill.Fill;
 
 public abstract class Shape extends SpookObject implements Colorable {
     protected Vector4 color;
@@ -37,7 +38,15 @@ public abstract class Shape extends SpookObject implements Colorable {
         return "return mat2(1.0/scale.x, 0.0, 0.0, 1.0/scale.y);";
     }
 
-    protected String getColorApplication() {
+    @Override
+    public String getColorApplication(String spaceName) {
+        StringBuilder childFillColors = new StringBuilder();
+        for (SpookObject child : children) {
+            if (child instanceof Fill) {
+                childFillColors.append(((Fill) child).getColorApplication(spaceName));
+            }
+        }
+
         //IF ALPHA IS FULL (1)
         if (color.getW().getLowPrecedence().getHighPrecedenceNodes().size() == 1) {
             HighPrecedenceNode highPrecedenceNode = color.getW().getLowPrecedence().getHighPrecedenceNodes().get(0);
@@ -46,9 +55,7 @@ public abstract class Shape extends SpookObject implements Colorable {
                 if (atomPrecedenceNode.getOperator() == null) {
                     if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
                         if (atomPrecedenceNode.getOperand().getRealNumberNode().getNumber() == 1) {
-                            return " {\n\t\t" +
-                                    "fragColor = " + name + ".color;\n\t" +
-                                    "}";
+                            return "\t\tfragColor = " + name + ".color;\n" + childFillColors.toString();
                         }
                     }
                 }
@@ -56,8 +63,6 @@ public abstract class Shape extends SpookObject implements Colorable {
         }
 
         //IF ALPHA CAN BE LESS THAN 1
-        return " {\n\t\t" +
-                "fragColor = mix(fragColor, " + name + ".color, " + name + ".color.a);\n\t" +
-                "}";
+        return "\t\tfragColor = mix(fragColor, " + name + ".color, " + name + ".color.a);\n" + childFillColors.toString();
     }
 }
