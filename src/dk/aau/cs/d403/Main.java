@@ -46,7 +46,7 @@ public class Main {
                         case "c": case "copy": case "clipboard": case "pasta":
                             copy = true;
                             break;
-                        case "o":
+                        case "o": case "output":
                             nextArgIsOutputFile = true;
                             break;
                         default:
