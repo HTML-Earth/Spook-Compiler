@@ -20,6 +20,11 @@ public class LowPrecedenceNode implements ASTnode {
         this.highPrecedenceNodes = highPrecedenceNodes;
     }
 
+    public LowPrecedenceNode(HighPrecedenceNode highPrecedenceNode) {
+        this.highPrecedenceNodes = new ArrayList<>();
+        this.highPrecedenceNodes.add(highPrecedenceNode);
+    }
+
     //Low -> High (Operator High)*
     public LowPrecedenceNode(ArrayList<HighPrecedenceNode> highPrecedenceNodes, ArrayList<Enums.Operator> operators) {
         //Check for illegal operators

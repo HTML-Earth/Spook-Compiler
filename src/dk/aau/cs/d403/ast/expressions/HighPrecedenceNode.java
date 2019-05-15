@@ -19,6 +19,11 @@ public class HighPrecedenceNode implements ASTnode {
         this.atomPrecedenceNodes = atomPrecedenceNodes;
     }
 
+    public HighPrecedenceNode(AtomPrecedenceNode atomPrecedenceNode) {
+        this.atomPrecedenceNodes = new ArrayList<>();
+        this.atomPrecedenceNodes.add(atomPrecedenceNode);
+    }
+
     //High -> Atom (Operator Atom)*
     public HighPrecedenceNode(ArrayList<AtomPrecedenceNode> atomPrecedenceNodes, ArrayList<Enums.Operator> operators) {
         //Check for low precedence operators
@@ -70,11 +75,11 @@ public class HighPrecedenceNode implements ASTnode {
                 }
                 return sb.toString();
             } else
-                return "HighPrecedenceNode receives empty list";
+                throw new CompilerException("HighPrecedenceNode receives empty list", getCodePosition());
         } else if (atomPrecedenceNodes != null && !atomPrecedenceNodes.isEmpty()) {
             return atomPrecedenceNodes.get(0).prettyPrint(indent);
         } else
-            return "Invalid High Precedence Operation";
+            throw new CompilerException("Invalid High Precedence Operation", getCodePosition());
     }
 
     private CodePosition codePosition;

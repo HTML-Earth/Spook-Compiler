@@ -122,12 +122,13 @@ public class PrintGLSL {
                     }
                 }
                 return sb.toString();
-            } else
-                return "HighPrecedenceNode receives empty list";
+            }
+            else
+                throw new CompilerException("HighPrecedenceNode receives empty list", highPrecedenceNode.getCodePosition());
         } else if (atomPrecedenceNodes != null && !atomPrecedenceNodes.isEmpty()) {
             return printAtomPrecedence(atomPrecedenceNodes.get(0));
         } else
-            return "Invalid High Precedence Operation";
+            throw new CompilerException("Invalid High Precedence Operation", highPrecedenceNode.getCodePosition());
     }
 
     public static String printAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {

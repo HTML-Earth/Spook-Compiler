@@ -91,6 +91,12 @@ public class Main {
         AstBuilder builder = new AstBuilder();
         ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
 
+        // Pretty printing
+        if (prettyPrint) {
+            System.out.println("Pretty Print:");
+            System.out.println(ast.prettyPrint(0));
+        }
+
         // CONTEXT ANALYSIS
         TypeChecking typeChecking = new TypeChecking();
         typeChecking.visitProgram(ast);
@@ -107,12 +113,6 @@ public class Main {
         CodeGenerator codeGenerator = new CodeGenerator();
         generatedCode = "// " + inputFileName + "\n// Compiled with Spook Compiler \n// https://github.com/HTML-Earth/Spook-Compiler\n\n";
         generatedCode = generatedCode + codeGenerator.GenerateGLSL(ast);
-
-        // Pretty printing
-        if (prettyPrint) {
-            System.out.println("Pretty Print:");
-            System.out.println(ast.prettyPrint(0));
-        }
 
         // Print the code to the terminal
         if (print) {
