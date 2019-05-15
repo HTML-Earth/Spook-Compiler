@@ -6,11 +6,11 @@ Shader {
     Num triWidth = Screen.y / 8 + size;
     Num triHeight = triWidth * 0.9;
 
-    Num rotation = smoothstep(1, 5, mod(Time, PI * 2)) * 360;
+    Num rotation = smoothstep(1, 5, mod(Time, Pi * 2)) * 360;
     Num panWidth = Screen.x * 2;
     Num panOffset = Screen.x / 2;
     Num centerPos = Screen.x / 2;
-    Num triforcePan = mod(panOffset + centerPos + smoothstep(1, 5, mod(Time, PI * 2)) * panWidth, panWidth) - panOffset;
+    Num triforcePan = mod(panOffset + centerPos + smoothstep(1, 5, mod(Time, Pi * 2)) * panWidth, panWidth) - panOffset;
 
     Empty triforce = (triforcePan, Screen.y / 2);
     Scene.add(triforce);
@@ -39,10 +39,10 @@ Shader {
     Vec4 courageDark   = (0.18, 0.44, 0.13, 1);
     Vec4 brightShine   = (1, 1, 0, 1);
 
-    Num bgRotationTime = mod(Time, PI * 6);
+    Num bgRotationTime = mod(Time, Pi * 6);
     Num bgRotation1 = smoothstep(2, 4, bgRotationTime);
-    Num bgRotation2 = smoothstep(2 + PI * 2, 4 + PI * 2, bgRotationTime);
-    Num bgRotation3 = smoothstep(2 + PI * 4, 4 + PI * 4, bgRotationTime);
+    Num bgRotation2 = smoothstep(2 + Pi * 2, 4 + Pi * 2, bgRotationTime);
+    Num bgRotation3 = smoothstep(2 + Pi * 4, 4 + Pi * 4, bgRotationTime);
 
     Vec4 darkRotation2 = mix(courageDark, powerDark, bgRotation3);
     Vec4 darkRotation1 = mix(wisdomDark, darkRotation2, bgRotation2);
