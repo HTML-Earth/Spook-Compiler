@@ -403,7 +403,7 @@ public class TypeChecking {
                 // predefined function
             }
             else
-                throw new CompilerException("ERROR: Non-object function (" + functionName + ") does not exist.", retrieveSymbol(functionName).getCodePosition());
+                throw new CompilerException("ERROR: Non-object function (" + functionName + ") does not exist.", nonObjectFunctionCallNode.getCodePosition());
         }
     }
 
