@@ -292,6 +292,11 @@ public class TypeChecking {
                             visitVector3Expression(currentArg.getVector3ExpressionNode());
                         else if (currentArg.getVector4ExpressionNode() != null)
                             visitVector4Expression(currentArg.getVector4ExpressionNode());
+                        else if (currentArg.getRealNumberNode() != null || currentArg.getSwizzleNode() != null) {
+                            //do nothing
+                        }
+                        else
+                            throw new CompilerException("ERROR Invalid Constructor Argument in (" + objectContructorNode.prettyPrint(0) + ")");
                     }
                 }
             }
