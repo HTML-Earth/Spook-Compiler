@@ -13,12 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
-    private HashMap<String, VariableDeclarationNode> variables;
 
     @Override
     public ASTnode visitProgram(SpookParser.ProgramContext ctx) {
-        variables = new HashMap<>();
-
         //Main shader function
         MainNode mainNode = (MainNode)visitMain(ctx.main());
         ArrayList<ClassDeclarationNode> classDeclarationNodes = new ArrayList<>();
@@ -92,10 +89,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitDeclaration(SpookParser.DeclarationContext ctx) {
         if (ctx.variableDecl() != null) {
-            VariableDeclarationNode visitedVariableDeclarationNode = (VariableDeclarationNode)visitVariableDecl(ctx.variableDecl());
-            for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
-                variables.put(varDeclInitNode.getAssignmentNode().getVariableName(), visitedVariableDeclarationNode);
-            }
             return visitVariableDecl(ctx.variableDecl());
         }
         else if (ctx.objectDecl() != null) {
