@@ -2,7 +2,6 @@ Shader {
     Num xPos = Screen.x / 2;
     Num yPos = Screen.y / 2;
 
-    Circle c = (10, Color.blue());
 
     for (Num i = 1 to 5) {
         Circle c = (25, Color.red());
@@ -10,6 +9,7 @@ Shader {
         Scene.add(c);
     }
 
+    Circle c = (10, Color.blue());
     c.setPosition(0,0);
     Scene.add(c);
 

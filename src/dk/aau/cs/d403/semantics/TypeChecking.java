@@ -225,8 +225,10 @@ public class TypeChecking {
 
             if (retrievedNode == null)
                 enterSymbol(varDeclInitNode.getAssignmentNode().getVariableName(), variableDeclarationNode);
+            //else if (retrievedNode.getCodePosition() == null)
+             //   System.out.println(retrievedNode.prettyPrint(0));
             else
-                throw new CompilerException("ERROR: A variable (" + varDeclInitNode.getAssignmentNode().getVariableName() + ") with the same name already exists.", variableDeclarationNode.getCodePosition());
+                throw new CompilerException("ERROR: A variable (" + varDeclInitNode.getAssignmentNode().getVariableName() + ") with the same name already exists.", retrievedNode.getCodePosition());
 
             if (varDeclInitNode.getAssignmentNode() != null)
                 visitAssignment(varDeclInitNode.getAssignmentNode());
@@ -533,6 +535,9 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: Variable is of an illegal type for the ForLoop.", variableDeclarationNode.getCodePosition());
             }
         }
+        else if (forLoopExpressionNode.getAtomPrecedenceNode() != null) {
+            //Type is ok
+        }
         else
             throw new CompilerException("ERROR: Invalid ForLoop expression", forLoopExpressionNode.getCodePosition());
     }
@@ -671,7 +676,7 @@ public class TypeChecking {
         LowPrecedenceNode lowPrecedenceNode;
         if (expressionNode instanceof ArithExpressionNode) {
             lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
-            visitLowPrecedenceNode(lowPrecedenceNode);
+            visitLowPrecedenceNode(lowPrecedenceNode); //TODO: this does nothing?
         }
         else if (expressionNode instanceof BoolExpressionNode)
             visitBoolExpression((BoolExpressionNode) expressionNode);
@@ -863,7 +868,6 @@ public class TypeChecking {
         if (retrieveSymbol(variableName) == null)
             throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared", retrieveSymbol(variableName).getCodePosition());
         else if (retrieveSymbol(variableName) != null) {
-            //TODO: retrieve all? assignments in ifs
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
             if (variableDeclarationNode != null)
