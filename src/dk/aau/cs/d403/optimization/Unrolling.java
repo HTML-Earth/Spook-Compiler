@@ -4,11 +4,72 @@ import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
+import dk.aau.cs.d403.ast.structure.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Unrolling {
-    public ArrayList<ForLoopStatementNode> unrollForLoop(ForLoopStatementNode forLoopStatementNode) {
+    private HashMap<String, VariableDeclarationNode> variables;
+
+    public ProgramNode unrollProgram(ProgramNode programNode) {
+        variables = new HashMap<>();
+
+        ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
+        ArrayList<ClassDeclarationNode> classDeclarationNodes;
+        MainNode mainNode;
+
+        functionDeclarationNodes = programNode.getFunctionDeclarationNodes();
+        classDeclarationNodes = programNode.getClassDeclarationNodes();
+        mainNode = unrollMainNode(programNode.getMainNode());
+
+        ProgramNode newProgramNode = new ProgramNode(mainNode, classDeclarationNodes, functionDeclarationNodes);
+        newProgramNode.setCodePosition(programNode.getCodePosition());
+
+        return newProgramNode;
+    }
+
+    private MainNode unrollMainNode(MainNode mainNode) {
+        BlockNode blockNode = unrollBlockNode(mainNode.getBlockNode());
+        MainNode newMainNode = new MainNode(blockNode);
+        newMainNode.setCodePosition(mainNode.getCodePosition());
+        return newMainNode;
+    }
+
+    private BlockNode unrollBlockNode(BlockNode blockNode) {
+        ArrayList<StatementNode> statementNodes = unrollStatementNodes(blockNode.getStatementNodes());
+        BlockNode newBlockNode = new BlockNode(statementNodes);
+        newBlockNode.setCodePosition(blockNode.getCodePosition());
+        return newBlockNode;
+    }
+
+    private ArrayList<StatementNode> unrollStatementNodes(ArrayList<StatementNode> statementNodes) {
+        ArrayList<StatementNode> newStatementNodes = new ArrayList<>();
+
+        for (StatementNode statementNode : statementNodes) {
+            if (statementNode instanceof ForLoopStatementNode)
+                newStatementNodes.addAll(unrollForLoop((ForLoopStatementNode)statementNode));
+            else if (statementNode instanceof DeclarationNode)
+                newStatementNodes.add(unrollDeclaration((DeclarationNode)statementNode));
+            else
+                newStatementNodes.add(statementNode);
+        }
+
+        return newStatementNodes;
+    }
+
+    private DeclarationNode unrollDeclaration(DeclarationNode declarationNode) {
+        if (declarationNode instanceof VariableDeclarationNode) {
+            VariableDeclarationNode visitedVariableDeclarationNode = (VariableDeclarationNode)declarationNode;
+            for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
+                variables.put(varDeclInitNode.getAssignmentNode().getVariableName(), visitedVariableDeclarationNode);
+            }
+        }
+
+        return declarationNode;
+    }
+
+    private ArrayList<ForLoopStatementNode> unrollForLoop(ForLoopStatementNode forLoopStatementNode) {
         ArrayList<ForLoopStatementNode> forLoopStatementNodes = new ArrayList<>();
 
         ConditionalBlockNode conditionalBlockNode = forLoopStatementNode.getConditionalBlockNode();
@@ -143,10 +204,10 @@ public class Unrolling {
     }
 
     private double evaluateVariable(String variableName) {
-        //VariableDeclarationNode variableDeclarationNode = variables.get(variableName); //TODO: variable list
-        //if (variableDeclarationNode != null)
-        //    return evaluateVariableDeclaration(variableDeclarationNode);
-        //else
+        VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
+        if (variableDeclarationNode != null)
+            return evaluateVariableDeclaration(variableDeclarationNode);
+        else
             throw new RuntimeException("Variable " + variableName + " not found");
     }
 
