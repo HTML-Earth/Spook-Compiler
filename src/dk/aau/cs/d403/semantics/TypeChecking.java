@@ -252,12 +252,52 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: An object (" + objectType + ") is declared with a non-existing class.", objectDeclarationNode.getCodePosition());
         }
 
+        //Check if the constructor is well typed
+        if (objectDeclarationNode.getObjectContructorNode() != null)
+            visitObjectConstructor(objectDeclarationNode.getObjectContructorNode());
+
         if (retrieveSymbol(variableName) == null)
             enterSymbol(variableName, objectDeclarationNode);
         else if (retrievedNode != null && !retrievedNode.getClassName().equals(objectType))
             enterSymbol(variableName, objectDeclarationNode);
         else
             throw new CompilerException("ERROR: An object (" + variableName + ") is already declared with the same name and type.", retrieveSymbol(variableName).getCodePosition());
+    }
+
+    private void visitObjectConstructor(ObjectContructorNode objectContructorNode) {
+        if (objectContructorNode.getNonObjectFunctionCallNode() != null)
+            visitNonObjectFunctionCall(objectContructorNode.getNonObjectFunctionCallNode());
+        else if (objectContructorNode.getObjectFunctionCallNode() != null)
+            visitObjectFunctionCall(objectContructorNode.getObjectFunctionCallNode());
+        //Visit every ObjectArgument
+        else if (objectContructorNode.getObjectArgumentNodePlural() != null) {
+            //Get all the Arguments
+            ArrayList<ObjectArgumentNode> objectArgumentNodes = objectContructorNode.getObjectArgumentNodePlural().getObjectArgumentNodes();
+            //For every Argument, get the LowPrecedence for which we get every HighPrecedence, for which we get every AtomPrecedence, for which we typecheck every operand
+            for (ObjectArgumentNode objectArgumentNode : objectArgumentNodes) {
+                LowPrecedenceNode currentLowPrecedence = objectArgumentNode.getLowPrecedence();
+                for (HighPrecedenceNode highPrecedenceNode : currentLowPrecedence.getHighPrecedenceNodes()) {
+                    for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
+                        ArithOperandNode currentArg = atomPrecedenceNode.getOperand();
+
+                        if (currentArg.getNonObjectFunctionCallNode() != null)
+                            visitNonObjectFunctionCall(currentArg.getNonObjectFunctionCallNode());
+                        else if (currentArg.getObjectFunctionCallNode() != null)
+                            visitObjectFunctionCall(currentArg.getObjectFunctionCallNode());
+                        else if (currentArg.getVariableName() != null)
+                            visitVariableName(currentArg.getVariableName());
+                        else if (currentArg.getVector2ExpressionNode() != null)
+                            visitVector2Expression(currentArg.getVector2ExpressionNode());
+                        else if (currentArg.getVector3ExpressionNode() != null)
+                            visitVector3Expression(currentArg.getVector3ExpressionNode());
+                        else if (currentArg.getVector4ExpressionNode() != null)
+                            visitVector4Expression(currentArg.getVector4ExpressionNode());
+                    }
+                }
+            }
+        }
+        else
+            throw new CompilerException("ERROR: Invalid constructor for object, must be 0 or more arguments or function", objectContructorNode.getCodePosition());
     }
 
     private void visitAssignment(AssignmentNode assignmentNode) {
