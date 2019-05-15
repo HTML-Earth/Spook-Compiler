@@ -19,6 +19,6 @@ public class CodePosition {
 
     @Override
     public String toString() {
-        return lineNumber + ":" + columnNumber;
+        return getLineNumber() + ":" + getColumnNumber();
     }
 }

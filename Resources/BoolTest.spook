@@ -10,5 +10,5 @@ Shader {
     rec.setPosition(100, 50);
 
     if (true)
-        Scene.Add(rec);
+        Scene.add(rec);
 }
