@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook.shapes;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
@@ -12,6 +13,7 @@ public class Polygon extends Shape {
     private ArrayList<Vector2> points;
 
     private static final int maxPoints = 16;
+    private static final int minPoints = 3;
 
     public Polygon (String name, ArrayList<ObjectArgumentNode> argumentNodes) {
         classType = Enums.ClassType.POLYGON;
@@ -23,12 +25,15 @@ public class Polygon extends Shape {
 
         points = new ArrayList<>();
 
-        if (argumentNodes.size() > 1) {
+        //Max arguments = 17
+        if (argumentNodes.size() > minPoints && argumentNodes.size() < maxPoints + 2) {
             for (int i = 0; i < argumentNodes.size() - 1; i++) {
                 points.add(Vector2.evaluateLowPrecedence(argumentNodes.get(i).getLowPrecedence()));
             }
             this.color = Color.getColorArgument(argumentNodes.get(argumentNodes.size() - 1));
         }
+        else
+            throw new CompilerException("Invalid number of arguments in Polygon Contructor. Expected: " + (minPoints + 1) + " - " + (maxPoints + 1) + "Found: " + argumentNodes.size() );
     }
 
     public static String getStruct() {

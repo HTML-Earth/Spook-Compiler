@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook.fill;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
@@ -35,6 +36,8 @@ public class CircleGradient extends Fill {
             this.innerColor = Color.getColorArgument(argumentNodes.get(2));
             this.outerColor = Color.getColorArgument(argumentNodes.get(3));
         }
+        else
+            throw new CompilerException("Invalid number of arguments in CircleGradient Contructor. Expected: 3 or 4. Found: " + argumentNodes.size());
     }
 
     public static String getStruct() {
