@@ -1,6 +1,7 @@
 Shader {
     Num length = true;
     Bool hej = true;
+
     if (length > 10 && length < 200) {
         Circle circ = (20, Color.white());
     }
@@ -16,14 +17,14 @@ Shader {
 
     Num i = sut(hej, 2);
 
-    #
-    Num ret = hej(2);
+    #Fails as hej is used both as Vardecl and FuncDecl
+#    Num ret = hej(2);
 }
 
 Num sut(Num int, Num nej) {
     return 0;
 }
 
-Num hej(Num ret) {
-    return ret;
-}
+#Num hej(Num ret) {
+#    return ret;
+#}
