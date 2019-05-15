@@ -1,5 +1,5 @@
 Shader {
-    Num length = true;
+    Num length = 100;
     Bool hej = true;
 
     if (length > 10 && length < 200) {
