@@ -421,6 +421,7 @@ public class CodeGenerator {
 
     private ArithExpressionNode visitArithExpression(ArithExpressionNode arithExpressionNode) {
         ArithExpressionNode newArithExpressionNode = new ArithExpressionNode(visitLowPrecedence(arithExpressionNode.getLowPrecedenceNode()));
+
         newArithExpressionNode.setCodePosition(arithExpressionNode.getCodePosition());
         return newArithExpressionNode;
     }
@@ -439,16 +440,46 @@ public class CodeGenerator {
     }
 
     private HighPrecedenceNode visitHighPrecedence(HighPrecedenceNode highPrecedenceNode) {
-        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+        ArrayList<AtomPrecedenceNode> newAtomPrecedenceNodes = new ArrayList<>();
 
         for (AtomPrecedenceNode atomPrecedenceNode: highPrecedenceNode.getAtomPrecedenceNodes()) {
-            atomPrecedenceNodes.add(visitAtomPrecedence(atomPrecedenceNode));
+            newAtomPrecedenceNodes.add(visitAtomPrecedence(atomPrecedenceNode));
         }
 
-        if (highPrecedenceNode.getOperators() != null)
-            return new HighPrecedenceNode(atomPrecedenceNodes, highPrecedenceNode.getOperators());
-        else
-            return new HighPrecedenceNode(atomPrecedenceNodes);
+        if (highPrecedenceNode.getOperators() != null) {
+            ArrayList<Enums.Operator> newOperators = highPrecedenceNode.getOperators();
+
+            //Convert x % y into mod(x,y)
+            for (int i = newOperators.size() - 1; i >= 0; i--) {
+                if (newOperators.get(i) == Enums.Operator.MOD) {
+                    ObjectArgumentNode argumentNode1 = new ObjectArgumentNode(new LowPrecedenceNode(new HighPrecedenceNode(newAtomPrecedenceNodes.get(i))));
+                    ObjectArgumentNode argumentNode2 = new ObjectArgumentNode(new LowPrecedenceNode(new HighPrecedenceNode(newAtomPrecedenceNodes.get(i+1))));
+
+                    ArrayList<ObjectArgumentNode> modulusArguments = new ArrayList<>();
+                    modulusArguments.add(argumentNode1);
+                    modulusArguments.add(argumentNode2);
+
+                    NonObjectFunctionCallNode modulusFunction = new NonObjectFunctionCallNode("mod", modulusArguments);
+
+                    AtomPrecedenceNode combinedModulusNode = new AtomPrecedenceNode(modulusFunction);
+
+                    newOperators.remove(i);
+                    newAtomPrecedenceNodes.add(i, combinedModulusNode); //insert new node into previous i position
+                    newAtomPrecedenceNodes.remove(i+2); //remove previous i+1 that was shifted
+                    newAtomPrecedenceNodes.remove(i+1); //remove previous i that was shifted
+                }
+                else {
+                    // do nuttin'
+                }
+            }
+            if (newOperators.size() > 0)
+                return new HighPrecedenceNode(newAtomPrecedenceNodes, newOperators);
+            else
+                return new HighPrecedenceNode(newAtomPrecedenceNodes);
+        }
+        else {
+            return new HighPrecedenceNode(newAtomPrecedenceNodes);
+        }
     }
 
     private AtomPrecedenceNode visitAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {
