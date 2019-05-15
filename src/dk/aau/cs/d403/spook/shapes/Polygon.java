@@ -57,7 +57,7 @@ public class Polygon extends Shape {
                 "        else\n" +
                 "            b = vec2(poly.points[0]-point);\n" +
                 "        \n" +
-                "        angle += abs(acos( dot(a,b) / (length(a) * length(b) ) ));\n" +
+                "        angle += abs( acos( dot(a,b) / ( length(a) * length(b) ) ) );\n" +
                 "    }\n" +
                 "    angle *= 180.0 / PI;\n" +
                 "    return angle < 361.0 && angle > 359.0;";

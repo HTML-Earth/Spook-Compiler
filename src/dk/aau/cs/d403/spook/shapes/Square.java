@@ -40,8 +40,8 @@ public class Square extends Shape {
     }
 
     public static String getCheckFunctionBody() {
-        return "return (point.x > rec.pos.x - rec.size * 0.5 && point.x < rec.pos.x + rec.size * 0.5 &&\n\t\t\t" +
-                       "point.y > rec.pos.y - rec.size * 0.5 && point.y < rec.pos.y + rec.size * 0.5);";
+        return "return (point.x > sqr.pos.x - sqr.size * 0.5 && point.x < sqr.pos.x + sqr.size * 0.5 &&\n\t\t\t" +
+                       "point.y > sqr.pos.y - sqr.size * 0.5 && point.y < sqr.pos.y + sqr.size * 0.5);";
     }
 
     @Override
