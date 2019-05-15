@@ -12,7 +12,7 @@ public class Circle extends Shape {
     private ObjectArgumentNode radius;
 
     public Circle (String name, ArrayList<ObjectArgumentNode> argumentNodes) {
-        classType = Enums.ClassType.CIRCLE;
+        classType = Enums.ClassType.EMPTY;
 
         this.name = name;
         this.position = Vector2.zero();
@@ -56,6 +56,6 @@ public class Circle extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (CircleCheck(" + spaceName + ", " + name + "))" + getColorApplication();
+        return "if (CircleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
     }
 }

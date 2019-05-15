@@ -91,13 +91,16 @@ public class Enums {
     }
 
     public enum ClassType {
+        EMPTY,
         CIRCLE,
         RECTANGLE,
         SQUARE,
         TRIANGLE,
         POLYGON,
         SHAPE,
-        COLOR
+        COLOR,
+        CIRCLE_GRADIENT,
+        LINE_GRADIENT
     }
 
     public static String classTypeToString(ClassType classType) {

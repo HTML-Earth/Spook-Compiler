@@ -16,6 +16,7 @@ public class Vector4 {
     private ObjectArgumentNode y;
     private ObjectArgumentNode z;
     private ObjectArgumentNode w;
+    private LowPrecedenceNode lowPrecedenceNode;
 
     public Vector4(ObjectArgumentNode x, ObjectArgumentNode y, ObjectArgumentNode z, ObjectArgumentNode w) {
         this.x = x;
@@ -29,6 +30,14 @@ public class Vector4 {
         this.y = NumberPacking.getObjectArgumentFromDouble(y);
         this.z = NumberPacking.getObjectArgumentFromDouble(z);
         this.w = NumberPacking.getObjectArgumentFromDouble(w);
+    }
+
+    public Vector4(LowPrecedenceNode lowPrecedenceNode) {
+        this.lowPrecedenceNode = lowPrecedenceNode;
+    }
+
+    public Vector4(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        this.lowPrecedenceNode = new LowPrecedenceNode(nonObjectFunctionCallNode);
     }
 
     public ObjectArgumentNode getX() {
@@ -63,6 +72,10 @@ public class Vector4 {
         this.w = w;
     }
 
+    public LowPrecedenceNode getLowPrecedenceNode() {
+        return lowPrecedenceNode;
+    }
+
     public static Vector4 zero(){
         RealNumberNode zero = new RealNumberNode(0);
         ObjectArgumentNode x = NumberPacking.getObjectArgumentFromRealNumber(zero);
@@ -80,6 +93,9 @@ public class Vector4 {
             ObjectArgumentNode z = new ObjectArgumentNode(vector4ExpressionNode.getArithExpressionNode3().getLowPrecedenceNode());
             ObjectArgumentNode w = new ObjectArgumentNode(vector4ExpressionNode.getArithExpressionNode4().getLowPrecedenceNode());
             return new Vector4(x,y,z,w);
+        }
+        else if (expressionNode instanceof ArithExpressionNode) {
+            return evaluateLowPrecedence(((ArithExpressionNode) expressionNode).getLowPrecedenceNode());
         }
         else
             throw new CompilerException("Expression is not vector4 expression", expressionNode.getCodePosition());
@@ -142,7 +158,7 @@ public class Vector4 {
             return new Vector4(number, number, number, number);
         }
         else if (nonObjectFunctionCallNode != null) {
-            throw new CompilerException("Evaluation not yet implemented", arithOperandNode.getCodePosition());
+            return new Vector4(nonObjectFunctionCallNode);
         }
         else if (objectFunctionCallNode != null) {
             if (objectFunctionCallNode.getObjectVariableName().equals("Color")) {
