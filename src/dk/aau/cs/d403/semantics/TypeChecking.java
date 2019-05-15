@@ -249,7 +249,7 @@ public class TypeChecking {
         // Check if the class is custom and check if that class is declared
         if (!listOfPredefinedClasses.contains(objectType)) {
             if (retrieveSymbol(objectType) == null)
-                throw new CompilerException("ERROR: An object (" + objectType + ") is declared with a non-existing class.", objectDeclarationNode.getCodePosition());
+                throw new CompilerException("ERROR: An object (" + objectDeclarationNode.getVariableName() + ") is declared with a non-existing class.", objectDeclarationNode.getCodePosition());
         }
 
         if (retrieveSymbol(variableName) == null)
@@ -384,7 +384,7 @@ public class TypeChecking {
                     objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
             }
             else
-                throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared.", retrieveSymbol(variableName).getCodePosition());
+                throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared.");
 
             if (objectDeclarationNode != null) {
 
@@ -420,13 +420,12 @@ public class TypeChecking {
                             }
                         }
                     }
-                    else
-                        throw new CompilerException("ERROR: Class (" + classDeclarationNode.getClassName() + ") does not exist.", classDeclarationNode.getCodePosition());
+
 
                     if (!existingFunction)
-                        throw new CompilerException("ERROR: No functions existed with the given function name (" + functionName + ")", retrieveSymbol(functionName).getCodePosition());
+                        throw new CompilerException("ERROR: No functions existed with the given function name (" + functionName + ")", classDeclarationNode.getCodePosition());
                     if (!sameFunction)
-                        throw new CompilerException("ERROR: No function with the given parameters exists for (" + functionName + ")", retrieveSymbol(functionName).getCodePosition());
+                        throw new CompilerException("ERROR: No function with the given parameters exists for (" + functionName + ")", classDeclarationNode.getCodePosition());
 
                     return dataType;
                 }
@@ -867,7 +866,7 @@ public class TypeChecking {
     /*      MISC         */
     private void visitVariableName(String variableName) {
         if (retrieveSymbol(variableName) == null)
-            throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared", retrieveSymbol(variableName).getCodePosition());
+            throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared");
         else if (retrieveSymbol(variableName) != null) {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
