@@ -4,10 +4,31 @@ import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
+import dk.aau.cs.d403.ast.structure.ProgramNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Unrolling {
+    private HashMap<String, VariableDeclarationNode> variables;
+
+    public ProgramNode unrollProgram(ProgramNode programNode) {
+        variables = new HashMap<>();
+
+        return programNode;
+    }
+
+    public DeclarationNode unrollDeclaration(DeclarationNode declarationNode) {
+        if (declarationNode instanceof VariableDeclarationNode) {
+            VariableDeclarationNode visitedVariableDeclarationNode = (VariableDeclarationNode)declarationNode;
+            for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
+                variables.put(varDeclInitNode.getAssignmentNode().getVariableName(), visitedVariableDeclarationNode);
+            }
+        }
+
+        return declarationNode;
+    }
+
     public ArrayList<ForLoopStatementNode> unrollForLoop(ForLoopStatementNode forLoopStatementNode) {
         ArrayList<ForLoopStatementNode> forLoopStatementNodes = new ArrayList<>();
 
@@ -143,10 +164,10 @@ public class Unrolling {
     }
 
     private double evaluateVariable(String variableName) {
-        //VariableDeclarationNode variableDeclarationNode = variables.get(variableName); //TODO: variable list
-        //if (variableDeclarationNode != null)
-        //    return evaluateVariableDeclaration(variableDeclarationNode);
-        //else
+        VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
+        if (variableDeclarationNode != null)
+            return evaluateVariableDeclaration(variableDeclarationNode);
+        else
             throw new RuntimeException("Variable " + variableName + " not found");
     }
 
