@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook.shapes;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
@@ -20,9 +21,13 @@ public class Circle extends Shape {
         this.scale = Vector2.one();
 
         if (argumentNodes.size() == 2) {
+
             this.radius = argumentNodes.get(0);
             this.color = Color.getColorArgument(argumentNodes.get(1));
         }
+
+        else
+            throw new CompilerException("ERROR: Invalid number of arguments expecting 2 arguments ex (Num, Vec4) Found " + argumentNodes.size() + " arguments");
     }
 
     public static String getStruct() {
