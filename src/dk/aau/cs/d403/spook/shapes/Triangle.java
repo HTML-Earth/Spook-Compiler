@@ -1,11 +1,13 @@
 package dk.aau.cs.d403.spook.shapes;
 
+import dk.aau.cs.d403.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.color.Color;
 
+import javax.naming.CommunicationException;
 import java.util.ArrayList;
 
 public class Triangle extends Shape {
@@ -23,6 +25,8 @@ public class Triangle extends Shape {
             this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
             this.color = Color.getColorArgument(argumentNodes.get(2));
         }
+        else
+            throw new CompilerException("Invalid number of arguments in Triangle Contructor. Expected: 3. Found:" + argumentNodes.size());
     }
 
     public static String getStruct() {
