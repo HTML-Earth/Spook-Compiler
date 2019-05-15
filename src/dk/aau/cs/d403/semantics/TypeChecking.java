@@ -322,6 +322,7 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: Variable (" + variableName + ") on left side of assignment is not declared.", assignmentNode.getCodePosition());
 
             if (assignmentNode.getExpressionNode() != null && assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
+                //TODO: ny if til at tjekke instanceof arith eller bool
                 Enums.DataType assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
                     throw new CompilerException("ERROR: Incompatible types.(" + dataType + " and " + assignedDataType + ")", assignmentNode.getCodePosition());
