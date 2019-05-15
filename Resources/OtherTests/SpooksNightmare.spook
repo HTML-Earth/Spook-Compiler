@@ -1,28 +1,28 @@
 Shader{
 
-    Num bobIgnored = true; # <-- THIS WORKS
+    #Num bobIgnored = true; # <-- FIXED
 
     #Bool bob = 2; # <-- THIS DOES NOT WORK == GOOD
 
-    help(); # <-- CAN CALL WITHOUT PARAMETER
+    #help(); # <-- CAN CALL WITHOUT PARAMETER
 
     Num ff = 1;
-    yikes(ff); # <-- GIVEN ARGUMENTS DOES NOT MATCH PARAMETER
+    #yikes(ff); # <-- GIVEN ARGUMENTS DOES NOT MATCH PARAMETER
 
     Rectangle rec = (1, 1, Color.black());
-    yeet(rec); # <-- GIVEN ARGUMENTS DOES NOT MATCH PARAMETER
+    #yeet(rec); # <-- GIVEN ARGUMENTS DOES NOT MATCH PARAMETER
 
     Num jlo = 1;
-    Hej hej;
-    hej.lol(jlo); # <-- THIS ARGUMENT IS NOT A PARAMETER IN THE "lol" FUNCTION
+    #Hej hej;
+    #hej.lol(jlo); # <-- THIS ARGUMENT IS NOT A PARAMETER IN THE "lol" FUNCTION
 
     Bool index;
-    for (index to 4) {} # <-- THIS SHOULD GIVE "Variable is of an illegal type for the ForLoop"
+    #for (index to 4) {} # <-- THIS SHOULD GIVE "Variable is of an illegal type for the ForLoop" FIXED
 
     Num index2;
-    for (index2 to 4) {} # <-- THIS SHOULD GIVE "Variable in ForLoop is not initialized"
+    #for (index2 to 4) {} # <-- THIS SHOULD GIVE "Variable in ForLoop is not initialized" FIXED
 
-    for (index4 to 5) {} # <-- THIS SHOULD GIVE "Variable in ForLoop is not declared"
+    #for (index4 to 5) {} # <-- THIS SHOULD GIVE "Variable in ForLoop is not declared" FIXED
 
     #Vec3 vec3 = (1, 1, 1);
     #Vec4 vec4 = vec3.xxxxx; # <-- NULL POINTER EXCEPTION. SHOULD MAYBE BE "ERROR: Too long swizzle" COMPILE EXCEPTION.
@@ -50,46 +50,46 @@ Shader{
 
 }
 
-Bool copy (Num test1) {return false;}
-Bool copy (Num test1, Num test2) {return false;} # <--  THIS IS OK? IF YES DELETE "function with name and type already exist" COMPILE EXCEPTION
+#Bool copy (Num test1) {return false;}
+#Bool copy (Num test1, Num test2) {return false;} # <-- GIVES COMPILER EXCEPTION "ERROR: A function with the same name (copy) and arguments already exists."
 
 #Void voidCopy (Bool fals) {}
 #Void voidCopy (Bool fals) {}  # <-- GIVES NULL POINTER EXCEPTION. SHOULD GIVE "function with name and type already exist"
 
-Bool ret () {
-    if (true)
-        return false; # <-- THIS MIGHT NOT RETURN FALSE
-    return true; }
+#Bool ret () {
+#    if (true)
+#        return false;      #      <-- NULL POINTER EXCEPTION
+#    return true; }
 
 
 
-Num help(Num i) {return 0;} # <-- 'i' DOES NOT EXIST
+#Num help(Num i) {return 0;} # <-- 'i' DOES NOT EXIST   .. ALSO SAYS ANOTHER FUNCTION WITH SAME NAME EXISTS
 
-Num yikes(Bool ff) {return 0;}
+#Num yikes(Num ff) {return 0;}   # .. ALSO SAYS ANOTHER FUNCTION WITH SAME NAME EXISTS
 
-Num yeet(Num rec) {return 0;}
+#Num yeet(Num rec) {return 0;}   # .. ALSO SAYS ANOTHER FUNCTION WITH SAME NAME EXISTS
 
 
 
 #Num wut(Meme meme) {return 0;} # DISPLAYS NULLPOINTEREXCEPTION. SHOULD BE "MISSING CLASS (Meme)"
 
-Test testFunc() {} # <-- THIS WORKS BUT NO "Test" CLASS IS MADE
+#Test testFunc() {} # <-- THIS WORKS BUT NO "Test" CLASS IS MADE .. NOW THROWS NULL POINTER EXCEPTION
 
 
-Num bobba(Num vvv) {return 0;}
+#Num bobba(Num vvv) {return 0;} # .. ALSO SAYS ANOTHER FUNCTION WITH SAME NAME EXISTS
 
-Bool nibba(Bool fff) {return true;}
+#Bool nibba(Bool fff) {return true;} # .. ALSO SAYS ANOTHER FUNCTION WITH SAME NAME EXISTS
 
-Class Hej {
-
-    Num lol() {return 0;}
-}
+#Class Hej {                    # .. ALSO SAYS ANOTHER CLASS WITH SAME NAME EXISTS
+#
+#    Num lol() {return 0;}
+#}
 
 #Class Hej2 {
 #
 #    Num lol(Num ooo, Num ppp) {return 0;}
 #}
 
-Class vur {
-    Num loool; # <-- JUST LOOK AT THE LAST COMPILER EXCEPTION IN TYPECHECKING
-}
+#Class vur {                # .. ALSO SAYS ANOTHER CLASS WITH SAME NAME EXISTS
+#    Num loool; # <-- JUST LOOK AT THE LAST COMPILER EXCEPTION IN TYPECHECKING
+#}
