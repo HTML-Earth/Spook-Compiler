@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class IterativeTests {
+class BooleanTest  {
     private TypeChecking typeChecking = new TypeChecking();
 
     void testShader(String shaderName) {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/IterativeTests/" + shaderName + ".spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/OtherTests/" + shaderName + ".spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -25,25 +25,34 @@ class IterativeTests {
 
             typeChecking.visitProgram(programNode);
             CodeGenerator codeGenerator = new CodeGenerator();
-            //codeGenerator.GenerateGLSL(programNode);
+            codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     @AfterEach
     void printTable() {
         typeChecking.printSymbolTable();
     }
 
     @Test
-    void Ghost() {
-        testShader("Ghost");
+    void BoolAndFunctionCalls() {
+        testShader("BoolAndFunctionCalls");
     }
 
     @Test
-    void TestShader2() {
-        testShader("TestShader2");
+    void IfElseSlaaGraesTest() {
+        testShader("IfElseSlaaGraesTest");
+    }
+
+    @Test
+    void IfElseTest() {
+        testShader("IfElseTest");
+    }
+
+    @Test
+    void RandomIfElseTests() {
+        testShader("RandomIfElseTests");
     }
 }

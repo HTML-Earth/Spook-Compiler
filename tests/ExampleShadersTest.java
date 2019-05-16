@@ -17,7 +17,7 @@ class ExampleShadersTest {
 
     void testShader(String shaderName) {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ExampleShadersTest/" + shaderName + ".spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/" + shaderName + ".spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -26,7 +26,7 @@ class ExampleShadersTest {
 
             typeChecking.visitProgram(programNode);
             CodeGenerator codeGenerator = new CodeGenerator();
-            //codeGenerator.GenerateGLSL(programNode);
+            codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,8 +44,18 @@ class ExampleShadersTest {
     }
 
     @Test
+    void BoolTest() {
+        testShader("BoolTest");
+    }
+
+    @Test
     void FunnyShader() {
         testShader("FunnyShader");
+    }
+
+    @Test
+    void Ghost() {
+        testShader("Ghost");
     }
 
     @Test
@@ -54,12 +64,72 @@ class ExampleShadersTest {
     }
 
     @Test
+    void LayersAndTransparency() {
+        testShader("LayersAndTransparency");
+    }
+
+    @Test
+    void MathFunctions() {
+        testShader("MathFunctions");
+    }
+
+    @Test
+    void MathFunctions2() {
+        testShader("MathFunctions2");
+    }
+
+    @Test
+    void MathFunctions3() {
+        testShader("MathFunctions3");
+    }
+
+    @Test
+    void Polygons() {
+        testShader("Polygons");
+    }
+
+    @Test
+    void RotationTest() {
+        testShader("RotationTest");
+    }
+
+    @Test
+    void ShapeTest() {
+        testShader("ShapeTest");
+    }
+
+    @Test
+    void ShapeTestMoving() {
+        testShader("ShapeTestMoving");
+    }
+
+    @Test
     void Spooderman() {
         testShader("Spooderman");
     }
 
     @Test
+    void TestShader() {
+        testShader("TestShader");
+    }
+
+    @Test
+    void TestShader2() {
+        testShader("TestShader2");
+    }
+
+    @Test
     void Triangles() {
         testShader("Triangles");
+    }
+
+    @Test
+    void Uniforms() {
+        testShader("Uniforms");
+    }
+
+    @Test
+    void VectorFunctions() {
+        testShader("VectorFunctions");
     }
 }
