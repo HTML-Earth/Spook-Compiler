@@ -67,15 +67,11 @@ Class Bulletbill extends Shape{
   #Create shadow func
   Bulletbill setShadow(Bulletbill bulletbill){
     Bulletbill billShadow = this.bulletbill;
-
-    #Scale
-    billShadow.setScale(1.3, 0.9);
-
     #Stretch rectangle
-    #billShadow.body.setScale(1.3, 0.9);
+    billShadow.body.setScale(1.3, 0.9);
 
     #Circle -> Ellipse
-    #billShadow.head.setScale(1.3, 0.9); double dot doesn't work, you need getter
+    billShadow.head.setScale(1.3, 0.9);
 
     #Place shadow beneath original figure
     billShadow.setParent(bulletbill - 100);
