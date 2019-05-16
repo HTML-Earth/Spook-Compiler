@@ -364,77 +364,13 @@ public class TypeChecking {
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        ArrayList<FunctionDeclarationNode> retrievedFunctions;
-        if (retrieveAllFunctions(functionName) != null)
-            retrievedFunctions = retrieveAllFunctions(functionName);
-        else
-            retrievedFunctions = null;
+        ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
+        retrievedFunctions = retrieveAllFunctions(functionName);
 
-        if (retrievedFunctions.size() > 0) {
-            boolean matchingSize = true;
-            boolean argumentMatch = true;
-            for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
-                if (retrievedNode != null) { //TODO: Find reason why this is neccesary (File: IfElseSlaaGraesTest)
-                    if (retrievedNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
-                        if (retrievedNode.getFunctionArgNodes().size() != objectArgumentNodes.size())
-                            matchingSize = false;
-                        else {
-                            // Check parameters
-                            outerLoop:
-                            for (int i = 0; i < objectArgumentNodes.size(); i++) {
-
-                                // Check Ints and Floats
-                                if (objectArgumentNodes.get(i).getLowPrecedence() != null) {
-                                    LowPrecedenceNode lowPrecedenceNode = objectArgumentNodes.get(i).getLowPrecedence();
-                                    for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
-                                        for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
-
-                                            if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
-                                                if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.NUM)) {
-                                                    argumentMatch = false;
-                                                    break outerLoop;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            /* Not yet implemented in the AST
-                            if (objectArgumentNodes.get(i).getNonObjectFunctionCallNode() != null) {
-                                visitNonObjectFunctionCall(objectArgumentNodes.get(i).getNonObjectFunctionCallNode());
-                            }
-                            */
-
-                            /* Not yet implemented in the AST
-                            if (objectArgumentNodes.get(i).getColorFunctionCallNode() != null) {
-                                if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.VEC3)) {
-                                    argumentMatch = false;
-                                    break outerLoop;
-                                }
-                                else {
-                                    argumentMatch = true;
-                                }
-                            }
-                             */
-                            }
-                        }
-                    } else if (retrievedNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
-                        enterSymbol(functionName, nonObjectFunctionCallNode);
-                        matchingSize = true;
-                        break;
-                    }
-                }
+        if (!retrievedFunctions.isEmpty()) {
+            for (FunctionDeclarationNode functionDeclarationNode : retrievedFunctions) {
+                System.out.println(functionDeclarationNode);
             }
-            if (!matchingSize)
-                throw new CompilerException("ERROR: The amount of given arguments (" + objectArgumentNodes.size() + ") for the Non-Object function call (" + functionName + ") does \nnot match the amount of required parameters for the function.", retrieveSymbol(functionName).getCodePosition());
-            if (!argumentMatch)
-                throw new CompilerException("ERROR: The given arguments for the Non-object function call (" + functionName + ") does \nnot match the parameters for the function.", retrieveSymbol(functionName).getCodePosition());
-        }
-        else {
-            if (listOfPredefinedFunctions.contains(functionName)) {
-                // predefined function
-            }
-            else
-                throw new CompilerException("ERROR: Non-object function (" + functionName + ") does not exist.", nonObjectFunctionCallNode.getCodePosition());
         }
     }
 
@@ -672,6 +608,7 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
 
             enterSymbol(functionName, functionDeclarationNode);
+            this.functionCounter = 1;
         }
 
         visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
