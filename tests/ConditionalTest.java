@@ -1,5 +1,4 @@
 import dk.aau.cs.d403.ast.AstBuilder;
-import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
@@ -12,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class ExampleShadersTest {
+class ConditionalTest {
     private TypeChecking typeChecking = new TypeChecking();
 
     void testShader(String shaderName) {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ExampleShadersTest/" + shaderName + ".spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ConditionalTests/" + shaderName + ".spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -26,40 +25,39 @@ class ExampleShadersTest {
 
             typeChecking.visitProgram(programNode);
             CodeGenerator codeGenerator = new CodeGenerator();
-            //codeGenerator.GenerateGLSL(programNode);
+            codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     @AfterEach
     void printTable() {
         typeChecking.printSymbolTable();
     }
 
     @Test
-    void BallShader() {
-        testShader("BallShader");
+    void BoolAndFunctionCalls() {
+        testShader("BoolAndFunctionCalls");
     }
 
     @Test
-    void FunnyShader() {
-        testShader("FunnyShader");
+    void IfElseSlaaGraesTest() {
+        testShader("IfElseSlaaGraesTest");
     }
 
     @Test
-    void GhostWithoutLoops() {
-        testShader("GhostWithoutLoops");
+    void IfElseTest() {
+        testShader("IfElseTest");
     }
 
     @Test
-    void Spooderman() {
-        testShader("Spooderman");
+    void RandomIfElseTests() {
+        testShader("RandomIfElseTests");
     }
 
     @Test
-    void Triangles() {
-        testShader("Triangles");
+    void BoolTest() {
+        testShader("BoolTest");
     }
 }
