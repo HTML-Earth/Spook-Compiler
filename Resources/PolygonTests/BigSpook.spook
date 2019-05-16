@@ -1,0 +1,180 @@
+Shader {
+	Num baseUnit = Screen.y / 6;
+
+	Empty ghost = (Screen.x / 2, Screen.y / 2);
+	Scene.add(ghost);
+
+	Scene.setColor(Color.black());
+
+	Circle bodyExtra = (baseUnit, Color.white());
+	bodyExtra.setPosition(-0.91 * baseUnit, -0.78 * baseUnit);
+	bodyExtra.setScale(0.75, 0.75);
+	bodyExtra.setRotation(-0.0);
+
+	bodyExtra.setParent(ghost);
+
+	Vec2 bodyPoly4 = (1.32 * baseUnit, 0.19 * baseUnit);
+	Vec2 bodyPoly2 = (1.21 * baseUnit, 0.55 * baseUnit);
+	Vec2 bodyPoly0 = (0.98 * baseUnit, 0.87 * baseUnit);
+	Vec2 bodyPoly1 = (0.74 * baseUnit, 1.03 * baseUnit);
+	Vec2 bodyPoly3 = (0.09 * baseUnit, 1.21 * baseUnit);
+	Vec2 bodyPoly8 = (-0.4 * baseUnit, 1.3 * baseUnit);
+	Vec2 bodyPoly14 = (-1.43 * baseUnit, -0.23 * baseUnit);
+	Vec2 bodyPoly13 = (-1.44 * baseUnit, -0.52 * baseUnit);
+	Vec2 bodyPoly12 = (-1.23 * baseUnit, -1.14 * baseUnit);
+	Vec2 bodyPoly10 = (-0.33 * baseUnit, -1.46 * baseUnit);
+	Vec2 bodyPoly7 = (0.52 * baseUnit, -1.21 * baseUnit);
+	Vec2 bodyPoly9 = (0.73 * baseUnit, -1.11 * baseUnit);
+	Vec2 bodyPoly15 = (0.98 * baseUnit, -0.86 * baseUnit);
+	Vec2 bodyPoly11 = (1.15 * baseUnit, -0.63 * baseUnit);
+	Vec2 bodyPoly6 = (1.27 * baseUnit, -0.4 * baseUnit);
+	Vec2 bodyPoly5 = (1.33 * baseUnit, -0.16 * baseUnit);
+	Polygon bodyPoly = (bodyPoly4, bodyPoly2, bodyPoly0, bodyPoly1, bodyPoly3, bodyPoly8, bodyPoly14, bodyPoly13, bodyPoly12, bodyPoly10, bodyPoly7, bodyPoly9, bodyPoly15, bodyPoly11, bodyPoly6, bodyPoly5, Color.white());
+	bodyPoly.setPosition(0.44 * baseUnit, -0.37 * baseUnit);
+	bodyPoly.setScale(1.0, 1.0);
+	bodyPoly.setRotation(-0.0);
+
+	bodyPoly.setParent(ghost);
+
+	Circle bottom = (baseUnit, Color.white());
+	bottom.setPosition(-0.15 * baseUnit, -1.45 * baseUnit);
+	bottom.setScale(1.16, 0.52);
+	bottom.setRotation(3.11);
+
+	bottom.setParent(ghost);
+
+	Circle headExtra = (baseUnit, Color.white());
+	headExtra.setPosition(-0.1 * baseUnit, 0.93 * baseUnit);
+	headExtra.setScale(0.61, 0.61);
+	headExtra.setRotation(-0.0);
+
+	headExtra.setParent(ghost);
+
+	Vec2 headPoly3 = (-0.92 * baseUnit, -0.45 * baseUnit);
+	Vec2 headPoly0 = (-0.8 * baseUnit, -0.86 * baseUnit);
+	Vec2 headPoly14 = (-0.64 * baseUnit, -1.08 * baseUnit);
+	Vec2 headPoly11 = (-0.47 * baseUnit, -1.22 * baseUnit);
+	Vec2 headPoly13 = (0.61 * baseUnit, -1.19 * baseUnit);
+	Vec2 headPoly12 = (0.97 * baseUnit, 0.14 * baseUnit);
+	Vec2 headPoly4 = (1.07 * baseUnit, 0.56 * baseUnit);
+	Vec2 headPoly9 = (1.08 * baseUnit, 0.79 * baseUnit);
+	Vec2 headPoly10 = (0.92 * baseUnit, 0.97 * baseUnit);
+	Vec2 headPoly5 = (0.69 * baseUnit, 1.06 * baseUnit);
+	Vec2 headPoly6 = (0.23 * baseUnit, 1.04 * baseUnit);
+	Vec2 headPoly7 = (-0.2 * baseUnit, 0.91 * baseUnit);
+	Vec2 headPoly2 = (-0.53 * baseUnit, 0.64 * baseUnit);
+	Vec2 headPoly8 = (-0.8 * baseUnit, 0.25 * baseUnit);
+	Vec2 headPoly1 = (-0.93 * baseUnit, -0.13 * baseUnit);
+	Polygon headPoly = (headPoly3, headPoly0, headPoly14, headPoly11, headPoly13, headPoly12, headPoly4, headPoly9, headPoly10, headPoly5, headPoly6, headPoly7, headPoly2, headPoly8, headPoly1, Color.white());
+	headPoly.setPosition(-0.85 * baseUnit, 1.07 * baseUnit);
+	headPoly.setScale(1.0, 1.0);
+	headPoly.setRotation(-0.0);
+
+	headPoly.setParent(ghost);
+
+	Circle tip1 = (baseUnit, Color.white());
+	tip1.setPosition(-1.25 * baseUnit, -1.47 * baseUnit);
+	tip1.setScale(0.15, 0.35);
+	tip1.setRotation(77.03);
+
+	tip1.setParent(ghost);
+
+	Circle tip2 = (baseUnit, Color.white());
+	tip2.setPosition(-0.95 * baseUnit, -1.78 * baseUnit);
+	tip2.setScale(0.12, 0.25);
+	tip2.setRotation(66.27);
+
+	tip2.setParent(ghost);
+
+	Circle tip3 = (baseUnit, Color.white());
+	tip3.setPosition(-0.4 * baseUnit, -1.9 * baseUnit);
+	tip3.setScale(0.14, 0.23);
+	tip3.setRotation(34.53);
+
+	tip3.setParent(ghost);
+
+	Circle tip4 = (baseUnit, Color.white());
+	tip4.setPosition(0.13 * baseUnit, -1.95 * baseUnit);
+	tip4.setScale(0.14, 0.21);
+	tip4.setRotation(23.81);
+
+	tip4.setParent(ghost);
+
+	Circle tip5 = (baseUnit, Color.white());
+	tip5.setPosition(0.73 * baseUnit, -1.82 * baseUnit);
+	tip5.setScale(0.15, 0.2);
+	tip5.setRotation(-22.19);
+
+	tip5.setParent(ghost);
+
+	Circle z_body_black = (baseUnit, Color.black());
+	z_body_black.setPosition(-1.73 * baseUnit, -0.74 * baseUnit);
+	z_body_black.setScale(0.73, 0.73);
+	z_body_black.setRotation(-0.0);
+
+	z_body_black.setParent(ghost);
+
+	Circle z_eyeL_black = (baseUnit, Color.black());
+	z_eyeL_black.setPosition(-0.72 * baseUnit, 0.88 * baseUnit);
+	z_eyeL_black.setScale(0.2, 0.35);
+	z_eyeL_black.setRotation(-8.02);
+
+	z_eyeL_black.setParent(ghost);
+
+	Circle z_eyeR_black = (baseUnit, Color.black());
+	z_eyeR_black.setPosition(-0.22 * baseUnit, 1.12 * baseUnit);
+	z_eyeR_black.setScale(0.15, 0.27);
+	z_eyeR_black.setRotation(-7.99);
+
+	z_eyeR_black.setParent(ghost);
+
+	Circle z_head_black = (baseUnit, Color.black());
+	z_head_black.setPosition(0.56 * baseUnit, 1.29 * baseUnit);
+	z_head_black.setScale(0.45, 0.45);
+	z_head_black.setRotation(-0.0);
+
+	z_head_black.setParent(ghost);
+
+	Circle z_mouth_black = (baseUnit, Color.black());
+	z_mouth_black.setPosition(1.13 * baseUnit, -0.36 * baseUnit);
+	z_mouth_black.setScale(0.32, 0.46);
+	z_mouth_black.setRotation(6.8);
+
+	z_mouth_black.setParent(ghost);
+
+	Circle z_tip_black1 = (baseUnit, Color.black());
+	z_tip_black1.setPosition(-1.19 * baseUnit, -1.7 * baseUnit);
+	z_tip_black1.setScale(0.1, 0.1);
+	z_tip_black1.setRotation(-0.0);
+
+	z_tip_black1.setParent(ghost);
+
+	Circle z_tip_black2 = (baseUnit, Color.black());
+	z_tip_black2.setPosition(-0.69 * baseUnit, -1.93 * baseUnit);
+	z_tip_black2.setScale(0.12, 0.12);
+	z_tip_black2.setRotation(-0.0);
+
+	z_tip_black2.setParent(ghost);
+
+	Circle z_tip_black3 = (baseUnit, Color.black());
+	z_tip_black3.setPosition(-0.16 * baseUnit, -2.01 * baseUnit);
+	z_tip_black3.setScale(0.12, 0.12);
+	z_tip_black3.setRotation(-0.0);
+
+	z_tip_black3.setParent(ghost);
+
+	Circle z_tip_black4 = (baseUnit, Color.black());
+	z_tip_black4.setPosition(0.45 * baseUnit, -1.98 * baseUnit);
+	z_tip_black4.setScale(0.17, 0.17);
+	z_tip_black4.setRotation(-0.0);
+
+	z_tip_black4.setParent(ghost);
+
+	Circle z_tip_black5 = (baseUnit, Color.black());
+	z_tip_black5.setPosition(1.04 * baseUnit, -1.72 * baseUnit);
+	z_tip_black5.setScale(0.17, 0.17);
+	z_tip_black5.setRotation(-0.0);
+
+	z_tip_black5.setParent(ghost);
+
+}

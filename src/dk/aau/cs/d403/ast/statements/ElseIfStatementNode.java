@@ -22,7 +22,7 @@ public class ElseIfStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint(int indent) {
-        return "else if (" + elseIfBool.prettyPrint(indent) + ") " + elseIfBlock.prettyPrint(indent);
+        return "else if (" + elseIfBool.prettyPrint(indent) + ") \n" + elseIfBlock.prettyPrint(indent);
     }
 
     private CodePosition codePosition;

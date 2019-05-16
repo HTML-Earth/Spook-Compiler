@@ -1,5 +1,4 @@
 import dk.aau.cs.d403.ast.AstBuilder;
-import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
@@ -12,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class ExampleShadersTest {
+class MathTests {
     private TypeChecking typeChecking = new TypeChecking();
 
     void testShader(String shaderName) {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ExampleShadersTest/" + shaderName + ".spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/MathTests/" + shaderName + ".spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -39,27 +38,27 @@ class ExampleShadersTest {
     }
 
     @Test
-    void BallShader() {
-        testShader("BallShader");
+    void MathFunctions() {
+        testShader("MathFunctions");
     }
 
     @Test
-    void FunnyShader() {
-        testShader("FunnyShader");
+    void MathFunctions2() {
+        testShader("MathFunctions2");
     }
 
     @Test
-    void GhostWithoutLoops() {
-        testShader("GhostWithoutLoops");
+    void MathFunctions3() {
+        testShader("MathFunctions3");
     }
 
     @Test
-    void Spooderman() {
-        testShader("Spooderman");
+    void VectorFunctions() {
+        testShader("VectorFunctions");
     }
 
     @Test
-    void Triangles() {
-        testShader("Triangles");
+    void SwizzlinTest() {
+        testShader("SwizzlinTest");
     }
 }

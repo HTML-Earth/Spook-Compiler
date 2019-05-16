@@ -12,8 +12,13 @@ public class ReturnNode extends StatementNode {
 
     @Override
     public String prettyPrint(int indent) {
-        if (expressionNode != null)
-            return "return " + expressionNode.prettyPrint(indent) + ";";
+        StringBuilder sb = new StringBuilder();
+        if (expressionNode != null) {
+            for (int i = 0; i < indent; i++)
+                sb.append("\t");
+            sb.append("return " + expressionNode.prettyPrint(indent) + ";");
+            return sb.toString();
+        }
         else
             return "Invalid return statement";
     }

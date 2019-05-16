@@ -12,8 +12,8 @@ Shader{
   }
 
   #Forget previous for-loop, this one does even require a block
-  for (Num i = 0 to 4)
-    i = 4;
+  for (Num o = 0 to 4)
+    o = 4;
 
   #Shape movement
   Num jumptime = abs(sin(iTime * i));
@@ -46,8 +46,8 @@ Class Bulletbill extends Shape{
   Num length, height;
   Num radius = height/2;
   #Color from Shape
-  Rectangle body = ();
-  Circle head = ();
+  Rectangle body = (length, height, super.color);
+  Circle head = (radius, super.color);
   Color shadow = (105, 105, 105);
 
   #Constructor
@@ -58,20 +58,22 @@ Class Bulletbill extends Shape{
   #}
 
   Void parent() {
-      body = (length, height, super.color);
-      head = (radius, super.color);
       head.setParent(body);
       head.setPosition(length, height);
   }
 
   #Create shadow func
   Bulletbill setShadow(Bulletbill bulletbill){
-    Bulletbill billShadow = this.bulletbill;
+    Bulletbill billShadow = bulletbill;
+
+    #Scale
+    billShadow.setScale(1.3, 0.9);
+
     #Stretch rectangle
-    billShadow.body.setScale(1.3, 0.9);
+    #billShadow.body.setScale(1.3, 0.9);
 
     #Circle -> Ellipse
-    billShadow.head.setScale(1.3, 0.9);
+    #billShadow.head.setScale(1.3, 0.9); double dot doesn't work, you need getter
 
     #Place shadow beneath original figure
     billShadow.setParent(bulletbill - 100);
