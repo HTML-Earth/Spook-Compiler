@@ -81,6 +81,9 @@ public class TypeChecking {
         this.listOfPredefinedFunctions.add("tan");
         this.listOfPredefinedFunctions.add("tanh");
         this.listOfPredefinedFunctions.add("trunc");
+        this.listOfPredefinedFunctions.add("setScale");
+        this.listOfPredefinedFunctions.add("setParent");
+
 
         ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
 
@@ -472,19 +475,23 @@ public class TypeChecking {
                         for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
 
                             // Look for the function with the same name
-                            if (functionDeclarationNode.getFunctionName().equals(functionName)) {
-                                existingFunction = true;
+                            for (String predefinedFunctionName : listOfPredefinedFunctions) {
+                                if (functionName.equals(predefinedFunctionName)) {
+                                    existingFunction = true;
+                                } else if (functionDeclarationNode.getFunctionName().equals(functionName)) {
+                                    existingFunction = true;
 
-                                // Check the data types of the arguments given
-                                if (functionDeclarationNode.getFunctionArgNodes() != null) {
-                                    ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
+                                    // Check the data types of the arguments given
+                                    if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                                        ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
 
-                                    // Check each argument if its data type matches the function's parameters
-                                    for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
-                                        dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
-                                        if (!(functionArgNodes.get(i).getDataType().equals(dataType))) {
-                                            sameFunction = false;
-                                            break;
+                                        // Check each argument if its data type matches the function's parameters
+                                        for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
+                                            dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
+                                            if (!(functionArgNodes.get(i).getDataType().equals(dataType))) {
+                                                sameFunction = false;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -614,7 +621,20 @@ public class TypeChecking {
     }
 
     /*      FUNCTIONS        */
+    private void visitObjectFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, ClassBlockNode classBlockNode) {
+        //Visit Declaration and block
+        visitFunctionDeclaration(functionDeclarationNode);
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode, classBlockNode);
+
+    }
+
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
+        visitFunctionDeclarationHelper(functionDeclarationNode);
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode, null);
+    }
+
+    //Contains the body of FunctionDeclaration in order to call different visitFunctionsBlock methods
+    private void visitFunctionDeclarationHelper(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
@@ -673,11 +693,9 @@ public class TypeChecking {
 
             enterSymbol(functionName, functionDeclarationNode);
         }
-
-        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
     }
 
-    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
+    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode, ClassBlockNode classBlockNode) {
         openScope();
 
         //Visit all function arguments and add them as Variable Declarations in the new scope
@@ -685,12 +703,25 @@ public class TypeChecking {
             for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
 
                 //Initialize VarDecl to null, as it should already be checked
-                AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
-                VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
-                VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
-                visitVariableDeclaration(variableDeclarationNode);
+                if (functionArgNode.getDataType() != null) {
+                    AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
+                    VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
+                    VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
+                    visitVariableDeclaration(variableDeclarationNode);
+                }
+                else if (functionArgNode.getClassName() != null) {
+                    //AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
+                    ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
+                    ObjectContructorNode objectContructorNode = new ObjectContructorNode(new ObjectArgumentNodePlural(objectArgumentNodes));
+                    ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(functionArgNode.getClassName(), functionArgNode.getVariableName(), objectContructorNode);
+                    visitObjectDeclaration(objectDeclarationNode);
+                }
             }
         }
+
+        //Visit all VarDecls in class and re-add them as VarDecls in the ObjectFunction
+        if (classBlockNode != null)
+
 
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
@@ -925,11 +956,11 @@ public class TypeChecking {
         for (DeclarationNode declarationNode : classBlockNode.getDeclarationNodes()) {
             if (declarationNode instanceof VariableDeclarationNode)
                 visitVariableDeclaration((VariableDeclarationNode) declarationNode);
-            //else if (declarationNode instanceof ObjectDeclarationNode)
-               // visitObjectDeclaration((ObjectDeclarationNode) declarationNode);
+            else if (declarationNode instanceof ObjectDeclarationNode)
+                visitObjectDeclaration((ObjectDeclarationNode) declarationNode);
         }
         for (FunctionDeclarationNode functionDeclarationNode : classBlockNode.getFunctionDeclarationNodes()) {
-            visitFunctionDeclaration(functionDeclarationNode);
+            visitObjectFunctionDeclaration(functionDeclarationNode, classBlockNode);
         }
         closeScope();
     }
