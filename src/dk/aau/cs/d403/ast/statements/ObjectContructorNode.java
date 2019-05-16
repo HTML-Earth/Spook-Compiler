@@ -8,6 +8,7 @@ public class ObjectContructorNode implements ASTnode {
     private ObjectArgumentNodePlural objectArgumentNodePlural;
     private NonObjectFunctionCallNode nonObjectFunctionCallNode;
     private ObjectFunctionCallNode objectFunctionCallNode;
+    private String objectVariableName;
 
     public ObjectContructorNode(ObjectArgumentNodePlural objectArgumentNodePlural) {
         this.objectArgumentNodePlural = objectArgumentNodePlural;
@@ -19,6 +20,10 @@ public class ObjectContructorNode implements ASTnode {
 
     public ObjectContructorNode(ObjectFunctionCallNode objectFunctionCallNode) {
         this.objectFunctionCallNode = objectFunctionCallNode;
+    }
+
+    public ObjectContructorNode(String objectVariableName) {
+        this.objectVariableName = objectVariableName;
     }
 
     public ObjectArgumentNodePlural getObjectArgumentNodePlural() {
@@ -33,6 +38,10 @@ public class ObjectContructorNode implements ASTnode {
         return objectFunctionCallNode;
     }
 
+    public String getObjectVariableName() {
+        return objectVariableName;
+    }
+
     @Override
     public String prettyPrint(int indent) {
         if (objectArgumentNodePlural != null)
@@ -41,6 +50,8 @@ public class ObjectContructorNode implements ASTnode {
             return nonObjectFunctionCallNode.prettyPrint(indent);
         else if (objectFunctionCallNode != null)
             return objectFunctionCallNode.prettyPrint(indent);
+        else if (objectVariableName != null)
+            return objectVariableName;
         else
             return "Invalid Object constructor";
     }

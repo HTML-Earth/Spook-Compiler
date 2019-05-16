@@ -6,7 +6,6 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
-import dk.aau.cs.d403.spook.Vector2;
 
 import java.util.*;
 
@@ -253,8 +252,9 @@ public class TypeChecking {
         }
 
         //Check if the constructor is well typed
-        if (objectDeclarationNode.getObjectContructorNode() != null)
-            visitObjectConstructor(objectDeclarationNode.getObjectContructorNode());
+        if (objectDeclarationNode.getObjectContructorNode() != null) {
+            visitObjectConstructor(objectDeclarationNode);
+        }
 
         if (retrieveSymbol(variableName) == null)
             enterSymbol(variableName, objectDeclarationNode);
@@ -264,11 +264,32 @@ public class TypeChecking {
             throw new CompilerException("ERROR: An object (" + variableName + ") is already declared with the same name and type.", retrieveSymbol(variableName).getCodePosition());
     }
 
-    private void visitObjectConstructor(ObjectContructorNode objectContructorNode) {
+    private void visitObjectConstructor(ObjectDeclarationNode objectDeclarationNode) {
+        ObjectContructorNode objectContructorNode = objectDeclarationNode.getObjectContructorNode();
         if (objectContructorNode.getNonObjectFunctionCallNode() != null)
             visitNonObjectFunctionCall(objectContructorNode.getNonObjectFunctionCallNode());
         else if (objectContructorNode.getObjectFunctionCallNode() != null)
             visitObjectFunctionCall(objectContructorNode.getObjectFunctionCallNode());
+        //If initialized to another object, check that it is declared and the types match
+        else if (objectContructorNode.getObjectVariableName() != null) {
+            retrieveSymbol(objectDeclarationNode.getVariableName());
+            if (retrieveSymbol(objectDeclarationNode.getObjectContructorNode().getObjectVariableName()) instanceof ObjectDeclarationNode) {
+                visitObjectVariableName(objectContructorNode.getObjectVariableName());
+                ObjectDeclarationNode objectConstructorDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(objectDeclarationNode.getObjectContructorNode().getObjectVariableName());
+                if (objectConstructorDeclarationNode != null) {
+                    //visitObjectDeclaration(objectConstructorDeclarationNode);
+                    if (objectDeclarationNode.getClassName().equals(objectConstructorDeclarationNode.getClassName())) {
+                        //Object types are a match
+                    }
+                    else
+                        throw new CompilerException("Object types do not match " + objectDeclarationNode.getClassName() + " and " + objectConstructorDeclarationNode.getClassName(), objectDeclarationNode.getCodePosition());
+                }
+                else
+                    throw new CompilerException("Object (" + objectContructorNode.getObjectVariableName() + ") not declared", objectContructorNode.getCodePosition());
+            }
+            else
+                throw new CompilerException("Contructor (" + objectContructorNode.getObjectVariableName() + ") is not an object", objectContructorNode.getCodePosition());
+        }
         //Visit every ObjectArgument
         else if (objectContructorNode.getObjectArgumentNodePlural() != null) {
             //Get all the Arguments
@@ -920,7 +941,7 @@ public class TypeChecking {
         else if (retrieveSymbol(variableName) != null) {
             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
-            if (variableDeclarationNode != null)
+            if (variableDeclarationNode != null) {
                 for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
                     if (varDeclInitNode.getAssignmentNode() != null) {
                         if (varDeclInitNode.getAssignmentNode().getVariableName().equals(variableName))
@@ -928,6 +949,22 @@ public class TypeChecking {
                     }
                 }
                 throw new CompilerException("ERROR: Variable (" + variableName + ") is not initialized", variableDeclarationNode.getCodePosition());
+            }
+        }
+    }
+
+    private void visitObjectVariableName (String objectVariableName) {
+        if (retrieveSymbol(objectVariableName) == null)
+            throw new CompilerException("ERROR: Variable (" + objectVariableName + ") is not declared");
+        else if (retrieveSymbol(objectVariableName) != null) {
+            ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(objectVariableName);
+
+            if (objectDeclarationNode != null) {
+                if (objectDeclarationNode.getObjectContructorNode() != null) {
+                    return;
+                }
+                throw new CompilerException("ERROR: Variable (" + objectVariableName + ") is not initialized", objectDeclarationNode.getCodePosition());
+            }
         }
     }
 }

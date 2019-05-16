@@ -51,7 +51,8 @@ objectDecl
 
 objectConstructor
     : LEFT_PAREN objectArgs? RIGHT_PAREN
-    | functionCall;
+    | functionCall
+    | objectVariableName;
 
 
 /*      ASSIGNMENT       */
