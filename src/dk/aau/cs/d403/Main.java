@@ -106,13 +106,14 @@ public class Main {
         ast = unrolling.unrollProgram(ast);
 
         // SECOND CONTEXT ANALYSIS
+        typeChecking = new TypeChecking();
         typeChecking.visitProgram(ast);
 
         // CODE GENERATION
         String inputFileName = new File(inputFile).getName();
         CodeGenerator codeGenerator = new CodeGenerator();
-        generatedCode = "// " + inputFileName + "\n// Compiled with Spook Compiler \n// https://github.com/HTML-Earth/Spook-Compiler\n\n";
-        generatedCode = generatedCode + codeGenerator.GenerateGLSL(ast);
+        //generatedCode = "// " + inputFileName + "\n// Compiled with Spook Compiler \n// https://github.com/HTML-Earth/Spook-Compiler\n\n";
+        //generatedCode = generatedCode + codeGenerator.GenerateGLSL(ast);
 
         // Print the code to the terminal
         if (print) {

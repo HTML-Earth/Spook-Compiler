@@ -6,7 +6,6 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
-import dk.aau.cs.d403.spook.Vector2;
 
 import java.util.*;
 
@@ -82,6 +81,9 @@ public class TypeChecking {
         this.listOfPredefinedFunctions.add("tan");
         this.listOfPredefinedFunctions.add("tanh");
         this.listOfPredefinedFunctions.add("trunc");
+        this.listOfPredefinedFunctions.add("setScale");
+        this.listOfPredefinedFunctions.add("setParent");
+
 
         ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
 
@@ -249,12 +251,13 @@ public class TypeChecking {
         // Check if the class is custom and check if that class is declared
         if (!listOfPredefinedClasses.contains(objectType)) {
             if (retrieveSymbol(objectType) == null)
-                throw new CompilerException("ERROR: An object (" + objectType + ") is declared with a non-existing class.", objectDeclarationNode.getCodePosition());
+                throw new CompilerException("ERROR: An object (" + objectDeclarationNode.getVariableName() + ") is declared with a non-existing class.", objectDeclarationNode.getCodePosition());
         }
 
         //Check if the constructor is well typed
-        if (objectDeclarationNode.getObjectContructorNode() != null)
-            visitObjectConstructor(objectDeclarationNode.getObjectContructorNode());
+        if (objectDeclarationNode.getObjectContructorNode() != null) {
+            visitObjectConstructor(objectDeclarationNode);
+        }
 
         if (retrieveSymbol(variableName) == null)
             enterSymbol(variableName, objectDeclarationNode);
@@ -264,11 +267,32 @@ public class TypeChecking {
             throw new CompilerException("ERROR: An object (" + variableName + ") is already declared with the same name and type.", retrieveSymbol(variableName).getCodePosition());
     }
 
-    private void visitObjectConstructor(ObjectContructorNode objectContructorNode) {
+    private void visitObjectConstructor(ObjectDeclarationNode objectDeclarationNode) {
+        ObjectContructorNode objectContructorNode = objectDeclarationNode.getObjectContructorNode();
         if (objectContructorNode.getNonObjectFunctionCallNode() != null)
             visitNonObjectFunctionCall(objectContructorNode.getNonObjectFunctionCallNode());
         else if (objectContructorNode.getObjectFunctionCallNode() != null)
             visitObjectFunctionCall(objectContructorNode.getObjectFunctionCallNode());
+        //If initialized to another object, check that it is declared and the types match
+        else if (objectContructorNode.getObjectVariableName() != null) {
+            retrieveSymbol(objectDeclarationNode.getVariableName());
+            if (retrieveSymbol(objectDeclarationNode.getObjectContructorNode().getObjectVariableName()) instanceof ObjectDeclarationNode) {
+                visitObjectVariableName(objectContructorNode.getObjectVariableName());
+                ObjectDeclarationNode objectConstructorDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(objectDeclarationNode.getObjectContructorNode().getObjectVariableName());
+                if (objectConstructorDeclarationNode != null) {
+                    //visitObjectDeclaration(objectConstructorDeclarationNode);
+                    if (objectDeclarationNode.getClassName().equals(objectConstructorDeclarationNode.getClassName())) {
+                        //Object types are a match
+                    }
+                    else
+                        throw new CompilerException("Object types do not match " + objectDeclarationNode.getClassName() + " and " + objectConstructorDeclarationNode.getClassName(), objectDeclarationNode.getCodePosition());
+                }
+                else
+                    throw new CompilerException("Object (" + objectContructorNode.getObjectVariableName() + ") not declared", objectContructorNode.getCodePosition());
+            }
+            else
+                throw new CompilerException("Contructor (" + objectContructorNode.getObjectVariableName() + ") is not an object", objectContructorNode.getCodePosition());
+        }
         //Visit every ObjectArgument
         else if (objectContructorNode.getObjectArgumentNodePlural() != null) {
             //Get all the Arguments
@@ -322,13 +346,13 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: Variable (" + variableName + ") on left side of assignment is not declared.", assignmentNode.getCodePosition());
 
             if (assignmentNode.getExpressionNode() != null) {
-                Enums.DataType assignedDataType = null;
+                String assignedDataType = null;
                 if (assignmentNode.getExpressionNode() instanceof BoolExpressionNode) {
-                    assignedDataType = Enums.DataType.BOOL;
+                    assignedDataType = Enums.DataType.BOOL.toString();
                 } else if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
                     assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 }
-                if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
+                if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType.toString()))
                     throw new CompilerException("ERROR: Incompatible types.(" + dataType + " and " + assignedDataType + ")", assignmentNode.getCodePosition());
             }
         }
@@ -343,81 +367,31 @@ public class TypeChecking {
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        ArrayList<FunctionDeclarationNode> retrievedFunctions;
-        if (retrieveAllFunctions(functionName) != null)
-            retrievedFunctions = retrieveAllFunctions(functionName);
-        else
-            retrievedFunctions = null;
+        ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
+        retrievedFunctions = retrieveAllFunctions(functionName);
 
-        if (retrievedFunctions.size() > 0) {
-            boolean matchingSize = true;
-            boolean argumentMatch = true;
-            for (FunctionDeclarationNode retrievedNode : retrievedFunctions) {
-                if (retrievedNode != null) { //TODO: Find reason why this is neccesary (File: IfElseSlaaGraesTest)
-                    if (retrievedNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
-                        if (retrievedNode.getFunctionArgNodes().size() != objectArgumentNodes.size())
-                            matchingSize = false;
-                        else {
-                            // Check parameters
-                            outerLoop:
-                            for (int i = 0; i < objectArgumentNodes.size(); i++) {
-
-                                // Check Ints and Floats
-                                if (objectArgumentNodes.get(i).getLowPrecedence() != null) {
-                                    LowPrecedenceNode lowPrecedenceNode = objectArgumentNodes.get(i).getLowPrecedence();
-                                    for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
-                                        for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
-
-                                            if (atomPrecedenceNode.getOperand().getRealNumberNode() != null) {
-                                                if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.NUM)) {
-                                                    argumentMatch = false;
-                                                    break outerLoop;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            /* Not yet implemented in the AST
-                            if (objectArgumentNodes.get(i).getNonObjectFunctionCallNode() != null) {
-                                visitNonObjectFunctionCall(objectArgumentNodes.get(i).getNonObjectFunctionCallNode());
-                            }
-                            */
-
-                            /* Not yet implemented in the AST
-                            if (objectArgumentNodes.get(i).getColorFunctionCallNode() != null) {
-                                if (!retrievedNode.getFunctionArgNodes().get(i).getDataType().equals(Enums.DataType.VEC3)) {
-                                    argumentMatch = false;
-                                    break outerLoop;
-                                }
-                                else {
-                                    argumentMatch = true;
-                                }
-                            }
-                             */
-                            }
-                        }
-                    } else if (retrievedNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
-                        enterSymbol(functionName, nonObjectFunctionCallNode);
-                        matchingSize = true;
-                        break;
+        if (!retrievedFunctions.isEmpty()) {
+            for (FunctionDeclarationNode functionDeclarationNode : retrievedFunctions) {
+                if (functionDeclarationNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
+                    if (functionDeclarationNode.getFunctionArgNodes().size() != objectArgumentNodes.size()) {
+                        throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
                     }
                 }
+                else if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                    throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
+                }
+                else if (objectArgumentNodes != null && functionDeclarationNode.getFunctionArgNodes() == null) {
+                    throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
+                }
             }
-            if (!matchingSize)
-                throw new CompilerException("ERROR: The amount of given arguments (" + objectArgumentNodes.size() + ") for the Non-Object function call (" + functionName + ") does \nnot match the amount of required parameters for the function.", retrieveSymbol(functionName).getCodePosition());
-            if (!argumentMatch)
-                throw new CompilerException("ERROR: The given arguments for the Non-object function call (" + functionName + ") does \nnot match the parameters for the function.", retrieveSymbol(functionName).getCodePosition());
         }
-        else {
-            if (listOfPredefinedFunctions.contains(functionName)) {
-                // predefined function
-            }
-            else
-                throw new CompilerException("ERROR: Non-object function (" + functionName + ") does not exist.", nonObjectFunctionCallNode.getCodePosition());
-        }
+
+        // TODO: Check data typer
+
+
     }
 
-    private Enums.DataType visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
+    private String visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
         String variableName = objectFunctionCallNode.getObjectVariableName();
         String functionName = objectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = objectFunctionCallNode.getObjectArguments();
@@ -434,7 +408,7 @@ public class TypeChecking {
                     objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
             }
             else
-                throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared.", retrieveSymbol(variableName).getCodePosition());
+                throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared.");
 
             if (objectDeclarationNode != null) {
 
@@ -443,7 +417,7 @@ public class TypeChecking {
                     classDeclarationNode = (ClassDeclarationNode) retrieveSymbol(objectDeclarationNode.getClassName());
                     boolean existingFunction = false;
                     boolean sameFunction = true;
-                    Enums.DataType dataType = null;
+                    String dataType = null;
 
                     if (classDeclarationNode != null && classDeclarationNode.getClassBlockNode() != null) {
 
@@ -451,32 +425,35 @@ public class TypeChecking {
                         for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
 
                             // Look for the function with the same name
-                            if (functionDeclarationNode.getFunctionName().equals(functionName)) {
-                                existingFunction = true;
+                            for (String predefinedFunctionName : listOfPredefinedFunctions) {
+                                if (functionName.equals(predefinedFunctionName)) {
+                                    existingFunction = true;
+                                } else if (functionDeclarationNode.getFunctionName().equals(functionName)) {
+                                    existingFunction = true;
 
-                                // Check the data types of the arguments given
-                                if (functionDeclarationNode.getFunctionArgNodes() != null) {
-                                    ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
+                                    // Check the data types of the arguments given
+                                    if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                                        ArrayList<FunctionArgNode> functionArgNodes = functionDeclarationNode.getFunctionArgNodes();
 
-                                    // Check each argument if its data type matches the function's parameters
-                                    for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
-                                        dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
-                                        if (!(functionArgNodes.get(i).getDataType().equals(dataType))) {
-                                            sameFunction = false;
-                                            break;
+                                        // Check each argument if its data type matches the function's parameters
+                                        for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
+                                            dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
+                                            if (!(functionArgNodes.get(i).getDataType().toString().equals(dataType))) {
+                                                sameFunction = false;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    else
-                        throw new CompilerException("ERROR: Class (" + classDeclarationNode.getClassName() + ") does not exist.", classDeclarationNode.getCodePosition());
+
 
                     if (!existingFunction)
-                        throw new CompilerException("ERROR: No functions existed with the given function name (" + functionName + ")", retrieveSymbol(functionName).getCodePosition());
+                        throw new CompilerException("ERROR: No functions existed with the given function name (" + functionName + ")", classDeclarationNode.getCodePosition());
                     if (!sameFunction)
-                        throw new CompilerException("ERROR: No function with the given parameters exists for (" + functionName + ")", retrieveSymbol(functionName).getCodePosition());
+                        throw new CompilerException("ERROR: No function with the given parameters exists for (" + functionName + ")", classDeclarationNode.getCodePosition());
 
                     return dataType;
                 }
@@ -594,7 +571,20 @@ public class TypeChecking {
     }
 
     /*      FUNCTIONS        */
+    private void visitObjectFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, ClassBlockNode classBlockNode) {
+        //Visit Declaration and block
+        visitFunctionDeclaration(functionDeclarationNode);
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode, classBlockNode);
+
+    }
+
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
+        visitFunctionDeclarationHelper(functionDeclarationNode);
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode, null);
+    }
+
+    //Contains the body of FunctionDeclaration in order to call different visitFunctionsBlock methods
+    private void visitFunctionDeclarationHelper(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
@@ -652,12 +642,11 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
 
             enterSymbol(functionName, functionDeclarationNode);
+            this.functionCounter = 1;
         }
-
-        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
     }
 
-    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
+    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode, ClassBlockNode classBlockNode) {
         openScope();
 
         //Visit all function arguments and add them as Variable Declarations in the new scope
@@ -665,12 +654,27 @@ public class TypeChecking {
             for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
 
                 //Initialize VarDecl to null, as it should already be checked
-                AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
-                VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
-                VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
-                visitVariableDeclaration(variableDeclarationNode);
+                if (functionArgNode.getDataType() != null) {
+                    AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
+                    VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
+                    VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
+                    visitVariableDeclaration(variableDeclarationNode);
+                }
+                else if (functionArgNode.getClassName() != null) {
+                    //AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
+                    ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
+                    ObjectContructorNode objectContructorNode = new ObjectContructorNode(new ObjectArgumentNodePlural(objectArgumentNodes));
+                    ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(functionArgNode.getClassName(), functionArgNode.getVariableName(), objectContructorNode);
+                    visitObjectDeclaration(objectDeclarationNode);
+                }
+                else
+                    throw new CompilerException("Function argument missing type for argument: " + functionArgNode.prettyPrint(0), functionArgNode.getCodePosition());
             }
         }
+
+        //Visit all VarDecls in class and re-add them as VarDecls in the ObjectFunction
+        if (classBlockNode != null)
+
 
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
@@ -701,9 +705,9 @@ public class TypeChecking {
 
         if (expressionNode instanceof ArithExpressionNode) {
             lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
-            Enums.DataType dataType = visitLowPrecedenceNode(lowPrecedenceNode);
+            String dataType = visitLowPrecedenceNode(lowPrecedenceNode);
 
-            if (dataType != null && !dataType.equals(returnType))
+            if (dataType != null && !dataType.equals(returnType.toString()))
                 throw new CompilerException("ERROR: Return statement does not match the return type (" + returnType + ") of the function", expressionNode.getCodePosition());
         }
         else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
@@ -741,7 +745,7 @@ public class TypeChecking {
             visitVector2Expression((Vector2ExpressionNode) expressionNode);
     }
 
-    private Enums.DataType visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
+    private String visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
         for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes()) {
             for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
 
@@ -751,9 +755,17 @@ public class TypeChecking {
                         String variableName = atomPrecedenceNode.getOperand().getVariableName();
 
                         visitVariableName(variableName);
-                        VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
-                        if (variableDeclarationNode != null)
-                            return variableDeclarationNode.getDataType();
+
+                        if (retrieveSymbol(variableName) instanceof VariableDeclarationNode) {
+                            VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+                            if (variableDeclarationNode != null)
+                                return variableDeclarationNode.getDataType().toString();
+                        }
+                        else if (retrieveSymbol(variableName) instanceof ObjectDeclarationNode) {
+                            ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
+                            if (objectDeclarationNode != null)
+                                return objectDeclarationNode.getClassName();
+                        }
                     }
 
                     // Operand: Non-object function Call
@@ -765,14 +777,14 @@ public class TypeChecking {
                         // It is not legal to have another function with the same name but with a different return type.
                         FunctionDeclarationNode functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(nonObjectFunctionCallNode.getFunctionName());
                         if (functionDeclarationNode != null)
-                            return functionDeclarationNode.getReturnType();
+                            return functionDeclarationNode.getReturnType().toString();
                     }
 
                     // Operand: Object function Call
-                    if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
-                        ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
-                        return visitObjectFunctionCall(objectFunctionCallNode);
-                    }
+                    //if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
+                    //    ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
+                    //    return visitObjectFunctionCall(objectFunctionCallNode);
+                    //}
 
                 // Operand: Swizzle
                 if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
@@ -784,19 +796,19 @@ public class TypeChecking {
                         swizzleLength = swizzleNode.getSwizzle().length();
 
                         if (swizzleLength == 4)
-                            return Enums.DataType.VEC4;
+                            return Enums.DataType.VEC4.toString();
                         else if (swizzleLength == 3)
-                            return Enums.DataType.VEC3;
+                            return Enums.DataType.VEC3.toString();
                         else if (swizzleLength == 2)
-                            return Enums.DataType.VEC2;
+                            return Enums.DataType.VEC2.toString();
                         else if (swizzleLength == 1)
-                            return Enums.DataType.NUM;
+                            return Enums.DataType.NUM.toString();
                         else
                             throw new CompilerException("ERROR: Too long swizzle", swizzleNode.getCodePosition());
                     }
 
                     if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
-                        return Enums.DataType.NUM;
+                        return Enums.DataType.NUM.toString();
 
                     // Operand: Low precedence
                     if (atomPrecedenceNode.getLowPrecedenceNode() != null)
@@ -905,11 +917,11 @@ public class TypeChecking {
         for (DeclarationNode declarationNode : classBlockNode.getDeclarationNodes()) {
             if (declarationNode instanceof VariableDeclarationNode)
                 visitVariableDeclaration((VariableDeclarationNode) declarationNode);
-            //else if (declarationNode instanceof ObjectDeclarationNode)
-               // visitObjectDeclaration((ObjectDeclarationNode) declarationNode);
+            else if (declarationNode instanceof ObjectDeclarationNode)
+                visitObjectDeclaration((ObjectDeclarationNode) declarationNode);
         }
         for (FunctionDeclarationNode functionDeclarationNode : classBlockNode.getFunctionDeclarationNodes()) {
-            visitFunctionDeclaration(functionDeclarationNode);
+            visitObjectFunctionDeclaration(functionDeclarationNode, classBlockNode);
         }
         closeScope();
     }
@@ -917,18 +929,22 @@ public class TypeChecking {
     /*      MISC         */
     private void visitVariableName(String variableName) {
         if (retrieveSymbol(variableName) == null)
-            throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared", retrieveSymbol(variableName).getCodePosition());
-        else if (retrieveSymbol(variableName) != null) {
-            VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
+            throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared");
 
-            if (variableDeclarationNode != null)
-                for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
-                    if (varDeclInitNode.getAssignmentNode() != null) {
-                        if (varDeclInitNode.getAssignmentNode().getVariableName().equals(variableName))
-                            return;
-                    }
+    }
+
+    private void visitObjectVariableName (String objectVariableName) {
+        if (retrieveSymbol(objectVariableName) == null)
+            throw new CompilerException("ERROR: Variable (" + objectVariableName + ") is not declared");
+        else if (retrieveSymbol(objectVariableName) != null) {
+            ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(objectVariableName);
+
+            if (objectDeclarationNode != null) {
+                if (objectDeclarationNode.getObjectContructorNode() != null) {
+                    return;
                 }
-                throw new CompilerException("ERROR: Variable (" + variableName + ") is not initialized", variableDeclarationNode.getCodePosition());
+                throw new CompilerException("ERROR: Variable (" + objectVariableName + ") is not initialized", objectDeclarationNode.getCodePosition());
+            }
         }
     }
 }
