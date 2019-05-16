@@ -175,12 +175,12 @@ public class CodeGenerator {
 
                 sb.append(newSpace).append(" -= ").append(objectName).append(".pos;\n\t");
 
-                sb.append(newSpace).append(" = scale2D(");
-                sb.append(objectName).append(".scale");
-                sb.append(") * ").append(newSpace).append(";\n\t");
-
                 sb.append(newSpace).append(" = rotate2D(");
                 sb.append(objectName).append(".rot");
+                sb.append(") * ").append(newSpace).append(";\n\t");
+
+                sb.append(newSpace).append(" = scale2D(");
+                sb.append(objectName).append(".scale");
                 sb.append(") * ").append(newSpace).append(";\n\t");
 
                 sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
