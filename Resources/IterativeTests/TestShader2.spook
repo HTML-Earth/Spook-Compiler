@@ -12,8 +12,8 @@ Shader{
   }
 
   #Forget previous for-loop, this one does even require a block
-  for (Num i = 0 to 4)
-    i = 4;
+  for (Num o = 0 to 4)
+    o = 4;
 
   #Shape movement
   Num jumptime = abs(sin(iTime * i));
