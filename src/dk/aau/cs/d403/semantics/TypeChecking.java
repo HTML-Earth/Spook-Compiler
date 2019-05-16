@@ -653,6 +653,8 @@ public class TypeChecking {
                     ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(functionArgNode.getClassName(), functionArgNode.getVariableName(), objectContructorNode);
                     visitObjectDeclaration(objectDeclarationNode);
                 }
+                else
+                    throw new CompilerException("Function argument missing type for argument: " + functionArgNode.prettyPrint(0), functionArgNode.getCodePosition());
             }
         }
 
