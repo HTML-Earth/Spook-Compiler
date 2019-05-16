@@ -106,6 +106,7 @@ public class Main {
         ast = unrolling.unrollProgram(ast);
 
         // SECOND CONTEXT ANALYSIS
+        typeChecking = new TypeChecking();
         typeChecking.visitProgram(ast);
 
         // CODE GENERATION
