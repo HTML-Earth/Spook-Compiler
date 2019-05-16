@@ -1,5 +1,4 @@
 import dk.aau.cs.d403.ast.AstBuilder;
-import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
@@ -12,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class ExampleShadersTest {
+class ShapeTests {
     private TypeChecking typeChecking = new TypeChecking();
 
     void testShader(String shaderName) {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ExampleShadersTest/" + shaderName + ".spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ShapeTests/" + shaderName + ".spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -39,27 +38,22 @@ class ExampleShadersTest {
     }
 
     @Test
-    void BallShader() {
-        testShader("BallShader");
+    void Polygons() {
+        testShader("Polygons");
     }
 
     @Test
-    void FunnyShader() {
-        testShader("FunnyShader");
+    void ShapeTest() {
+        testShader("ShapeTest");
     }
 
     @Test
-    void GhostWithoutLoops() {
-        testShader("GhostWithoutLoops");
+    void ShapeTestMoving() {
+        testShader("ShapeTestMoving");
     }
 
     @Test
-    void Spooderman() {
-        testShader("Spooderman");
-    }
-
-    @Test
-    void Triangles() {
-        testShader("Triangles");
+    void TestShader() {
+        testShader("TestShader");
     }
 }
