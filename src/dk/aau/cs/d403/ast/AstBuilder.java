@@ -445,7 +445,13 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             ObjectContructorNode objectContructorNode = new ObjectContructorNode(objectArgumentNodePlural);
             objectContructorNode.setCodePosition(getCodePosition(ctx));
             return objectContructorNode;
-        } else if (ctx.functionCall() != null) {
+        }
+        else if (ctx.objectVariableName() != null) {
+            ObjectContructorNode objectContructorNode = new ObjectContructorNode(ctx.objectVariableName().getText());
+            objectContructorNode.setCodePosition(getCodePosition(ctx));
+            return objectContructorNode;
+        }
+        else if (ctx.functionCall() != null) {
             ASTnode functionCallNode = visitFunctionCall(ctx.functionCall());
             if (functionCallNode instanceof NonObjectFunctionCallNode) {
                 ObjectContructorNode objectContructorNode = new ObjectContructorNode((NonObjectFunctionCallNode) functionCallNode);
