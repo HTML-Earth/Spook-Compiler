@@ -7,11 +7,6 @@ public class ObjectDeclarationNode extends DeclarationNode {
     private String variableName;
     private ObjectContructorNode objectContructorNode;
 
-    public ObjectDeclarationNode(String className, String variableName) {
-        this.className = className;
-        this.variableName = variableName;
-    }
-
     public ObjectDeclarationNode(String className, String variableName, ObjectContructorNode objectContructorNode) {
         this.className = className;
         this.variableName = variableName;
@@ -41,11 +36,10 @@ public class ObjectDeclarationNode extends DeclarationNode {
             sb.append(" ");
             sb.append(variableName);
 
-            //if initialized print construction
-            if (objectContructorNode != null) {
+            //print constructor
                 sb.append(" = ");
                 sb.append(objectContructorNode.prettyPrint(0));
-            }
+
             return sb.toString();
         } else
             return "Invalid Object declaration";

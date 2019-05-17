@@ -47,7 +47,7 @@ variableDeclInit
 
 // Object declaration
 objectDecl
-    : className objectVariableName (ASSIGN objectConstructor)?;
+    : className objectVariableName ASSIGN objectConstructor;
 
 objectConstructor
     : LEFT_PAREN objectArgs? RIGHT_PAREN
