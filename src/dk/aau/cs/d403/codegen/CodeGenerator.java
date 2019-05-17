@@ -695,8 +695,14 @@ public class CodeGenerator {
                                 .getOperand()
                                 .getVariableName();
                         SpookObject object = spookObjects.get(objectName);
-                        if (object != null)
+                        if (object != null) {
                             object.setParent(scene);
+
+                            if (argumentNodes.size() > 1) {
+                                Vector2 position = Vector2.evaluateLowPrecedence(argumentNodes.get(1).getLowPrecedence());
+                                object.setPosition(position);
+                            }
+                        }
                         break;
                     case "setColor":
                         scene.setColor(Color.getColorArgument(argumentNodes.get(0)));
