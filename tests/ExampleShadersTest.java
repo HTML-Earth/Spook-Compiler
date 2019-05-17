@@ -25,7 +25,7 @@ class ExampleShadersTest {
             programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
-            CodeGenerator codeGenerator = new CodeGenerator();
+            //CodeGenerator codeGenerator = new CodeGenerator();
             //codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {

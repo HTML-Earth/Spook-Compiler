@@ -16,8 +16,7 @@ Shader{
     }
 
     # Function call to create a yellow rectangle
-    Rectangle rec;
-    rec = createYellowRectangle(100, 400);
+    Rectangle rec = createYellowRectangle(100, 400);
 
     # Check if number is over 9000
     Bool test;
@@ -106,26 +105,23 @@ Bool over9000Checker (Num number) {
 }
 
 Void bygMaHouse() {
-    Square house;
-    Circle roundRoof;
-    Rectangle door;
-    house = makeHouse();
-    roundRoof = makeRoundRoof();
-    door = makeDoor();
+    Square house = makeHouse();
+    Circle roundRoof = makeRoundRoof();
+    Rectangle door = makeDoor();
 }
 
 Square makeHouse() {
-    Square house;
+    Square house = (100, Color.green());
     return house;
 }
 
 Circle makeRoundRoof() {
-    Circle roof;
+    Circle roof = (50, Color.green());
     return roof;
 }
 
 Rectangle makeDoor() {
-    Rectangle door;
+    Rectangle door = (20, 60, Color.black());
     return door;
 }
 
@@ -157,12 +153,12 @@ Void useWallhack() {
 }
 
 Circle createBob() {
-    Circle bobFace;
+    Circle bobFace = (100, Color.yellow());
     return bobFace;
 }
 
 Rectangle createBobBody(Circle bobFace) {
-    Rectangle bobBody;
+    Rectangle bobBody = (100, 200, Color.yellow);
     return bobBody;
 }
 
