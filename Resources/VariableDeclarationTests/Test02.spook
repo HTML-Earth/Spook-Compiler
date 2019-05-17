@@ -1,6 +1,6 @@
 Shader {
-    Int var1;
-    Int var1;
+    Int var1 = (1);
+    Int var1 = (1);
 }
 
 #   Throws a Compiler exception:
