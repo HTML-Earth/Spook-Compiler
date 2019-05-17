@@ -616,6 +616,7 @@ public class CodeGenerator {
     private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
 
+        //TODO: Check whether we need to use ObjectArgs, functionCall or another object
         for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectContructorNode().getObjectArgumentNodePlural().getObjectArgumentNodes()) {
             argumentNodes.add(visitArgumentNode(argumentNode));
         }
@@ -654,10 +655,8 @@ public class CodeGenerator {
 
         spookObjects.put(variableName, object);
 
-        if (argumentNodes.size() > 0)
             return new ObjectDeclarationNode(className, variableName, new ObjectContructorNode(new ObjectArgumentNodePlural(argumentNodes)));
-        else
-            return new ObjectDeclarationNode(className, variableName);
+
     }
 
     private NonObjectFunctionCallNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
