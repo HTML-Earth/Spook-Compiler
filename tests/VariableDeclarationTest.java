@@ -45,6 +45,7 @@ class VariableDeclarationTest {
             AstBuilder builder = new AstBuilder();
             ProgramNode ast = (ProgramNode) builder.visitProgram(parser.program());
 
+            //TODO: fix assert to expect specific exception
             assertThrows(CompilerException.class, ()-> typeChecking.visitProgram(ast));
         } catch (IOException e) {
             e.printStackTrace();
