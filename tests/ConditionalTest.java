@@ -24,8 +24,8 @@ class ConditionalTest {
             programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
-            CodeGenerator codeGenerator = new CodeGenerator();
-            codeGenerator.GenerateGLSL(programNode);
+            //CodeGenerator codeGenerator = new CodeGenerator();
+            //codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -423,18 +423,21 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
         String objectName = ctx.objectVariableName().getText();
         String className = ctx.className().getText();
+        ObjectContructorNode objectContructorNode;
 
-        if (ctx.objectConstructor() != null) {
-            ObjectContructorNode objectContructorNode = (ObjectContructorNode) visitObjectConstructor(ctx.objectConstructor());
+        if (ctx.objectConstructor() != null)
+            objectContructorNode = (ObjectContructorNode) visitObjectConstructor(ctx.objectConstructor());
+        else
+            throw new CompilerException("Missing constructor for object " + ctx.objectVariableName().getText(), getCodePosition(ctx));
 
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName, objectContructorNode);
-            objectDeclarationNode.setCodePosition(getCodePosition(ctx));
-            return objectDeclarationNode;
-        } else {
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName);
-            objectDeclarationNode.setCodePosition(getCodePosition(ctx));
-            return objectDeclarationNode;
-        }
+        ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName, objectContructorNode);
+        objectDeclarationNode.setCodePosition(getCodePosition(ctx));
+
+        if (ctx.objectConstructor().objectArgs() != null && ctx.objectConstructor().objectArgs().objectArg().size() == 0)
+            throw new CompilerException("Object "+ objectDeclarationNode.getVariableName() +" Must be given atleast 1 constructor argument", objectContructorNode.getCodePosition());
+
+        return objectDeclarationNode;
+
     }
 
     @Override
@@ -968,7 +971,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
             if (forLoopExpressionNode.getVariableDeclarationNode().getCodePosition() == null)
                 throw new RuntimeException("missing codeposition");
-            //forLoopExpressionNode.getVariableDeclarationNode().setCodePosition(getCodePosition(ctx)); TODO: remove this
             return forLoopExpressionNode;
         }
         else

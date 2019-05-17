@@ -608,20 +608,9 @@ public class TypeChecking {
     }
 
     /*      FUNCTIONS        */
-    private void visitObjectFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, ClassBlockNode classBlockNode) {
-        //Visit Declaration and block
-        visitFunctionDeclaration(functionDeclarationNode);
-        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode, classBlockNode);
-
-    }
-
-    private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
-        visitFunctionDeclarationHelper(functionDeclarationNode);
-        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode, null);
-    }
 
     //Contains the body of FunctionDeclaration in order to call different visitFunctionsBlock methods
-    private void visitFunctionDeclarationHelper(FunctionDeclarationNode functionDeclarationNode) {
+    private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
@@ -680,9 +669,10 @@ public class TypeChecking {
 
             enterSymbol(functionName, functionDeclarationNode);
         }
+        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
     }
 
-    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode, ClassBlockNode classBlockNode) {
+    private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
 
         //Visit all function arguments and add them as Variable Declarations in the new scope
@@ -707,10 +697,6 @@ public class TypeChecking {
                     throw new CompilerException("Function argument missing type for argument: " + functionArgNode.prettyPrint(0), functionArgNode.getCodePosition());
             }
         }
-
-        //Visit all VarDecls in class and re-add them as VarDecls in the ObjectFunction
-        if (classBlockNode != null)
-
 
         for (StatementNode statement : blockNode.getStatementNodes()) {
             visitStatement(statement);
@@ -957,7 +943,7 @@ public class TypeChecking {
                 visitObjectDeclaration((ObjectDeclarationNode) declarationNode);
         }
         for (FunctionDeclarationNode functionDeclarationNode : classBlockNode.getFunctionDeclarationNodes()) {
-            visitObjectFunctionDeclaration(functionDeclarationNode, classBlockNode);
+            visitFunctionDeclaration(functionDeclarationNode);
         }
         closeScope();
     }

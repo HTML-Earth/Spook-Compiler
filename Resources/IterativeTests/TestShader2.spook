@@ -48,7 +48,7 @@ Class Bulletbill extends Shape{
   #Color from Shape
   Rectangle body = (length, height, super.color);
   Circle head = (radius, super.color);
-  Color shadow = (105, 105, 105);
+  Vec4 shadow = (0.85, 0.85, 0.85, 1);
 
   #Constructor
   #Bulletbill (Num height, Num length, Color color) {
