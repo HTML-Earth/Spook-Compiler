@@ -1,13 +1,5 @@
 Shader{
 
-    help(); # <-- CAN CALL WITHOUT PARAMETER
-
-    Num ff = 1;
-    yikes(ff); # <-- GIVEN ARGUMENTS DOES NOT MATCH PARAMETER
-
-    Rectangle rec = (1, 1, Color.black());
-    yeet(rec); # <-- GIVEN ARGUMENTS DOES NOT MATCH PARAMETER
-
     Num jlo = 1;
     Hej hej;
     hej.lol(jlo); # <-- THIS ARGUMENT IS NOT A PARAMETER IN THE "lol" FUNCTION
@@ -37,9 +29,6 @@ Shader{
     #Hej2 hej2;
     #hej2.lol(ooo); # <-- THIS IS ACTING WEIRD. OUT OF BOUND EXCEPTION
 
-    Bool vvv = false;
-    bobba(vvv); # <-- ARGUMENT AND PARAMETER MISMATCH <-- CANT GET THE "MISMATCHING ARGUMENT AND PARAMETER" ERROR
-
 
 
 
@@ -57,21 +46,10 @@ Bool ret () {
     return true; }
 
 
-
-Num help(Num i) {return 0;} # <-- 'i' DOES NOT EXIST
-
-Num yikes(Bool ff) {return 0;} # <-- PARAMETER MISMATCH
-
-Num yeet(Num rec) {return 0;} # <-- PARAMETER MISMATCH
-
-
-
 #Num wut(Meme meme) {return 0;} # DISPLAYS NULLPOINTEREXCEPTION. SHOULD BE "MISSING CLASS (Meme)"
 
 Test testFunc() {} # <-- THIS WORKS BUT NO "Test" CLASS IS MADE
 
-
-Num bobba(Num vvv) {return 0;} # <-- PARAMETER MISMATCH
 
 Class Hej {
 
