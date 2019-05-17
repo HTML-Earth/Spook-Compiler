@@ -158,6 +158,7 @@ public class TypeChecking {
 
             stackLevel -= 1;
         }
+        this.functionCounter = 1;
 
         return symbols;
     }
@@ -365,18 +366,28 @@ public class TypeChecking {
 
     private void visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         int j = 0;
+        boolean notFound = true;
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
         ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
         retrievedFunctions = retrieveAllFunctions(functionName);
 
+        for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {
+            System.out.println(functionDeclarationNode.getFunctionName());
+            for (FunctionArgNode functionArgNode: functionDeclarationNode.getFunctionArgNodes()) {
+                System.out.println("    " + functionArgNode.getDataType());
+            }
+        }
+
         if (!retrievedFunctions.isEmpty()) {
             for (FunctionDeclarationNode functionDeclarationNode : retrievedFunctions) {
                 if (functionDeclarationNode.getFunctionArgNodes() != null && objectArgumentNodes != null) {
                     if (functionDeclarationNode.getFunctionArgNodes().size() != objectArgumentNodes.size()) {
-                        throw new CompilerException("ERROR: Argument and parameter size mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
+                        continue;
+                        //throw new CompilerException("ERROR: Argument and parameter size mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
                     } else {
+                        notFound = false;
                         for (int i  = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                             if (functionDeclarationNode.getFunctionArgNodes().get(i).getDataType() != null) {
                                     if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()) != null) {
@@ -404,7 +415,13 @@ public class TypeChecking {
                 }
                 j++;
             }
+            if (notFound) {
+                throw new CompilerException("ERROR: No function with matching parameters was found. ("+ functionName + ")", nonObjectFunctionCallNode.getCodePosition());
+            }
         }
+        else
+            throw new CompilerException("ERROR: Missing function for function call. (" + functionName + ")", nonObjectFunctionCallNode.getCodePosition());
+
 
 
 
@@ -662,7 +679,6 @@ public class TypeChecking {
                 throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
 
             enterSymbol(functionName, functionDeclarationNode);
-            this.functionCounter = 1;
         }
     }
 
