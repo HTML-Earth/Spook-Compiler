@@ -41,10 +41,14 @@ public abstract class SpookObject {
         this.position = position;
     }
 
+    public void setPosition(ObjectArgumentNode position) {
+        setPosition(Vector2.evaluateLowPrecedence(position.getLowPrecedence()));
+    }
+
     public void setPosition(ArrayList<ObjectArgumentNode> objectArgumentNodes) {
         if (objectArgumentNodes != null){
             if (objectArgumentNodes.size() == 1){
-                setPosition(Vector2.evaluateLowPrecedence(objectArgumentNodes.get(0).getLowPrecedence()));
+                setPosition(objectArgumentNodes.get(0));
             }
             else if (objectArgumentNodes.size() == 2) {
                 ObjectArgumentNode xPos = objectArgumentNodes.get(0);
@@ -73,10 +77,14 @@ public abstract class SpookObject {
         this.scale = scale;
     }
 
+    public void setScale(ObjectArgumentNode scale) {
+        setScale(Vector2.evaluateLowPrecedence(scale.getLowPrecedence()));
+    }
+
     public void setScale(ArrayList<ObjectArgumentNode> objectArgumentNodes) {
         if (objectArgumentNodes != null){
             if (objectArgumentNodes.size() == 1){
-                setScale(Vector2.evaluateLowPrecedence(objectArgumentNodes.get(0).getLowPrecedence()));
+                setScale(objectArgumentNodes.get(0));
             }
             else if (objectArgumentNodes.size() == 2) {
                 ObjectArgumentNode xPos = objectArgumentNodes.get(0);

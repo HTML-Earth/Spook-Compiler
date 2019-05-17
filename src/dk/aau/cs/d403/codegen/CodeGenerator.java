@@ -698,10 +698,14 @@ public class CodeGenerator {
                         if (object != null) {
                             object.setParent(scene);
 
-                            if (argumentNodes.size() > 1) {
-                                Vector2 position = Vector2.evaluateLowPrecedence(argumentNodes.get(1).getLowPrecedence());
-                                object.setPosition(position);
-                            }
+                            if (argumentNodes.size() > 1)
+                                object.setPosition(argumentNodes.get(1));
+
+                            if (argumentNodes.size() > 2)
+                                object.setRotation(argumentNodes.get(2));
+
+                            if (argumentNodes.size() > 3)
+                                object.setScale(argumentNodes.get(3));
                         }
                         break;
                     case "setColor":
