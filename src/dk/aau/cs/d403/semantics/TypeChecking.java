@@ -365,7 +365,6 @@ public class TypeChecking {
     }
 
     private void visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
-        int j = 0;
         boolean notFound = true;
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
@@ -373,14 +372,14 @@ public class TypeChecking {
         ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
         retrievedFunctions = retrieveAllFunctions(functionName);
 
-        for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {
-            System.out.println(functionDeclarationNode.getFunctionName());
-            if (functionDeclarationNode.getFunctionArgNodes() != null) {
-                for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
-                    System.out.println("    " + functionArgNode.getDataType());
-                }
-            }
-        }
+        //for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {           <-- USED FOR TESTING
+        //    System.out.println(functionDeclarationNode.getFunctionName());
+        //    if (functionDeclarationNode.getFunctionArgNodes() != null) {
+        //        for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
+        //            System.out.println("    " + functionArgNode.getDataType());
+        //        }
+        //    }
+        //}
 
         if (!retrievedFunctions.isEmpty()) {
             for (FunctionDeclarationNode functionDeclarationNode : retrievedFunctions) {
@@ -392,15 +391,21 @@ public class TypeChecking {
                         for (int i  = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                             if (functionDeclarationNode.getFunctionArgNodes().get(i).getDataType() != null) {
                                     if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                        if (!functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()))) {
-                                            throw new CompilerException("ERROR: Argument type mismatch in arguments (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                        if (!functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
+                                            throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
                                         }
                                     }
+                                    else
+                                        throw new CompilerException("ERROR: Argument (" + functionDeclarationNode.getFunctionArgNodes().get(i) + ") in function call ("+ functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
                                 }
                             else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
-                                if (!functionDeclarationNode.getFunctionArgNodes().get(i).getClassName().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()))) {
-                                    throw new CompilerException("ERROR: Argument type mismatch in arguments (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
+                                    if (!functionDeclarationNode.getFunctionArgNodes().get(i).getClassName().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
+                                        throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                    }
                                 }
+                                else
+                                    throw new CompilerException("ERROR: Argument (" + nonObjectFunctionCallNode.getArgumentNodes().get(i) + ") in function call ("+ functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
                             }
                             else
                                 System.out.println("get class name data type was null");
@@ -409,18 +414,18 @@ public class TypeChecking {
                     }
 
                 }
-                else if (notFound && functionDeclarationNode.getFunctionArgNodes() != null) {
-                    continue;
-                    //throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
-                }
-                else if (notFound && objectArgumentNodes != null && functionDeclarationNode.getFunctionArgNodes() == null) {
-                    continue;
-                }
-                else {
-                    break;
-                }
+                else if (functionDeclarationNode.getFunctionArgNodes() == null && objectArgumentNodes == null)
+                    notFound = false;
 
-                j++;
+                else if (notFound && functionDeclarationNode.getFunctionArgNodes() != null)
+                    continue;
+
+                else if (notFound && objectArgumentNodes != null && functionDeclarationNode.getFunctionArgNodes() == null)
+                    continue;
+
+                else
+                    break;
+
             }
 
             if (notFound)
