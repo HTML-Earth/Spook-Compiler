@@ -1,0 +1,16 @@
+Shader {
+    Bool bool;
+    Num hej;
+    test(bool);
+}
+
+
+
+Void test() {}
+Void test(Bool bool) {}
+Void test(Bool bool, Num hej) {}
+
+
+
+#Void test(Bool bool, nu mubk) { return 0;}
+#Void test(Bool bool,  hej) {}

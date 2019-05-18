@@ -375,8 +375,10 @@ public class TypeChecking {
 
         for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {
             System.out.println(functionDeclarationNode.getFunctionName());
-            for (FunctionArgNode functionArgNode: functionDeclarationNode.getFunctionArgNodes()) {
-                System.out.println("    " + functionArgNode.getDataType());
+            if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
+                    System.out.println("    " + functionArgNode.getDataType());
+                }
             }
         }
 
@@ -387,10 +389,9 @@ public class TypeChecking {
                         continue;
                         //throw new CompilerException("ERROR: Argument and parameter size mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
                     } else {
-                        notFound = false;
                         for (int i  = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                             if (functionDeclarationNode.getFunctionArgNodes().get(i).getDataType() != null) {
-                                    if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()) != null) {
+                                    if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
                                         if (!functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()))) {
                                             throw new CompilerException("ERROR: Argument type mismatch in arguments (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(j).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
                                         }
@@ -402,22 +403,29 @@ public class TypeChecking {
                                 }
                             }
                             else
-                                    System.out.println("get class name data type was null");
-                            }
+                                System.out.println("get class name data type was null");
+                        }
+                        notFound = false;
                     }
 
                 }
-                else if (functionDeclarationNode.getFunctionArgNodes() != null) {
-                    throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
+                else if (notFound && functionDeclarationNode.getFunctionArgNodes() != null) {
+                    continue;
+                    //throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
                 }
-                else if (objectArgumentNodes != null && functionDeclarationNode.getFunctionArgNodes() == null) {
-                    throw new CompilerException("ERROR: Argument and parameter mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + ")", nonObjectFunctionCallNode.getCodePosition());
+                else if (notFound && objectArgumentNodes != null && functionDeclarationNode.getFunctionArgNodes() == null) {
+                    continue;
                 }
+                else {
+                    break;
+                }
+
                 j++;
             }
-            if (notFound) {
+
+            if (notFound)
                 throw new CompilerException("ERROR: No function with matching parameters was found. ("+ functionName + ")", nonObjectFunctionCallNode.getCodePosition());
-            }
+
         }
         else
             throw new CompilerException("ERROR: Missing function for function call. (" + functionName + ")", nonObjectFunctionCallNode.getCodePosition());
@@ -662,8 +670,8 @@ public class TypeChecking {
 
             if (sameFunctionArgs)
                 throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and arguments already exists.", retrieveSymbol(functionName).getCodePosition());
-            if (!sameReturnType)
-                throw new CompilerException("ERROR: A function with the same name (" + functionName + ") with a different return type already exists.", retrieveSymbol(functionName).getCodePosition());
+            //if (!sameReturnType) TODO: Remove this
+            //    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") with a different return type already exists.", retrieveSymbol(functionName).getCodePosition());
             if (sameAmountOfArgs)
                 throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
 
