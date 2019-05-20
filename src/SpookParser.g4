@@ -73,7 +73,7 @@ vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: boolOperations;
-ternaryOperator: (boolExpression | variableName | functionCall) QUESTION expression COLON expression;
+ternaryOperator: (boolExpression | NOT? variableName | functionCall) QUESTION expression COLON expression;
 
 arithOperand
     : realNumber | variableName | functionCall | swizzle | vector2Expression | vector3Expression | vector4Expression;

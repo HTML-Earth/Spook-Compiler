@@ -816,6 +816,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
             return ternaryOperatorNode;
         }
+        else if (ctx.variableName() != null && ctx.NOT() != null) {
+            TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, ctx.variableName().getText(), Enums.BoolOperator.NOT);
+            ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
+            return ternaryOperatorNode;
+        }
         else if (ctx.variableName() != null) {
             TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, ctx.variableName().getText());
             ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
