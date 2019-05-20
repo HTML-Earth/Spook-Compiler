@@ -642,6 +642,7 @@ public class TypeChecking {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
+        String className = functionDeclarationNode.getClassName();
 
         ArrayList<FunctionDeclarationNode> retrievedFunctions;
         if (retrieveAllFunctions(functionName) != null)
@@ -693,7 +694,10 @@ public class TypeChecking {
             //if (!sameReturnType) TODO: Remove this
             //    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") with a different return type already exists.", retrieveSymbol(functionName).getCodePosition());
             if (sameAmountOfArgs)
-                throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
+                if (returnType != null)
+                    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
+                else
+                    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + className + ") already exists.", retrieveSymbol(functionName).getCodePosition());
 
             enterSymbol(functionName, functionDeclarationNode);
         }
