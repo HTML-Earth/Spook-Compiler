@@ -1,8 +1,25 @@
 Shader {
     Vec2 center = (Screen.x / 2, Screen.y / 2);
+    Num rps = 5;
 
-    Circle wheel = (Screen.y * 0.4, Color.black());
-    wheel.setInverted(true);
+    Empty wheel = (center);
+    wheel.setRotation((Time * 360 * rps) % 360);
+    Scene.add(wheel);
 
-    Scene.add(wheel, center);
+    Rectangle left = (Screen.x, Screen.y, Color.red());
+    left.setPosition(-Screen.x / 2, 0);
+    left.setParent(wheel);
+
+    Rectangle right = (Screen.x, Screen.y, Color.blue());
+    right.setPosition(Screen.x / 2, 0);
+    right.setParent(wheel);
+
+    Circle background = (Screen.y * 0.4, Color.black());
+    background.setInverted(true);
+    background.setParent(wheel);
+
+    Triangle arrow = (Screen.y / 10, Screen.y / 10, Color.white());
+    arrow.setPosition(Screen.x / 2, Screen.y * 0.9);
+    arrow.setRotation(180);
+    Scene.add(arrow);
 }
