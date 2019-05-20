@@ -33,7 +33,7 @@ Shader{
     # Boolean function to check if over 9000
     Bool isOver9000;
     Num powerLevel = 500;
-    isOver9000 = isOver9000Checker(powerLevel);
+    isOver9000 = over9000Checker(powerLevel);
 
     # Boolean decides which function to run based on riste value
     Bool makeDecision;
@@ -152,7 +152,7 @@ Void useWallhack() {
 
 }
 
-Circle createBob() {
+Circle createBobFace() {
     Circle bobFace = (100, Color.yellow());
     return bobFace;
 }
@@ -160,5 +160,11 @@ Circle createBob() {
 Rectangle createBobBody(Circle bobFace) {
     Rectangle bobBody = (100, 200, Color.yellow);
     return bobBody;
+}
+
+Void stay() {
+}
+
+Void goHome() {
 }
 
