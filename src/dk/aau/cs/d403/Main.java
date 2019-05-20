@@ -104,6 +104,12 @@ public class Main {
         Unrolling unrolling = new Unrolling();
         ast = unrolling.unrollProgram(ast);
 
+        // Pretty printing 2
+        if (prettyPrint) {
+            System.out.println("Pretty Print 2:");
+            System.out.println(ast.prettyPrint(0));
+        }
+
         // SECOND CONTEXT ANALYSIS
         typeChecking = new TypeChecking();
         typeChecking.visitProgram(ast);
