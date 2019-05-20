@@ -1,13 +1,12 @@
 package dk.aau.cs.d403.spook.shapes;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.color.Color;
 
-import javax.naming.CommunicationException;
 import java.util.ArrayList;
 
 public class Triangle extends Shape {
