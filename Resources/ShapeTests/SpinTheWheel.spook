@@ -1,0 +1,8 @@
+Shader {
+    Vec2 center = (Screen.x / 2, Screen.y / 2);
+
+    Circle wheel = (Screen.y * 0.4, Color.black());
+    wheel.setInverted(true);
+
+    Scene.add(wheel, center);
+}
