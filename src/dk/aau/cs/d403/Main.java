@@ -3,12 +3,12 @@ package dk.aau.cs.d403;
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
+import dk.aau.cs.d403.errorhandling.ReasonableErrorStrategy;
 import dk.aau.cs.d403.optimization.Unrolling;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.TypeChecking;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -75,21 +75,20 @@ public class Main {
 
 
         // LEXER / PARSER
-        SpookParser parser = null;
+        SpookParser.ProgramContext parseTree = null;
         try {
             SpookLexer lexer = new SpookLexer(CharStreams.fromFileName(inputFile));
-            parser = new SpookParser(new CommonTokenStream(lexer));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+            parser.setErrorHandler(new ReasonableErrorStrategy());
+            parseTree = parser.program();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (parser == null)
-            throw new RuntimeException("Parser failed.");
-
         // AST
         AstBuilder builder = new AstBuilder();
-        ProgramNode ast = (ProgramNode)builder.visitProgram(parser.program());
+        ProgramNode ast = (ProgramNode)builder.visitProgram(parseTree);
 
         // Pretty printing
         if (prettyPrint) {

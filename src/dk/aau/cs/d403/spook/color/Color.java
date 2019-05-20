@@ -1,15 +1,10 @@
 package dk.aau.cs.d403.spook.color;
 
-import dk.aau.cs.d403.CompilerException;
-import dk.aau.cs.d403.ast.expressions.HighPrecedenceNode;
-import dk.aau.cs.d403.ast.expressions.LowPrecedenceNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
-import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 public class Color {
     public static Vector4 clear() {
