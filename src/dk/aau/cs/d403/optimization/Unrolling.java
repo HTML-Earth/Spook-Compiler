@@ -128,9 +128,12 @@ public class Unrolling {
                         )
                     );
 
-                    fixedExpressionNode1 = new ForLoopExpressionNode(new VariableDeclarationNode(
+                    VariableDeclarationNode newVariableDeclarationNode = new VariableDeclarationNode(
                         expressionNode1.getVariableDeclarationNode().getDataType(), fixedVarDeclInitNodes
-                    ));
+                    );
+                    newVariableDeclarationNode.setCodePosition(expressionNode1.getCodePosition());
+
+                    fixedExpressionNode1 = new ForLoopExpressionNode(newVariableDeclarationNode);
                     fixedExpressionNode1.setCodePosition(forLoopStatementNode.getCodePosition());
                 }
             }
