@@ -745,6 +745,12 @@ public class CodeGenerator {
                         if (parentObject != null)
                             object.setParent(parentObject);
                         break;
+                    case "setInverted":
+                        if (object instanceof Shape) {
+                            Shape shape = (Shape)object;
+                            shape.setInverted(argumentNodes);
+                        }
+                        break;
                     default:
                         throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);
                 }
