@@ -38,11 +38,11 @@ public class BoolExpressionNode extends ExpressionNode {
     }
 
     public static BoolExpressionNode False() {
-        return new BoolExpressionNode(BoolOperationsNode.True());
+        return new BoolExpressionNode(BoolOperationsNode.False());
     }
 
     public static BoolExpressionNode True() {
-        return new BoolExpressionNode(BoolOperationsNode.False());
+        return new BoolExpressionNode(BoolOperationsNode.True());
     }
 
 }
