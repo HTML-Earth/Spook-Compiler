@@ -7,18 +7,30 @@ public class ObjectArgumentNode implements ASTnode {
 
     private LowPrecedenceNode lowPrecedence;
 
+    private BoolExpressionNode boolExpression;
+
     public ObjectArgumentNode(LowPrecedenceNode lowPrecedence) {
         this.lowPrecedence = lowPrecedence;
+    }
+
+    public ObjectArgumentNode(BoolExpressionNode boolExpression) {
+        this.boolExpression = boolExpression;
     }
 
     public LowPrecedenceNode getLowPrecedence() {
         return lowPrecedence;
     }
 
+    public BoolExpressionNode getBoolExpression() {
+        return boolExpression;
+    }
+
     @Override
     public String prettyPrint(int indent) {
         if (lowPrecedence != null)
             return lowPrecedence.prettyPrint(indent);
+        else if (boolExpression != null)
+            return boolExpression.prettyPrint(indent);
         else
             return "Invalid Object Argument";
     }

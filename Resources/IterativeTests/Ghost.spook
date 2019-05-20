@@ -30,7 +30,7 @@ Shader {
         Num frac = i * (1/5);
         Circle tip = (15, Color.white());
         tip.setPosition(xPos + 200 + sin(frac - 1) * 150, yPos + 128 - cos(frac * 1.5 - 1) * 90 + hoverTips);
-        Scene.add(tip1);
+        Scene.add(tip);
     }
 
     Circle eye1 = (20, Color.black());

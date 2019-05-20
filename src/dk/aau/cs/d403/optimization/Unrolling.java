@@ -69,8 +69,8 @@ public class Unrolling {
         return declarationNode;
     }
 
-    private ArrayList<ForLoopStatementNode> unrollForLoop(ForLoopStatementNode forLoopStatementNode) {
-        ArrayList<ForLoopStatementNode> forLoopStatementNodes = new ArrayList<>();
+    private ArrayList<StatementNode> unrollForLoop(ForLoopStatementNode forLoopStatementNode) {
+        ArrayList<StatementNode> unrolledStatementNodes = new ArrayList<>();
 
         ConditionalBlockNode conditionalBlockNode = forLoopStatementNode.getConditionalBlockNode();
 
@@ -84,9 +84,10 @@ public class Unrolling {
         if (expr1 > expr2)
             countDown = true;
 
+        //SIMULATE FOR LOOP ITERATION
         while (countDown ? expr1 >= expr2 : expr1 <= expr2) {
 
-            ForLoopExpressionNode fixedExpressionNode1 = expressionNode1;
+            // CREATE FIXED EXPRESSION NODE
 
             ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
             atomPrecedenceNodes.add(
@@ -106,18 +107,11 @@ public class Unrolling {
 
             fixedExpressionNode.setCodePosition(forLoopStatementNode.getCodePosition());
 
-            if (expressionNode1.getAtomPrecedenceNode() != null) {
-                fixedExpressionNode1 = new ForLoopExpressionNode(
-                    new AtomPrecedenceNode(
-                        new ArithOperandNode(
-                            new RealNumberNode(expr1)
-                        )
-                    )
-                );
-                fixedExpressionNode1.setCodePosition(forLoopStatementNode.getCodePosition());
-            }
-            else if (expressionNode1.getVariableDeclarationNode() != null) {
+            // CHECK FOR VARIABLE DECLARATION OR ASSIGNMENT
+
+            if (expressionNode1.getVariableDeclarationNode() != null) {
                 if (expressionNode1.getVariableDeclarationNode().getVarDeclInitNodes() != null) {
+                    //CREATE NEW VARIABLE DECLARATION
                     ArrayList<VarDeclInitNode> varDeclInitNodes = expressionNode1.getVariableDeclarationNode().getVarDeclInitNodes();
                     AssignmentNode assignmentNode = varDeclInitNodes.get(0).getAssignmentNode();
 
@@ -128,44 +122,47 @@ public class Unrolling {
                         )
                     );
 
-                    fixedExpressionNode1 = new ForLoopExpressionNode(new VariableDeclarationNode(
+                    VariableDeclarationNode newVariableDeclarationNode = new VariableDeclarationNode(
                         expressionNode1.getVariableDeclarationNode().getDataType(), fixedVarDeclInitNodes
-                    ));
-                    fixedExpressionNode1.setCodePosition(forLoopStatementNode.getCodePosition());
+                    );
+                    newVariableDeclarationNode.setCodePosition(expressionNode1.getCodePosition());
+
+                    //ADD VARIABLE DECLARATION TO STATEMENT LIST
+                    unrolledStatementNodes.add(newVariableDeclarationNode);
                 }
             }
             else if (expressionNode1.getAssignmentNode() != null) {
-                AssignmentNode assignmentNode = expressionNode1.getAssignmentNode();
-                fixedExpressionNode1 = new ForLoopExpressionNode(new AssignmentNode(
-                        assignmentNode.getVariableName(), fixedExpressionNode
-                ));
-                fixedExpressionNode1.setCodePosition(forLoopStatementNode.getCodePosition());
+                //CREATE NEW ASSIGNMENT
+                AssignmentNode newAssignmentNode = new AssignmentNode(
+                        expressionNode1.getAssignmentNode().getVariableName(), fixedExpressionNode
+                );
+                newAssignmentNode.setCodePosition(expressionNode1.getCodePosition());
+
+                //ADD ASSIGNMENT TO STATEMENT LIST
+                unrolledStatementNodes.add(newAssignmentNode);
             }
 
-            ForLoopExpressionNode fixedExpressionNode2 = new ForLoopExpressionNode(
-                new AtomPrecedenceNode(
-                    new ArithOperandNode(
-                        new RealNumberNode(expr1)
-                    )
-                )
-            );
-            fixedExpressionNode2.setCodePosition(forLoopStatementNode.getCodePosition());
+            // ADD LOOP STATEMENTS TO STATEMENT LIST
 
             if (conditionalBlockNode != null) {
-                ForLoopStatementNode newForLoopStatementNode = new ForLoopStatementNode(fixedExpressionNode1, fixedExpressionNode2, conditionalBlockNode);
-                newForLoopStatementNode.setCodePosition(forLoopStatementNode.getCodePosition());
-                forLoopStatementNodes.add(newForLoopStatementNode);
+                if (conditionalBlockNode.getStatementNode() != null)
+                    unrolledStatementNodes.add(conditionalBlockNode.getStatementNode());
+                else if (conditionalBlockNode.getBlockNode() != null)
+                    unrolledStatementNodes.addAll(conditionalBlockNode.getBlockNode().getStatementNodes());
+                else if (conditionalBlockNode.getReturnNode() != null)
+                    unrolledStatementNodes.add(conditionalBlockNode.getReturnNode()); //TODO: maybe illegal?
             }
             else
                 throw new CompilerException("Invalid ForLoopStatement", forLoopStatementNode.getCodePosition());
 
+            //INCREMENT OR DECREMENT EXPRESSION
             if (countDown)
                 expr1--;
             else
                 expr1++;
         }
 
-        return forLoopStatementNodes;
+        return unrolledStatementNodes;
     }
 
     // FOR LOOP EVALUATION

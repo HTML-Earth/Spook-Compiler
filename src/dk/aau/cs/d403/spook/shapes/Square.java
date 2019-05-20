@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.spook.Vector2;
@@ -18,6 +19,8 @@ public class Square extends Shape {
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
         this.scale = Vector2.one();
+
+        this.inverted = BoolExpressionNode.False();
 
         if (argumentNodes.size() == 2) {
             this.size = argumentNodes.get(0);
@@ -57,6 +60,6 @@ public class Square extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (SquareCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
+        return "SquareCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName);
     }
 }
