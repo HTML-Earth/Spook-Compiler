@@ -871,11 +871,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitConditionalExpression(SpookParser.ConditionalExpressionContext ctx) {
         ConditionalExpressionNode conditionalExpressionNode;
-        if (ctx.BOOL_LITERAL() != null) {
-            conditionalExpressionNode = new ConditionalExpressionNode(getBooleanValue(ctx.BOOL_LITERAL()));
-            conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-            return conditionalExpressionNode;
-        } else if (ctx.boolExpression() != null) {
+        if (ctx.boolExpression() != null) {
             BoolExpressionNode boolExpressionNode = (BoolExpressionNode) visitBoolExpression(ctx.boolExpression());
             conditionalExpressionNode = new ConditionalExpressionNode(boolExpressionNode);
             conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
