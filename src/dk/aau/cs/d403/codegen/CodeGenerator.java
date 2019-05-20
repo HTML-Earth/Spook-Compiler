@@ -187,7 +187,15 @@ public class CodeGenerator {
 
                 //Only Shapes
                 if (child instanceof Shape){
+                    sb.append("if (");
+
+                    sb.append(PrintGLSL.printBoolExpression(((Shape) child).isInverted()));
+
+                    sb.append(" ^^ ");
+
                     sb.append(((Shape)child).getCheckCall(newSpace));
+
+                    sb.append("\t}");
                 }
 
                 sb.append("\n\n");
@@ -694,8 +702,18 @@ public class CodeGenerator {
                                 .getOperand()
                                 .getVariableName();
                         SpookObject object = spookObjects.get(objectName);
-                        if (object != null)
+                        if (object != null) {
                             object.setParent(scene);
+
+                            if (argumentNodes.size() > 1)
+                                object.setPosition(argumentNodes.get(1));
+
+                            if (argumentNodes.size() > 2)
+                                object.setRotation(argumentNodes.get(2));
+
+                            if (argumentNodes.size() > 3)
+                                object.setScale(argumentNodes.get(3));
+                        }
                         break;
                     case "setColor":
                         scene.setColor(Color.getColorArgument(argumentNodes.get(0)));
@@ -733,6 +751,12 @@ public class CodeGenerator {
                         SpookObject parentObject = spookObjects.get(parentName);
                         if (parentObject != null)
                             object.setParent(parentObject);
+                        break;
+                    case "setInverted":
+                        if (object instanceof Shape) {
+                            Shape shape = (Shape)object;
+                            shape.setInverted(argumentNodes);
+                        }
                         break;
                     default:
                         throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);

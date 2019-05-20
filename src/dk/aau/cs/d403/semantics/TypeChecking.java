@@ -648,6 +648,7 @@ public class TypeChecking {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
+        String className = functionDeclarationNode.getClassName();
 
         ArrayList<FunctionDeclarationNode> retrievedFunctions;
         if (retrieveAllFunctions(functionName) != null)
@@ -699,7 +700,10 @@ public class TypeChecking {
             //if (!sameReturnType) TODO: Remove this
             //    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") with a different return type already exists.", retrieveSymbol(functionName).getCodePosition());
             if (sameAmountOfArgs)
-                throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
+                if (returnType != null)
+                    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + returnType + ") already exists.", retrieveSymbol(functionName).getCodePosition());
+                else
+                    throw new CompilerException("ERROR: A function with the same name (" + functionName + ") and type (" + className + ") already exists.", retrieveSymbol(functionName).getCodePosition());
 
             enterSymbol(functionName, functionDeclarationNode);
         }
@@ -881,9 +885,29 @@ public class TypeChecking {
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
-        visitExpression(ternaryOperatorNode.getBoolExpressionNode());
-        visitExpression(ternaryOperatorNode.getExpressionNode1());
+        if (ternaryOperatorNode.getBoolExpressionNode() != null)
+            visitExpression(ternaryOperatorNode.getBoolExpressionNode());
+        else if (ternaryOperatorNode.getVariableName() != null) {
+            visitVariableName(ternaryOperatorNode.getVariableName());
+            //Case of !variableName check that variableName is of type Bool
+            if (ternaryOperatorNode.getBoolOperator() != null) {
+                VariableDeclarationNode variableDeclarationNode = null;
+                if (retrieveSymbol(ternaryOperatorNode.getVariableName()) instanceof VariableDeclarationNode)
+                variableDeclarationNode =(VariableDeclarationNode) retrieveSymbol(ternaryOperatorNode.getVariableName());
+                if (variableDeclarationNode != null) {
+                    if (variableDeclarationNode.getDataType() != Enums.DataType.BOOL)
+                        throw new CompilerException("Variable: " + ternaryOperatorNode.getVariableName() +" is not of type bool, negation not allowed", ternaryOperatorNode.getCodePosition());
+                }
+            }
+        }
+        else if (ternaryOperatorNode.getObjectFunctionCallNode() != null)
+            visitObjectFunctionCall(ternaryOperatorNode.getObjectFunctionCallNode());
+        else if (ternaryOperatorNode.getNonObjectFunctionCallNode() != null)
+            visitNonObjectFunctionCall(ternaryOperatorNode.getNonObjectFunctionCallNode());
+
+
         visitExpression(ternaryOperatorNode.getExpressionNode2());
+        visitExpression(ternaryOperatorNode.getExpressionNode1());
     }
 
     private void visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {

@@ -3,7 +3,6 @@ package dk.aau.cs.d403.spook;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
-import dk.aau.cs.d403.spook.color.Color;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,10 @@ public class Empty extends SpookObject {
         this.rotation = ObjectArgumentNode.zero();
         this.scale = Vector2.one();
 
-        if (argumentNodes.size() == 2) {
+        if (argumentNodes.size() == 1) {
+            this.position = Vector2.evaluateLowPrecedence(argumentNodes.get(0).getLowPrecedence());
+        }
+        else if (argumentNodes.size() == 2) {
             this.position = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
         }
     }

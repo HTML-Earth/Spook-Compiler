@@ -14,8 +14,9 @@ Shader {
 
     #Ternary Operator
     Bool bool1 = true;
-    Num ternary = bool1 ? 2 : 3;
+    Num ternary = !bool1 ? 2 : 3;
     Num ternary2 = false ? 2 : 3;
+    Num ternary3 = !false ? 4 : 0;
 
     Num a, r, g = 3, b;
 
