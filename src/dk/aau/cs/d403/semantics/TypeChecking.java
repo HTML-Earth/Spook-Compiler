@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.semantics;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
