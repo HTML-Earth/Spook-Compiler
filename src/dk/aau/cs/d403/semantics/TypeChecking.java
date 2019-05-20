@@ -712,6 +712,7 @@ public class TypeChecking {
                     ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
                     ObjectContructorNode objectContructorNode = new ObjectContructorNode(new ObjectArgumentNodePlural(objectArgumentNodes));
                     ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(functionArgNode.getClassName(), functionArgNode.getVariableName(), objectContructorNode);
+                    objectDeclarationNode.setCodePosition(functionArgNode.getCodePosition());
                     visitObjectDeclaration(objectDeclarationNode);
                 }
                 else
