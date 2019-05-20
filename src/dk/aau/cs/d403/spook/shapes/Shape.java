@@ -1,8 +1,10 @@
 package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.expressions.AtomPrecedenceNode;
+import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.ast.expressions.HighPrecedenceNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.spook.Vector4;
 import dk.aau.cs.d403.spook.color.Colorable;
 import dk.aau.cs.d403.spook.SpookObject;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 
 public abstract class Shape extends SpookObject implements Colorable {
     protected Vector4 color;
-    protected boolean inverted;
+    protected BoolExpressionNode inverted;
 
     @Override
     public Vector4 getColor() {
@@ -24,20 +26,28 @@ public abstract class Shape extends SpookObject implements Colorable {
         this.color = color;
     }
 
-    public boolean isInverted() {
+    public BoolExpressionNode isInverted() {
         return inverted;
     }
 
-    public void setInverted(boolean inverted) {
+    public void setInverted(BoolExpressionNode inverted) {
         this.inverted = inverted;
     }
 
     public void setInverted(ObjectArgumentNode argumentNode) {
-        this.inverted = inverted; //TODO: fix
+        if (argumentNode.getBoolExpression() != null) {
+            this.inverted = argumentNode.getBoolExpression();
+        }
+        //TODO: make it possible to use variables through lowPrecedence
+        else
+            throw new CompilerException("Expected a boolean expression");
     }
 
     public void setInverted(ArrayList<ObjectArgumentNode> argumentNodes) {
-        this.inverted = inverted; //TODO: fix
+        if (argumentNodes.size() == 1)
+            setInverted(argumentNodes.get(0));
+        else
+            throw new CompilerException("ERROR: Invalid number of arguments. Expecting 1 argument, Found " + argumentNodes.size() + " arguments");
     }
 
     public abstract String getCheckCall(String spaceName);
