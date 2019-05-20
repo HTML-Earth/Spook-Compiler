@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook.shapes;
 
+import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
@@ -19,6 +20,8 @@ public class Triangle extends Shape {
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
         this.scale = Vector2.one();
+
+        this.inverted = BoolExpressionNode.False();
 
         if (argumentNodes.size() == 3) {
             this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
@@ -73,6 +76,6 @@ public class Triangle extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (TriangleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
+        return "TriangleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName);
     }
 }

@@ -1,5 +1,6 @@
 package dk.aau.cs.d403.spook.shapes;
 
+import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
@@ -19,6 +20,8 @@ public class Circle extends Shape {
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
         this.scale = Vector2.one();
+
+        this.inverted = BoolExpressionNode.False();
 
         if (argumentNodes.size() == 2) {
 
@@ -61,6 +64,6 @@ public class Circle extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (CircleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName) + "\t}";
+        return "CircleCheck(" + spaceName + ", " + name + ")) {\n" + getColorApplication(spaceName);
     }
 }

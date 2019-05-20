@@ -36,4 +36,13 @@ public class BoolExpressionNode extends ExpressionNode {
     public CodePosition getCodePosition() {
         return codePosition;
     }
+
+    public static BoolExpressionNode False() {
+        return new BoolExpressionNode(BoolOperationsNode.True());
+    }
+
+    public static BoolExpressionNode True() {
+        return new BoolExpressionNode(BoolOperationsNode.False());
+    }
+
 }

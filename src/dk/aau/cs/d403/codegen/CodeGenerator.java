@@ -187,7 +187,15 @@ public class CodeGenerator {
 
                 //Only Shapes
                 if (child instanceof Shape){
+                    sb.append("if (");
+
+                    sb.append(PrintGLSL.printBoolExpression(((Shape) child).isInverted()));
+
+                    sb.append(" ^^ ");
+
                     sb.append(((Shape)child).getCheckCall(newSpace));
+
+                    sb.append("\t}");
                 }
 
                 sb.append("\n\n");

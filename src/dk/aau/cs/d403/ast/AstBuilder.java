@@ -637,14 +637,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectArg(SpookParser.ObjectArgContext ctx) {
-        if (ctx.lowPrecedence() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
-            objectArgumentNode.setCodePosition(getCodePosition(ctx));
+        ObjectArgumentNode objectArgumentNode;
 
-            return objectArgumentNode;
-        }
+        if (ctx.lowPrecedence() != null)
+            objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
+        else if (ctx.boolExpression() != null)
+            objectArgumentNode = new ObjectArgumentNode((BoolExpressionNode) visitBoolExpression(ctx.boolExpression()));
         else
             throw new CompilerException("Invalid Object Function Call Argument", getCodePosition(ctx));
+
+        objectArgumentNode.setCodePosition(getCodePosition(ctx));
+        return objectArgumentNode;
     }
 
     @Override
