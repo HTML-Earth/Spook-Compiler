@@ -72,6 +72,10 @@ public class TernaryOperatorNode extends ExpressionNode {
         return objectFunctionCallNode;
     }
 
+    public Enums.BoolOperator getBoolOperator() {
+        return boolOperator;
+    }
+
     @Override
     public String prettyPrint(int indent) {
         if (boolExpressionNode != null)

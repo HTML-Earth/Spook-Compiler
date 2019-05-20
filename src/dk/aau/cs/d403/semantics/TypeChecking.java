@@ -882,9 +882,29 @@ public class TypeChecking {
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
-        visitExpression(ternaryOperatorNode.getBoolExpressionNode());
-        visitExpression(ternaryOperatorNode.getExpressionNode1());
+        if (ternaryOperatorNode.getBoolExpressionNode() != null)
+            visitExpression(ternaryOperatorNode.getBoolExpressionNode());
+        else if (ternaryOperatorNode.getVariableName() != null) {
+            visitVariableName(ternaryOperatorNode.getVariableName());
+            //Case of !variableName check that variableName is of type Bool
+            if (ternaryOperatorNode.getBoolOperator() != null) {
+                VariableDeclarationNode variableDeclarationNode = null;
+                if (retrieveSymbol(ternaryOperatorNode.getVariableName()) instanceof VariableDeclarationNode)
+                variableDeclarationNode =(VariableDeclarationNode) retrieveSymbol(ternaryOperatorNode.getVariableName());
+                if (variableDeclarationNode != null) {
+                    if (variableDeclarationNode.getDataType() != Enums.DataType.BOOL)
+                        throw new CompilerException("Variable: " + ternaryOperatorNode.getVariableName() +" is not of type bool, negation not allowed", ternaryOperatorNode.getCodePosition());
+                }
+            }
+        }
+        else if (ternaryOperatorNode.getObjectFunctionCallNode() != null)
+            visitObjectFunctionCall(ternaryOperatorNode.getObjectFunctionCallNode());
+        else if (ternaryOperatorNode.getNonObjectFunctionCallNode() != null)
+            visitNonObjectFunctionCall(ternaryOperatorNode.getNonObjectFunctionCallNode());
+
+
         visitExpression(ternaryOperatorNode.getExpressionNode2());
+        visitExpression(ternaryOperatorNode.getExpressionNode1());
     }
 
     private void visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
