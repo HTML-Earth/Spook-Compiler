@@ -1,0 +1,11 @@
+Shader {
+    Rectangle box = (25, 50, Color.green());
+    Rectangle shadow = (25, 50, Color.black());
+
+    #Vec2 boxPosition = Scene.getCenter();
+    Vec2 boxPosition = (Screen.x / 2, Screen.y / 2);
+    Vec2 shadowOffset = (10, 15);
+
+    Scene.add(shadow, boxPosition + shadowOffset);
+    Scene.add(box, boxPosition);
+}
