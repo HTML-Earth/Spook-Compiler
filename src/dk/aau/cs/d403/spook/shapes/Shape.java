@@ -2,13 +2,17 @@ package dk.aau.cs.d403.spook.shapes;
 
 import dk.aau.cs.d403.ast.expressions.AtomPrecedenceNode;
 import dk.aau.cs.d403.ast.expressions.HighPrecedenceNode;
+import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.spook.Vector4;
 import dk.aau.cs.d403.spook.color.Colorable;
 import dk.aau.cs.d403.spook.SpookObject;
 import dk.aau.cs.d403.spook.fill.Fill;
 
+import java.util.ArrayList;
+
 public abstract class Shape extends SpookObject implements Colorable {
     protected Vector4 color;
+    protected boolean inverted;
 
     @Override
     public Vector4 getColor() {
@@ -18,6 +22,22 @@ public abstract class Shape extends SpookObject implements Colorable {
     @Override
     public void setColor(Vector4 color) {
         this.color = color;
+    }
+
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
+    }
+
+    public void setInverted(ObjectArgumentNode argumentNode) {
+        this.inverted = inverted; //TODO: fix
+    }
+
+    public void setInverted(ArrayList<ObjectArgumentNode> argumentNodes) {
+        this.inverted = inverted; //TODO: fix
     }
 
     public abstract String getCheckCall(String spaceName);
