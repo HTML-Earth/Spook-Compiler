@@ -183,8 +183,15 @@ public class TypeChecking {
         enterSymbol(this.listOfPredefinedVariables.get(0).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(0));
         enterSymbol(this.listOfPredefinedVariables.get(1).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(1));
 
-        for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes())
+        // Visit and enterSymbol for all functionDecls, needed in order to call functions in other functions
+        for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes()) {
             visitFunctionDeclaration(functionDeclaration);
+        }
+        // Visit every function block
+        for (FunctionDeclarationNode functionDeclaration : programNode.getFunctionDeclarationNodes()) {
+            visitFunctionBlock(functionDeclaration.getBlockNode(), functionDeclaration.getReturnType(), functionDeclaration);
+        }
+        // visit all classDecls
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
             visitClassDeclaration(classDeclaration);
         visitMain(programNode.getMainNode());
@@ -678,7 +685,6 @@ public class TypeChecking {
 
             enterSymbol(functionName, functionDeclarationNode);
         }
-        visitFunctionBlock(functionDeclarationNode.getBlockNode(), functionDeclarationNode.getReturnType(), functionDeclarationNode);
     }
 
     private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
