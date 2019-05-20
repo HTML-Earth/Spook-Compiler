@@ -146,6 +146,8 @@ public class TypeChecking {
 
     private ArrayList<FunctionDeclarationNode> retrieveAllFunctions(String name) {
         ArrayList<FunctionDeclarationNode> symbols = new ArrayList<>();
+
+
         int stackLevel = this.hashMapStack.size() - 1;
 
         while (stackLevel >= 0) {
@@ -370,7 +372,7 @@ public class TypeChecking {
         visitExpression(assignmentNode.getExpressionNode());
     }
 
-    private void visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+    private FunctionDeclarationNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         boolean notFound = true;
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
@@ -378,14 +380,14 @@ public class TypeChecking {
         ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
         retrievedFunctions = retrieveAllFunctions(functionName);
 
-        //for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {           <-- USED FOR TESTING
-        //    System.out.println(functionDeclarationNode.getFunctionName());
-        //    if (functionDeclarationNode.getFunctionArgNodes() != null) {
-        //        for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
-        //            System.out.println("    " + functionArgNode.getDataType());
-        //        }
-        //    }
-        //}
+        for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {
+            System.out.println(functionDeclarationNode.getFunctionName());
+            if (functionDeclarationNode.getFunctionArgNodes() != null) {
+                for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
+                    System.out.println("    " + functionArgNode.getDataType());
+                }
+            }
+        }
 
         if (!this.listOfPredefinedFunctions.contains(functionName)) {
             if (!retrievedFunctions.isEmpty()) {
@@ -415,10 +417,13 @@ public class TypeChecking {
                                         System.out.println("get class name data type was null");
                                 }
                                 notFound = false;
+                                return functionDeclarationNode;
                             }
 
-                        } else if (functionDeclarationNode.getFunctionArgNodes() == null && objectArgumentNodes == null)
+                        } else if (functionDeclarationNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
                             notFound = false;
+                            return functionDeclarationNode;
+                        }
 
                         else if (notFound && functionDeclarationNode.getFunctionArgNodes() != null)
                             continue;
@@ -441,6 +446,7 @@ public class TypeChecking {
 
         }
 
+        return null;
 
     }
 
@@ -821,11 +827,8 @@ public class TypeChecking {
                     // Operand: Non-object function Call
                     if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
                         NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
-                        visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
+                        FunctionDeclarationNode functionDeclarationNode = visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
 
-                        // The reason for not checking all functions is because a function with a given name can only have one return type.
-                        // It is not legal to have another function with the same name but with a different return type.
-                        FunctionDeclarationNode functionDeclarationNode = (FunctionDeclarationNode) retrieveSymbol(nonObjectFunctionCallNode.getFunctionName());
                         if (functionDeclarationNode != null)
                             return functionDeclarationNode.getReturnType().toString();
                     }
