@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
@@ -10,6 +11,7 @@ public class TernaryOperatorNode extends ExpressionNode {
     private ExpressionNode expressionNode1;
     private ExpressionNode expressionNode2;
     private String variableName;
+    private Enums.BoolOperator boolOperator;
     private NonObjectFunctionCallNode nonObjectFunctionCallNode;
     private ObjectFunctionCallNode objectFunctionCallNode;
 
@@ -23,6 +25,15 @@ public class TernaryOperatorNode extends ExpressionNode {
         this.expressionNode1 = expressionNode1;
         this.expressionNode2 = expressionNode2;
         this.variableName = variableName;
+    }
+
+    public TernaryOperatorNode(ExpressionNode expressionNode1, ExpressionNode expressionNode2, String variableName, Enums.BoolOperator boolOperator) {
+        if (boolOperator != Enums.BoolOperator.NOT)
+            throw new IllegalArgumentException("Boolean operator must be 'NOT'");
+        this.expressionNode1 = expressionNode1;
+        this.expressionNode2 = expressionNode2;
+        this.variableName = variableName;
+        this.boolOperator = boolOperator;
     }
 
     public TernaryOperatorNode(ExpressionNode expressionNode1, ExpressionNode expressionNode2, NonObjectFunctionCallNode nonObjectFunctionCallNode) {
@@ -59,6 +70,10 @@ public class TernaryOperatorNode extends ExpressionNode {
 
     public ObjectFunctionCallNode getObjectFunctionCallNode() {
         return objectFunctionCallNode;
+    }
+
+    public Enums.BoolOperator getBoolOperator() {
+        return boolOperator;
     }
 
     @Override

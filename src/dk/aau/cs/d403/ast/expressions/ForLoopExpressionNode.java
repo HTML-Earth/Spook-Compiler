@@ -6,7 +6,6 @@ import dk.aau.cs.d403.ast.statements.VariableDeclarationNode;
 
 public class ForLoopExpressionNode extends ExpressionNode {
     private VariableDeclarationNode variableDeclarationNode;
-    private String variableName;
     private AssignmentNode assignmentNode;
     private AtomPrecedenceNode atomPrecedenceNode;
 
@@ -23,19 +22,11 @@ public class ForLoopExpressionNode extends ExpressionNode {
         this.variableDeclarationNode = variableDeclarationNode;
     }
 
-    public ForLoopExpressionNode(String variableName) {
-        this.variableName = variableName;
-    }
-
     public VariableDeclarationNode getVariableDeclarationNode() {
         return variableDeclarationNode;
     }
 
     // Getters
-    public String getVariableName() {
-        return variableName;
-    }
-
     public AssignmentNode getAssignmentNode() {
         return assignmentNode;
     }
@@ -48,8 +39,6 @@ public class ForLoopExpressionNode extends ExpressionNode {
     public String prettyPrint(int indent) {
         if (variableDeclarationNode != null)
             return variableDeclarationNode.prettyPrint(indent);
-        else if (variableName != null)
-            return variableName;
         else if (assignmentNode != null)
             return assignmentNode.prettyPrint(indent);
         else if (atomPrecedenceNode != null)

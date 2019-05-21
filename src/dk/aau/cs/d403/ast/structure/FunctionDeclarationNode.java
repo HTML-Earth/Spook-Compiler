@@ -50,6 +50,7 @@ public class FunctionDeclarationNode implements ASTnode {
         this.returnType = null;
         this.functionName = functionName;
         this.blockNode = blockNode;
+        this.functionArgNodes = functionArgNodes;
     }
 
     public Enums.DataType getReturnType() {
@@ -72,17 +73,17 @@ public class FunctionDeclarationNode implements ASTnode {
         return className;
     }
 
-    //TODO: kom tilbage
     @Override
     public String prettyPrint(int indent) {
         StringBuilder sb = new StringBuilder();
 
-        if (returnType == null)
-            sb.append("Void");
+        if (returnType != null)
+            sb.append(Enums.dataTypeToStringSpook(returnType));
         else if (className != null)
             sb.append(className);
         else
-            sb.append(Enums.dataTypeToStringSpook(returnType));
+            sb.append("Void");
+
 
         sb.append(" ");
         sb.append(functionName);

@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.spook.fill;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
@@ -76,8 +76,8 @@ public class CircleGradient extends Fill {
 
     @Override
     public String getColorApplication(String spaceName) {
-        return "\t\tfloat blendValue = CircleGradientBlend(" + spaceName + ", " + name + ");\n" +
-                "\t\tvec4 blendedGradientColor = mix(" + name + ".innerColor, " + name + ".outerColor, blendValue);\n" +
-                "\t\tfragColor = mix(fragColor, blendedGradientColor, blendedGradientColor.a);\n";
+        return "\t\tfloat " + name + "_blendValue = CircleGradientBlend(" + spaceName + ", " + name + ");\n" +
+                "\t\tvec4 " + name + "_blendedGradientColor = mix(" + name + ".innerColor, " + name + ".outerColor, " + name + "_blendValue);\n" +
+                "\t\tfragColor = mix(fragColor, " + name + "_blendedGradientColor, " + name + "_blendedGradientColor.a);\n";
     }
 }

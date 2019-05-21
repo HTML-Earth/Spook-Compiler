@@ -33,7 +33,12 @@ public class FunctionArgNode implements ASTnode {
 
     @Override
     public String prettyPrint(int indent) {
-        return Enums.dataTypeToStringSpook(dataType) + " " + variableName;
+        if (dataType != null)
+            return Enums.dataTypeToStringSpook(dataType) + " " + variableName;
+        else if (className != null)
+            return className + " " + variableName;
+        else
+            return "Invalid type or class";
     }
 
     private CodePosition codePosition;

@@ -15,7 +15,7 @@ public class ElseStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint(int indent) {
-        return "else " + elseBlock.prettyPrint(indent);
+        return "else" + elseBlock.prettyPrint(indent);
     }
 
     private CodePosition codePosition;

@@ -1,6 +1,7 @@
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
+import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.TypeChecking;
@@ -17,6 +18,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ObjectDeclarationTest {
 
     private TypeChecking typeChecking = new TypeChecking();
+
+    void testShader(String shaderName) {
+        try {
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ObjectDeclarationTests/" + shaderName + ".spook"));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+
+            AstBuilder astBuilder = new AstBuilder();
+            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+            programNode.prettyPrint(0);
+
+            typeChecking.visitProgram(programNode);
+            CodeGenerator codeGenerator = new CodeGenerator();
+            //codeGenerator.GenerateGLSL(programNode);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @AfterEach
     void printSymbolTable() {
@@ -73,5 +92,10 @@ public class ObjectDeclarationTest {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void objectDeclaration04() {
+        testShader("ObjectDeclaration04");
     }
 }

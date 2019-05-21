@@ -1,0 +1,49 @@
+Shader {
+    for (Num i = 0 to 10) {
+        Rectangle rect = (10, Screen.y, Color.olive());
+        rect.setPosition(Screen.x / 5 * i, Screen.y / 2);
+        Scene.add(rect);
+    }
+
+    Num circleAmt = 100;
+    Num circleSize = 20;
+    Num moveSpeed = 20;
+    Num loopWidth = Screen.x / (circleAmt * 0.9);
+    Num movement = (Time * moveSpeed) % loopWidth - loopWidth - circleSize;
+
+    for (Num i = 0 to circleAmt) {
+        Num iMovement = movement + i * loopWidth;
+        Num yPos = (Screen.y / 2) + sin(iMovement * 0.01) * (Screen.x / 4);
+
+        Circle c = (circleSize, Color.silver());
+        c.setPosition(iMovement, yPos);
+
+        Scene.add(c);
+    }
+
+    for (Num i = 0 to 10) {
+        Rectangle rect = (10, Screen.y, Color.yellow());
+        rect.setPosition(Screen.x / 5 * i + Screen.x / 10, Screen.y / 2);
+        Scene.add(rect);
+    }
+
+    Vec2 center = (Screen.x / 2, Screen.y / 2);
+
+    for (Num i = 1 to circleSize) {
+        Num ringSize = circleSize * 10;
+        Circle c = (circleSize, Color.magenta());
+        c.setPosition(center.x + sin(Time + i / Pi) * ringSize, center.y + cos(Time + i / Pi) * ringSize);
+
+        Scene.add(c);
+    }
+
+    CircleGradient grad1 = (Screen.y * 2, Color.orange(), Color.clear());
+    grad1.setPosition(0, Screen.y);
+    Scene.add(grad1);
+
+    CircleGradient grad2 = (Screen.y * 2, Color.cyan(), Color.clear());
+    grad2.setPosition(Screen.x, 0);
+    Scene.add(grad2);
+
+    Scene.setColor(Color.black());
+}

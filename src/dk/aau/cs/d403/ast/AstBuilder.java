@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.ast;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
@@ -131,6 +130,27 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             else if (dataType == Enums.DataType.BOOL) {
                 BoolExpressionNode boolExpressionNode = new BoolExpressionNode(new BoolOperationsNode(new BoolOperationNode(false)));
                 varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), boolExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else if (dataType == Enums.DataType.VEC2) {
+                ArithExpressionNode zeroNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                Vector2ExpressionNode vector2ExpressionNode = new Vector2ExpressionNode(zeroNode, zeroNode);
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), vector2ExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else if (dataType == Enums.DataType.VEC3) {
+                ArithExpressionNode zeroNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                Vector3ExpressionNode vector3ExpressionNode = new Vector3ExpressionNode(zeroNode, zeroNode, zeroNode);
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), vector3ExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else if (dataType == Enums.DataType.VEC4) {
+                ArithExpressionNode zeroNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                Vector4ExpressionNode vector4ExpressionNode = new Vector4ExpressionNode(zeroNode, zeroNode, zeroNode, zeroNode);
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), vector4ExpressionNode);
                 varDeclInitNode.setCodePosition(getCodePosition(ctx));
                 return varDeclInitNode;
             }
@@ -423,18 +443,21 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     public ASTnode visitObjectDecl(SpookParser.ObjectDeclContext ctx) {
         String objectName = ctx.objectVariableName().getText();
         String className = ctx.className().getText();
+        ObjectContructorNode objectContructorNode;
 
-        if (ctx.objectConstructor() != null) {
-            ObjectContructorNode objectContructorNode = (ObjectContructorNode) visitObjectConstructor(ctx.objectConstructor());
+        if (ctx.objectConstructor() != null)
+            objectContructorNode = (ObjectContructorNode) visitObjectConstructor(ctx.objectConstructor());
+        else
+            throw new CompilerException("Missing constructor for object " + ctx.objectVariableName().getText(), getCodePosition(ctx));
 
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName, objectContructorNode);
-            objectDeclarationNode.setCodePosition(getCodePosition(ctx));
-            return objectDeclarationNode;
-        } else {
-            ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName);
-            objectDeclarationNode.setCodePosition(getCodePosition(ctx));
-            return objectDeclarationNode;
-        }
+        ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(className, objectName, objectContructorNode);
+        objectDeclarationNode.setCodePosition(getCodePosition(ctx));
+
+        if (ctx.objectConstructor().objectArgs() != null && ctx.objectConstructor().objectArgs().objectArg().size() == 0)
+            throw new CompilerException("Object "+ objectDeclarationNode.getVariableName() +" Must be given atleast 1 constructor argument", objectContructorNode.getCodePosition());
+
+        return objectDeclarationNode;
+
     }
 
     @Override
@@ -445,7 +468,13 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             ObjectContructorNode objectContructorNode = new ObjectContructorNode(objectArgumentNodePlural);
             objectContructorNode.setCodePosition(getCodePosition(ctx));
             return objectContructorNode;
-        } else if (ctx.functionCall() != null) {
+        }
+        else if (ctx.objectVariableName() != null) {
+            ObjectContructorNode objectContructorNode = new ObjectContructorNode(ctx.objectVariableName().getText());
+            objectContructorNode.setCodePosition(getCodePosition(ctx));
+            return objectContructorNode;
+        }
+        else if (ctx.functionCall() != null) {
             ASTnode functionCallNode = visitFunctionCall(ctx.functionCall());
             if (functionCallNode instanceof NonObjectFunctionCallNode) {
                 ObjectContructorNode objectContructorNode = new ObjectContructorNode((NonObjectFunctionCallNode) functionCallNode);
@@ -629,14 +658,17 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
 
     @Override
     public ASTnode visitObjectArg(SpookParser.ObjectArgContext ctx) {
-        if (ctx.lowPrecedence() != null) {
-            ObjectArgumentNode objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
-            objectArgumentNode.setCodePosition(getCodePosition(ctx));
+        ObjectArgumentNode objectArgumentNode;
 
-            return objectArgumentNode;
-        }
+        if (ctx.lowPrecedence() != null)
+            objectArgumentNode = new ObjectArgumentNode((LowPrecedenceNode) visitLowPrecedence(ctx.lowPrecedence()));
+        else if (ctx.boolExpression() != null)
+            objectArgumentNode = new ObjectArgumentNode((BoolExpressionNode) visitBoolExpression(ctx.boolExpression()));
         else
             throw new CompilerException("Invalid Object Function Call Argument", getCodePosition(ctx));
+
+        objectArgumentNode.setCodePosition(getCodePosition(ctx));
+        return objectArgumentNode;
     }
 
     @Override
@@ -805,6 +837,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
             return ternaryOperatorNode;
         }
+        else if (ctx.variableName() != null && ctx.NOT() != null) {
+            TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, ctx.variableName().getText(), Enums.BoolOperator.NOT);
+            ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
+            return ternaryOperatorNode;
+        }
         else if (ctx.variableName() != null) {
             TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, ctx.variableName().getText());
             ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
@@ -863,11 +900,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitConditionalExpression(SpookParser.ConditionalExpressionContext ctx) {
         ConditionalExpressionNode conditionalExpressionNode;
-        if (ctx.BOOL_LITERAL() != null) {
-            conditionalExpressionNode = new ConditionalExpressionNode(getBooleanValue(ctx.BOOL_LITERAL()));
-            conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
-            return conditionalExpressionNode;
-        } else if (ctx.boolExpression() != null) {
+        if (ctx.boolExpression() != null) {
             BoolExpressionNode boolExpressionNode = (BoolExpressionNode) visitBoolExpression(ctx.boolExpression());
             conditionalExpressionNode = new ConditionalExpressionNode(boolExpressionNode);
             conditionalExpressionNode.setCodePosition(getCodePosition(ctx));
@@ -952,17 +985,11 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
             return forLoopExpressionNode;
         }
-        else if (ctx.variableName() != null) {
-            ForLoopExpressionNode forLoopExpressionNode = new ForLoopExpressionNode(ctx.variableName().getText());
-            forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
-            return forLoopExpressionNode;
-        }
         else if (ctx.variableDecl() != null) {
             ForLoopExpressionNode forLoopExpressionNode = new ForLoopExpressionNode((VariableDeclarationNode) visitVariableDecl(ctx.variableDecl()));
             forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
             if (forLoopExpressionNode.getVariableDeclarationNode().getCodePosition() == null)
                 throw new RuntimeException("missing codeposition");
-            //forLoopExpressionNode.getVariableDeclarationNode().setCodePosition(getCodePosition(ctx)); TODO: remove this
             return forLoopExpressionNode;
         }
         else

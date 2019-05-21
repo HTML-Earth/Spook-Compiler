@@ -29,14 +29,19 @@ public class ForLoopStatementNode extends StatementNode {
 
     @Override
     public String prettyPrint(int indent) {
+        StringBuilder sb = new StringBuilder();
 
-        return "for (" +
-                forLoopExpressionNode1.prettyPrint(indent) +
-                " to " +
-                forLoopExpressionNode2.prettyPrint(indent) +
-                ") " +
-                "\n" +
-                conditionalBlockNode.prettyPrint(indent);
+        for (int i = 0; i < indent; i++)
+            sb.append("\t");
+
+        sb.append("for (");
+        sb.append(forLoopExpressionNode1.prettyPrint(0));
+        sb.append(" to ");
+        sb.append(forLoopExpressionNode2.prettyPrint(0));
+        sb.append(") ");
+        sb.append(conditionalBlockNode.prettyPrint(indent));
+
+        return sb.toString();
     }
 
     private CodePosition codePosition;

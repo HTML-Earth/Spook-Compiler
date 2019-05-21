@@ -47,11 +47,12 @@ variableDeclInit
 
 // Object declaration
 objectDecl
-    : className objectVariableName (ASSIGN objectConstructor)?;
+    : className objectVariableName ASSIGN objectConstructor;
 
 objectConstructor
     : LEFT_PAREN objectArgs? RIGHT_PAREN
-    | functionCall;
+    | functionCall
+    | objectVariableName;
 
 
 /*      ASSIGNMENT       */
@@ -72,7 +73,7 @@ vector2Expression: LEFT_PAREN arithExpression COMMA arithExpression RIGHT_PAREN;
 vector3Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 vector4Expression: LEFT_PAREN arithExpression COMMA arithExpression COMMA arithExpression COMMA arithExpression RIGHT_PAREN;
 boolExpression: boolOperations;
-ternaryOperator: (boolExpression | variableName | functionCall) QUESTION expression COLON expression;
+ternaryOperator: (boolExpression | NOT? variableName | functionCall) QUESTION expression COLON expression;
 
 arithOperand
     : realNumber | variableName | functionCall | swizzle | vector2Expression | vector3Expression | vector4Expression;
@@ -127,11 +128,12 @@ nonObjectFunctionCall
 objectFunctionCall
     :objectVariableName DOT functionName LEFT_PAREN objectArgs? RIGHT_PAREN;
 
-// Object arguments TODO: bør have bools?
+// Object arguments
 objectArgs
     : objectArg (COMMA objectArg)*;
 objectArg
-    : lowPrecedence;
+    : lowPrecedence
+    | boolExpression;
 
 
 /*      CONDITIONAL STATEMENTS      */
@@ -147,7 +149,7 @@ elseIfStatement: ELSE_IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditiona
 elseStatement: ELSE conditionalBlock;
 
 // Expressions
-conditionalExpression: boolExpression | BOOL_LITERAL | variableName | functionCall;
+conditionalExpression: boolExpression | variableName | functionCall;
 
 // Blocks
 conditionalBlock: statement | block;
@@ -161,7 +163,7 @@ iterativeStatement
 forStatement
     : FOR LEFT_PAREN forLoopExpression TO forLoopExpression RIGHT_PAREN conditionalBlock;
 
-forLoopExpression: (atomPrecedence | variableDecl | variableName | assignment);
+forLoopExpression: (atomPrecedence | variableDecl | assignment);
 
 
 

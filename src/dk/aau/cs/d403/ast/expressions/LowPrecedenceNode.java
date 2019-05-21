@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.ast.expressions;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
@@ -9,7 +9,6 @@ import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 import java.util.ArrayList;
 
 import static dk.aau.cs.d403.ast.Enums.operatorToString;
-import static dk.aau.cs.d403.ast.Enums.returnTypeToStringGLSL;
 
 public class LowPrecedenceNode implements ASTnode {
     private ArrayList<HighPrecedenceNode> highPrecedenceNodes;
