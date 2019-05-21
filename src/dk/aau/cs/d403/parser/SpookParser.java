@@ -1,4 +1,4 @@
-// Generated from C:/Users/the_p/Desktop/P4/src\SpookParser.g4 by ANTLR 4.7.2
+// Generated from C:/Programming/P4/src\SpookParser.g4 by ANTLR 4.7.2
 package dk.aau.cs.d403.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -2928,9 +2928,6 @@ public class SpookParser extends Parser {
 		public VariableDeclContext variableDecl() {
 			return getRuleContext(VariableDeclContext.class,0);
 		}
-		public VariableNameContext variableName() {
-			return getRuleContext(VariableNameContext.class,0);
-		}
 		public AssignmentContext assignment() {
 			return getRuleContext(AssignmentContext.class,0);
 		}
@@ -2959,7 +2956,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(400);
+			setState(399);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
 			case 1:
@@ -2977,12 +2974,6 @@ public class SpookParser extends Parser {
 			case 3:
 				{
 				setState(398);
-				variableName();
-				}
-				break;
-			case 4:
-				{
-				setState(399);
 				assignment();
 				}
 				break;
@@ -3039,16 +3030,16 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(402);
+			setState(401);
 			match(CLASS);
-			setState(403);
+			setState(402);
 			className();
-			setState(406);
+			setState(405);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==EXTENDS || _la==IMPLEMENTS) {
 				{
-				setState(404);
+				setState(403);
 				_la = _input.LA(1);
 				if ( !(_la==EXTENDS || _la==IMPLEMENTS) ) {
 				_errHandler.recoverInline(this);
@@ -3058,12 +3049,12 @@ public class SpookParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(405);
+				setState(404);
 				className();
 				}
 			}
 
-			setState(408);
+			setState(407);
 			classBlock();
 			}
 		}
@@ -3125,41 +3116,41 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(410);
+			setState(409);
 			match(LEFT_BRACKET);
-			setState(416);
+			setState(415);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUM) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << VOID) | (1L << ID))) != 0)) {
 				{
-				setState(414);
+				setState(413);
 				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,37,_ctx) ) {
 				case 1:
 					{
-					setState(411);
+					setState(410);
 					declaration();
 					}
 					break;
 				case 2:
 					{
-					setState(412);
+					setState(411);
 					constructor();
 					}
 					break;
 				case 3:
 					{
-					setState(413);
+					setState(412);
 					functionDecl();
 					}
 					break;
 				}
 				}
-				setState(418);
+				setState(417);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(419);
+			setState(418);
 			match(RIGHT_BRACKET);
 			}
 		}
@@ -3212,23 +3203,23 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(421);
+			setState(420);
 			className();
-			setState(422);
+			setState(421);
 			match(LEFT_PAREN);
-			setState(424);
+			setState(423);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUM) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << ID))) != 0)) {
 				{
-				setState(423);
+				setState(422);
 				functionArgs();
 				}
 			}
 
-			setState(426);
+			setState(425);
 			match(RIGHT_PAREN);
-			setState(427);
+			setState(426);
 			constructorBlock();
 			}
 		}
@@ -3282,25 +3273,25 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(429);
+			setState(428);
 			match(LEFT_BRACKET);
-			setState(435);
+			setState(434);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==ID) {
 				{
 				{
-				setState(430);
+				setState(429);
 				assignment();
-				setState(431);
+				setState(430);
 				match(SEMICOLON);
 				}
 				}
-				setState(437);
+				setState(436);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(438);
+			setState(437);
 			match(RIGHT_BRACKET);
 			}
 		}
@@ -3358,31 +3349,31 @@ public class SpookParser extends Parser {
 		enterRule(_localctx, 92, RULE_functionDecl);
 		int _la;
 		try {
-			setState(461);
+			setState(460);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case VOID:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(440);
+				setState(439);
 				match(VOID);
-				setState(441);
+				setState(440);
 				functionName();
-				setState(442);
+				setState(441);
 				match(LEFT_PAREN);
-				setState(444);
+				setState(443);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUM) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << ID))) != 0)) {
 					{
-					setState(443);
+					setState(442);
 					functionArgs();
 					}
 				}
 
-				setState(446);
+				setState(445);
 				match(RIGHT_PAREN);
-				setState(447);
+				setState(446);
 				block();
 				}
 				break;
@@ -3394,7 +3385,7 @@ public class SpookParser extends Parser {
 			case ID:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(451);
+				setState(450);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case NUM:
@@ -3403,36 +3394,36 @@ public class SpookParser extends Parser {
 				case VECTOR3:
 				case VECTOR4:
 					{
-					setState(449);
+					setState(448);
 					dataType();
 					}
 					break;
 				case ID:
 					{
-					setState(450);
+					setState(449);
 					className();
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(453);
+				setState(452);
 				functionName();
-				setState(454);
+				setState(453);
 				match(LEFT_PAREN);
-				setState(456);
+				setState(455);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUM) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4) | (1L << ID))) != 0)) {
 					{
-					setState(455);
+					setState(454);
 					functionArgs();
 					}
 				}
 
-				setState(458);
+				setState(457);
 				match(RIGHT_PAREN);
-				setState(459);
+				setState(458);
 				block();
 				}
 				break;
@@ -3482,24 +3473,24 @@ public class SpookParser extends Parser {
 		FunctionArgsContext _localctx = new FunctionArgsContext(_ctx, getState());
 		enterRule(_localctx, 94, RULE_functionArgs);
 		try {
-			setState(468);
+			setState(467);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(463);
+				setState(462);
 				functionArg();
-				setState(464);
+				setState(463);
 				match(COMMA);
-				setState(465);
+				setState(464);
 				functionArgs();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(467);
+				setState(466);
 				functionArg();
 				}
 				break;
@@ -3551,7 +3542,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(472);
+			setState(471);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NUM:
@@ -3560,20 +3551,20 @@ public class SpookParser extends Parser {
 			case VECTOR3:
 			case VECTOR4:
 				{
-				setState(470);
+				setState(469);
 				dataType();
 				}
 				break;
 			case ID:
 				{
-				setState(471);
+				setState(470);
 				className();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(474);
+			setState(473);
 			variableName();
 			}
 		}
@@ -3619,11 +3610,11 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(476);
+			setState(475);
 			match(RETURN);
-			setState(477);
+			setState(476);
 			expression();
-			setState(478);
+			setState(477);
 			match(SEMICOLON);
 			}
 		}
@@ -3667,28 +3658,28 @@ public class SpookParser extends Parser {
 		RealNumberContext _localctx = new RealNumberContext(_ctx, getState());
 		enterRule(_localctx, 100, RULE_realNumber);
 		try {
-			setState(483);
+			setState(482);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DIGIT:
 			case DIGIT_NEGATIVE:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(480);
+				setState(479);
 				integerNumber();
 				}
 				break;
 			case FLOAT_DIGIT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(481);
+				setState(480);
 				match(FLOAT_DIGIT);
 				}
 				break;
 			case FLOAT_DIGIT_NEGATIVE:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(482);
+				setState(481);
 				match(FLOAT_DIGIT_NEGATIVE);
 				}
 				break;
@@ -3736,7 +3727,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(485);
+			setState(484);
 			_la = _input.LA(1);
 			if ( !(_la==DIGIT || _la==DIGIT_NEGATIVE) ) {
 			_errHandler.recoverInline(this);
@@ -3794,7 +3785,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(487);
+			setState(486);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQUAL) | (1L << AND) | (1L << OR) | (1L << NOT_EQUAL) | (1L << GREATER_THAN) | (1L << GREATER_OR_EQUAL) | (1L << LESS_THAN) | (1L << LESS_OR_EQUAL))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3849,7 +3840,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(489);
+			setState(488);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NUM) | (1L << BOOL) | (1L << VECTOR2) | (1L << VECTOR3) | (1L << VECTOR4))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3899,7 +3890,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(491);
+			setState(490);
 			match(ID);
 			}
 		}
@@ -3941,7 +3932,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(493);
+			setState(492);
 			match(ID);
 			}
 		}
@@ -3983,7 +3974,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(495);
+			setState(494);
 			match(ID);
 			}
 		}
@@ -4025,7 +4016,7 @@ public class SpookParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(497);
+			setState(496);
 			match(ID);
 			}
 		}
@@ -4041,7 +4032,7 @@ public class SpookParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\62\u01f6\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\62\u01f5\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -4070,16 +4061,16 @@ public class SpookParser extends Parser {
 		" \16 \u015b\13 \3!\3!\5!\u015f\n!\3\"\3\"\3#\3#\7#\u0165\n#\f#\16#\u0168"+
 		"\13#\3#\5#\u016b\n#\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3%\3&\3&\3&\3\'\3"+
 		"\'\3\'\5\'\u017f\n\'\3(\3(\5(\u0183\n(\3)\3)\3*\3*\3*\3*\3*\3*\3*\3*\3"+
-		"+\3+\3+\3+\5+\u0193\n+\3,\3,\3,\3,\5,\u0199\n,\3,\3,\3-\3-\3-\3-\7-\u01a1"+
-		"\n-\f-\16-\u01a4\13-\3-\3-\3.\3.\3.\5.\u01ab\n.\3.\3.\3.\3/\3/\3/\3/\7"+
-		"/\u01b4\n/\f/\16/\u01b7\13/\3/\3/\3\60\3\60\3\60\3\60\5\60\u01bf\n\60"+
-		"\3\60\3\60\3\60\3\60\3\60\5\60\u01c6\n\60\3\60\3\60\3\60\5\60\u01cb\n"+
-		"\60\3\60\3\60\3\60\5\60\u01d0\n\60\3\61\3\61\3\61\3\61\3\61\5\61\u01d7"+
-		"\n\61\3\62\3\62\5\62\u01db\n\62\3\62\3\62\3\63\3\63\3\63\3\63\3\64\3\64"+
-		"\3\64\5\64\u01e6\n\64\3\65\3\65\3\66\3\66\3\67\3\67\38\38\39\39\3:\3:"+
+		"+\3+\3+\5+\u0192\n+\3,\3,\3,\3,\5,\u0198\n,\3,\3,\3-\3-\3-\3-\7-\u01a0"+
+		"\n-\f-\16-\u01a3\13-\3-\3-\3.\3.\3.\5.\u01aa\n.\3.\3.\3.\3/\3/\3/\3/\7"+
+		"/\u01b3\n/\f/\16/\u01b6\13/\3/\3/\3\60\3\60\3\60\3\60\5\60\u01be\n\60"+
+		"\3\60\3\60\3\60\3\60\3\60\5\60\u01c5\n\60\3\60\3\60\3\60\5\60\u01ca\n"+
+		"\60\3\60\3\60\3\60\5\60\u01cf\n\60\3\61\3\61\3\61\3\61\3\61\5\61\u01d6"+
+		"\n\61\3\62\3\62\5\62\u01da\n\62\3\62\3\62\3\63\3\63\3\63\3\63\3\64\3\64"+
+		"\3\64\5\64\u01e5\n\64\3\65\3\65\3\66\3\66\3\67\3\67\38\38\39\39\3:\3:"+
 		"\3;\3;\3;\2\2<\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64"+
 		"\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprt\2\b\3\2$&\3\2\"#\3\2\13\f\3\2\23\24"+
-		"\4\2\'*,/\3\2\3\7\2\u01fd\2v\3\2\2\2\4\177\3\2\2\2\6\u0082\3\2\2\2\b\u0095"+
+		"\4\2\'*,/\3\2\3\7\2\u01fb\2v\3\2\2\2\4\177\3\2\2\2\6\u0082\3\2\2\2\b\u0095"+
 		"\3\2\2\2\n\u009d\3\2\2\2\f\u009f\3\2\2\2\16\u00aa\3\2\2\2\20\u00ac\3\2"+
 		"\2\2\22\u00b8\3\2\2\2\24\u00bc\3\2\2\2\26\u00c4\3\2\2\2\30\u00c6\3\2\2"+
 		"\2\32\u00c8\3\2\2\2\34\u00ce\3\2\2\2\36\u00d6\3\2\2\2 \u00e0\3\2\2\2\""+
@@ -4088,10 +4079,10 @@ public class SpookParser extends Parser {
 		"\u0134\3\2\2\2\66\u013c\3\2\2\28\u0142\3\2\2\2:\u0144\3\2\2\2<\u014b\3"+
 		"\2\2\2>\u0154\3\2\2\2@\u015e\3\2\2\2B\u0160\3\2\2\2D\u0162\3\2\2\2F\u016c"+
 		"\3\2\2\2H\u0172\3\2\2\2J\u0178\3\2\2\2L\u017e\3\2\2\2N\u0182\3\2\2\2P"+
-		"\u0184\3\2\2\2R\u0186\3\2\2\2T\u0192\3\2\2\2V\u0194\3\2\2\2X\u019c\3\2"+
-		"\2\2Z\u01a7\3\2\2\2\\\u01af\3\2\2\2^\u01cf\3\2\2\2`\u01d6\3\2\2\2b\u01da"+
-		"\3\2\2\2d\u01de\3\2\2\2f\u01e5\3\2\2\2h\u01e7\3\2\2\2j\u01e9\3\2\2\2l"+
-		"\u01eb\3\2\2\2n\u01ed\3\2\2\2p\u01ef\3\2\2\2r\u01f1\3\2\2\2t\u01f3\3\2"+
+		"\u0184\3\2\2\2R\u0186\3\2\2\2T\u0191\3\2\2\2V\u0193\3\2\2\2X\u019b\3\2"+
+		"\2\2Z\u01a6\3\2\2\2\\\u01ae\3\2\2\2^\u01ce\3\2\2\2`\u01d5\3\2\2\2b\u01d9"+
+		"\3\2\2\2d\u01dd\3\2\2\2f\u01e4\3\2\2\2h\u01e6\3\2\2\2j\u01e8\3\2\2\2l"+
+		"\u01ea\3\2\2\2n\u01ec\3\2\2\2p\u01ee\3\2\2\2r\u01f0\3\2\2\2t\u01f2\3\2"+
 		"\2\2v|\5\4\3\2w{\5V,\2x{\5^\60\2y{\5r:\2zw\3\2\2\2zx\3\2\2\2zy\3\2\2\2"+
 		"{~\3\2\2\2|z\3\2\2\2|}\3\2\2\2}\3\3\2\2\2~|\3\2\2\2\177\u0080\7\t\2\2"+
 		"\u0080\u0081\5\6\4\2\u0081\5\3\2\2\2\u0082\u0086\7\30\2\2\u0083\u0085"+
@@ -4181,43 +4172,43 @@ public class SpookParser extends Parser {
 		"\u0182\u0181\3\2\2\2\u0183O\3\2\2\2\u0184\u0185\5R*\2\u0185Q\3\2\2\2\u0186"+
 		"\u0187\7\21\2\2\u0187\u0188\7\32\2\2\u0188\u0189\5T+\2\u0189\u018a\7\22"+
 		"\2\2\u018a\u018b\5T+\2\u018b\u018c\7\33\2\2\u018c\u018d\5N(\2\u018dS\3"+
-		"\2\2\2\u018e\u0193\5*\26\2\u018f\u0193\5\f\7\2\u0190\u0193\5r:\2\u0191"+
-		"\u0193\5\24\13\2\u0192\u018e\3\2\2\2\u0192\u018f\3\2\2\2\u0192\u0190\3"+
-		"\2\2\2\u0192\u0191\3\2\2\2\u0193U\3\2\2\2\u0194\u0195\7\n\2\2\u0195\u0198"+
-		"\5t;\2\u0196\u0197\t\4\2\2\u0197\u0199\5t;\2\u0198\u0196\3\2\2\2\u0198"+
-		"\u0199\3\2\2\2\u0199\u019a\3\2\2\2\u019a\u019b\5X-\2\u019bW\3\2\2\2\u019c"+
-		"\u01a2\7\30\2\2\u019d\u01a1\5\n\6\2\u019e\u01a1\5Z.\2\u019f\u01a1\5^\60"+
-		"\2\u01a0\u019d\3\2\2\2\u01a0\u019e\3\2\2\2\u01a0\u019f\3\2\2\2\u01a1\u01a4"+
-		"\3\2\2\2\u01a2\u01a0\3\2\2\2\u01a2\u01a3\3\2\2\2\u01a3\u01a5\3\2\2\2\u01a4"+
-		"\u01a2\3\2\2\2\u01a5\u01a6\7\31\2\2\u01a6Y\3\2\2\2\u01a7\u01a8\5t;\2\u01a8"+
-		"\u01aa\7\32\2\2\u01a9\u01ab\5`\61\2\u01aa\u01a9\3\2\2\2\u01aa\u01ab\3"+
-		"\2\2\2\u01ab\u01ac\3\2\2\2\u01ac\u01ad\7\33\2\2\u01ad\u01ae\5\\/\2\u01ae"+
-		"[\3\2\2\2\u01af\u01b5\7\30\2\2\u01b0\u01b1\5\24\13\2\u01b1\u01b2\7\36"+
-		"\2\2\u01b2\u01b4\3\2\2\2\u01b3\u01b0\3\2\2\2\u01b4\u01b7\3\2\2\2\u01b5"+
-		"\u01b3\3\2\2\2\u01b5\u01b6\3\2\2\2\u01b6\u01b8\3\2\2\2\u01b7\u01b5\3\2"+
-		"\2\2\u01b8\u01b9\7\31\2\2\u01b9]\3\2\2\2\u01ba\u01bb\7\b\2\2\u01bb\u01bc"+
-		"\5p9\2\u01bc\u01be\7\32\2\2\u01bd\u01bf\5`\61\2\u01be\u01bd\3\2\2\2\u01be"+
-		"\u01bf\3\2\2\2\u01bf\u01c0\3\2\2\2\u01c0\u01c1\7\33\2\2\u01c1\u01c2\5"+
-		"\6\4\2\u01c2\u01d0\3\2\2\2\u01c3\u01c6\5l\67\2\u01c4\u01c6\5t;\2\u01c5"+
-		"\u01c3\3\2\2\2\u01c5\u01c4\3\2\2\2\u01c6\u01c7\3\2\2\2\u01c7\u01c8\5p"+
-		"9\2\u01c8\u01ca\7\32\2\2\u01c9\u01cb\5`\61\2\u01ca\u01c9\3\2\2\2\u01ca"+
-		"\u01cb\3\2\2\2\u01cb\u01cc\3\2\2\2\u01cc\u01cd\7\33\2\2\u01cd\u01ce\5"+
-		"\6\4\2\u01ce\u01d0\3\2\2\2\u01cf\u01ba\3\2\2\2\u01cf\u01c5\3\2\2\2\u01d0"+
-		"_\3\2\2\2\u01d1\u01d2\5b\62\2\u01d2\u01d3\7\35\2\2\u01d3\u01d4\5`\61\2"+
-		"\u01d4\u01d7\3\2\2\2\u01d5\u01d7\5b\62\2\u01d6\u01d1\3\2\2\2\u01d6\u01d5"+
-		"\3\2\2\2\u01d7a\3\2\2\2\u01d8\u01db\5l\67\2\u01d9\u01db\5t;\2\u01da\u01d8"+
-		"\3\2\2\2\u01da\u01d9\3\2\2\2\u01db\u01dc\3\2\2\2\u01dc\u01dd\5r:\2\u01dd"+
-		"c\3\2\2\2\u01de\u01df\7\r\2\2\u01df\u01e0\5\26\f\2\u01e0\u01e1\7\36\2"+
-		"\2\u01e1e\3\2\2\2\u01e2\u01e6\5h\65\2\u01e3\u01e6\7\25\2\2\u01e4\u01e6"+
-		"\7\26\2\2\u01e5\u01e2\3\2\2\2\u01e5\u01e3\3\2\2\2\u01e5\u01e4\3\2\2\2"+
-		"\u01e6g\3\2\2\2\u01e7\u01e8\t\5\2\2\u01e8i\3\2\2\2\u01e9\u01ea\t\6\2\2"+
-		"\u01eak\3\2\2\2\u01eb\u01ec\t\7\2\2\u01ecm\3\2\2\2\u01ed\u01ee\7\60\2"+
-		"\2\u01eeo\3\2\2\2\u01ef\u01f0\7\60\2\2\u01f0q\3\2\2\2\u01f1\u01f2\7\60"+
-		"\2\2\u01f2s\3\2\2\2\u01f3\u01f4\7\60\2\2\u01f4u\3\2\2\2\62z|\u0086\u0095"+
-		"\u009d\u00a5\u00aa\u00b3\u00b8\u00bc\u00c4\u00e4\u00e8\u00f6\u00fe\u0107"+
-		"\u010b\u0112\u0119\u011f\u0123\u0129\u012b\u0132\u0136\u013a\u0142\u0147"+
-		"\u0150\u0159\u015e\u0166\u016a\u017e\u0182\u0192\u0198\u01a0\u01a2\u01aa"+
-		"\u01b5\u01be\u01c5\u01ca\u01cf\u01d6\u01da\u01e5";
+		"\2\2\2\u018e\u0192\5*\26\2\u018f\u0192\5\f\7\2\u0190\u0192\5\24\13\2\u0191"+
+		"\u018e\3\2\2\2\u0191\u018f\3\2\2\2\u0191\u0190\3\2\2\2\u0192U\3\2\2\2"+
+		"\u0193\u0194\7\n\2\2\u0194\u0197\5t;\2\u0195\u0196\t\4\2\2\u0196\u0198"+
+		"\5t;\2\u0197\u0195\3\2\2\2\u0197\u0198\3\2\2\2\u0198\u0199\3\2\2\2\u0199"+
+		"\u019a\5X-\2\u019aW\3\2\2\2\u019b\u01a1\7\30\2\2\u019c\u01a0\5\n\6\2\u019d"+
+		"\u01a0\5Z.\2\u019e\u01a0\5^\60\2\u019f\u019c\3\2\2\2\u019f\u019d\3\2\2"+
+		"\2\u019f\u019e\3\2\2\2\u01a0\u01a3\3\2\2\2\u01a1\u019f\3\2\2\2\u01a1\u01a2"+
+		"\3\2\2\2\u01a2\u01a4\3\2\2\2\u01a3\u01a1\3\2\2\2\u01a4\u01a5\7\31\2\2"+
+		"\u01a5Y\3\2\2\2\u01a6\u01a7\5t;\2\u01a7\u01a9\7\32\2\2\u01a8\u01aa\5`"+
+		"\61\2\u01a9\u01a8\3\2\2\2\u01a9\u01aa\3\2\2\2\u01aa\u01ab\3\2\2\2\u01ab"+
+		"\u01ac\7\33\2\2\u01ac\u01ad\5\\/\2\u01ad[\3\2\2\2\u01ae\u01b4\7\30\2\2"+
+		"\u01af\u01b0\5\24\13\2\u01b0\u01b1\7\36\2\2\u01b1\u01b3\3\2\2\2\u01b2"+
+		"\u01af\3\2\2\2\u01b3\u01b6\3\2\2\2\u01b4\u01b2\3\2\2\2\u01b4\u01b5\3\2"+
+		"\2\2\u01b5\u01b7\3\2\2\2\u01b6\u01b4\3\2\2\2\u01b7\u01b8\7\31\2\2\u01b8"+
+		"]\3\2\2\2\u01b9\u01ba\7\b\2\2\u01ba\u01bb\5p9\2\u01bb\u01bd\7\32\2\2\u01bc"+
+		"\u01be\5`\61\2\u01bd\u01bc\3\2\2\2\u01bd\u01be\3\2\2\2\u01be\u01bf\3\2"+
+		"\2\2\u01bf\u01c0\7\33\2\2\u01c0\u01c1\5\6\4\2\u01c1\u01cf\3\2\2\2\u01c2"+
+		"\u01c5\5l\67\2\u01c3\u01c5\5t;\2\u01c4\u01c2\3\2\2\2\u01c4\u01c3\3\2\2"+
+		"\2\u01c5\u01c6\3\2\2\2\u01c6\u01c7\5p9\2\u01c7\u01c9\7\32\2\2\u01c8\u01ca"+
+		"\5`\61\2\u01c9\u01c8\3\2\2\2\u01c9\u01ca\3\2\2\2\u01ca\u01cb\3\2\2\2\u01cb"+
+		"\u01cc\7\33\2\2\u01cc\u01cd\5\6\4\2\u01cd\u01cf\3\2\2\2\u01ce\u01b9\3"+
+		"\2\2\2\u01ce\u01c4\3\2\2\2\u01cf_\3\2\2\2\u01d0\u01d1\5b\62\2\u01d1\u01d2"+
+		"\7\35\2\2\u01d2\u01d3\5`\61\2\u01d3\u01d6\3\2\2\2\u01d4\u01d6\5b\62\2"+
+		"\u01d5\u01d0\3\2\2\2\u01d5\u01d4\3\2\2\2\u01d6a\3\2\2\2\u01d7\u01da\5"+
+		"l\67\2\u01d8\u01da\5t;\2\u01d9\u01d7\3\2\2\2\u01d9\u01d8\3\2\2\2\u01da"+
+		"\u01db\3\2\2\2\u01db\u01dc\5r:\2\u01dcc\3\2\2\2\u01dd\u01de\7\r\2\2\u01de"+
+		"\u01df\5\26\f\2\u01df\u01e0\7\36\2\2\u01e0e\3\2\2\2\u01e1\u01e5\5h\65"+
+		"\2\u01e2\u01e5\7\25\2\2\u01e3\u01e5\7\26\2\2\u01e4\u01e1\3\2\2\2\u01e4"+
+		"\u01e2\3\2\2\2\u01e4\u01e3\3\2\2\2\u01e5g\3\2\2\2\u01e6\u01e7\t\5\2\2"+
+		"\u01e7i\3\2\2\2\u01e8\u01e9\t\6\2\2\u01e9k\3\2\2\2\u01ea\u01eb\t\7\2\2"+
+		"\u01ebm\3\2\2\2\u01ec\u01ed\7\60\2\2\u01edo\3\2\2\2\u01ee\u01ef\7\60\2"+
+		"\2\u01efq\3\2\2\2\u01f0\u01f1\7\60\2\2\u01f1s\3\2\2\2\u01f2\u01f3\7\60"+
+		"\2\2\u01f3u\3\2\2\2\62z|\u0086\u0095\u009d\u00a5\u00aa\u00b3\u00b8\u00bc"+
+		"\u00c4\u00e4\u00e8\u00f6\u00fe\u0107\u010b\u0112\u0119\u011f\u0123\u0129"+
+		"\u012b\u0132\u0136\u013a\u0142\u0147\u0150\u0159\u015e\u0166\u016a\u017e"+
+		"\u0182\u0191\u0197\u019f\u01a1\u01a9\u01b4\u01bd\u01c4\u01c9\u01ce\u01d5"+
+		"\u01d9\u01e4";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

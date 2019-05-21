@@ -293,8 +293,6 @@ public class CodeGenerator {
             return new ForLoopExpressionNode(forLoopExpressionNode.getAtomPrecedenceNode());
         else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
             return new ForLoopExpressionNode((VariableDeclarationNode)visitDeclaration(forLoopExpressionNode.getVariableDeclarationNode()));
-        else if (forLoopExpressionNode.getVariableName() != null)
-            return new ForLoopExpressionNode(forLoopExpressionNode.getVariableName());
         else
             return forLoopExpressionNode;
     }
