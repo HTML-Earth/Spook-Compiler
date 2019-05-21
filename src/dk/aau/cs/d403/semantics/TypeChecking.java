@@ -612,18 +612,19 @@ public class TypeChecking {
         else if (forLoopExpressionNode.getAssignmentNode() != null) {
             visitAssignment(forLoopExpressionNode.getAssignmentNode());
         }
-        else if (retrieveSymbol(forLoopExpressionNode.getVariableName()) != null) {
-            VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(forLoopExpressionNode.getVariableName());
-            if (variableDeclarationNode == null)
-                throw new CompilerException("ERROR: Variable in ForLoop is not declared.", variableDeclarationNode.getCodePosition());
-            else if (variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode() == null)
-                throw new CompilerException("ERROR: Variable in ForLoop is not initialized.", variableDeclarationNode.getCodePosition());
-            else if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM)) {
-                throw new CompilerException("ERROR: Variable is of an illegal type for the ForLoop.", variableDeclarationNode.getCodePosition());
-            }
-        }
+        //else if (retrieveSymbol(forLoopExpressionNode.getVariableName()) != null) {
+        //    VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(forLoopExpressionNode.getVariableName());
+        //    if (variableDeclarationNode == null)
+        //        throw new CompilerException("ERROR: Variable in ForLoop is not declared.", variableDeclarationNode.getCodePosition());
+        //    else if (variableDeclarationNode.getVarDeclInitNodes().get(0).getAssignmentNode() == null)
+        //        throw new CompilerException("ERROR: Variable in ForLoop is not initialized.", variableDeclarationNode.getCodePosition());
+        //    else if (!variableDeclarationNode.getDataType().equals(Enums.DataType.NUM)) {
+        //        throw new CompilerException("ERROR: Variable is of an illegal type for the ForLoop.", variableDeclarationNode.getCodePosition());
+        //    }
+        //}
         else if (forLoopExpressionNode.getAtomPrecedenceNode() != null) {
             //Type is ok
+            //TODO: type is probably not ok, since atom precedence can have a variable name (see above)
         }
         else
             throw new CompilerException("ERROR: Invalid ForLoop expression", forLoopExpressionNode.getCodePosition());
