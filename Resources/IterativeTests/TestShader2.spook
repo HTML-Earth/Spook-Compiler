@@ -30,10 +30,10 @@ Shader{
 
   #And Action!
   Scene.setColor(Color.black());
-  Scene.Add(circleFactory(radius, Color.red()));
-  Scene.Add(rec, 100, yPos);
-  Scene.Add(billy.setShadow(billy));
-  Scene.Add(billy);
+  Scene.add(circleFactory(radius, Color.red()));
+  Scene.add(rec, 100, yPos);
+  Scene.add(billy.setShadow(billy));
+  Scene.add(billy);
 }
 
 #Totally unnecessary function to create new circles
