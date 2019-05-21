@@ -442,12 +442,10 @@ public class Unrolling {
     private double evaluateForLoopExpression(ForLoopExpressionNode expressionNode) {
         if (expressionNode.getAssignmentNode() != null)
             return evaluateAssignment(expressionNode.getAssignmentNode());
-        else if (expressionNode.getAtomPrecedenceNode() != null && expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode() != null)
-            return expressionNode.getAtomPrecedenceNode().getOperand().getRealNumberNode().getNumber();
+        else if (expressionNode.getAtomPrecedenceNode() != null)
+            return evaluateAtomPrecedence(expressionNode.getAtomPrecedenceNode());
         else if (expressionNode.getVariableDeclarationNode() != null)
             return evaluateVariableDeclaration(expressionNode.getVariableDeclarationNode());
-        else if (expressionNode.getVariableName() != null)
-            return evaluateVariable(expressionNode.getVariableName());
         else
             throw new CompilerException("Invalid for loop expression", expressionNode.getCodePosition());
     }

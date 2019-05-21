@@ -985,11 +985,6 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
             return forLoopExpressionNode;
         }
-        else if (ctx.variableName() != null) {
-            ForLoopExpressionNode forLoopExpressionNode = new ForLoopExpressionNode(ctx.variableName().getText());
-            forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
-            return forLoopExpressionNode;
-        }
         else if (ctx.variableDecl() != null) {
             ForLoopExpressionNode forLoopExpressionNode = new ForLoopExpressionNode((VariableDeclarationNode) visitVariableDecl(ctx.variableDecl()));
             forLoopExpressionNode.setCodePosition(getCodePosition(ctx));
