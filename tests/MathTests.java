@@ -21,7 +21,6 @@ class MathTests {
 
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
-            programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
             CodeGenerator codeGenerator = new CodeGenerator();

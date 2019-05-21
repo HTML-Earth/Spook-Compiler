@@ -1,7 +1,8 @@
 Shader {
 
     #Swizzling tests
-    Vec4 vec = (1, 2, 3, 4);
+    Vec2 rec = (1, 1);
+    Vec4 vec = (rec.x, giveMeTen(), 3, 4);
     Vec4 vec1 = vec.xxxy;
 
     Vec3 vec3 = (1, 2, 3);
@@ -20,10 +21,17 @@ Shader {
     Num ternary = !bool1 ? 2 : 3;
     Num ternary2 = false ? 2 : 3;
     Num ternary3 = !false ? 4 : 0;
+    Bool ternary4 = bool1 ? true : true;
+    Bool ternary5 = returnTrue() ? false : returnTrue();
+
 
     Num a, r, g = 3, b;
+}
 
+Bool returnTrue() {
+    return true;
+}
 
-
-
+Num giveMeTen() {
+    return 10;
 }
