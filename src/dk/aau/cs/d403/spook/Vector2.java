@@ -1,13 +1,12 @@
 package dk.aau.cs.d403.spook;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.NumberPacking;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.NonObjectFunctionCallNode;
 import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
-import dk.aau.cs.d403.spook.color.Color;
 
 import java.util.ArrayList;
 

@@ -105,4 +105,12 @@ public class BoolOperationsNode implements ASTnode {
     public CodePosition getCodePosition() {
         return codePosition;
     }
+
+    public static BoolOperationsNode False() {
+        return new BoolOperationsNode(new BoolOperationNode(false));
+    }
+
+    public static BoolOperationsNode True() {
+        return new BoolOperationsNode(new BoolOperationNode(true));
+    }
 }

@@ -1,0 +1,18 @@
+Shader {
+    Bool bool;
+    Num hej;
+    Circle cir = (40, Color.green());
+    test();
+
+}
+
+Void test();
+Void test(Num hej) {}
+
+
+
+#Void test(Circle rec) {}
+#Void test(Bool bool, nu mubk) { return 0;}
+#Void test(Bool bool,  hej) {}
+
+#test(bool, hej, test); <-- THIS IS GARBAGE

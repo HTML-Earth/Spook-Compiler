@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.spook.shapes;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
@@ -22,6 +23,8 @@ public class Polygon extends Shape {
         this.position = Vector2.zero();
         this.rotation = ObjectArgumentNode.zero();
         this.scale = Vector2.one();
+
+        this.inverted = BoolExpressionNode.False();
 
         points = new ArrayList<>();
 
@@ -101,6 +104,6 @@ public class Polygon extends Shape {
 
     @Override
     public String getCheckCall(String spaceName) {
-        return "if (PolygonCheck(" + spaceName + ", " + name + ", " + points.size() + ")) {\n" + getColorApplication(spaceName) + "\t}";
+        return "PolygonCheck(" + spaceName + ", " + name + ", " + points.size() + ")) {\n" + getColorApplication(spaceName);
     }
 }

@@ -1,4 +1,4 @@
-package dk.aau.cs.d403;
+package dk.aau.cs.d403.errorhandling;
 
 import dk.aau.cs.d403.ast.CodePosition;
 

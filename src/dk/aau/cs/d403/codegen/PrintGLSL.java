@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
@@ -154,6 +154,10 @@ public class PrintGLSL {
             return "Invalid Atom Precedence Operation";
     }
 
+    public static String printBoolExpression(BoolExpressionNode boolExpressionNode) {
+        return boolExpressionNode.prettyPrint(0); //TODO: this might need to use custom code instead of pp
+    }
+
     public static String printNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         StringBuilder sb = new StringBuilder();
         ArrayList<ObjectArgumentNode> argumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
@@ -224,7 +228,12 @@ public class PrintGLSL {
     }
 
     public static String printObjArgNode(ObjectArgumentNode node) {
-        return printLowPrecedence(node.getLowPrecedence());
+        if (node.getLowPrecedence() != null)
+            return printLowPrecedence(node.getLowPrecedence());
+        else if (node.getBoolExpression() != null)
+            return printBoolExpression(node.getBoolExpression());
+        else
+            throw new CompilerException("Invalid object arg node", node.getCodePosition());
     }
 
     public static String printVector2(Vector2 vector){

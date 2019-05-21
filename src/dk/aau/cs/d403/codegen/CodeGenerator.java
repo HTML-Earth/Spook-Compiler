@@ -1,6 +1,6 @@
 package dk.aau.cs.d403.codegen;
 
-import dk.aau.cs.d403.CompilerException;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
@@ -175,19 +175,27 @@ public class CodeGenerator {
 
                 sb.append(newSpace).append(" -= ").append(objectName).append(".pos;\n\t");
 
-                sb.append(newSpace).append(" = scale2D(");
-                sb.append(objectName).append(".scale");
-                sb.append(") * ").append(newSpace).append(";\n\t");
-
                 sb.append(newSpace).append(" = rotate2D(");
                 sb.append(objectName).append(".rot");
+                sb.append(") * ").append(newSpace).append(";\n\t");
+
+                sb.append(newSpace).append(" = scale2D(");
+                sb.append(objectName).append(".scale");
                 sb.append(") * ").append(newSpace).append(";\n\t");
 
                 sb.append(newSpace).append(" += ").append(objectName).append(".pos;\n\t");
 
                 //Only Shapes
                 if (child instanceof Shape){
+                    sb.append("if (");
+
+                    sb.append(PrintGLSL.printBoolExpression(((Shape) child).isInverted()));
+
+                    sb.append(" ^^ ");
+
                     sb.append(((Shape)child).getCheckCall(newSpace));
+
+                    sb.append("\t}");
                 }
 
                 sb.append("\n\n");
@@ -285,8 +293,6 @@ public class CodeGenerator {
             return new ForLoopExpressionNode(forLoopExpressionNode.getAtomPrecedenceNode());
         else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
             return new ForLoopExpressionNode((VariableDeclarationNode)visitDeclaration(forLoopExpressionNode.getVariableDeclarationNode()));
-        else if (forLoopExpressionNode.getVariableName() != null)
-            return new ForLoopExpressionNode(forLoopExpressionNode.getVariableName());
         else
             return forLoopExpressionNode;
     }
@@ -616,6 +622,7 @@ public class CodeGenerator {
     private ObjectDeclarationNode visitObjectDeclaration(ObjectDeclarationNode objectDeclarationNode) {
         ArrayList<ObjectArgumentNode> argumentNodes = new ArrayList<>();
 
+        //TODO: Check whether we need to use ObjectArgs, functionCall or another object
         for (ObjectArgumentNode argumentNode : objectDeclarationNode.getObjectContructorNode().getObjectArgumentNodePlural().getObjectArgumentNodes()) {
             argumentNodes.add(visitArgumentNode(argumentNode));
         }
@@ -654,10 +661,8 @@ public class CodeGenerator {
 
         spookObjects.put(variableName, object);
 
-        if (argumentNodes.size() > 0)
             return new ObjectDeclarationNode(className, variableName, new ObjectContructorNode(new ObjectArgumentNodePlural(argumentNodes)));
-        else
-            return new ObjectDeclarationNode(className, variableName);
+
     }
 
     private NonObjectFunctionCallNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
@@ -695,8 +700,18 @@ public class CodeGenerator {
                                 .getOperand()
                                 .getVariableName();
                         SpookObject object = spookObjects.get(objectName);
-                        if (object != null)
+                        if (object != null) {
                             object.setParent(scene);
+
+                            if (argumentNodes.size() > 1)
+                                object.setPosition(argumentNodes.get(1));
+
+                            if (argumentNodes.size() > 2)
+                                object.setRotation(argumentNodes.get(2));
+
+                            if (argumentNodes.size() > 3)
+                                object.setScale(argumentNodes.get(3));
+                        }
                         break;
                     case "setColor":
                         scene.setColor(Color.getColorArgument(argumentNodes.get(0)));
@@ -734,6 +749,12 @@ public class CodeGenerator {
                         SpookObject parentObject = spookObjects.get(parentName);
                         if (parentObject != null)
                             object.setParent(parentObject);
+                        break;
+                    case "setInverted":
+                        if (object instanceof Shape) {
+                            Shape shape = (Shape)object;
+                            shape.setInverted(argumentNodes);
+                        }
                         break;
                     default:
                         throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);

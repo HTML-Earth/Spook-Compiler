@@ -38,9 +38,9 @@ public class ConditionalBlockNode implements ASTnode {
         if (blockNode != null)
             return blockNode.prettyPrint(indent);
         else if (statementNode != null)
-            return statementNode.prettyPrint(indent);
+            return "\n" + statementNode.prettyPrint(indent + 1);
         else if (returnNode != null)
-            return returnNode.prettyPrint(indent);
+            return "\n" + returnNode.prettyPrint(indent + 1);
         else
             return "Invalid Conditional Block";
     }

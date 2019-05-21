@@ -1,0 +1,10 @@
+Shader {
+    Rectangle rec = (100, 200);
+    Rectangle rec2 = rec;
+    Rectangle recFunc = makeRec();
+}
+
+Rectangle makeRec() {
+    Rectangle rec = (1000, 20);
+    return rec;
+}

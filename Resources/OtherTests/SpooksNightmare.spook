@@ -1,0 +1,66 @@
+Shader{
+
+    Num jlo = 1;
+    Hej hej;
+    hej.lol(jlo); # <-- THIS ARGUMENT IS NOT A PARAMETER IN THE "lol" FUNCTION
+
+    Bool index;
+    #for (index to 4) {} # <-- THIS SHOULD GIVE "Variable is of an illegal type for the ForLoop"
+
+    Num index2;
+    #for (index2 to 4) {} # <-- THIS SHOULD GIVE "Variable in ForLoop is not initialized"
+
+    #for (index4 to 5) {} # <-- THIS SHOULD GIVE "Variable in ForLoop is not declared"
+
+    #Vec3 vec3 = (1, 1, 1);
+    #Vec4 vec4 = vec3.xxxxx; # <-- NULL POINTER EXCEPTION. SHOULD MAYBE BE "ERROR: Too long swizzle" COMPILE EXCEPTION.
+
+    #Vec2 vec21 = (1, 1);
+    #Vec2 vec2;
+    #vec2 = vec21.xw; # <-- NULL POINTER EXCEPTION. SHOULD MAYBE BE "ERROR: w or a in swizzle, but it's not a Vec4." COMPILE EXCEPTION.
+
+    #Vec2 vec22 = (1, 1);
+    #Vec4 vec4;
+    #vec4 = vec22.xz; # <-- NULL POINTER EXCEPTION. SHOULD MAYBE BE "ERROR: z or b in swizzle, but it's not a Vec3 or Vec4." COMPILE EXCEPTION.
+
+
+
+    #Num ooo = 1;
+    #Hej2 hej2;
+    #hej2.lol(ooo); # <-- THIS IS ACTING WEIRD. OUT OF BOUND EXCEPTION
+
+
+
+
+}
+
+Bool copy (Num test1) {return false;}
+Bool copy (Num test1, Num test2) {return false;}
+
+#Void voidCopy (Bool fals) {}
+#Void voidCopy (Bool fals) {}  # <-- GIVES NULL POINTER EXCEPTION. SHOULD GIVE "function with name and type already exist"
+
+Bool ret () {
+    if (true)
+        return false;
+    return true; }
+
+
+#Num wut(Meme meme) {return 0;} # DISPLAYS NULLPOINTEREXCEPTION. SHOULD BE "MISSING CLASS (Meme)"
+
+Test testFunc() {} # <-- THIS WORKS BUT NO "Test" CLASS IS MADE
+
+
+Class Hej {
+
+    Num lol() {return 0;}
+}
+
+#Class Hej2 {
+#
+#    Num lol(Num ooo, Num ppp) {return 0;}
+#}
+
+#Class vur {
+#    Num loool; # <-- JUST LOOK AT THE LAST COMPILER EXCEPTION IN TYPECHECKING
+#}
