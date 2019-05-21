@@ -643,12 +643,14 @@ public class TypeChecking {
         }
     }
 
-    //Contains the body of FunctionDeclaration in order to call different visitFunctionsBlock methods
     private void visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
         String functionName = functionDeclarationNode.getFunctionName();
         ArrayList<FunctionArgNode> functionArgs = functionDeclarationNode.getFunctionArgNodes();
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
         String className = functionDeclarationNode.getClassName();
+
+        //Check if name matches predefined
+        functionNameMatchesPredefined(functionDeclarationNode);
 
         ArrayList<FunctionDeclarationNode> retrievedFunctions;
         if (retrieveAllFunctions(functionName) != null)
@@ -707,6 +709,14 @@ public class TypeChecking {
 
             enterSymbol(functionName, functionDeclarationNode);
         }
+    }
+
+    private void functionNameMatchesPredefined(FunctionDeclarationNode function) {
+        String functionName = function.getFunctionName();
+        for (String predefinedName : listOfPredefinedFunctions)
+        if (functionName.equals(predefinedName))
+            throw new CompilerException("ERROR: A predefined function with this name exists (" + functionName + ")", function.getCodePosition());
+
     }
 
     private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
