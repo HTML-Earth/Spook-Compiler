@@ -716,7 +716,7 @@ public class TypeChecking {
         if (functionDeclarationNode.getFunctionArgNodes() != null) {
             for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
 
-                //Initialize VarDecl to null, as it should already be checked
+                //Initialize Var/Object Decls to null, as they should already be checked
                 if (functionArgNode.getDataType() != null) {
                     AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
                     VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
@@ -724,7 +724,6 @@ public class TypeChecking {
                     visitVariableDeclaration(variableDeclarationNode);
                 }
                 else if (functionArgNode.getClassName() != null) {
-                    //AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
                     ArrayList<ObjectArgumentNode> objectArgumentNodes = new ArrayList<>();
                     ObjectContructorNode objectContructorNode = new ObjectContructorNode(new ObjectArgumentNodePlural(objectArgumentNodes));
                     ObjectDeclarationNode objectDeclarationNode = new ObjectDeclarationNode(functionArgNode.getClassName(), functionArgNode.getVariableName(), objectContructorNode);
