@@ -102,7 +102,6 @@ public class TypeChecking {
         this.booleanOperatorList = new ArrayList<>();
         this.booleanOperatorList.add(Enums.BoolOperator.AND);
         this.booleanOperatorList.add(Enums.BoolOperator.OR);
-        this.booleanOperatorList.add(Enums.BoolOperator.NOT);
 
         this.numberOperatorList = new ArrayList<>();
         this.numberOperatorList.add(Enums.BoolOperator.GREATER_OR_EQUAL);
@@ -776,7 +775,7 @@ public class TypeChecking {
             String dataType = visitLowPrecedenceNode(lowPrecedenceNode);
 
             if (dataType != null && !dataType.equals(Enums.dataTypeToStringSpook(returnType)))
-                throw new CompilerException("ERROR: Return statement does not match the return type (" + returnType + ") of the function", expressionNode.getCodePosition());
+                throw new CompilerException("ERROR: Return statement does not match the return type (" + Enums.dataTypeToStringSpook(returnType) + ") of the function", expressionNode.getCodePosition());
         }
         else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
             visitExpression(expressionNode);
@@ -826,7 +825,7 @@ public class TypeChecking {
                         if (retrieveSymbol(variableName) instanceof VariableDeclarationNode) {
                             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
                             if (variableDeclarationNode != null)
-                                return variableDeclarationNode.getDataType().toString();
+                                return Enums.dataTypeToStringSpook(variableDeclarationNode.getDataType());
                         }
                         else if (retrieveSymbol(variableName) instanceof ObjectDeclarationNode) {
                             ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
@@ -887,11 +886,21 @@ public class TypeChecking {
     }
 
     private void visitBoolExpression(BoolExpressionNode boolExpressionNode) {
+        //TODO: true > false, 1 && 1
 
         BoolOperationsNode boolOperationsNode = boolExpressionNode.getBoolOperationsNode();
 
-        BoolOperationNode boolOperationNode = boolOperationsNode.getBoolOperationNode();
-        ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = boolOperationsNode.getBoolOperationExtendNodes();
+        if (boolOperationsNode.getBoolOperationNode() != null) {
+            for (BoolOperationExtendNode extendNode : boolOperationsNode.getBoolOperationExtendNodes()) {
+                    if (!booleanOperatorList.contains(extendNode.getBoolOperator())) {
+                        throw new CompilerException("Operator " + Enums.boolOperatorToString(extendNode.getBoolOperator()) + " not allowed with Bools", boolExpressionNode.getCodePosition());
+                    }
+            }
+        }
+
+
+        //BoolOperationNode boolOperationNode = boolOperationsNode.getBoolOperationNode();
+        //ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = boolOperationsNode.getBoolOperationExtendNodes();
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
