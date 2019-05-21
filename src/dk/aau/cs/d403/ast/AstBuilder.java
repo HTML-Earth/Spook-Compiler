@@ -133,6 +133,27 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
                 varDeclInitNode.setCodePosition(getCodePosition(ctx));
                 return varDeclInitNode;
             }
+            else if (dataType == Enums.DataType.VEC2) {
+                ArithExpressionNode zeroNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                Vector2ExpressionNode vector2ExpressionNode = new Vector2ExpressionNode(zeroNode, zeroNode);
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), vector2ExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else if (dataType == Enums.DataType.VEC3) {
+                ArithExpressionNode zeroNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                Vector3ExpressionNode vector3ExpressionNode = new Vector3ExpressionNode(zeroNode, zeroNode, zeroNode);
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), vector3ExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
+            else if (dataType == Enums.DataType.VEC4) {
+                ArithExpressionNode zeroNode = new ArithExpressionNode(new LowPrecedenceNode(0));
+                Vector4ExpressionNode vector4ExpressionNode = new Vector4ExpressionNode(zeroNode, zeroNode, zeroNode, zeroNode);
+                varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), vector4ExpressionNode);
+                varDeclInitNode.setCodePosition(getCodePosition(ctx));
+                return varDeclInitNode;
+            }
             else {
                 varDeclInitNode = new VarDeclInitNode(ctx.variableName().getText(), null);
                 varDeclInitNode.setCodePosition(getCodePosition(ctx));

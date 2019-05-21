@@ -7,6 +7,9 @@ Shader {
     Vec3 vec3 = (1, 2, 3);
     vec3 = vec1.xxy;
 
+    Vec2 vec2 = (0, 0);
+    Vec2 vechej;
+
     #Reserved Tokens test
     Num x = 1;
     Num y = 2;
