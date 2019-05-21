@@ -20,10 +20,13 @@ Shader {
     Num ternary = !bool1 ? 2 : 3;
     Num ternary2 = false ? 2 : 3;
     Num ternary3 = !false ? 4 : 0;
+    Bool ternary4 = bool1 ? true : true;
+    Bool ternary5 = returnTrue() ? false : returnTrue();
+
 
     Num a, r, g = 3, b;
+}
 
-
-
-
+Bool returnTrue() {
+    return true;
 }
