@@ -8,12 +8,40 @@ import dk.aau.cs.d403.ast.structure.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Unrolling {
-    private HashMap<String, VariableDeclarationNode> variables;
+    private HashMap<String, VariableDeclarationNode> variableDeclarations;
+    private Stack<HashMap<String, Integer>> variableNameUsage;
+
+    private void openScope() {
+        HashMap<String, Integer> newVariableMap = new HashMap<>();
+        variableNameUsage.push(newVariableMap);
+    }
+
+    private void closeScope() {
+        variableNameUsage.pop();
+    }
+
+    private void useVariableName(String variableName) {
+        int currentUsage = 0;
+
+        if (variableNameUsage.peek().get(variableName) != null)
+            currentUsage = variableNameUsage.peek().get(variableName) + 1;
+
+        variableNameUsage.peek().put(variableName, currentUsage);
+    }
+
+    private String getNewVariableName(String variableName) {
+        if (variableNameUsage.peek().get(variableName) != null && variableNameUsage.peek().get(variableName) > 0)
+            return variableName + "_v" +  variableNameUsage.peek().get(variableName);
+        else
+            return variableName;
+    }
 
     public ProgramNode unrollProgram(ProgramNode programNode) {
-        variables = new HashMap<>();
+        variableDeclarations = new HashMap<>();
+        variableNameUsage = new Stack<>();
 
         ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
         ArrayList<ClassDeclarationNode> classDeclarationNodes;
@@ -31,15 +59,21 @@ public class Unrolling {
 
     private MainNode unrollMainNode(MainNode mainNode) {
         BlockNode blockNode = unrollBlockNode(mainNode.getBlockNode());
+
         MainNode newMainNode = new MainNode(blockNode);
         newMainNode.setCodePosition(mainNode.getCodePosition());
+
         return newMainNode;
     }
 
     private BlockNode unrollBlockNode(BlockNode blockNode) {
+        openScope();
         ArrayList<StatementNode> statementNodes = unrollStatementNodes(blockNode.getStatementNodes());
+        closeScope();
+
         BlockNode newBlockNode = new BlockNode(statementNodes);
         newBlockNode.setCodePosition(blockNode.getCodePosition());
+
         return newBlockNode;
     }
 
@@ -51,6 +85,10 @@ public class Unrolling {
                 newStatementNodes.addAll(unrollForLoop((ForLoopStatementNode)statementNode));
             else if (statementNode instanceof DeclarationNode)
                 newStatementNodes.add(unrollDeclaration((DeclarationNode)statementNode));
+            else if (statementNode instanceof AssignmentNode)
+                newStatementNodes.add(unrollAssignment((AssignmentNode)statementNode));
+            else if (statementNode instanceof ObjectFunctionCallNode)
+                newStatementNodes.add(unrollObjectFunctionCall((ObjectFunctionCallNode)statementNode));
             else
                 newStatementNodes.add(statementNode);
         }
@@ -58,15 +96,243 @@ public class Unrolling {
         return newStatementNodes;
     }
 
+    private ArrayList<StatementNode> unrollStatementNode(StatementNode statementNode) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+        statementNodes.add(statementNode);
+        return unrollStatementNodes(statementNodes);
+    }
+
+    private ObjectFunctionCallNode unrollObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
+        ObjectFunctionCallNode newObjFunCall = null;
+
+        String newObjName = getNewVariableName(objectFunctionCallNode.getObjectVariableName());
+
+        if (objectFunctionCallNode.getObjectArguments() != null) {
+            ArrayList<ObjectArgumentNode> objectArgumentNodes = unrollObjectArguments(objectFunctionCallNode.getObjectArguments());
+            newObjFunCall = new ObjectFunctionCallNode(newObjName, objectFunctionCallNode.getFunctionName(), objectArgumentNodes);
+        }
+        else
+            newObjFunCall = new ObjectFunctionCallNode(newObjName, objectFunctionCallNode.getFunctionName());
+
+        return newObjFunCall;
+    }
+
     private DeclarationNode unrollDeclaration(DeclarationNode declarationNode) {
         if (declarationNode instanceof VariableDeclarationNode) {
-            VariableDeclarationNode visitedVariableDeclarationNode = (VariableDeclarationNode)declarationNode;
-            for (VarDeclInitNode varDeclInitNode : visitedVariableDeclarationNode.getVarDeclInitNodes()) {
-                variables.put(varDeclInitNode.getAssignmentNode().getVariableName(), visitedVariableDeclarationNode);
+            Enums.DataType dataType = ((VariableDeclarationNode)declarationNode).getDataType();
+            ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
+
+            VariableDeclarationNode visitedVariableDeclarationNode = new VariableDeclarationNode(dataType, varDeclInitNodes);
+
+            for (VarDeclInitNode varDeclInitNode : ((VariableDeclarationNode)declarationNode).getVarDeclInitNodes()) {
+                String variableName = varDeclInitNode.getAssignmentNode().getVariableName();
+                useVariableName(variableName);
+
+                String newVarName = getNewVariableName(variableName);
+                ExpressionNode newExpressionNode = unrollExpression(varDeclInitNode.getAssignmentNode().getExpressionNode());
+
+                AssignmentNode newAssignmentNode = new AssignmentNode(newVarName, newExpressionNode);
+                newAssignmentNode.setCodePosition(varDeclInitNode.getAssignmentNode().getCodePosition());
+
+                VarDeclInitNode newVarDeclInit = new VarDeclInitNode(newAssignmentNode);
+                newVarDeclInit.setCodePosition(varDeclInitNode.getCodePosition());
+
+                visitedVariableDeclarationNode.getVarDeclInitNodes().add(newVarDeclInit);
+                variableDeclarations.put(newVarName, visitedVariableDeclarationNode);
             }
+
+            return visitedVariableDeclarationNode;
+        }
+        else if (declarationNode instanceof ObjectDeclarationNode) {
+            ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode)declarationNode;
+
+            useVariableName(objectDeclarationNode.getVariableName());
+            String newObjName = getNewVariableName(objectDeclarationNode.getVariableName());
+            ObjectContructorNode newObjectConstructor = objectDeclarationNode.getObjectContructorNode();
+
+            ObjectDeclarationNode visitedObjectDeclarationNode = new ObjectDeclarationNode(objectDeclarationNode.getClassName(), newObjName, newObjectConstructor);
+            visitedObjectDeclarationNode.setCodePosition(objectDeclarationNode.getCodePosition());
+
+            return visitedObjectDeclarationNode;
+        }
+        else
+            return declarationNode;
+    }
+
+    private AssignmentNode unrollAssignment(AssignmentNode assignmentNode) {
+        AssignmentNode newAssignmentNode = null;
+
+        if (assignmentNode.getVariableName() != null) {
+            String newVarName = getNewVariableName(assignmentNode.getVariableName());
+            newAssignmentNode = new AssignmentNode(newVarName, assignmentNode.getExpressionNode());
+        }
+        else if (assignmentNode.getSwizzleNode() != null) {
+            String newVarName = getNewVariableName(assignmentNode.getSwizzleNode().getVariableName());
+            SwizzleNode newSwizzle = new SwizzleNode(newVarName, assignmentNode.getSwizzleNode().getSwizzle());
+            newSwizzle.setCodePosition(assignmentNode.getSwizzleNode().getCodePosition());
+
+            newAssignmentNode = new AssignmentNode(assignmentNode.getSwizzleNode(), assignmentNode.getExpressionNode());
         }
 
-        return declarationNode;
+        newAssignmentNode.setCodePosition(assignmentNode.getCodePosition());
+
+        return newAssignmentNode;
+    }
+
+    private ExpressionNode unrollExpression(ExpressionNode expressionNode) {
+        ExpressionNode newExpressionNode = null;
+
+        if (expressionNode instanceof ArithExpressionNode) {
+            ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
+            return unrollArithExpression(arithExpressionNode);
+        }
+        else if (expressionNode instanceof BoolExpressionNode) {
+            BoolExpressionNode boolExpressionNode = (BoolExpressionNode)expressionNode;
+            return unrollBoolExpression(boolExpressionNode);
+        }
+        else
+            return newExpressionNode;
+    }
+
+    private BoolExpressionNode unrollBoolExpression(BoolExpressionNode boolExpressionNode) {
+        return boolExpressionNode; //TODO: fill in method
+    }
+
+
+    private ArithExpressionNode unrollArithExpression(ArithExpressionNode arithExpressionNode) {
+        LowPrecedenceNode newLowPre = unrollLowPrecedence(arithExpressionNode.getLowPrecedenceNode());
+
+        ArithExpressionNode newArithExpressionNode = new ArithExpressionNode(newLowPre);
+
+        newArithExpressionNode.setCodePosition(arithExpressionNode.getCodePosition());
+        return newArithExpressionNode;
+    }
+
+    private LowPrecedenceNode unrollLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
+        LowPrecedenceNode newLowPre = null;
+
+        ArrayList<HighPrecedenceNode> highPrecedenceNodes = new ArrayList<>();
+
+        for(HighPrecedenceNode highPrecedenceNode: lowPrecedenceNode.getHighPrecedenceNodes()) {
+            highPrecedenceNodes.add(unrollHighPrecedence(highPrecedenceNode));
+        }
+
+        if (lowPrecedenceNode.getOperators() != null)
+            newLowPre = new LowPrecedenceNode(highPrecedenceNodes, lowPrecedenceNode.getOperators());
+        else
+            newLowPre = new LowPrecedenceNode(highPrecedenceNodes);
+
+        newLowPre.setCodePosition(lowPrecedenceNode.getCodePosition());
+
+        return newLowPre;
+    }
+
+    private HighPrecedenceNode unrollHighPrecedence(HighPrecedenceNode highPrecedenceNode) {
+        HighPrecedenceNode newHighPre = null;
+        ArrayList<AtomPrecedenceNode> atomPrecedenceNodes = new ArrayList<>();
+
+        for(AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
+            atomPrecedenceNodes.add(unrollAtomPrecedence(atomPrecedenceNode));
+        }
+
+        if (highPrecedenceNode.getOperators() != null)
+            newHighPre = new HighPrecedenceNode(atomPrecedenceNodes, highPrecedenceNode.getOperators());
+        else
+            newHighPre = new HighPrecedenceNode(atomPrecedenceNodes);
+
+        newHighPre.setCodePosition(highPrecedenceNode.getCodePosition());
+
+        return newHighPre;
+    }
+
+    private AtomPrecedenceNode unrollAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode) {
+        AtomPrecedenceNode newAtomPrecedenceNode = null;
+
+        if (atomPrecedenceNode.getOperand() != null) {
+            ArithOperandNode newOperand = unrollArithOperand(atomPrecedenceNode.getOperand());
+
+            if (atomPrecedenceNode.getOperator() != null)
+                newAtomPrecedenceNode = new AtomPrecedenceNode(atomPrecedenceNode.getOperator(), newOperand);
+            else
+                newAtomPrecedenceNode = new AtomPrecedenceNode(newOperand);
+        }
+        else if (atomPrecedenceNode.getLowPrecedenceNode() != null) {
+            LowPrecedenceNode newLoPre = unrollLowPrecedence(atomPrecedenceNode.getLowPrecedenceNode());
+
+            newAtomPrecedenceNode = new AtomPrecedenceNode(newLoPre);
+        }
+        else
+            return atomPrecedenceNode;
+
+        newAtomPrecedenceNode.setCodePosition(atomPrecedenceNode.getCodePosition());
+        return newAtomPrecedenceNode;
+    }
+
+    private ArithOperandNode unrollArithOperand(ArithOperandNode arithOperandNode) {
+        ArithOperandNode newArithOperandNode = null;
+
+        NonObjectFunctionCallNode nonObjectFunctionCallNode = arithOperandNode.getNonObjectFunctionCallNode();
+        ObjectFunctionCallNode objectFunctionCallNode = arithOperandNode.getObjectFunctionCallNode();
+        String variableName = arithOperandNode.getVariableName();
+        SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
+
+        if (nonObjectFunctionCallNode != null) {
+            ArrayList<ObjectArgumentNode> argumentNodes = unrollObjectArguments(nonObjectFunctionCallNode.getArgumentNodes());
+
+            NonObjectFunctionCallNode newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName(), argumentNodes);
+            newNonObjectFunCall.setCodePosition(nonObjectFunctionCallNode.getCodePosition());
+
+            newArithOperandNode = new ArithOperandNode(newNonObjectFunCall);
+        }
+        else if (objectFunctionCallNode != null) {
+            ObjectFunctionCallNode newObjFunCall = unrollObjectFunctionCall(objectFunctionCallNode);
+            newArithOperandNode = new ArithOperandNode(newObjFunCall);
+        }
+        else if (variableName != null) {
+            String newVarName = getNewVariableName(variableName);
+
+            newArithOperandNode = new ArithOperandNode(newVarName);
+        }
+        else if (swizzleNode != null) {
+            String newVarName = getNewVariableName(swizzleNode.getVariableName());
+
+            SwizzleNode newSwizzleNode = new SwizzleNode(newVarName, swizzleNode.getSwizzle());
+            newSwizzleNode.setCodePosition(swizzleNode.getCodePosition());
+
+            newArithOperandNode = new ArithOperandNode(newSwizzleNode);
+        }
+        else
+            return arithOperandNode;
+
+
+        newArithOperandNode.setCodePosition(arithOperandNode.getCodePosition());
+
+        return newArithOperandNode;
+    }
+
+    private ArrayList<ObjectArgumentNode> unrollObjectArguments(ArrayList<ObjectArgumentNode> objectArgumentNodes) {
+        ArrayList<ObjectArgumentNode> newObjectArgs = new ArrayList<>();
+
+        for (ObjectArgumentNode objArg : objectArgumentNodes) {
+            if (objArg.getLowPrecedence() != null) {
+                LowPrecedenceNode newLowPre = unrollLowPrecedence(objArg.getLowPrecedence());
+
+                ObjectArgumentNode newObjArg = new ObjectArgumentNode(newLowPre);
+                newObjArg.setCodePosition(objArg.getCodePosition());
+                newObjectArgs.add(newObjArg);
+            }
+            else if (objArg.getBoolExpression() != null) {
+                BoolExpressionNode boolExp = unrollBoolExpression(objArg.getBoolExpression());
+
+                ObjectArgumentNode newObjArg = new ObjectArgumentNode(boolExp);
+                newObjArg.setCodePosition(objArg.getCodePosition());
+                newObjectArgs.add(newObjArg);
+            }
+            else
+                newObjectArgs.add(objArg);
+        }
+
+        return newObjectArgs;
     }
 
     private ArrayList<StatementNode> unrollForLoop(ForLoopStatementNode forLoopStatementNode) {
@@ -115,10 +381,13 @@ public class Unrolling {
                     ArrayList<VarDeclInitNode> varDeclInitNodes = expressionNode1.getVariableDeclarationNode().getVarDeclInitNodes();
                     AssignmentNode assignmentNode = varDeclInitNodes.get(0).getAssignmentNode();
 
+                    useVariableName(assignmentNode.getVariableName());
+                    String newVarName = getNewVariableName(assignmentNode.getVariableName());
+
                     ArrayList<VarDeclInitNode> fixedVarDeclInitNodes = new ArrayList<>();
                     fixedVarDeclInitNodes.add(
                         new VarDeclInitNode(
-                            new AssignmentNode(assignmentNode.getVariableName(), fixedExpressionNode)
+                            new AssignmentNode(newVarName, fixedExpressionNode)
                         )
                     );
 
@@ -133,6 +402,9 @@ public class Unrolling {
             }
             else if (expressionNode1.getAssignmentNode() != null) {
                 //CREATE NEW ASSIGNMENT
+                useVariableName(expressionNode1.getAssignmentNode().getVariableName());
+                String newVarName = getNewVariableName(expressionNode1.getAssignmentNode().getVariableName());
+
                 AssignmentNode newAssignmentNode = new AssignmentNode(
                         expressionNode1.getAssignmentNode().getVariableName(), fixedExpressionNode
                 );
@@ -146,11 +418,11 @@ public class Unrolling {
 
             if (conditionalBlockNode != null) {
                 if (conditionalBlockNode.getStatementNode() != null)
-                    unrolledStatementNodes.add(conditionalBlockNode.getStatementNode());
+                    unrolledStatementNodes.addAll(unrollStatementNode(conditionalBlockNode.getStatementNode()));
                 else if (conditionalBlockNode.getBlockNode() != null)
-                    unrolledStatementNodes.addAll(conditionalBlockNode.getBlockNode().getStatementNodes());
+                    unrolledStatementNodes.addAll(unrollStatementNodes(conditionalBlockNode.getBlockNode().getStatementNodes()));
                 else if (conditionalBlockNode.getReturnNode() != null)
-                    unrolledStatementNodes.add(conditionalBlockNode.getReturnNode()); //TODO: maybe illegal?
+                    unrolledStatementNodes.addAll(unrollStatementNode(conditionalBlockNode.getReturnNode())); //TODO: maybe illegal?
             }
             else
                 throw new CompilerException("Invalid ForLoopStatement", forLoopStatementNode.getCodePosition());
@@ -201,7 +473,7 @@ public class Unrolling {
     }
 
     private double evaluateVariable(String variableName) {
-        VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
+        VariableDeclarationNode variableDeclarationNode = variableDeclarations.get(variableName);
         if (variableDeclarationNode != null)
             return evaluateVariableDeclaration(variableDeclarationNode);
         else
