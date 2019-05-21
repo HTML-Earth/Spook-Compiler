@@ -591,6 +591,8 @@ public class TypeChecking {
         ForLoopExpressionNode forLoopExpression1 = forLoopStatementNode.getForLoopExpressionNode1();
         ForLoopExpressionNode forLoopExpression2 = forLoopStatementNode.getForLoopExpressionNode2();
 
+        openScope();
+
         // Visit expression and check if they are well typed
         visitForLoopExpression(forLoopExpression1);
         visitForLoopExpression(forLoopExpression2);
@@ -599,6 +601,8 @@ public class TypeChecking {
             visitBlock(forLoopStatementNode.getConditionalBlockNode().getBlockNode());
         else if (forLoopStatementNode.getConditionalBlockNode().getStatementNode() != null)
             visitStatement(forLoopStatementNode.getConditionalBlockNode().getStatementNode());
+
+        closeScope();
     }
 
     private void visitForLoopExpression(ForLoopExpressionNode forLoopExpressionNode) {
