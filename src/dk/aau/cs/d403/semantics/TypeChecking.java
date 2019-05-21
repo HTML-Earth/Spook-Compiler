@@ -338,7 +338,7 @@ public class TypeChecking {
 
     private void visitAssignment(AssignmentNode assignmentNode) {
         String variableName;
-        Enums.DataType dataType;
+        String dataType;
 
         if (assignmentNode.getVariableName() != null) {
             VariableDeclarationNode variableDeclarationNode = null;
@@ -347,7 +347,7 @@ public class TypeChecking {
                 variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
 
             if (variableDeclarationNode != null)
-                dataType = variableDeclarationNode.getDataType();
+                dataType = Enums.dataTypeToStringSpook(variableDeclarationNode.getDataType());
             else
                 dataType = null;
 
@@ -357,11 +357,17 @@ public class TypeChecking {
             if (assignmentNode.getExpressionNode() != null) {
                 String assignedDataType = null;
                 if (assignmentNode.getExpressionNode() instanceof BoolExpressionNode) {
-                    assignedDataType = Enums.DataType.BOOL.toString();
+                    assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
                 } else if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
                     assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 }
-                if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType.toString()))
+                //Check datatype for the first expression in ternaryoperator, visitTernaryOperator makes sure both expressions are of same type
+                else if (assignmentNode.getExpressionNode() instanceof TernaryOperatorNode) {
+                    TernaryOperatorNode ternaryOperatorNode = (TernaryOperatorNode) assignmentNode.getExpressionNode();
+                    visitTernaryOperator(ternaryOperatorNode);
+                    assignedDataType = ternaryExprType(assignmentNode.getExpressionNode());
+                }
+                if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
                     throw new CompilerException("ERROR: Incompatible types.(" + dataType + " and " + assignedDataType + ")", assignmentNode.getCodePosition());
             }
         }
@@ -379,15 +385,6 @@ public class TypeChecking {
 
         ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
         retrievedFunctions = retrieveAllFunctions(functionName);
-
-        for (FunctionDeclarationNode functionDeclarationNode: retrievedFunctions) {
-            System.out.println(functionDeclarationNode.getFunctionName());
-            if (functionDeclarationNode.getFunctionArgNodes() != null) {
-                for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
-                    System.out.println("    " + functionArgNode.getDataType());
-                }
-            }
-        }
 
         if (!this.listOfPredefinedFunctions.contains(functionName)) {
             if (!retrievedFunctions.isEmpty()) {
@@ -497,7 +494,7 @@ public class TypeChecking {
                                         // Check each argument if its data type matches the function's parameters
                                         for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                                             dataType = visitLowPrecedenceNode(objectArgumentNodes.get(i).getLowPrecedence());
-                                            if (!(functionArgNodes.get(i).getDataType().toString().equals(dataType))) {
+                                            if (!(Enums.dataTypeToStringSpook(functionArgNodes.get(i).getDataType()).equals(dataType))) {
                                                 sameFunction = false;
                                                 break;
                                             }
@@ -731,6 +728,7 @@ public class TypeChecking {
                     AssignmentNode assignmentNode = new AssignmentNode(functionArgNode.getVariableName(), null);
                     VarDeclInitNode varDeclInitNode = new VarDeclInitNode(assignmentNode);
                     VariableDeclarationNode variableDeclarationNode = new VariableDeclarationNode(functionArgNode.getDataType(), varDeclInitNode);
+                    variableDeclarationNode.setCodePosition(functionArgNode.getCodePosition());
                     visitVariableDeclaration(variableDeclarationNode);
                 }
                 else if (functionArgNode.getClassName() != null) {
@@ -781,9 +779,8 @@ public class TypeChecking {
         }
         else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
             visitExpression(expressionNode);
-        else if (expressionNode instanceof TernaryOperatorNode) {
-            // ternary
-        }
+        else if (expressionNode instanceof TernaryOperatorNode)
+            visitTernaryOperator((TernaryOperatorNode) expressionNode);
         else if (expressionNode instanceof  Vector4ExpressionNode && returnType.equals(Enums.DataType.VEC4))
             visitExpression(expressionNode);
         else if (expressionNode instanceof  Vector3ExpressionNode && returnType.equals(Enums.DataType.VEC3))
@@ -800,7 +797,7 @@ public class TypeChecking {
         LowPrecedenceNode lowPrecedenceNode;
         if (expressionNode instanceof ArithExpressionNode) {
             lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
-            visitLowPrecedenceNode(lowPrecedenceNode); //TODO: this does nothing?
+            visitLowPrecedenceNode(lowPrecedenceNode);
         }
         else if (expressionNode instanceof BoolExpressionNode)
             visitBoolExpression((BoolExpressionNode) expressionNode);
@@ -840,17 +837,20 @@ public class TypeChecking {
                     // Operand: Non-object function Call
                     if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
                         NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
-                        FunctionDeclarationNode functionDeclarationNode = visitNonObjectFunctionCall(atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode());
+                        FunctionDeclarationNode functionDeclarationNode = visitNonObjectFunctionCall(nonObjectFunctionCallNode);
 
                         if (functionDeclarationNode != null)
-                            return functionDeclarationNode.getReturnType().toString();
+                            if (functionDeclarationNode.getReturnType() != null)
+                                return Enums.dataTypeToStringSpook(functionDeclarationNode.getReturnType());
+                            else if (functionDeclarationNode.getClassName() != null)
+                                return functionDeclarationNode.getClassName();
                     }
 
                     // Operand: Object function Call
-                    //if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
-                    //    ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
-                    //    return visitObjectFunctionCall(objectFunctionCallNode);
-                    //}
+                    if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
+                        ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
+                        return visitObjectFunctionCall(objectFunctionCallNode);
+                    }
 
                 // Operand: Swizzle
                 if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
@@ -862,19 +862,19 @@ public class TypeChecking {
                         swizzleLength = swizzleNode.getSwizzle().length();
 
                         if (swizzleLength == 4)
-                            return Enums.DataType.VEC4.toString();
+                            return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
                         else if (swizzleLength == 3)
-                            return Enums.DataType.VEC3.toString();
+                            return Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
                         else if (swizzleLength == 2)
-                            return Enums.DataType.VEC2.toString();
+                            return Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
                         else if (swizzleLength == 1)
-                            return Enums.DataType.NUM.toString();
+                            return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
                         else
                             throw new CompilerException("ERROR: Too long swizzle", swizzleNode.getCodePosition());
                     }
 
                     if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
-                        return Enums.DataType.NUM.toString();
+                        return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
 
                     // Operand: Low precedence
                     if (atomPrecedenceNode.getLowPrecedenceNode() != null)
@@ -914,9 +914,47 @@ public class TypeChecking {
         else if (ternaryOperatorNode.getNonObjectFunctionCallNode() != null)
             visitNonObjectFunctionCall(ternaryOperatorNode.getNonObjectFunctionCallNode());
 
+        //check if the types of the expression are a match
+        ternaryExprMatch(ternaryOperatorNode);
 
         visitExpression(ternaryOperatorNode.getExpressionNode2());
         visitExpression(ternaryOperatorNode.getExpressionNode1());
+    }
+
+    //Checks if the 2 expression in a ternary operator matches
+    private void ternaryExprMatch(TernaryOperatorNode ternaryOperatorNode) {
+        ExpressionNode expression1 = ternaryOperatorNode.getExpressionNode1();
+        ExpressionNode expression2 = ternaryOperatorNode.getExpressionNode2();
+        String expression1Type = ternaryExprType(expression1);
+        String expression2Type = ternaryExprType(expression2);
+
+        if (!expression1Type.equals(expression2Type))
+            throw new CompilerException("Expressions in ternary operator are not the same type. Found: (" + expression1Type + " and " + expression2Type + ")", ternaryOperatorNode.getCodePosition());
+    }
+
+    //Returns the type of a single expression in a ternary operator
+    private String ternaryExprType(ExpressionNode expressionNode) {
+        if (expressionNode instanceof ArithExpressionNode)
+            return visitLowPrecedenceNode(((ArithExpressionNode) expressionNode).getLowPrecedenceNode());
+        else if (expressionNode instanceof BoolExpressionNode)
+            return Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
+        else if (expressionNode instanceof Vector2ExpressionNode) {
+            String tempDataType;
+            tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
+            if (expressionNode instanceof Vector3ExpressionNode) {
+                tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
+                if (expressionNode instanceof Vector4ExpressionNode)
+                    tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+            }
+            return tempDataType;
+        }
+        else if (expressionNode instanceof TernaryOperatorNode) {
+            TernaryOperatorNode ternaryTemp = (TernaryOperatorNode) expressionNode;
+            ternaryExprMatch(ternaryTemp);
+            return ternaryExprType(ternaryTemp.getExpressionNode1());
+        }
+        else
+            throw new CompilerException("Ternary expression missing type");
     }
 
     private void visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
