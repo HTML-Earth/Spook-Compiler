@@ -775,7 +775,7 @@ public class TypeChecking {
             lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
             String dataType = visitLowPrecedenceNode(lowPrecedenceNode);
 
-            if (dataType != null && !dataType.equals(returnType.toString()))
+            if (dataType != null && !dataType.equals(Enums.dataTypeToStringSpook(returnType)))
                 throw new CompilerException("ERROR: Return statement does not match the return type (" + returnType + ") of the function", expressionNode.getCodePosition());
         }
         else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
@@ -959,21 +959,28 @@ public class TypeChecking {
     }
 
     private void visitVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
-        visitExpression(vector4ExpressionNode.getArithExpressionNode1());
-        visitExpression(vector4ExpressionNode.getArithExpressionNode2());
-        visitExpression(vector4ExpressionNode.getArithExpressionNode3());
-        visitExpression(vector4ExpressionNode.getArithExpressionNode4());
+        String expr1 = visitLowPrecedenceNode(vector4ExpressionNode.getArithExpressionNode1().getLowPrecedenceNode());
+        String expr2 = visitLowPrecedenceNode(vector4ExpressionNode.getArithExpressionNode2().getLowPrecedenceNode());
+        String expr3 = visitLowPrecedenceNode(vector4ExpressionNode.getArithExpressionNode3().getLowPrecedenceNode());
+        String expr4 = visitLowPrecedenceNode(vector4ExpressionNode.getArithExpressionNode4().getLowPrecedenceNode());
+
+        if (!expr1.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) || !expr2.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) || !expr3.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) || !expr4.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)))
+            throw new CompilerException("Expression in Vec4 can only be Num. Found: " + expr1 + ", " + expr2 + ", " + expr3 + " and " + expr4, vector4ExpressionNode.getCodePosition());
     }
 
     private void visitVector3Expression(Vector3ExpressionNode vector3ExpressionNode) {
-        visitExpression(vector3ExpressionNode.getArithExpressionNode1());
-        visitExpression(vector3ExpressionNode.getArithExpressionNode2());
-        visitExpression(vector3ExpressionNode.getArithExpressionNode3());
+        String expr1 = visitLowPrecedenceNode(vector3ExpressionNode.getArithExpressionNode1().getLowPrecedenceNode());
+        String expr2 = visitLowPrecedenceNode(vector3ExpressionNode.getArithExpressionNode2().getLowPrecedenceNode());
+        String expr3 = visitLowPrecedenceNode(vector3ExpressionNode.getArithExpressionNode3().getLowPrecedenceNode());
+        if (!expr1.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) || !expr2.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) || !expr3.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)))
+            throw new CompilerException("Expression in Vec3 can only be Num. Found: " + expr1 + ", " + expr2 + " and " + expr3, vector3ExpressionNode.getCodePosition());
     }
 
     private void visitVector2Expression(Vector2ExpressionNode vector2ExpressionNode) {
-        visitExpression(vector2ExpressionNode.getArithExpressionNode1());
-        visitExpression(vector2ExpressionNode.getArithExpressionNode2());
+        String expr1 = visitLowPrecedenceNode(vector2ExpressionNode.getArithExpressionNode1().getLowPrecedenceNode());
+        String expr2 = visitLowPrecedenceNode(vector2ExpressionNode.getArithExpressionNode2().getLowPrecedenceNode());
+        if (!expr1.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) || !expr2.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)))
+            throw new CompilerException("Expression in Vec2 can only be Num. Found: " + expr1 + " and " + expr2, vector2ExpressionNode.getCodePosition());
     }
 
     private void visitSwizzle(SwizzleNode swizzleNode) {
