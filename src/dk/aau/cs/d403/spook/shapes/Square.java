@@ -4,6 +4,7 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
+import dk.aau.cs.d403.errorhandling.InvalidAmountOfArgumentsException;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.color.Color;
 
@@ -22,10 +23,18 @@ public class Square extends Shape {
 
         this.inverted = BoolExpressionNode.False();
 
-        if (argumentNodes.size() == 2) {
+        if (argumentNodes.size() == 1) {
+            // (Num size)
+            this.size = argumentNodes.get(0);
+            this.color = Color.magenta();
+        }
+        else if (argumentNodes.size() == 2) {
+            // (Num size, Vec4 color)
             this.size = argumentNodes.get(0);
             this.color = Color.getColorArgument(argumentNodes.get(1));
         }
+        else
+            throw new InvalidAmountOfArgumentsException("Square constructor", 1,2, argumentNodes.size());
     }
 
     public static String getStruct() {
