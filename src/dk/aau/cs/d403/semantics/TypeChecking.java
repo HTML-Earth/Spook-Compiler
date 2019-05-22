@@ -108,8 +108,6 @@ public class TypeChecking {
         this.numberOperatorList.add(Enums.BoolOperator.GREATER_THAN);
         this.numberOperatorList.add(Enums.BoolOperator.LESS_OR_EQUAL);
         this.numberOperatorList.add(Enums.BoolOperator.LESS_THAN);
-        this.numberOperatorList.add(Enums.BoolOperator.EQUAL);
-        this.numberOperatorList.add(Enums.BoolOperator.NOT_EQUAL);
     }
 
     private void openScope() {
@@ -889,18 +887,103 @@ public class TypeChecking {
         //TODO: true > false, 1 && 1
 
         BoolOperationsNode boolOperationsNode = boolExpressionNode.getBoolOperationsNode();
+        ArrayList<BoolOperationExtendNode> extendNodes = boolOperationsNode.getBoolOperationExtendNodes();
 
-        if (boolOperationsNode.getBoolOperationNode() != null) {
-            for (BoolOperationExtendNode extendNode : boolOperationsNode.getBoolOperationExtendNodes()) {
-                    if (!booleanOperatorList.contains(extendNode.getBoolOperator())) {
-                        throw new CompilerException("Operator " + Enums.boolOperatorToString(extendNode.getBoolOperator()) + " not allowed with Bools", boolExpressionNode.getCodePosition());
+        if (extendNodes != null) {
+            for (int currentExtend = 0; currentExtend < extendNodes.size(); currentExtend++) {
+                //Go through all extendNodes, if the operator matches <, >, >=, <= check that both operands are arithExpression
+                if (numberOperatorList.contains(extendNodes.get(currentExtend).getBoolOperator())) {
+                    //For the first node we check the original operand is an arithExpression (Original operator extend)
+                    if (currentExtend == 0) {
+                        if (boolOperationsNode.getArithExpressionNode() == null || extendNodes.get(currentExtend).getArithExpressionNode() == null) {
+                            throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires arithmetic expressions.", boolExpressionNode.getCodePosition());
+                        }
+                    } else
+                        //Check for currentExtend - 1 operator currentExtend
+                        if (extendNodes.get(currentExtend).getArithExpressionNode() == null || extendNodes.get(currentExtend - 1).getArithExpressionNode() == null) {
+                            throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires arithmetic expressions.", boolExpressionNode.getCodePosition());
+
+                        }
+                }
+                //Check if the operator matches &&, ||
+                if (booleanOperatorList.contains(extendNodes.get(currentExtend).getBoolOperator())) {
+                    //For the first node we check the original operand is a boolExpression (Original operator extend)
+                    if (currentExtend == 0) {
+                        if (boolOperationsNode.getBoolOperationNode() == null || extendNodes.get(currentExtend).getBoolOperationNode() == null) {
+                            throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
+                        }
+                    } else
+                        //Check for currentExtend - 1 operator currentExtend
+                        if (extendNodes.get(currentExtend).getBoolOperationNode() == null || extendNodes.get(currentExtend - 1).getBoolOperationNode() == null) {
+                            throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
+
+                        }
+                }
+
+                //Check for != and ==, where both type must match
+                if (extendNodes.get(currentExtend).getBoolOperator() == Enums.BoolOperator.EQUAL || extendNodes.get(currentExtend).getBoolOperator() == Enums.BoolOperator.NOT_EQUAL) {
+                    //Special check for the first node
+                    if (currentExtend == 0) {
+
+                        if (boolOperationsNode.getBoolOperationNode() != null && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                            //OK type
+                        }
+                        // originalType = bool && extend = boolOperation
+                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                                //OK type
+                            }
+                        }
+                        // original = boolOperation && extendType = bool
+                        else if (extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && boolOperationsNode.getBoolOperationNode() != null) {
+                                //OK type
+                            }
+                        }
+                        //The 2 LowPrecedences match type
+                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(extendVariableType)) {
+                                //OK type
+                            }
+                        } else
+                            throw new CompilerException("Cannot compare expressions of different types", boolExpressionNode.getCodePosition());
+
+                    } else {
+                        if (extendNodes.get(currentExtend - 1).getBoolOperationNode() != null && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                            //OK type
+                        } else if (extendNodes.get(currentExtend - 1).getArithExpressionNode() != null && extendNodes.get(currentExtend).getArithExpressionNode() != null) {
+                            //OK type
+                        }
+                        // prevoiusExtend = boolOperation && currentExtendType = bool
+                        else if (extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendNodes.get(currentExtend - 1).getBoolOperationNode() != null) {
+                                //OK type
+                            }
+                        }
+                        //The 2 LowPrecedences match type
+                        else if (extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(extendVariableType)) {
+                                //OK type
+                            }
+                        } else
+                            throw new CompilerException("Cannot compare expressions of different types", boolExpressionNode.getCodePosition());
+
                     }
+                }
             }
         }
-
-
-        //BoolOperationNode boolOperationNode = boolOperationsNode.getBoolOperationNode();
-        //ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = boolOperationsNode.getBoolOperationExtendNodes();
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
