@@ -131,10 +131,30 @@ public class Unrolling {
                     if (declarationNode.getFunctionArgNodes() != null) {
                         if (nonObjectFunctionCallNode.getArgumentNodes().size() == declarationNode.getFunctionArgNodes().size()) {
                             if (declarationNode.getReturnType() == null) {
-                                //TODO: declare arguments as variables
+                                for (int i = 0; i < declarationNode.getFunctionArgNodes().size(); i++) {
+                                    FunctionArgNode argNode = declarationNode.getFunctionArgNodes().get(i);
+                                    ObjectArgumentNode objArgNode = nonObjectFunctionCallNode.getArgumentNodes().get(i);
+                                    if (argNode.getDataType() != null) {
+                                        ExpressionNode expression;
+                                        if (objArgNode.getBoolExpression() != null) {
+                                            expression = objArgNode.getBoolExpression();
+                                        }
+                                        else if (objArgNode.getLowPrecedence() != null) {
+                                            expression = new ArithExpressionNode(objArgNode.getLowPrecedence());
+                                        }
+                                        else throw new CompilerException("Invalid argument", objArgNode.getCodePosition());
+
+                                        VarDeclInitNode varDeclInit = new VarDeclInitNode(argNode.getVariableName(), expression);
+                                        VariableDeclarationNode varDec = new VariableDeclarationNode(argNode.getDataType(), varDeclInit);
+                                        statementNodes.add(varDec);
+                                    }
+                                    else if (argNode.getClassName() != null) {
+                                        throw new CompilerException("Object as arguments not yet implemented", nonObjectFunctionCallNode.getCodePosition());
+                                    }
+                                }
                                 statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
                             }
-                            else throw new CompilerException("Only functions that return Null are implemented");
+                            else throw new CompilerException("Only functions that return Void are implemented");
                         }
                         else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
                     }
@@ -146,7 +166,7 @@ public class Unrolling {
                         if (declarationNode.getReturnType() == null) {
                             statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
                         }
-                        else throw new CompilerException("Only functions that return Null are implemented");
+                        else throw new CompilerException("Only functions that return Void are implemented");
                     }
                     else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
                 }
