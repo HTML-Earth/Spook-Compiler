@@ -977,10 +977,11 @@ public class TypeChecking {
                             if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL))) {
                                 //OK type
                             }
+                            else
+                                throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
                         }
-                        else
-                            throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
-                    } else {
+                    }
+                    else {
                         //Check for currentExtend - 1 operator currentExtend
                         if (extendNodes.get(currentExtend).getBoolOperationNode() != null || extendNodes.get(currentExtend - 1).getBoolOperationNode() != null) {
                             //OK type
@@ -993,6 +994,8 @@ public class TypeChecking {
                             if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL))) {
                                 //OK type
                             }
+                            else
+                                throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
                         }
                     }
                 }
