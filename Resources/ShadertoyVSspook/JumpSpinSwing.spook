@@ -1,0 +1,39 @@
+Shader{
+#Scource: https://www.shadertoy.com/view/MlS3RV
+
+#Declare variables
+Num xPos = Screen.x;
+Num yPos = Screen.y;
+Num ballSize = xPos / 10;
+Num squareSize = xPos / 6;
+Vec4 squareColor = (0, 0.5, 0, 1);
+Vec4 rectangleColor = (0, 0.5, 1, 0.5);
+Vec4 circleColor = (1, 0.5, 0, 1);
+
+#Declare objects
+Square square = (squareSize, squareColor);
+Rectangle rectangle = (yPos/1.5, xPos*5, rectangleColor);
+Circle ball = (ballSize, circleColor);
+Circle middleDot = (1, Color.clear());
+Circle outDot = (1, Color.clear());
+
+#Set square
+middleDot.setPosition(xPos/2, yPos/2);
+square.setPosition(xPos/2 - xPos * 0.68, yPos/2 - yPos * 0.68);
+square.setParent(middleDot);
+middleDot.setRotation(50 * Time);
+
+#Set rectangle
+outDot.setPosition(xPos/2 ,yPos);
+rectangle.setPosition(0,0);
+rectangle.setParent(outDot);
+outDot.setRotation(35*sin(Time));
+
+#Set Circle
+ball.setPosition(xPos * 0.2 + xPos/Pi * acos(cos(Time * 0.5)) * 0.6, ballSize + abs(sin(Time * 2)) * yPos * 0.6);
+
+#Add objects to scene
+Scene.add(middleDot);
+Scene.add(ball);
+Scene.add(outDot);
+}
