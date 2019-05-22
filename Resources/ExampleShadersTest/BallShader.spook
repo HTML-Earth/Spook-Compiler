@@ -1,4 +1,8 @@
 Shader {
+    wowee();
+}
+
+Void wowee() {
     #Ball values
     Num ballSize = 64;
     Vec4 ballColor = (0.6, 0, 0, 1);
