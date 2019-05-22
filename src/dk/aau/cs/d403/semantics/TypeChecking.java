@@ -15,7 +15,7 @@ public class TypeChecking {
     private FunctionDeclarationNode currentFuncNode;
 
     private ArrayList<String> listOfPredefinedClasses;
-    private ArrayList<String> listOfPredefinedFunctions;
+    private HashMap<String, Enums.DataType> predefinedFunctions;
     private ArrayList<VariableDeclarationNode> listOfPredefinedVariables;
     private ArrayList<Enums.BoolOperator> booleanOperatorList;
     private ArrayList<Enums.BoolOperator> numberOperatorList;
@@ -37,53 +37,63 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Scene");
 
 
-        this.listOfPredefinedFunctions = new ArrayList<>();
-        this.listOfPredefinedFunctions.add("abs");
-        this.listOfPredefinedFunctions.add("acos");
-        this.listOfPredefinedFunctions.add("acosh");
-        this.listOfPredefinedFunctions.add("asin");
-        this.listOfPredefinedFunctions.add("asinh");
-        this.listOfPredefinedFunctions.add("atan");
-        this.listOfPredefinedFunctions.add("atanh");
-        this.listOfPredefinedFunctions.add("ceil");
-        this.listOfPredefinedFunctions.add("clamp");
-        this.listOfPredefinedFunctions.add("cos");
-        this.listOfPredefinedFunctions.add("cosh");
-        this.listOfPredefinedFunctions.add("cross");
-        this.listOfPredefinedFunctions.add("degrees");
-        this.listOfPredefinedFunctions.add("distance");
-        this.listOfPredefinedFunctions.add("dot");
-        this.listOfPredefinedFunctions.add("exp");
-        this.listOfPredefinedFunctions.add("exp2");
-        this.listOfPredefinedFunctions.add("floor");
-        this.listOfPredefinedFunctions.add("fract");
-        this.listOfPredefinedFunctions.add("inversesqrt");
-        this.listOfPredefinedFunctions.add("length");
-        this.listOfPredefinedFunctions.add("log");
-        this.listOfPredefinedFunctions.add("log2");
-        this.listOfPredefinedFunctions.add("max");
-        this.listOfPredefinedFunctions.add("min");
-        this.listOfPredefinedFunctions.add("mix");
-        this.listOfPredefinedFunctions.add("mod");
-        this.listOfPredefinedFunctions.add("normalize");
-        this.listOfPredefinedFunctions.add("outerProduct");
-        this.listOfPredefinedFunctions.add("pow");
-        this.listOfPredefinedFunctions.add("radians");
-        this.listOfPredefinedFunctions.add("reflect");
-        this.listOfPredefinedFunctions.add("refract");
-        this.listOfPredefinedFunctions.add("round");
-        this.listOfPredefinedFunctions.add("roundEven");
-        this.listOfPredefinedFunctions.add("sign");
-        this.listOfPredefinedFunctions.add("sin");
-        this.listOfPredefinedFunctions.add("sinh");
-        this.listOfPredefinedFunctions.add("smoothstep");
-        this.listOfPredefinedFunctions.add("sqrt");
-        this.listOfPredefinedFunctions.add("step");
-        this.listOfPredefinedFunctions.add("tan");
-        this.listOfPredefinedFunctions.add("tanh");
-        this.listOfPredefinedFunctions.add("trunc");
-        this.listOfPredefinedFunctions.add("setScale");
-        this.listOfPredefinedFunctions.add("setParent");
+        this.predefinedFunctions = new HashMap<>();
+        this.predefinedFunctions.put("abs", Enums.DataType.NUM);
+        this.predefinedFunctions.put("acos", Enums.DataType.NUM);
+        this.predefinedFunctions.put("acosh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("asin", Enums.DataType.NUM);
+        this.predefinedFunctions.put("asinh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("atan", Enums.DataType.NUM);
+        this.predefinedFunctions.put("atanh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("ceil", Enums.DataType.NUM);
+        this.predefinedFunctions.put("clamp", Enums.DataType.NUM);
+        this.predefinedFunctions.put("cos", Enums.DataType.NUM);
+        this.predefinedFunctions.put("cosh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("cross", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("cross3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("degrees", Enums.DataType.NUM);
+        this.predefinedFunctions.put("distance", Enums.DataType.NUM);
+        this.predefinedFunctions.put("dot", Enums.DataType.NUM);
+        this.predefinedFunctions.put("exp", Enums.DataType.NUM);
+        this.predefinedFunctions.put("exp2", Enums.DataType.NUM);
+        this.predefinedFunctions.put("floor", Enums.DataType.NUM);
+        this.predefinedFunctions.put("fract", Enums.DataType.NUM);
+        this.predefinedFunctions.put("inversesqrt", Enums.DataType.NUM);
+        this.predefinedFunctions.put("length", Enums.DataType.NUM);
+        this.predefinedFunctions.put("log", Enums.DataType.NUM);
+        this.predefinedFunctions.put("log2", Enums.DataType.NUM);
+        this.predefinedFunctions.put("max", Enums.DataType.NUM);
+        this.predefinedFunctions.put("min", Enums.DataType.NUM);
+        this.predefinedFunctions.put("mix", Enums.DataType.NUM);
+        this.predefinedFunctions.put("mix2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("mix3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("mix4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("mod", Enums.DataType.NUM);
+        this.predefinedFunctions.put("normalize2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("normalize3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("normalize4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("outerProduct", Enums.DataType.NUM);
+        this.predefinedFunctions.put("pow", Enums.DataType.NUM);
+        this.predefinedFunctions.put("radians", Enums.DataType.NUM);
+        this.predefinedFunctions.put("reflect2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("reflect3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("reflect4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("refract2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("refract3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("refract4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("round", Enums.DataType.NUM);
+        this.predefinedFunctions.put("roundEven", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sign", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sin", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sinh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("smoothstep", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sqrt", Enums.DataType.NUM);
+        this.predefinedFunctions.put("step", Enums.DataType.NUM);
+        this.predefinedFunctions.put("tan", Enums.DataType.NUM);
+        this.predefinedFunctions.put("tanh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("trunc", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setScale", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setParent", Enums.DataType.NUM);
 
 
         ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
@@ -383,7 +393,10 @@ public class TypeChecking {
         ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
         retrievedFunctions = retrieveAllFunctions(functionName);
 
-        if (!this.listOfPredefinedFunctions.contains(functionName)) {
+        if (this.predefinedFunctions.containsKey(functionName)) {
+            return new FunctionDeclarationNode(predefinedFunctions.get(functionName), functionName, new BlockNode(new ArrayList<>()));
+        }
+        else {
             if (!retrievedFunctions.isEmpty()) {
                 for (FunctionDeclarationNode functionDeclarationNode : retrievedFunctions) {
                     if (functionDeclarationNode != null) {
@@ -395,19 +408,29 @@ public class TypeChecking {
                                 for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                                     if (functionDeclarationNode.getFunctionArgNodes().get(i).getDataType() != null) {
                                         if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                            if (!functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
-                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                            String foundDataType1 = Enums.dataTypeToStringSpook(functionDeclarationNode.getFunctionArgNodes().get(i).getDataType());
+                                            String foundDataType2 = visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence());
+                                            if (!foundDataType1.equals(foundDataType2)) {
+                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + functionName + "). Found " + foundDataType1 + " and " + foundDataType2, nonObjectFunctionCallNode.getCodePosition());
                                             }
-                                        } else
+                                        }
+                                        else
                                             throw new CompilerException("ERROR: Argument (" + functionDeclarationNode.getFunctionArgNodes().get(i) + ") in function call (" + functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
-                                    } else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
+                                    }
+
+                                    else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
                                         if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                            if (!functionDeclarationNode.getFunctionArgNodes().get(i).getClassName().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
-                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                            String foundClassName1 = functionDeclarationNode.getFunctionArgNodes().get(i).getClassName();
+                                            String foundClassName2 = visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence());
+                                            if (!foundClassName1.equals(foundClassName2)) {
+                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + functionName + "). Found " + foundClassName1 + " and " + foundClassName2, nonObjectFunctionCallNode.getCodePosition());
                                             }
-                                        } else
+                                        }
+                                        else
                                             throw new CompilerException("ERROR: Argument (" + nonObjectFunctionCallNode.getArgumentNodes().get(i) + ") in function call (" + functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
-                                    } else
+                                    }
+
+                                    else
                                         System.out.println("get class name data type was null");
                                 }
                                 notFound = false;
@@ -478,7 +501,7 @@ public class TypeChecking {
                         for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
 
                             // Look for the function with the same name
-                            for (String predefinedFunctionName : listOfPredefinedFunctions) {
+                            for (String predefinedFunctionName : predefinedFunctions.keySet()) {
                                 if (functionName.equals(predefinedFunctionName)) {
                                     existingFunction = true;
                                 } else if (functionDeclarationNode.getFunctionName().equals(functionName)) {
@@ -585,6 +608,8 @@ public class TypeChecking {
         ForLoopExpressionNode forLoopExpression1 = forLoopStatementNode.getForLoopExpressionNode1();
         ForLoopExpressionNode forLoopExpression2 = forLoopStatementNode.getForLoopExpressionNode2();
 
+        openScope();
+
         // Visit expression and check if they are well typed
         visitForLoopExpression(forLoopExpression1);
         visitForLoopExpression(forLoopExpression2);
@@ -593,6 +618,8 @@ public class TypeChecking {
             visitBlock(forLoopStatementNode.getConditionalBlockNode().getBlockNode());
         else if (forLoopStatementNode.getConditionalBlockNode().getStatementNode() != null)
             visitStatement(forLoopStatementNode.getConditionalBlockNode().getStatementNode());
+
+        closeScope();
     }
 
     private void visitForLoopExpression(ForLoopExpressionNode forLoopExpressionNode) {
@@ -708,7 +735,7 @@ public class TypeChecking {
 
     private void functionNameMatchesPredefined(FunctionDeclarationNode function) {
         String functionName = function.getFunctionName();
-        for (String predefinedName : listOfPredefinedFunctions)
+        for (String predefinedName : predefinedFunctions.keySet())
         if (functionName.equals(predefinedName))
             throw new CompilerException("ERROR: A predefined function with this name exists (" + functionName + ")", function.getCodePosition());
 
@@ -824,40 +851,51 @@ public class TypeChecking {
                             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
                             if (variableDeclarationNode != null)
                                 return Enums.dataTypeToStringSpook(variableDeclarationNode.getDataType());
+                            else
+                                throw new CompilerException("Missing VariableDeclarationNode", lowPrecedenceNode.getCodePosition());
                         }
                         else if (retrieveSymbol(variableName) instanceof ObjectDeclarationNode) {
                             ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
                             if (objectDeclarationNode != null)
                                 return objectDeclarationNode.getClassName();
+                            else
+                                throw new CompilerException("Missing ObjectDeclarationNode", lowPrecedenceNode.getCodePosition());
                         }
+                        else
+                            throw new CompilerException("Retrieved symbol for " + variableName + " was not varDec or objDec.", lowPrecedenceNode.getCodePosition());
                     }
 
                     // Operand: Non-object function Call
-                    if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
+                    else if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
                         NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
                         FunctionDeclarationNode functionDeclarationNode = visitNonObjectFunctionCall(nonObjectFunctionCallNode);
 
-                        if (functionDeclarationNode != null)
+                        if (functionDeclarationNode != null) {
                             if (functionDeclarationNode.getReturnType() != null)
                                 return Enums.dataTypeToStringSpook(functionDeclarationNode.getReturnType());
                             else if (functionDeclarationNode.getClassName() != null)
                                 return functionDeclarationNode.getClassName();
+                            else
+                                throw new CompilerException("Invalid FunctionDeclarationNode", lowPrecedenceNode.getCodePosition());
+                        }
+                        else
+                            throw new CompilerException("Missing FunctionDeclarationNode", lowPrecedenceNode.getCodePosition());
                     }
 
                     // Operand: Object function Call
-                    if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
+                    else if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
                         ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
                         return visitObjectFunctionCall(objectFunctionCallNode);
                     }
 
-                // Operand: Swizzle
-                if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
-                    SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
-                    visitSwizzle(swizzleNode);
-                    int swizzleLength = 0;
+                    // Operand: Swizzle
+                    else if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
+                        SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
+                        visitSwizzle(swizzleNode);
+                        int swizzleLength = 0;
 
-                    if (swizzleNode.getSwizzle() != null)
-                        swizzleLength = swizzleNode.getSwizzle().length();
+                        if (swizzleNode.getSwizzle() != null)
+                            swizzleLength = swizzleNode.getSwizzle().length();
 
                         if (swizzleLength == 4)
                             return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
@@ -871,13 +909,20 @@ public class TypeChecking {
                             throw new CompilerException("ERROR: Too long swizzle", swizzleNode.getCodePosition());
                     }
 
-                    if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
+                    else if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
                         return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
 
-                    // Operand: Low precedence
-                    if (atomPrecedenceNode.getLowPrecedenceNode() != null)
-                        return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
+                    else
+                        throw new CompilerException("Invalid Operand", lowPrecedenceNode.getCodePosition());
+
                 }
+
+                // Operand: Low precedence
+                else if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+                    return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
+
+                else
+                    throw new CompilerException("Invalid AtomPrecedence", lowPrecedenceNode.getCodePosition());
             }
         }
         return null;
