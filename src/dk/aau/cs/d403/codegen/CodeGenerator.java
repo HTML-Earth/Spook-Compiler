@@ -693,13 +693,12 @@ public class CodeGenerator {
             case "Scene":
                 switch (functionName) {
                     case "add":
-                        String objectName = argumentNodes.get(0)
-                                .getLowPrecedence()
-                                .getHighPrecedenceNodes().get(0)
-                                .getAtomPrecedenceNodes().get(0)
-                                .getOperand()
-                                .getVariableName();
+                        String objectName = "";
+                        if (argumentNodes.get(0).isOnlyVariableName())
+                            objectName = argumentNodes.get(0).getVariableName();
+
                         SpookObject object = spookObjects.get(objectName);
+
                         if (object != null) {
                             object.setParent(scene);
 
@@ -711,6 +710,9 @@ public class CodeGenerator {
 
                             if (argumentNodes.size() > 3)
                                 object.setScale(argumentNodes.get(3));
+                        }
+                        else {
+                            throw new CompilerException("Object '" + objectName + "' cannot be added to scene, because it does not exist.", objectFunctionCallNode.getCodePosition());
                         }
                         break;
                     case "setColor":

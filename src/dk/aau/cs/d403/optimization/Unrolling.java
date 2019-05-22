@@ -105,6 +105,45 @@ public class Unrolling {
         return unrollStatementNodes(statementNodes);
     }
 
+    private void renameVarsInStatement(StatementNode statementNode, String oldName, String newName) {
+        if (statementNode instanceof DeclarationNode)
+            renameVarsInDeclaration((DeclarationNode)statementNode, oldName, newName);
+        else if (statementNode instanceof AssignmentNode)
+            renameVarsInAssignment((AssignmentNode) statementNode, oldName, newName);
+        else if (statementNode instanceof ObjectFunctionCallNode)
+            renameVarsObjectFunctionCall((ObjectFunctionCallNode) statementNode, oldName, newName);
+        else if (statementNode instanceof NonObjectFunctionCallNode)
+            renameVarsInNonObjectFunctionCall((NonObjectFunctionCallNode) statementNode, oldName, newName);
+        else
+            throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
+    private void renameVarsInDeclaration(DeclarationNode declarationNode, String oldName, String newName) {
+        if (declarationNode instanceof VariableDeclarationNode) {
+            throw new CompilerException("NOT YET IMPLEMENTED");
+        }
+        else if (declarationNode instanceof ObjectDeclarationNode) {
+            throw new CompilerException("NOT YET IMPLEMENTED");
+        }
+    }
+
+    private void renameVarsInAssignment(AssignmentNode assignmentNode, String oldName, String newName) {
+        throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
+    private void renameVarsObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode, String oldName, String newName) {
+        for (ObjectArgumentNode objectArgumentNode : objectFunctionCallNode.getObjectArguments()) {
+            if (objectArgumentNode.isOnlyVariableName()) {
+                if (objectArgumentNode.getVariableName().equals(oldName))
+                    objectArgumentNode.renameVariable(newName);
+            }
+        }
+    }
+
+    private void renameVarsInNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode, String oldName, String newName) {
+        throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
     private ObjectFunctionCallNode unrollObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
         ObjectFunctionCallNode newObjFunCall = null;
 
@@ -130,30 +169,43 @@ public class Unrolling {
                 if (nonObjectFunctionCallNode.getArgumentNodes() != null) {
                     if (declarationNode.getFunctionArgNodes() != null) {
                         if (nonObjectFunctionCallNode.getArgumentNodes().size() == declarationNode.getFunctionArgNodes().size()) {
+                            // NO RETURN TYPE
                             if (declarationNode.getReturnType() == null) {
                                 for (int i = 0; i < declarationNode.getFunctionArgNodes().size(); i++) {
                                     FunctionArgNode argNode = declarationNode.getFunctionArgNodes().get(i);
                                     ObjectArgumentNode objArgNode = nonObjectFunctionCallNode.getArgumentNodes().get(i);
-                                    if (argNode.getDataType() != null) {
-                                        ExpressionNode expression;
-                                        if (objArgNode.getBoolExpression() != null) {
-                                            expression = objArgNode.getBoolExpression();
-                                        }
-                                        else if (objArgNode.getLowPrecedence() != null) {
-                                            expression = new ArithExpressionNode(objArgNode.getLowPrecedence());
-                                        }
-                                        else throw new CompilerException("Invalid argument", objArgNode.getCodePosition());
 
-                                        VarDeclInitNode varDeclInit = new VarDeclInitNode(argNode.getVariableName(), expression);
-                                        VariableDeclarationNode varDec = new VariableDeclarationNode(argNode.getDataType(), varDeclInit);
-                                        statementNodes.add(varDec);
+                                    if (objArgNode.isOnlyVariableName()) {
+                                        for (StatementNode statementNode : declarationNode.getBlockNode().getStatementNodes()) {
+                                            renameVarsInStatement(statementNode, argNode.getVariableName(), objArgNode.getVariableName());
+                                        }
                                     }
-                                    else if (argNode.getClassName() != null) {
-                                        throw new CompilerException("Object as arguments not yet implemented", nonObjectFunctionCallNode.getCodePosition());
+                                    else {
+                                        // VARIABLE DECLARATIONS
+                                        if (argNode.getDataType() != null) {
+                                            ExpressionNode expression;
+                                            if (objArgNode.getBoolExpression() != null) {
+                                                expression = objArgNode.getBoolExpression();
+                                            }
+                                            else if (objArgNode.getLowPrecedence() != null) {
+                                                expression = new ArithExpressionNode(objArgNode.getLowPrecedence());
+                                            }
+                                            else throw new CompilerException("Invalid argument", objArgNode.getCodePosition());
+
+                                            VarDeclInitNode varDeclInit = new VarDeclInitNode(argNode.getVariableName(), expression);
+                                            VariableDeclarationNode varDec = new VariableDeclarationNode(argNode.getDataType(), varDeclInit);
+                                            statementNodes.add(varDec);
+                                        }
+
+                                        // OBJECT DECLARATIONS
+                                        else if (argNode.getClassName() != null) {
+                                            throw new CompilerException("This should not happen. An argument of object type should only be a single variable name", nonObjectFunctionCallNode.getCodePosition());
+                                        }
                                     }
                                 }
                                 statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
                             }
+                            // RETURN TYPE
                             else throw new CompilerException("Only functions that return Void are implemented");
                         }
                         else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());

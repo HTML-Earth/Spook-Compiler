@@ -63,6 +63,12 @@ public class ArithOperandNode implements ASTnode {
         return variableName;
     }
 
+    public void renameVariable(String newName) {
+        if (variableName != null) {
+            variableName = newName;
+        }
+    }
+
     public SwizzleNode getSwizzleNode() {return swizzleNode; }
 
     public Vector2ExpressionNode getVector2ExpressionNode() {

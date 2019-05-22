@@ -58,6 +58,10 @@ public class HighPrecedenceNode implements ASTnode {
         return new HighPrecedenceNode(atomPrecedenceNodes);
     }
 
+    public void renameVariable (String newName) {
+        atomPrecedenceNodes.get(0).renameVariable(newName);
+    }
+
     @Override
     public String prettyPrint(int indent) {
         int matchAtom = 0;
