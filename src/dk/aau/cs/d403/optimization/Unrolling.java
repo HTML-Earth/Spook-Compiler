@@ -8,12 +8,13 @@ import dk.aau.cs.d403.ast.structure.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 public class Unrolling {
     private HashMap<String, VariableDeclarationNode> variableDeclarations;
     private Stack<HashMap<String, Integer>> variableNameUsage;
-
+    private ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
     private void openScope() {
         HashMap<String, Integer> newVariableMap = new HashMap<>();
         variableNameUsage.push(newVariableMap);
@@ -43,7 +44,6 @@ public class Unrolling {
         variableDeclarations = new HashMap<>();
         variableNameUsage = new Stack<>();
 
-        ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
         ArrayList<ClassDeclarationNode> classDeclarationNodes;
         MainNode mainNode;
 
@@ -89,6 +89,9 @@ public class Unrolling {
                 newStatementNodes.add(unrollAssignment((AssignmentNode)statementNode));
             else if (statementNode instanceof ObjectFunctionCallNode)
                 newStatementNodes.add(unrollObjectFunctionCall((ObjectFunctionCallNode)statementNode));
+            else if (statementNode instanceof NonObjectFunctionCallNode) {
+                newStatementNodes.addAll(unrollNonObjectFunctionCall((NonObjectFunctionCallNode)statementNode));
+            }
             else
                 newStatementNodes.add(statementNode);
         }
@@ -115,6 +118,43 @@ public class Unrolling {
             newObjFunCall = new ObjectFunctionCallNode(newObjName, objectFunctionCallNode.getFunctionName());
 
         return newObjFunCall;
+    }
+
+    private ArrayList<StatementNode> unrollNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
+        String functionName = nonObjectFunctionCallNode.getFunctionName();
+        for (FunctionDeclarationNode declarationNode : functionDeclarationNodes) {
+            if (functionName.equals(declarationNode.getFunctionName())) {
+                // ARGUMENTS
+                if (nonObjectFunctionCallNode.getArgumentNodes() != null) {
+                    if (declarationNode.getFunctionArgNodes() != null) {
+                        if (nonObjectFunctionCallNode.getArgumentNodes().size() == declarationNode.getFunctionArgNodes().size()) {
+                            if (declarationNode.getReturnType() == null) {
+                                //TODO: declare arguments as variables
+                                statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
+                            }
+                            else throw new CompilerException("Only functions that return Null are implemented");
+                        }
+                        else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
+                    }
+                }
+
+                //NO ARGUMENTS
+                else {
+                    if (declarationNode.getFunctionArgNodes() == null) {
+                        if (declarationNode.getReturnType() == null) {
+                            statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
+                        }
+                        else throw new CompilerException("Only functions that return Null are implemented");
+                    }
+                    else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
+                }
+            }
+            else throw new CompilerException("No function '" + functionName + "' was found", nonObjectFunctionCallNode.getCodePosition());
+        }
+
+        return statementNodes;
     }
 
     private DeclarationNode unrollDeclaration(DeclarationNode declarationNode) {
