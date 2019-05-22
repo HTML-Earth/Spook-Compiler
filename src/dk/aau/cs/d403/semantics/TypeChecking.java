@@ -50,6 +50,7 @@ public class TypeChecking {
         this.predefinedFunctions.put("cos", Enums.DataType.NUM);
         this.predefinedFunctions.put("cosh", Enums.DataType.NUM);
         this.predefinedFunctions.put("cross", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("cross3", Enums.DataType.VEC3);
         this.predefinedFunctions.put("degrees", Enums.DataType.NUM);
         this.predefinedFunctions.put("distance", Enums.DataType.NUM);
         this.predefinedFunctions.put("dot", Enums.DataType.NUM);
@@ -64,13 +65,22 @@ public class TypeChecking {
         this.predefinedFunctions.put("max", Enums.DataType.NUM);
         this.predefinedFunctions.put("min", Enums.DataType.NUM);
         this.predefinedFunctions.put("mix", Enums.DataType.NUM);
+        this.predefinedFunctions.put("mix2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("mix3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("mix4", Enums.DataType.VEC4);
         this.predefinedFunctions.put("mod", Enums.DataType.NUM);
-        this.predefinedFunctions.put("normalize", Enums.DataType.NUM);
+        this.predefinedFunctions.put("normalize2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("normalize3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("normalize4", Enums.DataType.VEC4);
         this.predefinedFunctions.put("outerProduct", Enums.DataType.NUM);
         this.predefinedFunctions.put("pow", Enums.DataType.NUM);
         this.predefinedFunctions.put("radians", Enums.DataType.NUM);
-        this.predefinedFunctions.put("reflect", Enums.DataType.VEC2);
-        this.predefinedFunctions.put("refract", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("reflect2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("reflect3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("reflect4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("refract2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("refract3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("refract4", Enums.DataType.VEC4);
         this.predefinedFunctions.put("round", Enums.DataType.NUM);
         this.predefinedFunctions.put("roundEven", Enums.DataType.NUM);
         this.predefinedFunctions.put("sign", Enums.DataType.NUM);
@@ -400,19 +410,29 @@ public class TypeChecking {
                                 for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                                     if (functionDeclarationNode.getFunctionArgNodes().get(i).getDataType() != null) {
                                         if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                            if (!functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
-                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                            String foundDataType1 = Enums.dataTypeToStringSpook(functionDeclarationNode.getFunctionArgNodes().get(i).getDataType());
+                                            String foundDataType2 = visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence());
+                                            if (!foundDataType1.equals(foundDataType2)) {
+                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + functionName + "). Found " + foundDataType1 + " and " + foundDataType2, nonObjectFunctionCallNode.getCodePosition());
                                             }
-                                        } else
+                                        }
+                                        else
                                             throw new CompilerException("ERROR: Argument (" + functionDeclarationNode.getFunctionArgNodes().get(i) + ") in function call (" + functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
-                                    } else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
+                                    }
+
+                                    else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
                                         if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                            if (!functionDeclarationNode.getFunctionArgNodes().get(i).getClassName().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
-                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                            String foundClassName1 = functionDeclarationNode.getFunctionArgNodes().get(i).getClassName();
+                                            String foundClassName2 = visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence());
+                                            if (!foundClassName1.equals(foundClassName2)) {
+                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + functionName + "). Found " + foundClassName1 + " and " + foundClassName2, nonObjectFunctionCallNode.getCodePosition());
                                             }
-                                        } else
+                                        }
+                                        else
                                             throw new CompilerException("ERROR: Argument (" + nonObjectFunctionCallNode.getArgumentNodes().get(i) + ") in function call (" + functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
-                                    } else
+                                    }
+
+                                    else
                                         System.out.println("get class name data type was null");
                                 }
                                 notFound = false;
