@@ -190,6 +190,18 @@ public class Unrolling {
             BoolExpressionNode boolExpressionNode = (BoolExpressionNode)expressionNode;
             return unrollBoolExpression(boolExpressionNode);
         }
+        else if (expressionNode instanceof Vector4ExpressionNode) {
+            Vector4ExpressionNode vector4ExpressionNode = (Vector4ExpressionNode)expressionNode;
+            return unrollVector4Expression(vector4ExpressionNode);
+        }
+        else if (expressionNode instanceof Vector3ExpressionNode) {
+            Vector3ExpressionNode vector3ExpressionNode = (Vector3ExpressionNode)expressionNode;
+            return unrollVector3Expression(vector3ExpressionNode);
+        }
+        else if (expressionNode instanceof Vector2ExpressionNode) {
+            Vector2ExpressionNode vector2ExpressionNode = (Vector2ExpressionNode)expressionNode;
+            return unrollVector2Expression(vector2ExpressionNode);
+        }
         else
             return newExpressionNode;
     }
@@ -198,6 +210,38 @@ public class Unrolling {
         return boolExpressionNode; //TODO: fill in method
     }
 
+    private Vector4ExpressionNode unrollVector4Expression(Vector4ExpressionNode vector4ExpressionNode) {
+        ArithExpressionNode expr1 = unrollArithExpression(vector4ExpressionNode.getArithExpressionNode1());
+        ArithExpressionNode expr2 = unrollArithExpression(vector4ExpressionNode.getArithExpressionNode2());
+        ArithExpressionNode expr3 = unrollArithExpression(vector4ExpressionNode.getArithExpressionNode3());
+        ArithExpressionNode expr4 = unrollArithExpression(vector4ExpressionNode.getArithExpressionNode4());
+
+        Vector4ExpressionNode newVector4Expression = new Vector4ExpressionNode(expr1, expr2, expr3, expr4);
+
+        newVector4Expression.setCodePosition(vector4ExpressionNode.getCodePosition());
+        return newVector4Expression;
+    }
+
+    private Vector3ExpressionNode unrollVector3Expression(Vector3ExpressionNode vector3ExpressionNode) {
+        ArithExpressionNode expr1 = unrollArithExpression(vector3ExpressionNode.getArithExpressionNode1());
+        ArithExpressionNode expr2 = unrollArithExpression(vector3ExpressionNode.getArithExpressionNode2());
+        ArithExpressionNode expr3 = unrollArithExpression(vector3ExpressionNode.getArithExpressionNode3());
+
+        Vector3ExpressionNode newVector3Expression = new Vector3ExpressionNode(expr1, expr2, expr3);
+
+        newVector3Expression.setCodePosition(vector3ExpressionNode.getCodePosition());
+        return newVector3Expression;
+    }
+
+    private Vector2ExpressionNode unrollVector2Expression(Vector2ExpressionNode vector2ExpressionNode) {
+        ArithExpressionNode expr1 = unrollArithExpression(vector2ExpressionNode.getArithExpressionNode1());
+        ArithExpressionNode expr2 = unrollArithExpression(vector2ExpressionNode.getArithExpressionNode2());
+
+        Vector2ExpressionNode newVector2Expression = new Vector2ExpressionNode(expr1, expr2);
+
+        newVector2Expression.setCodePosition(vector2ExpressionNode.getCodePosition());
+        return newVector2Expression;
+    }
 
     private ArithExpressionNode unrollArithExpression(ArithExpressionNode arithExpressionNode) {
         LowPrecedenceNode newLowPre = unrollLowPrecedence(arithExpressionNode.getLowPrecedenceNode());

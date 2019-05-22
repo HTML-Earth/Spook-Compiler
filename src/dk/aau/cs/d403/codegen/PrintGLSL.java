@@ -162,7 +162,26 @@ public class PrintGLSL {
         StringBuilder sb = new StringBuilder();
         ArrayList<ObjectArgumentNode> argumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        sb.append(nonObjectFunctionCallNode.getFunctionName());
+        switch (nonObjectFunctionCallNode.getFunctionName()) {
+            case "mix2": case "mix3": case "mix4":
+                sb.append("mix");
+                break;
+            case "cross3":
+                sb.append("cross");
+                break;
+            case "normalize2": case "normalize3": case "normalize4":
+                sb.append("normalize");
+                break;
+            case "reflect2": case "reflect3": case "reflect4":
+                sb.append("reflect");
+                break;
+            case "refract2": case "refract3": case "refract4":
+                sb.append("refract");
+                break;
+            default:
+                sb.append(nonObjectFunctionCallNode.getFunctionName());
+                break;
+        }
         sb.append("(");
 
         if (argumentNodes != null) {
