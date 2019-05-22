@@ -63,6 +63,10 @@ public class LowPrecedenceNode implements ASTnode {
         return operators;
     }
 
+    public void renameVariable (String newName) {
+        highPrecedenceNodes.get(0).renameVariable(newName);
+    }
+
     @Override
     public String prettyPrint(int indent) {
         int matchHigh = 0;

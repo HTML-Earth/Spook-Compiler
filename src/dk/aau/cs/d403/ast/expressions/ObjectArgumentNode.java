@@ -47,6 +47,41 @@ public class ObjectArgumentNode implements ASTnode {
         return codePosition;
     }
 
+    public boolean isOnlyVariableName() {
+        if (lowPrecedence != null) {
+            if (lowPrecedence.getHighPrecedenceNodes() != null) {
+                if (lowPrecedence.getHighPrecedenceNodes().size() == 1) {
+                    if (lowPrecedence.getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes() != null) {
+                        if (lowPrecedence.getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes().size() == 1) {
+                            if (lowPrecedence.getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes().get(0).getOperand() != null) {
+                                if (lowPrecedence.getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes().get(0).getOperand().getVariableName() != null) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isOnlyGame() {
+        return true; //Why you heff to be mad?
+    }
+
+    public String getVariableName() {
+        return lowPrecedence
+                .getHighPrecedenceNodes().get(0)
+                .getAtomPrecedenceNodes().get(0)
+                .getOperand()
+                .getVariableName();
+    }
+
+    public void renameVariable (String newName) {
+        lowPrecedence.renameVariable(newName);
+    }
+
     public static ObjectArgumentNode zero() {
         return new ObjectArgumentNode(LowPrecedenceNode.zero());
     }

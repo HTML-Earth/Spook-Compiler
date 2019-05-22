@@ -50,6 +50,10 @@ public class AtomPrecedenceNode implements ASTnode {
         return new AtomPrecedenceNode(ArithOperandNode.zero());
     }
 
+    public void renameVariable(String newName) {
+        operand.renameVariable(newName);
+    }
+
     @Override
     public String prettyPrint(int indent) {
         //Print -operand
