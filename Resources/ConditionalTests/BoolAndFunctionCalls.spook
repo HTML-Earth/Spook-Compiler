@@ -3,8 +3,8 @@ Shader{
     # Get true and false through function call
     Bool truer;
     Bool falser;
-    truer = getTrue;
-    falser = getFalse;
+    truer = getTrue();
+    falser = getFalse();
 
     # Function call to check for true or false
     Bool flag;
@@ -28,7 +28,7 @@ Shader{
 
     # Function that returns 21;
     Num NinePlusTen;
-    NinePlusTen = get21;
+    NinePlusTen = get21();
 
     # Boolean function to check if over 9000
     Bool isOver9000;
