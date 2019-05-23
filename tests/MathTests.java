@@ -62,4 +62,9 @@ class MathTests {
     void SwizzlinTest() {
         testShader("SwizzlinTest");
     }
+
+    @Test
+    void mix() {
+        testShader("mix");
+    }
 }
