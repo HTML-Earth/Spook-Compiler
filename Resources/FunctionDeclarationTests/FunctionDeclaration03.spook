@@ -1,8 +1,11 @@
 Shader {
     Num radius = CoolFunction();
+
     Circle c = (radius, Color.red());
     c.setPosition(CoolFunctionWithArguments(50,100));
     Scene.add(c);
+
+    SetSceneBackgroundBrightness(0.5);
 }
 
 Num CoolFunction() {
@@ -12,4 +15,9 @@ Num CoolFunction() {
 Vec2 CoolFunctionWithArguments(Num xOffset, Num yOffset) {
     Vec2 result = (xOffset + Screen.x / 2, yOffset + Screen.y / 2);
     return result;
+}
+
+Void SetSceneBackgroundBrightness(Num value) {
+    Vec4 bgColor = (value, value, value, 1);
+    Scene.setColor(bgColor);
 }
