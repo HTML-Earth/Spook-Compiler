@@ -1,12 +1,8 @@
 Shader {
     #Ball values
-    Num notballSize = 64;
-    Vec4 notballColor = (0.6, 0, 0, 1);
+    Num ballSize = 64;
+    Vec4 ballColor = (0.6, 0, 0, 1);
 
-    wowee(notballSize,notballColor);
-}
-
-Void wowee(Num ballSize, Vec4 ballColor) {
     #Position and size values
     Num groundHeight = 100;
     Num jumpHeight   = 150;

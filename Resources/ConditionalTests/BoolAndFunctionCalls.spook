@@ -16,7 +16,7 @@ Shader{
     }
 
     # Function call to create a yellow rectangle
-    Rectangle rec = createYellowRectangle(100, 400);
+    #Rectangle rec = createYellowRectangle(100, 400);
 
     # Check if number is over 9000
     Bool test;
@@ -71,8 +71,8 @@ Shader{
         useWallhack();
 
     # object in function
-    Circle bobFace = createBobFace();
-    Rectangle bobBody = createBobBody(bobFace);
+    #Circle bobFace = createBobFace();
+    #Rectangle bobBody = createBobBody(bobFace);
 
     #
 
@@ -92,11 +92,11 @@ Bool trueChecker(Bool bool) {
     return false;
 }
 
-Rectangle createYellowRectangle (Num height, Num width) {
-    Rectangle rec = (height, width, Color.yellow());
-    rec.setPosition(400, 400);
-    return rec;
-}
+#Rectangle createYellowRectangle (Num height, Num width) {
+#    Rectangle rec = (height, width, Color.yellow());
+#    rec.setPosition(400, 400);
+#    return rec;
+#}
 
 Bool over9000Checker (Num number) {
     if (number > 9000)
@@ -105,25 +105,25 @@ Bool over9000Checker (Num number) {
 }
 
 Void bygMaHouse() {
-    Square house = makeHouse();
-    Circle roundRoof = makeRoundRoof();
-    Rectangle door = makeDoor();
+    #Square house = makeHouse();
+    #Circle roundRoof = makeRoundRoof();
+    #Rectangle door = makeDoor();
 }
 
-Square makeHouse() {
-    Square house = (100, Color.green());
-    return house;
-}
+#Square makeHouse() {
+#    Square house = (100, Color.green());
+#    return house;
+#}
 
-Circle makeRoundRoof() {
-    Circle roof = (50, Color.green());
-    return roof;
-}
+#Circle makeRoundRoof() {
+#    Circle roof = (50, Color.green());
+#    return roof;
+#}
 
-Rectangle makeDoor() {
-    Rectangle door = (20, 60, Color.black());
-    return door;
-}
+#Rectangle makeDoor() {
+#    Rectangle door = (20, 60, Color.black());
+#    return door;
+#}
 
 Bool getDecisionBasedOnValue(Num value) {
     Bool isBiggerThan50;
@@ -152,15 +152,15 @@ Void useWallhack() {
 
 }
 
-Circle createBobFace() {
-    Circle bobFace = (100, Color.yellow());
-    return bobFace;
-}
+#Circle createBobFace() {
+#    Circle bobFace = (100, Color.yellow());
+#    return bobFace;
+#}
 
-Rectangle createBobBody(Circle bobFace) {
-    Rectangle bobBody = (100, 200, Color.yellow);
-    return bobBody;
-}
+#Rectangle createBobBody(Circle bobFace) {
+#    Rectangle bobBody = (100, 200, Color.yellow);
+#    return bobBody;
+#}
 
 Void stay() {
 }
