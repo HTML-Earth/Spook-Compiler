@@ -1,0 +1,10 @@
+Shader {
+    Vec4 blinking = (sin(Time) > 0) ? Color.blue() : Color.red();
+    Square sqr = (50, blinking);
+
+    Vec2 center = (Screen.x / 2, Screen.y / 2);
+    sqr.setPosition(center);
+
+    Scene.add(sqr);
+    Scene.setColor(Color.black());
+}
