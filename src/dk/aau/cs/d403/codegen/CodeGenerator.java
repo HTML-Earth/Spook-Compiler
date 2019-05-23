@@ -719,7 +719,7 @@ public class CodeGenerator {
                         scene.setColor(Color.getColorArgument(argumentNodes.get(0)));
                         break;
                     default:
-                        throw new RuntimeException("Unknown function: " + functionName);
+                        throw new CompilerException("Unknown function: " + functionName, objectFunctionCallNode.getCodePosition());
                 }
                 break;
             case "Color":
@@ -729,7 +729,7 @@ public class CodeGenerator {
                 SpookObject object = spookObjects.get(objectVariableName);
 
                 if (object == null)
-                    throw new RuntimeException("Object (" + objectVariableName + ") not found");
+                    throw new CompilerException("Object (" + objectVariableName + ") not found", objectFunctionCallNode.getCodePosition());
 
                 switch (functionName) {
                     case "setPosition":
@@ -741,15 +741,22 @@ public class CodeGenerator {
                     case "setScale":
                         object.setScale(argumentNodes);
                         break;
+                    case "setColor":
+                        if (object instanceof Shape)
+                            ((Shape)object).setColor(Color.getColorArgument(argumentNodes.get(0)));
+                        else
+                            throw new CompilerException("Cannot setColor() on object (" + object.getName() + ") because it is not a Shape", objectFunctionCallNode.getCodePosition());
+                        break;
                     case "setParent":
-                        String parentName = argumentNodes.get(0)
-                                .getLowPrecedence()
-                                .getHighPrecedenceNodes().get(0)
-                                .getAtomPrecedenceNodes().get(0)
-                                .getOperand()
-                                .getVariableName();
+                        String parentName = "";
+                        if (argumentNodes.get(0).isOnlyVariableName())
+                            parentName = argumentNodes.get(0).getVariableName();
+
                         SpookObject parentObject = spookObjects.get(parentName);
-                        if (parentObject != null)
+
+                        if (parentObject == null)
+                            throw new CompilerException("Object (" + objectVariableName + ") not found", objectFunctionCallNode.getCodePosition());
+                        else
                             object.setParent(parentObject);
                         break;
                     case "setInverted":
@@ -759,7 +766,7 @@ public class CodeGenerator {
                         }
                         break;
                     default:
-                        throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);
+                        throw new CompilerException("Unknown function: " + functionName + " on object: " + objectVariableName, objectFunctionCallNode.getCodePosition());
                 }
         }
 
