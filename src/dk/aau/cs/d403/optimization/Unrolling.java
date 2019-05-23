@@ -362,7 +362,7 @@ public class Unrolling {
     }
 
     private ExpressionNode unrollExpression(ExpressionNode expressionNode) {
-        ExpressionNode newExpressionNode = null;
+        ExpressionNode newExpressionNode = expressionNode;
 
         if (expressionNode instanceof ArithExpressionNode) {
             ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
