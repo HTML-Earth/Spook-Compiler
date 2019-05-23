@@ -7,17 +7,12 @@ import dk.aau.cs.d403.ast.statements.ObjectFunctionCallNode;
 
 public class ConditionalExpressionNode implements ASTnode {
     private BoolExpressionNode boolExpressionNode;
-    private Boolean boolLiteral;
     private String variableName;
     private NonObjectFunctionCallNode nonObjectFunctionCallNode;
     private ObjectFunctionCallNode objectFunctionCallNode;
 
     public ConditionalExpressionNode(BoolExpressionNode boolExpressionNode) {
         this.boolExpressionNode = boolExpressionNode;
-    }
-
-    public ConditionalExpressionNode(Boolean boolLiteral) {
-        this.boolLiteral = boolLiteral;
     }
 
     public ConditionalExpressionNode(String variableName) {
@@ -36,10 +31,6 @@ public class ConditionalExpressionNode implements ASTnode {
         return boolExpressionNode;
     }
 
-    public Boolean getBoolLiteral() {
-        return boolLiteral;
-    }
-
     public String getVariableName() {
         return variableName;
     }
@@ -56,8 +47,6 @@ public class ConditionalExpressionNode implements ASTnode {
     public String prettyPrint(int indent) {
         if (boolExpressionNode != null)
             return boolExpressionNode.prettyPrint(indent);
-        else if (boolLiteral != null)
-            return boolLiteral.toString();
         else if (variableName != null)
             return variableName;
         else if (nonObjectFunctionCallNode != null)

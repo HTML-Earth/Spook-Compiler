@@ -1,6 +1,7 @@
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
+import dk.aau.cs.d403.optimization.Unrolling;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.TypeChecking;
@@ -24,8 +25,10 @@ class IterativeTests {
             programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
+            Unrolling unrolling = new Unrolling();
+            unrolling.unrollProgram(programNode);
             CodeGenerator codeGenerator = new CodeGenerator();
-            //codeGenerator.GenerateGLSL(programNode);
+            codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,5 +48,10 @@ class IterativeTests {
     @Test
     void TestShader2() {
         testShader("TestShader2");
+    }
+
+    @Test
+    void Fibonacci() {
+        testShader("Fibonacci");
     }
 }

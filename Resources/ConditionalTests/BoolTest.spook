@@ -2,13 +2,10 @@ Shader {
     Num length = 100;
     Bool hej = true;
 
-    if(true && false) {}
-    if(1 && 2) {}
-
-    if (length > 10 && length < 200) {
+    if ((length > 10) && (length < 200)) {
         Circle circ = (20, Color.white());
     }
-    Circle circ3 = (2, 2, 2, 2, 2, 2, 2);
+    Circle circ3 = (2, Color.blue());
 
 
     Rectangle rec = (length, 100, Color.black());
@@ -17,9 +14,11 @@ Shader {
     if (true)
         Scene.add(rec);
 
+    if (!true)
+        Scene.add(circ3);
+
     Num i = sut(length, 2);
 
-    #Fails as hej is used both as Vardecl and FuncDecl
     Num ret = hej(2);
 }
 

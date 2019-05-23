@@ -13,7 +13,7 @@ import java.util.Stack;
 public class Unrolling {
     private HashMap<String, VariableDeclarationNode> variableDeclarations;
     private Stack<HashMap<String, Integer>> variableNameUsage;
-
+    private ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
     private void openScope() {
         HashMap<String, Integer> newVariableMap = new HashMap<>();
         variableNameUsage.push(newVariableMap);
@@ -43,7 +43,6 @@ public class Unrolling {
         variableDeclarations = new HashMap<>();
         variableNameUsage = new Stack<>();
 
-        ArrayList<FunctionDeclarationNode> functionDeclarationNodes;
         ArrayList<ClassDeclarationNode> classDeclarationNodes;
         MainNode mainNode;
 
@@ -89,6 +88,9 @@ public class Unrolling {
                 newStatementNodes.add(unrollAssignment((AssignmentNode)statementNode));
             else if (statementNode instanceof ObjectFunctionCallNode)
                 newStatementNodes.add(unrollObjectFunctionCall((ObjectFunctionCallNode)statementNode));
+            else if (statementNode instanceof NonObjectFunctionCallNode) {
+                newStatementNodes.addAll(unrollNonObjectFunctionCall((NonObjectFunctionCallNode)statementNode));
+            }
             else
                 newStatementNodes.add(statementNode);
         }
@@ -100,6 +102,103 @@ public class Unrolling {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
         statementNodes.add(statementNode);
         return unrollStatementNodes(statementNodes);
+    }
+
+    private void renameVarsInStatement(StatementNode statementNode, String oldName, String newName) {
+        if (statementNode instanceof DeclarationNode)
+            renameVarsInDeclaration((DeclarationNode)statementNode, oldName, newName);
+        else if (statementNode instanceof AssignmentNode)
+            renameVarsInAssignment((AssignmentNode) statementNode, oldName, newName);
+        else if (statementNode instanceof ObjectFunctionCallNode)
+            renameVarsObjectFunctionCall((ObjectFunctionCallNode) statementNode, oldName, newName);
+        else if (statementNode instanceof NonObjectFunctionCallNode)
+            renameVarsInNonObjectFunctionCall((NonObjectFunctionCallNode) statementNode, oldName, newName);
+        else
+            throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
+    private void renameVarsInDeclaration(DeclarationNode declarationNode, String oldName, String newName) {
+        if (declarationNode instanceof VariableDeclarationNode) {
+            for (VarDeclInitNode varDeclInitNode : ((VariableDeclarationNode)declarationNode).getVarDeclInitNodes()) {
+                renameVarsInAssignment(varDeclInitNode.getAssignmentNode(), oldName, newName);
+            }
+        }
+        else if (declarationNode instanceof ObjectDeclarationNode) {
+            throw new CompilerException("NOT YET IMPLEMENTED");
+        }
+    }
+
+    private void renameVarsInAssignment(AssignmentNode assignmentNode, String oldName, String newName) {
+        if (assignmentNode.getVariableName().equals(oldName))
+            assignmentNode.renameVariable(newName);
+
+        renameVarsInExpression(assignmentNode.getExpressionNode(), oldName, newName);
+    }
+
+    private void renameVarsInExpression(ExpressionNode expressionNode, String oldName, String newName) {
+        if (expressionNode instanceof ArithExpressionNode) {
+            ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
+            renameVarsInLowPrecedence(arithExpressionNode.getLowPrecedenceNode(), oldName, newName);
+        }
+        else if (expressionNode instanceof BoolExpressionNode) {
+            BoolExpressionNode boolExpressionNode = (BoolExpressionNode)expressionNode;
+            renameVarsInBoolOperations(boolExpressionNode.getBoolOperationsNode(), oldName, newName);
+        }
+        else if (expressionNode instanceof Vector4ExpressionNode) {
+            Vector4ExpressionNode vector4ExpressionNode = (Vector4ExpressionNode)expressionNode;
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode1(), oldName, newName);
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode2(), oldName, newName);
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode3(), oldName, newName);
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode4(), oldName, newName);
+        }
+        else if (expressionNode instanceof Vector3ExpressionNode) {
+            Vector3ExpressionNode vector3ExpressionNode = (Vector3ExpressionNode)expressionNode;
+            renameVarsInExpression(vector3ExpressionNode.getArithExpressionNode1(), oldName, newName);
+            renameVarsInExpression(vector3ExpressionNode.getArithExpressionNode2(), oldName, newName);
+            renameVarsInExpression(vector3ExpressionNode.getArithExpressionNode3(), oldName, newName);
+        }
+        else if (expressionNode instanceof Vector2ExpressionNode) {
+            Vector2ExpressionNode vector2ExpressionNode = (Vector2ExpressionNode)expressionNode;
+            renameVarsInExpression(vector2ExpressionNode.getArithExpressionNode1(), oldName, newName);
+            renameVarsInExpression(vector2ExpressionNode.getArithExpressionNode2(), oldName, newName);
+        }
+        else throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
+    private void renameVarsInLowPrecedence(LowPrecedenceNode lowPrecedenceNode, String oldName, String newName) {
+        for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes())
+            renameVarsInHighPrecedence(highPrecedenceNode, oldName, newName);
+    }
+
+    private void renameVarsInHighPrecedence(HighPrecedenceNode highPrecedenceNode, String oldName, String newName) {
+        for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes())
+            renameVarsInAtomPrecedence(atomPrecedenceNode, oldName, newName);
+    }
+
+    private void renameVarsInAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode, String oldName, String newName) {
+        if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+            renameVarsInLowPrecedence(atomPrecedenceNode.getLowPrecedenceNode(), oldName, newName);
+
+        if (atomPrecedenceNode.getOperand() != null)
+            if (atomPrecedenceNode.getOperand().getVariableName().equals(oldName))
+                atomPrecedenceNode.getOperand().renameVariable(newName);
+    }
+
+    private void renameVarsObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode, String oldName, String newName) {
+        for (ObjectArgumentNode objectArgumentNode : objectFunctionCallNode.getObjectArguments()) {
+            if (objectArgumentNode.isOnlyVariableName()) {
+                if (objectArgumentNode.getVariableName().equals(oldName))
+                    objectArgumentNode.renameVariable(newName);
+            }
+        }
+    }
+
+    private void renameVarsInBoolOperations(BoolOperationsNode boolOperationsNode, String oldName, String newName) {
+        throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
+    private void renameVarsInNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode, String oldName, String newName) {
+        throw new CompilerException("NOT YET IMPLEMENTED");
     }
 
     private ObjectFunctionCallNode unrollObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
@@ -115,6 +214,89 @@ public class Unrolling {
             newObjFunCall = new ObjectFunctionCallNode(newObjName, objectFunctionCallNode.getFunctionName());
 
         return newObjFunCall;
+    }
+
+    private ArrayList<StatementNode> unrollNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+        ArrayList<StatementNode> statementNodes = new ArrayList<>();
+
+        String functionName = nonObjectFunctionCallNode.getFunctionName();
+        boolean foundFunction = false;
+        boolean correctArguments = false;
+
+        for (FunctionDeclarationNode declarationNode : functionDeclarationNodes) {
+
+            if (functionName.equals(declarationNode.getFunctionName())) {
+                foundFunction = true;
+
+                // ARGUMENTS
+                if (nonObjectFunctionCallNode.getArgumentNodes() != null) {
+                    if (declarationNode.getFunctionArgNodes() != null) {
+                        if (nonObjectFunctionCallNode.getArgumentNodes().size() == declarationNode.getFunctionArgNodes().size()) {
+                            correctArguments = true;
+
+                            // NO RETURN TYPE
+                            if (declarationNode.getReturnType() == null) {
+                                for (int i = 0; i < declarationNode.getFunctionArgNodes().size(); i++) {
+                                    FunctionArgNode argNode = declarationNode.getFunctionArgNodes().get(i);
+                                    ObjectArgumentNode objArgNode = nonObjectFunctionCallNode.getArgumentNodes().get(i);
+
+                                    if (objArgNode.isOnlyVariableName()) {
+                                        for (StatementNode statementNode : declarationNode.getBlockNode().getStatementNodes()) {
+                                            renameVarsInStatement(statementNode, argNode.getVariableName(), objArgNode.getVariableName());
+                                        }
+                                    }
+                                    else {
+                                        // VARIABLE DECLARATIONS
+                                        if (argNode.getDataType() != null) {
+                                            ExpressionNode expression;
+                                            if (objArgNode.getBoolExpression() != null) {
+                                                expression = objArgNode.getBoolExpression();
+                                            }
+                                            else if (objArgNode.getLowPrecedence() != null) {
+                                                expression = new ArithExpressionNode(objArgNode.getLowPrecedence());
+                                            }
+                                            else throw new CompilerException("Invalid argument", objArgNode.getCodePosition());
+
+                                            VarDeclInitNode varDeclInit = new VarDeclInitNode(argNode.getVariableName(), expression);
+                                            VariableDeclarationNode varDec = new VariableDeclarationNode(argNode.getDataType(), varDeclInit);
+                                            statementNodes.add(varDec);
+                                        }
+
+                                        // OBJECT DECLARATIONS
+                                        else if (argNode.getClassName() != null) {
+                                            throw new CompilerException("This should not happen. An argument of object type should only be a single variable name", nonObjectFunctionCallNode.getCodePosition());
+                                        }
+                                    }
+                                }
+                                statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
+                            }
+                            // RETURN TYPE
+                            else throw new CompilerException("Only functions that return Void are implemented");
+                        }
+                    }
+                }
+
+                //NO ARGUMENTS
+                else {
+                    if (declarationNode.getFunctionArgNodes() == null) {
+                        correctArguments = true;
+
+                        if (declarationNode.getReturnType() == null) {
+                            statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
+                        }
+                        else throw new CompilerException("Only functions that return Void are implemented");
+                    }
+                }
+            }
+        }
+
+        if (!foundFunction)
+            throw new CompilerException("No function '" + functionName + "' was found", nonObjectFunctionCallNode.getCodePosition());
+
+        if (!correctArguments)
+            throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
+
+        return statementNodes;
     }
 
     private DeclarationNode unrollDeclaration(DeclarationNode declarationNode) {
@@ -180,7 +362,7 @@ public class Unrolling {
     }
 
     private ExpressionNode unrollExpression(ExpressionNode expressionNode) {
-        ExpressionNode newExpressionNode = null;
+        ExpressionNode newExpressionNode = expressionNode;
 
         if (expressionNode instanceof ArithExpressionNode) {
             ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
@@ -321,9 +503,13 @@ public class Unrolling {
         SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
 
         if (nonObjectFunctionCallNode != null) {
-            ArrayList<ObjectArgumentNode> argumentNodes = unrollObjectArguments(nonObjectFunctionCallNode.getArgumentNodes());
+            NonObjectFunctionCallNode newNonObjectFunCall;
 
-            NonObjectFunctionCallNode newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName(), argumentNodes);
+            if (nonObjectFunctionCallNode.getArgumentNodes() != null)
+                newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName(), unrollObjectArguments(nonObjectFunctionCallNode.getArgumentNodes()));
+            else
+                newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName());
+
             newNonObjectFunCall.setCodePosition(nonObjectFunctionCallNode.getCodePosition());
 
             newArithOperandNode = new ArithOperandNode(newNonObjectFunCall);

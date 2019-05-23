@@ -58,7 +58,7 @@ Shader {
 
     Vec2 upVector = (0,1);
 
-    Vec2 refractPointerVector = refract(pointerVector, upVector, sin(Time) + 1);
+    Vec2 refractPointerVector = refract2(pointerVector, upVector, sin(Time) + 1);
     Num refractRotation = degrees(acos(dot(normalize(refractPointerVector), upVector))) * sign(refractPointerVector.x);
     Vec4 refractColor = (sin(Time) + 1, 0, cos(Time) + 1, 0.25 + sin(Time) * 0.25);
 
@@ -71,7 +71,7 @@ Shader {
     refractTip.setPosition(center + refractPointerVector);
     Scene.add(refractTip);
 
-    Vec2 reflectPointerVector = reflect(pointerVector, upVector);
+    Vec2 reflectPointerVector = reflect2(pointerVector, upVector);
     Num reflectRotation = degrees(acos(dot(normalize(reflectPointerVector), upVector))) * sign(reflectPointerVector.x);
     Vec4 transparent = (0,0,0,0.5);
 

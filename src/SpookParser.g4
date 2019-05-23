@@ -148,7 +148,7 @@ ifStatement: IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditionalBlock;
 elseIfStatement: ELSE_IF LEFT_PAREN conditionalExpression RIGHT_PAREN conditionalBlock;
 elseStatement: ELSE conditionalBlock;
 
-// Expressions
+// Expressions TODO: should have been NOT variableName
 conditionalExpression: boolExpression | variableName | functionCall;
 
 // Blocks

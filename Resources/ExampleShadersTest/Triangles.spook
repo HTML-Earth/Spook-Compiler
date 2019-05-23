@@ -44,14 +44,14 @@ Shader {
     Num bgRotation2 = smoothstep(2 + Pi * 2, 4 + Pi * 2, bgRotationTime);
     Num bgRotation3 = smoothstep(2 + Pi * 4, 4 + Pi * 4, bgRotationTime);
 
-    Vec4 darkRotation2 = mix(courageDark, powerDark, bgRotation3);
-    Vec4 darkRotation1 = mix(wisdomDark, darkRotation2, bgRotation2);
-    Vec4 darkRotation = mix(powerDark, darkRotation1, bgRotation1);
+    Vec4 darkRotation2 = mix4(courageDark, powerDark, bgRotation3);
+    Vec4 darkRotation1 = mix4(wisdomDark, darkRotation2, bgRotation2);
+    Vec4 darkRotation = mix4(powerDark, darkRotation1, bgRotation1);
 
-    Vec4 brightRotation3 = mix(courageBright, powerBright, bgRotation3);
-    Vec4 brightRotation2 = mix(wisdomBright, brightRotation3, bgRotation2);
-    Vec4 brightRotation1 = mix(powerBright, brightRotation2, bgRotation1);
-    Vec4 brightRotation = mix(brightRotation1, brightShine, pow(max(sin(Time + 0.5), 0), 3) * 0.5);
+    Vec4 brightRotation3 = mix4(courageBright, powerBright, bgRotation3);
+    Vec4 brightRotation2 = mix4(wisdomBright, brightRotation3, bgRotation2);
+    Vec4 brightRotation1 = mix4(powerBright, brightRotation2, bgRotation1);
+    Vec4 brightRotation = mix4(brightRotation1, brightShine, pow(max(sin(Time + 0.5), 0), 3) * 0.5);
 
     CircleGradient background = (Screen.x / 2, brightRotation, darkRotation);
     background.setPosition(Screen.x / 2, Screen.y / 2);

@@ -1,5 +1,7 @@
 package dk.aau.cs.d403.codegen;
 
+import dk.aau.cs.d403.ast.structure.BlockNode;
+import dk.aau.cs.d403.ast.structure.FunctionDeclarationNode;
 import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
@@ -7,11 +9,14 @@ import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
+import dk.aau.cs.d403.spook.color.Color;
 
+import java.awt.font.ImageGraphicAttribute;
 import java.util.ArrayList;
 
 import static dk.aau.cs.d403.ast.Enums.Operator.SUB;
 import static dk.aau.cs.d403.ast.Enums.operatorToString;
+import static dk.aau.cs.d403.ast.Enums.returnTypeToStringGLSL;
 
 public class PrintGLSL {
 
@@ -38,13 +43,15 @@ public class PrintGLSL {
         if (expressionNode instanceof ArithExpressionNode)
             return printArithExpression((ArithExpressionNode)expressionNode);
         else if (expressionNode instanceof BoolExpressionNode)
-            throw new CompilerException("Not yet implemented", expressionNode.getCodePosition());
+            return printBoolExpression((BoolExpressionNode)expressionNode);
         else if (expressionNode instanceof Vector4ExpressionNode)
             return printVector4Expression((Vector4ExpressionNode)expressionNode);
         else if (expressionNode instanceof Vector3ExpressionNode)
             return printVector3Expression((Vector3ExpressionNode)expressionNode);
         else if (expressionNode instanceof Vector2ExpressionNode)
             return printVector2Expression((Vector2ExpressionNode)expressionNode);
+        else if (expressionNode instanceof TernaryOperatorNode)
+            return printTernaryOperator((TernaryOperatorNode)expressionNode);
         else
             throw new CompilerException("Invalid Expression", expressionNode.getCodePosition());
     }
@@ -82,7 +89,6 @@ public class PrintGLSL {
         if (highPrecedenceNodes != null && operators != null) {
             if (!highPrecedenceNodes.isEmpty() && !operators.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("(");
                 for (HighPrecedenceNode highPrecedenceNode : highPrecedenceNodes) {
                     //Get the highNode
                     sb.append(printHighPrecedence(highPrecedenceNode));
@@ -92,14 +98,13 @@ public class PrintGLSL {
                         matchHigh++;
                     }
                 }
-                sb.append(")");
                 return sb.toString();
             } else
                 return "LowPrecedenceNode receives empty list";
         }
         //Single HighNode
         else if (highPrecedenceNodes != null) {
-            return "(" + printHighPrecedence(highPrecedenceNodes.get(0)) + ")";
+            return printHighPrecedence(highPrecedenceNodes.get(0));
         } else
             return "Invalid Low Precedence Operation";
     }
@@ -155,14 +160,308 @@ public class PrintGLSL {
     }
 
     public static String printBoolExpression(BoolExpressionNode boolExpressionNode) {
-        return boolExpressionNode.prettyPrint(0); //TODO: this might need to use custom code instead of pp
+        if (boolExpressionNode.getBoolOperationsNode() != null)
+            return printBoolOperations(boolExpressionNode.getBoolOperationsNode());
+        else
+            throw new CompilerException("Invalid BoolExpression", boolExpressionNode.getCodePosition());
+    }
+
+    public static String printBoolOperations(BoolOperationsNode boolOperationsNode) {
+        //COPY PASTA'd from BoolOperationsNode.prettyPrint()
+
+        StringBuilder sb = new StringBuilder();
+        if (boolOperationsNode.getBoolOperationExtendNodes() != null) {
+            for (BoolOperationExtendNode boolOperationExtendNode : boolOperationsNode.getBoolOperationExtendNodes()) {
+                sb.append(printBoolOperationExtend(boolOperationExtendNode));
+            }
+        }
+        //Case !bool extend
+        if (boolOperationsNode.getBoolOperationNode() != null && boolOperationsNode.getBoolOperationExtendNodes() != null && boolOperationsNode.getOptionalNOT() != null)
+            return Enums.boolOperatorToString(boolOperationsNode.getOptionalNOT()) + printBoolOperation(boolOperationsNode.getBoolOperationNode()) + sb;
+        //Case bool extend
+        else if (boolOperationsNode.getBoolOperationNode() != null && boolOperationsNode.getBoolOperationExtendNodes() != null)
+            return printBoolOperation(boolOperationsNode.getBoolOperationNode()) + sb;
+        //Case !bool
+        else if (boolOperationsNode.getOptionalNOT() != null && boolOperationsNode.getBoolOperationNode() != null)
+            return Enums.boolOperatorToString(boolOperationsNode.getOptionalNOT()) + printBoolOperation(boolOperationsNode.getBoolOperationNode());
+        //Case bool
+        else if (boolOperationsNode.getBoolOperationNode() != null)
+            return printBoolOperation(boolOperationsNode.getBoolOperationNode());
+
+        //Case !arith extend
+        else if (boolOperationsNode.getArithExpressionNode() != null && boolOperationsNode.getBoolOperationExtendNodes() != null && boolOperationsNode.getOptionalNOT() != null)
+            return Enums.boolOperatorToString(boolOperationsNode.getOptionalNOT()) + printArithExpression(boolOperationsNode.getArithExpressionNode()) + sb;
+        //Case arith extend
+        else if (boolOperationsNode.getArithExpressionNode() != null && boolOperationsNode.getBoolOperationExtendNodes() != null)
+            return printArithExpression(boolOperationsNode.getArithExpressionNode()) + sb;
+        else
+            throw new CompilerException("Invalid Boolean Operations Node", boolOperationsNode.getCodePosition());
+    }
+
+    public static String printBoolOperation(BoolOperationNode boolOperationNode) {
+        if (boolOperationNode.getBoolOperationsNode() != null)
+            return printBoolOperations(boolOperationNode.getBoolOperationsNode());
+        else if (boolOperationNode.getBoolLiteral() != null)
+            return boolOperationNode.getBoolLiteral().toString();
+        else
+            throw new CompilerException("Invalid BoolOperationNode", boolOperationNode.getCodePosition());
+    }
+
+    public static String printBoolOperationExtend(BoolOperationExtendNode boolOperationExtendNode) {
+        //COPY PASTA'd from BoolOperationExtendNode.prettyPrint()
+
+        //Case of operator !bool
+        if (boolOperationExtendNode.getBoolOperator() != null && boolOperationExtendNode.getOptionalNOT() != null && boolOperationExtendNode.getBoolOperationNode() != null) {
+            return Enums.boolOperatorToString(boolOperationExtendNode.getBoolOperator()) + Enums.boolOperatorToString(boolOperationExtendNode.getOptionalNOT()) + printBoolOperation(boolOperationExtendNode.getBoolOperationNode());
+        }
+        //Case of operator bool
+        else if (boolOperationExtendNode.getBoolOperator() != null && boolOperationExtendNode.getBoolOperationNode() != null) {
+            return Enums.boolOperatorToString(boolOperationExtendNode.getBoolOperator()) + printBoolOperation(boolOperationExtendNode.getBoolOperationNode());
+        }
+
+        //Case of operator arith
+        else if (boolOperationExtendNode.getBoolOperator() != null && boolOperationExtendNode.getOptionalNOT() != null && boolOperationExtendNode.getArithExpressionNode() != null) {
+            return " " + Enums.boolOperatorToString(boolOperationExtendNode.getBoolOperator()) + " " + Enums.boolOperatorToString(boolOperationExtendNode.getOptionalNOT()) + printArithExpression(boolOperationExtendNode.getArithExpressionNode());
+        }
+        //Case of operator !arith
+        else if (boolOperationExtendNode.getBoolOperator() != null && boolOperationExtendNode.getArithExpressionNode() != null) {
+            return " " + Enums.boolOperatorToString(boolOperationExtendNode.getBoolOperator()) + " " + printArithExpression(boolOperationExtendNode.getArithExpressionNode());
+        }
+        else
+            throw new CompilerException("Invalid Boolean Operation Extension", boolOperationExtendNode.getCodePosition());
+    }
+
+    public static String printFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode, boolean prototype) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(Enums.dataTypeToStringGLSL(functionDeclarationNode.getReturnType()));
+        sb.append(" ");
+        sb.append(functionDeclarationNode.getFunctionName());
+        sb.append("(");
+
+        if (functionDeclarationNode.getFunctionArgNodes() != null)
+            for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
+                String arg = printFunctionArg(functionDeclarationNode.getFunctionArgNodes().get(i));
+                sb.append(i < functionDeclarationNode.getFunctionArgNodes().size()-1 ? arg + ", " : arg);
+            }
+
+        sb.append(")");
+
+        if (prototype)
+            sb.append(";");
+        else {
+            sb.append(printFunctionBlock(functionDeclarationNode.getBlockNode()));
+        }
+
+        sb.append("\n\n");
+
+        return sb.toString();
+    }
+
+    public static String printFunctionArg(FunctionArgNode functionArgNode) {
+        if (functionArgNode.getDataType() != null)
+            return Enums.dataTypeToStringGLSL(functionArgNode.getDataType()) + " " + functionArgNode.getVariableName();
+        else
+            throw new CompilerException("Not implemented");
+    }
+
+    public static String printFunctionBlock(BlockNode blockNode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{\n");
+        for (StatementNode statementNode : blockNode.getStatementNodes()) {
+            sb.append("\t");
+            sb.append(printStatement(statementNode));
+            sb.append("\n");
+        }
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+    public static String printStatement(StatementNode statementNode) {
+        if (statementNode instanceof DeclarationNode)
+            return printDeclaration((DeclarationNode)statementNode);
+        else if (statementNode instanceof AssignmentNode)
+            return printAssignment((AssignmentNode)statementNode);
+        else if (statementNode instanceof NonObjectFunctionCallNode)
+            return printNonObjectFunctionCall((NonObjectFunctionCallNode)statementNode);
+        else if (statementNode instanceof ForLoopStatementNode)
+            return printForLoop((ForLoopStatementNode)statementNode);
+        else if (statementNode instanceof IfElseStatementNode)
+            return printIfElse((IfElseStatementNode)statementNode);
+        else if (statementNode instanceof ReturnNode)
+            return printReturn((ReturnNode)statementNode);
+        else
+            throw new CompilerException("Not implemented");
+    }
+
+    public static String printReturn(ReturnNode returnNode) {
+        return "return " + printExpression(returnNode.getExpressionNode()) + ";";
+    }
+
+    public static String printDeclaration(DeclarationNode declarationNode) {
+        if (declarationNode instanceof VariableDeclarationNode)
+            return printVariableDeclaration((VariableDeclarationNode)declarationNode);
+        else
+            throw new CompilerException("Not implemented");
+    }
+
+    public static String printForLoop(ForLoopStatementNode forLoopStatementNode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("for (");
+
+        sb.append(printForLoopExpression(forLoopStatementNode.getForLoopExpressionNode1(), forLoopStatementNode.getForLoopExpressionNode2()));
+
+        sb.append(")\n");
+
+        sb.append(printConditionalBlock(forLoopStatementNode.getConditionalBlockNode()));
+
+        return sb.toString();
+    }
+
+    public static String printForLoopExpression(ForLoopExpressionNode forLoopExpressionNode1, ForLoopExpressionNode forLoopExpressionNode2) {
+        StringBuilder sb = new StringBuilder();
+
+        if (forLoopExpressionNode1.getVariableDeclarationNode() != null)
+            sb.append(printVariableDeclaration(forLoopExpressionNode1.getVariableDeclarationNode()));
+        else if (forLoopExpressionNode1.getAssignmentNode() != null)
+            sb.append(printAssignment(forLoopExpressionNode1.getAssignmentNode()));
+        else if (forLoopExpressionNode1.getAtomPrecedenceNode() != null)
+            sb.append(printAtomPrecedence(forLoopExpressionNode1.getAtomPrecedenceNode()));
+
+        sb.append("; ");
+
+        sb.append("var < ");
+
+        if (forLoopExpressionNode2.getVariableDeclarationNode() != null)
+            sb.append(printVariableDeclaration(forLoopExpressionNode2.getVariableDeclarationNode()));
+        else if (forLoopExpressionNode2.getAssignmentNode() != null)
+            sb.append(printAssignment(forLoopExpressionNode2.getAssignmentNode()));
+        else if (forLoopExpressionNode2.getAtomPrecedenceNode() != null)
+            sb.append(printAtomPrecedence(forLoopExpressionNode2.getAtomPrecedenceNode()));
+
+        sb.append("; ");
+
+        sb.append("var++");
+
+        return sb.toString();
+    }
+
+    public static String printIfElse(IfElseStatementNode ifElseStatementNode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(printIf(ifElseStatementNode.getIfStatementNode()));
+
+        sb.append("\n");
+
+        if (ifElseStatementNode.getElseIfStatementNodes() != null)
+            for (ElseIfStatementNode elseIfStatementNode : ifElseStatementNode.getElseIfStatementNodes()){
+                sb.append(printElseIf(elseIfStatementNode));
+                sb.append("\n");
+            }
+
+        if (ifElseStatementNode.getElseStatementNode() != null) {
+            sb.append(printElse(ifElseStatementNode.getElseStatementNode()));
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public static String printIf(IfStatementNode ifStatementNode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("if (");
+
+        if (ifStatementNode.getIfBool().getBoolExpressionNode() != null)
+            sb.append(printBoolExpression(ifStatementNode.getIfBool().getBoolExpressionNode()));
+        else if (ifStatementNode.getIfBool().getVariableName() != null)
+            sb.append(ifStatementNode.getIfBool().getVariableName());
+        else if (ifStatementNode.getIfBool().getNonObjectFunctionCallNode() != null)
+            sb.append(printNonObjectFunctionCall(ifStatementNode.getIfBool().getNonObjectFunctionCallNode()));
+        else if (ifStatementNode.getIfBool().getObjectFunctionCallNode() != null)
+            throw new CompilerException("Not implemented");
+
+        sb.append(")\n");
+
+        sb.append(printConditionalBlock(ifStatementNode.getIfBlock()));
+
+        return sb.toString();
+    }
+
+    public static String printElseIf(ElseIfStatementNode elseIfStatementNode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("else if (");
+
+        if (elseIfStatementNode.getElseIfBool().getBoolExpressionNode() != null)
+            sb.append(printBoolExpression(elseIfStatementNode.getElseIfBool().getBoolExpressionNode()));
+        else if (elseIfStatementNode.getElseIfBool().getVariableName() != null)
+            sb.append(elseIfStatementNode.getElseIfBool().getVariableName());
+        else if (elseIfStatementNode.getElseIfBool().getNonObjectFunctionCallNode() != null)
+            sb.append(printNonObjectFunctionCall(elseIfStatementNode.getElseIfBool().getNonObjectFunctionCallNode()));
+        else if (elseIfStatementNode.getElseIfBool().getObjectFunctionCallNode() != null)
+            throw new CompilerException("Not implemented");
+
+        sb.append(")\n");
+
+        sb.append(printConditionalBlock(elseIfStatementNode.getElseIfBlock()));
+
+        return sb.toString();
+    }
+
+    public static String printElse(ElseStatementNode elseStatementNode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("else\n");
+
+        sb.append(printConditionalBlock(elseStatementNode.getElseBlock()));
+
+        return sb.toString();
+    }
+
+    public static String printConditionalBlock(ConditionalBlockNode conditionalBlockNode) {
+        StringBuilder sb = new StringBuilder();
+
+        if (conditionalBlockNode.getStatementNode() != null) {
+            sb.append("\t\t");
+            sb.append(printStatement(conditionalBlockNode.getStatementNode()));
+        }
+        else if (conditionalBlockNode.getBlockNode() != null) {
+            sb.append("{\n");
+            sb.append(printFunctionBlock(conditionalBlockNode.getBlockNode()));
+            sb.append("}");
+        }
+
+        return sb.toString();
     }
 
     public static String printNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         StringBuilder sb = new StringBuilder();
         ArrayList<ObjectArgumentNode> argumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        sb.append(nonObjectFunctionCallNode.getFunctionName());
+        switch (nonObjectFunctionCallNode.getFunctionName()) {
+            case "mix2": case "mix3": case "mix4":
+                sb.append("mix");
+                break;
+            case "cross3":
+                sb.append("cross");
+                break;
+            case "normalize2": case "normalize3": case "normalize4":
+                sb.append("normalize");
+                break;
+            case "reflect2": case "reflect3": case "reflect4":
+                sb.append("reflect");
+                break;
+            case "refract2": case "refract3": case "refract4":
+                sb.append("refract");
+                break;
+            default:
+                sb.append(nonObjectFunctionCallNode.getFunctionName());
+                break;
+        }
         sb.append("(");
 
         if (argumentNodes != null) {
@@ -183,7 +482,10 @@ public class PrintGLSL {
     }
 
     public static String printObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
-        return objectFunctionCallNode.prettyPrint(0);
+        if (objectFunctionCallNode.getObjectVariableName().equals("Color"))
+            return printVector4(Color.getColorProperty(objectFunctionCallNode));
+        else
+            return objectFunctionCallNode.prettyPrint(0);
     }
 
     public static String printArithOperand(ArithOperandNode arithOperandNode) {
@@ -206,10 +508,10 @@ public class PrintGLSL {
             return printObjectFunctionCall(objectFunctionCallNode);
         }
         else if (variableName != null) {
-            return variableName;
+            return printVariableName(variableName);
         }
         else if (swizzleNode != null) {
-            return swizzleNode.prettyPrint(0);
+            return printSwizzle(swizzleNode);
         }
         else if (vector2ExpressionNode != null) {
             return vector2ExpressionNode.prettyPrint(0);
@@ -221,6 +523,23 @@ public class PrintGLSL {
             return vector4ExpressionNode.prettyPrint(0);
         }
         else throw new RuntimeException("Invalid arith operand");
+    }
+
+    public static String printSwizzle(SwizzleNode swizzleNode) {
+        return printVariableName(swizzleNode.getVariableName()) + "." + swizzleNode.getSwizzle();
+    }
+
+    public static String printVariableName(String variableName) {
+        switch (variableName) {
+            case "Time":
+                return "iTime";
+            case "Pi":
+                return "PI";
+            case "Screen":
+                return "iResolution";
+            default:
+                return variableName;
+        }
     }
 
     public static String printRealNumber(RealNumberNode realNumberNode) {
@@ -238,7 +557,7 @@ public class PrintGLSL {
 
     public static String printVector2(Vector2 vector){
         if (vector.getLowPrecedenceNode() != null) {
-            return "vec2" + printLowPrecedence(vector.getLowPrecedenceNode());
+            return "vec2(" + printLowPrecedence(vector.getLowPrecedenceNode()) + ")";
         }
         else return "vec2(" +
                 printObjArgNode(vector.getX()) + ", " +
@@ -254,12 +573,39 @@ public class PrintGLSL {
 
     public static String printVector4(Vector4 vector){
         if (vector.getLowPrecedenceNode() != null) {
-            return "vec4" + printLowPrecedence(vector.getLowPrecedenceNode());
+            return "vec4(" + printLowPrecedence(vector.getLowPrecedenceNode()) + ")";
+        }
+        else if (vector.getTernaryOperatorNode() != null) {
+            return printTernaryOperator(vector.getTernaryOperatorNode());
         }
         else return "vec4(" +
                 printObjArgNode(vector.getX()) + ", " +
                 printObjArgNode(vector.getY()) + ", " +
                 printObjArgNode(vector.getZ()) + ", " +
                 printObjArgNode(vector.getW()) + ")";
+    }
+
+    public static String printTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
+        String expressions = " ? " + printExpression(ternaryOperatorNode.getExpressionNode1()) + " : " + printExpression(ternaryOperatorNode.getExpressionNode2());
+
+        if (ternaryOperatorNode.getBoolExpressionNode() != null) {
+            return "(" + printBoolExpression(ternaryOperatorNode.getBoolExpressionNode()) + ")" + expressions;
+        }
+        else if (ternaryOperatorNode.getVariableName() != null) {
+            if (ternaryOperatorNode.getBoolOperator() != null) {
+                return ternaryOperatorNode.getBoolOperator() + ternaryOperatorNode.getVariableName() + expressions;
+            }
+            else {
+                return ternaryOperatorNode.getVariableName() + expressions;
+            }
+        }
+        else if (ternaryOperatorNode.getNonObjectFunctionCallNode() != null) {
+            return printNonObjectFunctionCall(ternaryOperatorNode.getNonObjectFunctionCallNode()) + expressions;
+        }
+        else if (ternaryOperatorNode.getObjectFunctionCallNode() != null) {
+            return printObjectFunctionCall(ternaryOperatorNode.getObjectFunctionCallNode()) + expressions;
+        }
+        else
+            throw new CompilerException("Invalid ternary", ternaryOperatorNode.getCodePosition());
     }
 }

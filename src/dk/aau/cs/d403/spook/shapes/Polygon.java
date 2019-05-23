@@ -5,6 +5,7 @@ import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
+import dk.aau.cs.d403.errorhandling.InvalidAmountOfArgumentsException;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.color.Color;
 
@@ -28,15 +29,16 @@ public class Polygon extends Shape {
 
         points = new ArrayList<>();
 
-        //Max arguments = 17
+        //Max arguments = maxPoints + 1
         if (argumentNodes.size() > minPoints && argumentNodes.size() < maxPoints + 2) {
+            // (Vec2 point1, Vec2 point2, Vec2 point3 ... , Vec4 color)
             for (int i = 0; i < argumentNodes.size() - 1; i++) {
                 points.add(Vector2.evaluateLowPrecedence(argumentNodes.get(i).getLowPrecedence()));
             }
             this.color = Color.getColorArgument(argumentNodes.get(argumentNodes.size() - 1));
         }
         else
-            throw new CompilerException("Invalid number of arguments in Polygon Contructor. Expected: " + (minPoints + 1) + " - " + (maxPoints + 1) + "Found: " + argumentNodes.size() );
+            throw new InvalidAmountOfArgumentsException("Polygon constructor", minPoints + 1, maxPoints + 1, argumentNodes.size());
     }
 
     public static String getStruct() {

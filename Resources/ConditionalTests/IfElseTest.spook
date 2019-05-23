@@ -5,7 +5,25 @@ Shader{
         circle.setPosition(500, 500);
     }
     Rectangle rec = (50, 100, Color.yellow());
-    rec.setPosition(500, 500);
+    Bool bol = false;
+    #ConditionalExpr (varName)
+    if (bol) {
+        rec.setScale(1.2, 1.2);
+    }
+    #!boolOp + extend
+    else if (!true && true) {
+    }
+    #boolOp + extend
+    else if (bol && !true) {
+        rec.setPosition(500, 500);
+    }
+    #!arithExpr + extend
+    else if (!bol && true) {
+        rec.setRotation(90);
+    }
+
+   # if (!true && true && false) {}
+
     Scene.add(circle);
     Scene.add(rec);
 

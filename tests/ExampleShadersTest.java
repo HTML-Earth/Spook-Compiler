@@ -25,8 +25,8 @@ class ExampleShadersTest {
             programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
-            //CodeGenerator codeGenerator = new CodeGenerator();
-            //codeGenerator.GenerateGLSL(programNode);
+            CodeGenerator codeGenerator = new CodeGenerator();
+            codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,11 +46,6 @@ class ExampleShadersTest {
     @Test
     void FunnyShader() {
         testShader("FunnyShader");
-    }
-
-    @Test
-    void GhostWithoutLoops() {
-        testShader("GhostWithoutLoops");
     }
 
     @Test

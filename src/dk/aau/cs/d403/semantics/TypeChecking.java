@@ -1,13 +1,16 @@
 package dk.aau.cs.d403.semantics;
 
-import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class TypeChecking {
     private Stack<HashMap<String, ASTnode>> hashMapStack;
@@ -15,7 +18,7 @@ public class TypeChecking {
     private FunctionDeclarationNode currentFuncNode;
 
     private ArrayList<String> listOfPredefinedClasses;
-    private ArrayList<String> listOfPredefinedFunctions;
+    private HashMap<String, Enums.DataType> predefinedFunctions;
     private ArrayList<VariableDeclarationNode> listOfPredefinedVariables;
     private ArrayList<Enums.BoolOperator> booleanOperatorList;
     private ArrayList<Enums.BoolOperator> numberOperatorList;
@@ -37,53 +40,72 @@ public class TypeChecking {
         this.listOfPredefinedClasses.add("Scene");
 
 
-        this.listOfPredefinedFunctions = new ArrayList<>();
-        this.listOfPredefinedFunctions.add("abs");
-        this.listOfPredefinedFunctions.add("acos");
-        this.listOfPredefinedFunctions.add("acosh");
-        this.listOfPredefinedFunctions.add("asin");
-        this.listOfPredefinedFunctions.add("asinh");
-        this.listOfPredefinedFunctions.add("atan");
-        this.listOfPredefinedFunctions.add("atanh");
-        this.listOfPredefinedFunctions.add("ceil");
-        this.listOfPredefinedFunctions.add("clamp");
-        this.listOfPredefinedFunctions.add("cos");
-        this.listOfPredefinedFunctions.add("cosh");
-        this.listOfPredefinedFunctions.add("cross");
-        this.listOfPredefinedFunctions.add("degrees");
-        this.listOfPredefinedFunctions.add("distance");
-        this.listOfPredefinedFunctions.add("dot");
-        this.listOfPredefinedFunctions.add("exp");
-        this.listOfPredefinedFunctions.add("exp2");
-        this.listOfPredefinedFunctions.add("floor");
-        this.listOfPredefinedFunctions.add("fract");
-        this.listOfPredefinedFunctions.add("inversesqrt");
-        this.listOfPredefinedFunctions.add("length");
-        this.listOfPredefinedFunctions.add("log");
-        this.listOfPredefinedFunctions.add("log2");
-        this.listOfPredefinedFunctions.add("max");
-        this.listOfPredefinedFunctions.add("min");
-        this.listOfPredefinedFunctions.add("mix");
-        this.listOfPredefinedFunctions.add("mod");
-        this.listOfPredefinedFunctions.add("normalize");
-        this.listOfPredefinedFunctions.add("outerProduct");
-        this.listOfPredefinedFunctions.add("pow");
-        this.listOfPredefinedFunctions.add("radians");
-        this.listOfPredefinedFunctions.add("reflect");
-        this.listOfPredefinedFunctions.add("refract");
-        this.listOfPredefinedFunctions.add("round");
-        this.listOfPredefinedFunctions.add("roundEven");
-        this.listOfPredefinedFunctions.add("sign");
-        this.listOfPredefinedFunctions.add("sin");
-        this.listOfPredefinedFunctions.add("sinh");
-        this.listOfPredefinedFunctions.add("smoothstep");
-        this.listOfPredefinedFunctions.add("sqrt");
-        this.listOfPredefinedFunctions.add("step");
-        this.listOfPredefinedFunctions.add("tan");
-        this.listOfPredefinedFunctions.add("tanh");
-        this.listOfPredefinedFunctions.add("trunc");
-        this.listOfPredefinedFunctions.add("setScale");
-        this.listOfPredefinedFunctions.add("setParent");
+        this.predefinedFunctions = new HashMap<>();
+        this.predefinedFunctions.put("abs", Enums.DataType.NUM);
+        this.predefinedFunctions.put("acos", Enums.DataType.NUM);
+        this.predefinedFunctions.put("acosh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("asin", Enums.DataType.NUM);
+        this.predefinedFunctions.put("asinh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("atan", Enums.DataType.NUM);
+        this.predefinedFunctions.put("atanh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("ceil", Enums.DataType.NUM);
+        this.predefinedFunctions.put("clamp", Enums.DataType.NUM);
+        this.predefinedFunctions.put("cos", Enums.DataType.NUM);
+        this.predefinedFunctions.put("cosh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("cross", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("cross3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("degrees", Enums.DataType.NUM);
+        this.predefinedFunctions.put("distance", Enums.DataType.NUM);
+        this.predefinedFunctions.put("dot", Enums.DataType.NUM);
+        this.predefinedFunctions.put("exp", Enums.DataType.NUM);
+        this.predefinedFunctions.put("exp2", Enums.DataType.NUM);
+        this.predefinedFunctions.put("floor", Enums.DataType.NUM);
+        this.predefinedFunctions.put("fract", Enums.DataType.NUM);
+        this.predefinedFunctions.put("inversesqrt", Enums.DataType.NUM);
+        this.predefinedFunctions.put("length", Enums.DataType.NUM);
+        this.predefinedFunctions.put("log", Enums.DataType.NUM);
+        this.predefinedFunctions.put("log2", Enums.DataType.NUM);
+        this.predefinedFunctions.put("max", Enums.DataType.NUM);
+        this.predefinedFunctions.put("min", Enums.DataType.NUM);
+        this.predefinedFunctions.put("mix", Enums.DataType.NUM);
+        this.predefinedFunctions.put("mix2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("mix3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("mix4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("mod", Enums.DataType.NUM);
+        this.predefinedFunctions.put("normalize2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("normalize3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("normalize4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("outerProduct", Enums.DataType.NUM);
+        this.predefinedFunctions.put("pow", Enums.DataType.NUM);
+        this.predefinedFunctions.put("radians", Enums.DataType.NUM);
+        this.predefinedFunctions.put("reflect2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("reflect3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("reflect4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("refract2", Enums.DataType.VEC2);
+        this.predefinedFunctions.put("refract3", Enums.DataType.VEC3);
+        this.predefinedFunctions.put("refract4", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("round", Enums.DataType.NUM);
+        this.predefinedFunctions.put("roundEven", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sign", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sin", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sinh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("smoothstep", Enums.DataType.NUM);
+        this.predefinedFunctions.put("sqrt", Enums.DataType.NUM);
+        this.predefinedFunctions.put("step", Enums.DataType.NUM);
+        this.predefinedFunctions.put("tan", Enums.DataType.NUM);
+        this.predefinedFunctions.put("tanh", Enums.DataType.NUM);
+        this.predefinedFunctions.put("trunc", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setScale", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setParent", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setColor", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("setPosition", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setRotation", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getColor", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("getScale", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getParent", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getPosition", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getRotation", Enums.DataType.NUM);
+
 
 
         ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
@@ -108,8 +130,6 @@ public class TypeChecking {
         this.numberOperatorList.add(Enums.BoolOperator.GREATER_THAN);
         this.numberOperatorList.add(Enums.BoolOperator.LESS_OR_EQUAL);
         this.numberOperatorList.add(Enums.BoolOperator.LESS_THAN);
-        this.numberOperatorList.add(Enums.BoolOperator.EQUAL);
-        this.numberOperatorList.add(Enums.BoolOperator.NOT_EQUAL);
     }
 
     private void openScope() {
@@ -379,13 +399,16 @@ public class TypeChecking {
 
     private FunctionDeclarationNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         boolean notFound = true;
+        FunctionDeclarationNode functionDeclarationNodeReturn = null;
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
-        retrievedFunctions = retrieveAllFunctions(functionName);
+        ArrayList<FunctionDeclarationNode> retrievedFunctions = retrieveAllFunctions(functionName);
 
-        if (!this.listOfPredefinedFunctions.contains(functionName)) {
+        if (this.predefinedFunctions.containsKey(functionName)) {
+            return new FunctionDeclarationNode(predefinedFunctions.get(functionName), functionName, new BlockNode(new ArrayList<>()));
+        }
+        else {
             if (!retrievedFunctions.isEmpty()) {
                 for (FunctionDeclarationNode functionDeclarationNode : retrievedFunctions) {
                     if (functionDeclarationNode != null) {
@@ -397,28 +420,38 @@ public class TypeChecking {
                                 for (int i = 0; i < functionDeclarationNode.getFunctionArgNodes().size(); i++) {
                                     if (functionDeclarationNode.getFunctionArgNodes().get(i).getDataType() != null) {
                                         if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                            if (!functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
-                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getDataType().toString() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                            String foundDataType1 = Enums.dataTypeToStringSpook(functionDeclarationNode.getFunctionArgNodes().get(i).getDataType());
+                                            String foundDataType2 = visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence());
+                                            if (!foundDataType1.equals(foundDataType2)) {
+                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + functionName + "). Found " + foundDataType1 + " and " + foundDataType2, nonObjectFunctionCallNode.getCodePosition());
                                             }
-                                        } else
+                                        }
+                                        else
                                             throw new CompilerException("ERROR: Argument (" + functionDeclarationNode.getFunctionArgNodes().get(i) + ") in function call (" + functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
-                                    } else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
+                                    }
+
+                                    else if (functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() != null) {
                                         if (visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()) != null) {
-                                            if (!functionDeclarationNode.getFunctionArgNodes().get(i).getClassName().equals(visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()))) {
-                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + nonObjectFunctionCallNode.getFunctionName() + "). Found " + functionDeclarationNode.getFunctionArgNodes().get(i).getClassName() + " and " + visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence()), nonObjectFunctionCallNode.getCodePosition());
+                                            String foundClassName1 = functionDeclarationNode.getFunctionArgNodes().get(i).getClassName();
+                                            String foundClassName2 = visitLowPrecedenceNode(nonObjectFunctionCallNode.getArgumentNodes().get(i).getLowPrecedence());
+                                            if (!foundClassName1.equals(foundClassName2)) {
+                                                throw new CompilerException("ERROR: Argument type mismatch in function call (" + functionName + "). Found " + foundClassName1 + " and " + foundClassName2, nonObjectFunctionCallNode.getCodePosition());
                                             }
-                                        } else
+                                        }
+                                        else
                                             throw new CompilerException("ERROR: Argument (" + nonObjectFunctionCallNode.getArgumentNodes().get(i) + ") in function call (" + functionName + ") with missing type.", nonObjectFunctionCallNode.getCodePosition());
-                                    } else
+                                    }
+
+                                    else
                                         System.out.println("get class name data type was null");
                                 }
                                 notFound = false;
-                                return functionDeclarationNode;
+                                functionDeclarationNodeReturn = functionDeclarationNode;
                             }
 
                         } else if (functionDeclarationNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
                             notFound = false;
-                            return functionDeclarationNode;
+                            functionDeclarationNodeReturn = functionDeclarationNode;
                         }
 
                         else if (notFound && functionDeclarationNode.getFunctionArgNodes() != null)
@@ -435,15 +468,13 @@ public class TypeChecking {
 
                 if (notFound)
                     throw new CompilerException("ERROR: No function with matching parameters was found. (" + functionName + ")", nonObjectFunctionCallNode.getCodePosition());
+                return functionDeclarationNodeReturn;
 
             } else {
                 throw new CompilerException("ERROR: Missing function for function call. (" + functionName + ")", nonObjectFunctionCallNode.getCodePosition());
             }
 
         }
-
-        return null;
-
     }
 
     private String visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
@@ -453,7 +484,14 @@ public class TypeChecking {
         ObjectDeclarationNode objectDeclarationNode;
         ClassDeclarationNode classDeclarationNode;
 
-        if (!listOfPredefinedClasses.contains(variableName)) {
+
+        if (listOfPredefinedClasses.contains(variableName)) {
+            switch (variableName) {
+                case "Color":
+                    return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+            }
+        }
+        else {
             
             // Check if variable is declared and initialized
             if (retrieveSymbol(variableName) != null) {
@@ -480,7 +518,7 @@ public class TypeChecking {
                         for (FunctionDeclarationNode functionDeclarationNode : classDeclarationNode.getClassBlockNode().getFunctionDeclarationNodes()) {
 
                             // Look for the function with the same name
-                            for (String predefinedFunctionName : listOfPredefinedFunctions) {
+                            for (String predefinedFunctionName : predefinedFunctions.keySet()) {
                                 if (functionName.equals(predefinedFunctionName)) {
                                     existingFunction = true;
                                 } else if (functionDeclarationNode.getFunctionName().equals(functionName)) {
@@ -514,6 +552,8 @@ public class TypeChecking {
                 }
             }
         }
+
+        // Void function
         return null;
     }
 
@@ -650,6 +690,18 @@ public class TypeChecking {
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
         String className = functionDeclarationNode.getClassName();
 
+        if (className != null)
+            throw new CompilerException("Functions currently cannot return objects", functionDeclarationNode.getCodePosition());
+
+        // Non-Void function = pure function (no objects as function arguments)
+        boolean pureFunction = (returnType != null);
+        if (pureFunction) {
+            if (functionArgs != null)
+                for (FunctionArgNode functionArgNode : functionArgs)
+                    if (functionArgNode.getClassName() != null)
+                        throw new CompilerException(functionArgNode.getClassName() + " not allowed as argument in non-Void function", functionDeclarationNode.getCodePosition());
+        }
+
         //Check if name matches predefined
         functionNameMatchesPredefined(functionDeclarationNode);
 
@@ -660,10 +712,10 @@ public class TypeChecking {
             retrievedFunctions = null;
 
         // Same name
-        if (retrievedFunctions == null)
+        if (retrievedFunctions.isEmpty())
             enterSymbol(functionName, functionDeclarationNode);
 
-        if (retrievedFunctions != null) {
+        if (retrievedFunctions.size() > 0) {
             boolean sameReturnType = true;
             boolean sameFunctionArgs = false;
             boolean sameAmountOfArgs = false;
@@ -714,7 +766,7 @@ public class TypeChecking {
 
     private void functionNameMatchesPredefined(FunctionDeclarationNode function) {
         String functionName = function.getFunctionName();
-        for (String predefinedName : listOfPredefinedFunctions)
+        for (String predefinedName : predefinedFunctions.keySet())
         if (functionName.equals(predefinedName))
             throw new CompilerException("ERROR: A predefined function with this name exists (" + functionName + ")", function.getCodePosition());
 
@@ -722,6 +774,9 @@ public class TypeChecking {
 
     private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
+
+        // Non-Void function = pure function (no object declarations and no object function calls)
+        boolean pureFunction = (returnType != null);
 
         //Visit all function arguments and add them as Variable Declarations in the new scope
         if (functionDeclarationNode.getFunctionArgNodes() != null) {
@@ -748,6 +803,13 @@ public class TypeChecking {
         }
 
         for (StatementNode statement : blockNode.getStatementNodes()) {
+            if (pureFunction) {
+                if (statement instanceof ObjectDeclarationNode)
+                    throw new CompilerException("Object declaration not allowed in non-Void function", statement.getCodePosition());
+                else if (statement instanceof ObjectFunctionCallNode)
+                    throw new CompilerException("Object function call not allowed in non-Void function", statement.getCodePosition());
+            }
+
             visitStatement(statement);
         }
         if (returnType != null) {
@@ -830,40 +892,51 @@ public class TypeChecking {
                             VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) retrieveSymbol(variableName);
                             if (variableDeclarationNode != null)
                                 return Enums.dataTypeToStringSpook(variableDeclarationNode.getDataType());
+                            else
+                                throw new CompilerException("Missing VariableDeclarationNode", lowPrecedenceNode.getCodePosition());
                         }
                         else if (retrieveSymbol(variableName) instanceof ObjectDeclarationNode) {
                             ObjectDeclarationNode objectDeclarationNode = (ObjectDeclarationNode) retrieveSymbol(variableName);
                             if (objectDeclarationNode != null)
                                 return objectDeclarationNode.getClassName();
+                            else
+                                throw new CompilerException("Missing ObjectDeclarationNode", lowPrecedenceNode.getCodePosition());
                         }
+                        else
+                            throw new CompilerException("Retrieved symbol for " + variableName + " was not varDec or objDec.", lowPrecedenceNode.getCodePosition());
                     }
 
                     // Operand: Non-object function Call
-                    if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
+                    else if (atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode() != null) {
                         NonObjectFunctionCallNode nonObjectFunctionCallNode = atomPrecedenceNode.getOperand().getNonObjectFunctionCallNode();
                         FunctionDeclarationNode functionDeclarationNode = visitNonObjectFunctionCall(nonObjectFunctionCallNode);
 
-                        if (functionDeclarationNode != null)
+                        if (functionDeclarationNode != null) {
                             if (functionDeclarationNode.getReturnType() != null)
                                 return Enums.dataTypeToStringSpook(functionDeclarationNode.getReturnType());
                             else if (functionDeclarationNode.getClassName() != null)
                                 return functionDeclarationNode.getClassName();
+                            else
+                                throw new CompilerException("Invalid FunctionDeclarationNode", lowPrecedenceNode.getCodePosition());
+                        }
+                        else
+                            throw new CompilerException("Missing FunctionDeclarationNode", lowPrecedenceNode.getCodePosition());
                     }
 
                     // Operand: Object function Call
-                    if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
+                    else if (atomPrecedenceNode.getOperand().getObjectFunctionCallNode() != null) {
                         ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
                         return visitObjectFunctionCall(objectFunctionCallNode);
                     }
 
-                // Operand: Swizzle
-                if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
-                    SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
-                    visitSwizzle(swizzleNode);
-                    int swizzleLength = 0;
+                    // Operand: Swizzle
+                    else if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
+                        SwizzleNode swizzleNode = atomPrecedenceNode.getOperand().getSwizzleNode();
+                        visitSwizzle(swizzleNode);
+                        int swizzleLength = 0;
 
-                    if (swizzleNode.getSwizzle() != null)
-                        swizzleLength = swizzleNode.getSwizzle().length();
+                        if (swizzleNode.getSwizzle() != null)
+                            swizzleLength = swizzleNode.getSwizzle().length();
 
                         if (swizzleLength == 4)
                             return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
@@ -877,34 +950,161 @@ public class TypeChecking {
                             throw new CompilerException("ERROR: Too long swizzle", swizzleNode.getCodePosition());
                     }
 
-                    if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
+                    else if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
                         return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
 
-                    // Operand: Low precedence
-                    if (atomPrecedenceNode.getLowPrecedenceNode() != null)
-                        return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
+                    else
+                        throw new CompilerException("Invalid Operand", lowPrecedenceNode.getCodePosition());
+
                 }
+
+                // Operand: Low precedence
+                else if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+                    return visitLowPrecedenceNode(atomPrecedenceNode.getLowPrecedenceNode());
+
+                else
+                    throw new CompilerException("Invalid AtomPrecedence", lowPrecedenceNode.getCodePosition());
             }
         }
-        return null;
+        throw new CompilerException("null");
     }
 
     private void visitBoolExpression(BoolExpressionNode boolExpressionNode) {
-        //TODO: true > false, 1 && 1
-
         BoolOperationsNode boolOperationsNode = boolExpressionNode.getBoolOperationsNode();
+        ArrayList<BoolOperationExtendNode> extendNodes = boolOperationsNode.getBoolOperationExtendNodes();
 
-        if (boolOperationsNode.getBoolOperationNode() != null) {
-            for (BoolOperationExtendNode extendNode : boolOperationsNode.getBoolOperationExtendNodes()) {
-                    if (!booleanOperatorList.contains(extendNode.getBoolOperator())) {
-                        throw new CompilerException("Operator " + Enums.boolOperatorToString(extendNode.getBoolOperator()) + " not allowed with Bools", boolExpressionNode.getCodePosition());
+        if (extendNodes != null) {
+            for (int currentExtend = 0; currentExtend < extendNodes.size(); currentExtend++) {
+                //Go through all extendNodes, if the operator matches <, >, >=, <= check that both operands are arithExpression
+                if (numberOperatorList.contains(extendNodes.get(currentExtend).getBoolOperator())) {
+                    //For the first node we check the original operand is an arithExpression (Original operator extend)
+                    if (currentExtend == 0) {
+                        if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) && extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM))) {
+                                //OK type
+                            }
+                            else
+                                throw new CompilerException("Operator (" + extendNodes.get(currentExtend).getBoolOperator() + ") requires Num type. Found: " + variableType + " and " + extendVariableType, boolExpressionNode.getCodePosition());
+                        }
+                    } else
+                        //Check for currentExtend - 1 operator currentExtend
+                        if (extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM)) && extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.NUM))) {
+                                //OK type
+                            }
+                            else
+                                throw new CompilerException("Operator (" + extendNodes.get(currentExtend).getBoolOperator() + ") requires Num type. Found: " + variableType + " and " + extendVariableType, boolExpressionNode.getCodePosition());
+                        }
+
+                }
+                //Check if the operator matches &&, ||
+                if (booleanOperatorList.contains(extendNodes.get(currentExtend).getBoolOperator())) {
+                    //For the first node we check the original operand is a boolExpression (Original operator extend)
+                    if (currentExtend == 0) {
+                        if (boolOperationsNode.getBoolOperationNode() != null || extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                            //OK type
+                        }
+                        //Check variables
+                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL))) {
+                                //OK type
+                            }
+                            else
+                                throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
+                        }
                     }
+                    else {
+                        //Check for currentExtend - 1 operator currentExtend
+                        if (extendNodes.get(currentExtend).getBoolOperationNode() != null || extendNodes.get(currentExtend - 1).getBoolOperationNode() != null) {
+                            //OK type
+                        }
+                        //Check variables
+                        else if (extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL))) {
+                                //OK type
+                            }
+                            else
+                                throw new CompilerException("Operator (" + Enums.boolOperatorToString(extendNodes.get(currentExtend).getBoolOperator()) + ") requires boolean expressions. Check for missing parentheses", boolExpressionNode.getCodePosition());
+                        }
+                    }
+                }
+
+                //Check for != and ==, where both type must match
+                if (extendNodes.get(currentExtend).getBoolOperator() == Enums.BoolOperator.EQUAL || extendNodes.get(currentExtend).getBoolOperator() == Enums.BoolOperator.NOT_EQUAL) {
+                    //Special check for the first node
+                    if (currentExtend == 0) {
+
+                        if (boolOperationsNode.getBoolOperationNode() != null && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                            //OK type
+                        }
+                        // originalType = bool && extend = boolOperation
+                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                                //OK type
+                            }
+                        }
+                        // original = boolOperation && extendType = bool
+                        else if (extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && boolOperationsNode.getBoolOperationNode() != null) {
+                                //OK type
+                            }
+                        }
+                        //The 2 LowPrecedences match type
+                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(extendVariableType)) {
+                                //OK type
+                            }
+                        } else
+                            throw new CompilerException("Cannot compare expressions of different types", boolExpressionNode.getCodePosition());
+
+                    } else {
+                        if (extendNodes.get(currentExtend - 1).getBoolOperationNode() != null && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                            //OK type
+                        } else if (extendNodes.get(currentExtend - 1).getArithExpressionNode() != null && extendNodes.get(currentExtend).getArithExpressionNode() != null) {
+                            //OK type
+                        }
+                        // prevoiusExtend = boolOperation && currentExtendType = bool
+                        else if (extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendNodes.get(currentExtend - 1).getBoolOperationNode() != null) {
+                                //OK type
+                            }
+                        }
+                        //The 2 LowPrecedences match type
+                        else if (extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                            String variableType = visitLowPrecedenceNode(extendNodes.get(currentExtend - 1).getArithExpressionNode().getLowPrecedenceNode());
+                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+
+                            if (variableType.equals(extendVariableType)) {
+                                //OK type
+                            }
+                        } else
+                            throw new CompilerException("Cannot compare expressions of different types", boolExpressionNode.getCodePosition());
+
+                    }
+                }
             }
         }
-
-
-        //BoolOperationNode boolOperationNode = boolOperationsNode.getBoolOperationNode();
-        //ArrayList<BoolOperationExtendNode> boolOperationExtendNodes = boolOperationsNode.getBoolOperationExtendNodes();
     }
 
     private void visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
@@ -953,11 +1153,13 @@ public class TypeChecking {
         else if (expressionNode instanceof BoolExpressionNode)
             return Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
         else if (expressionNode instanceof Vector2ExpressionNode) {
+            Vector2ExpressionNode vec2 = (Vector2ExpressionNode) expressionNode;
             String tempDataType;
             tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
-            if (expressionNode instanceof Vector3ExpressionNode) {
+            if (vec2 instanceof Vector3ExpressionNode) {
+                Vector3ExpressionNode vec3 = (Vector3ExpressionNode) vec2;
                 tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
-                if (expressionNode instanceof Vector4ExpressionNode)
+                if (vec3 instanceof Vector4ExpressionNode)
                     tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
             }
             return tempDataType;

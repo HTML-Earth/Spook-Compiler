@@ -21,13 +21,13 @@ public class TernaryOperatorNode extends ExpressionNode {
         this.expressionNode2 = expressionNode2;
     }
 
-    public TernaryOperatorNode(ExpressionNode expressionNode1, ExpressionNode expressionNode2, String variableName) {
+    public TernaryOperatorNode(String variableName, ExpressionNode expressionNode1, ExpressionNode expressionNode2) {
         this.expressionNode1 = expressionNode1;
         this.expressionNode2 = expressionNode2;
         this.variableName = variableName;
     }
 
-    public TernaryOperatorNode(ExpressionNode expressionNode1, ExpressionNode expressionNode2, String variableName, Enums.BoolOperator boolOperator) {
+    public TernaryOperatorNode(Enums.BoolOperator boolOperator, String variableName,ExpressionNode expressionNode1, ExpressionNode expressionNode2) {
         if (boolOperator != Enums.BoolOperator.NOT)
             throw new IllegalArgumentException("Boolean operator must be 'NOT'");
         this.expressionNode1 = expressionNode1;
@@ -36,13 +36,13 @@ public class TernaryOperatorNode extends ExpressionNode {
         this.boolOperator = boolOperator;
     }
 
-    public TernaryOperatorNode(ExpressionNode expressionNode1, ExpressionNode expressionNode2, NonObjectFunctionCallNode nonObjectFunctionCallNode) {
+    public TernaryOperatorNode(NonObjectFunctionCallNode nonObjectFunctionCallNode, ExpressionNode expressionNode1, ExpressionNode expressionNode2) {
         this.expressionNode1 = expressionNode1;
         this.expressionNode2 = expressionNode2;
         this.nonObjectFunctionCallNode = nonObjectFunctionCallNode;
     }
 
-    public TernaryOperatorNode(ExpressionNode expressionNode1, ExpressionNode expressionNode2, ObjectFunctionCallNode objectFunctionCallNode) {
+    public TernaryOperatorNode(ObjectFunctionCallNode objectFunctionCallNode, ExpressionNode expressionNode1, ExpressionNode expressionNode2) {
         this.expressionNode1 = expressionNode1;
         this.expressionNode2 = expressionNode2;
         this.objectFunctionCallNode = objectFunctionCallNode;
