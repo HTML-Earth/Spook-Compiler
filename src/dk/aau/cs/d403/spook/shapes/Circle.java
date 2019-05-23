@@ -24,7 +24,6 @@ public class Circle extends Shape {
         this.inverted = BoolExpressionNode.False();
 
         if (argumentNodes.size() == 2) {
-
             this.radius = argumentNodes.get(0);
             this.color = Color.getColorArgument(argumentNodes.get(1));
         }

@@ -3,6 +3,7 @@ package dk.aau.cs.d403.ast.expressions;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.CodePosition;
 import dk.aau.cs.d403.ast.Enums;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 
 import java.util.ArrayList;
 
@@ -91,7 +92,7 @@ public class BoolOperationsNode implements ASTnode {
         else if (arithExpressionNode != null && boolOperationExtendNodes != null)
             return arithExpressionNode.prettyPrint(indent) + sb;
         else
-            return "Invalid Boolean Operations Node";
+            throw new CompilerException("Invalid Boolean Operations Node", codePosition);
     }
 
     private CodePosition codePosition;

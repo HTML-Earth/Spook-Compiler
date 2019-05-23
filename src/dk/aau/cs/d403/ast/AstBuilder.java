@@ -838,24 +838,24 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return ternaryOperatorNode;
         }
         else if (ctx.variableName() != null && ctx.NOT() != null) {
-            TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, ctx.variableName().getText(), Enums.BoolOperator.NOT);
+            TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(Enums.BoolOperator.NOT, ctx.variableName().getText(), expression1, expression2);
             ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
             return ternaryOperatorNode;
         }
         else if (ctx.variableName() != null) {
-            TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, ctx.variableName().getText());
+            TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(ctx.variableName().getText(), expression1, expression2);
             ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
             return ternaryOperatorNode;
         }
         else if (ctx.functionCall() != null) {
             functionCallNode = visitFunctionCall(ctx.functionCall());
             if (functionCallNode instanceof NonObjectFunctionCallNode) {
-                TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, (NonObjectFunctionCallNode) functionCallNode);
+                TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode((NonObjectFunctionCallNode) functionCallNode, expression1, expression2);
                 ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
                 return ternaryOperatorNode;
             }
             else if (functionCallNode instanceof ObjectFunctionCallNode) {
-                TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode(expression1, expression2, (ObjectFunctionCallNode) functionCallNode);
+                TernaryOperatorNode ternaryOperatorNode = new TernaryOperatorNode((ObjectFunctionCallNode) functionCallNode, expression1, expression2);
                 ternaryOperatorNode.setCodePosition(getCodePosition(ctx));
                 return ternaryOperatorNode;
             }
