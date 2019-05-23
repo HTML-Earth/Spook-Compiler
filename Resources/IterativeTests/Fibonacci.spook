@@ -1,0 +1,23 @@
+Shader{
+
+    Num radical = radians(137.51+Time/50);
+    Num screenX = Screen.x/2;
+    Num screenY = Screen.y/2;
+
+    for (Num n = 0 to 400) {
+
+        Num rad = 0.02 * sqrt(n*1);
+        Num angle = n * radical;
+        Num xPos = cos(angle) * rad * Screen.x + screenX;
+        Num yPos = sin(angle) * rad * Screen.y + screenY;
+
+        Vec2 circlePos = (xPos, yPos);
+
+        Circle cir = (2.5, Color.white());
+        cir.setPosition(circlePos);
+        Scene.add(cir);
+
+    }
+
+    Scene.setColor(Color.black());
+}

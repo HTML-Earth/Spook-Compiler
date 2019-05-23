@@ -1,6 +1,7 @@
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
 import dk.aau.cs.d403.codegen.CodeGenerator;
+import dk.aau.cs.d403.codegen.PrintGLSL;
 import dk.aau.cs.d403.parser.SpookLexer;
 import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.TypeChecking;
@@ -21,10 +22,11 @@ class MathTests {
 
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+            programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
             CodeGenerator codeGenerator = new CodeGenerator();
-            //codeGenerator.GenerateGLSL(programNode);
+            codeGenerator.GenerateGLSL(programNode);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,5 +61,10 @@ class MathTests {
     @Test
     void SwizzlinTest() {
         testShader("SwizzlinTest");
+    }
+
+    @Test
+    void mix() {
+        testShader("mix");
     }
 }

@@ -34,6 +34,10 @@ public class AtomPrecedenceNode implements ASTnode {
         this.operand = new ArithOperandNode(nonObjectFunctionCallNode);
     }
 
+    public AtomPrecedenceNode(String variableName) {
+        this.operand = new ArithOperandNode(variableName);
+    }
+
     public ArithOperandNode getOperand() {
         return operand;
     }
@@ -48,6 +52,10 @@ public class AtomPrecedenceNode implements ASTnode {
 
     public static AtomPrecedenceNode zero() {
         return new AtomPrecedenceNode(ArithOperandNode.zero());
+    }
+
+    public void renameVariable(String newName) {
+        operand.renameVariable(newName);
     }
 
     @Override

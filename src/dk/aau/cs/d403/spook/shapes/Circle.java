@@ -5,6 +5,7 @@ import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
+import dk.aau.cs.d403.errorhandling.InvalidAmountOfArgumentsException;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.color.Color;
 
@@ -23,14 +24,18 @@ public class Circle extends Shape {
 
         this.inverted = BoolExpressionNode.False();
 
-        if (argumentNodes.size() == 2) {
-
+        if (argumentNodes.size() == 1) {
+            // (Num radius)
+            this.radius = argumentNodes.get(0);
+            this.color = Color.magenta();
+        }
+        else if (argumentNodes.size() == 2) {
+            // (Num radius, Vec4 color)
             this.radius = argumentNodes.get(0);
             this.color = Color.getColorArgument(argumentNodes.get(1));
         }
-
         else
-            throw new CompilerException("ERROR: Invalid number of arguments expecting 2 arguments ex (Num, Vec4) Found " + argumentNodes.size() + " arguments");
+            throw new InvalidAmountOfArgumentsException("Circle constructor", 1,2, argumentNodes.size());
     }
 
     public static String getStruct() {

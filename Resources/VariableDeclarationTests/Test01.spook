@@ -6,12 +6,12 @@ Shader {
     Num i, Hej = 0, k = Hej;
 
     Num var2 = giveMeTen(10, 2);
+    Num var47 = giveMeTen();
 }
-
-Num giveMeTen() {
-return 1;
-}
-
 Num giveMeTen(Num arg1, Num arg2) {
-        return 10;
+    return 10;
 }
+Num giveMeTen() {
+    return 1;
+}
+

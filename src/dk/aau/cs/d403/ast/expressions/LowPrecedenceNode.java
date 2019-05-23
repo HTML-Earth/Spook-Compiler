@@ -55,12 +55,21 @@ public class LowPrecedenceNode implements ASTnode {
         this.highPrecedenceNodes.add(new HighPrecedenceNode(nonObjectFunctionCallNode));
     }
 
+    public LowPrecedenceNode(String variableName) {
+        this.highPrecedenceNodes = new ArrayList<>();
+        this.highPrecedenceNodes.add(new HighPrecedenceNode(variableName));
+    }
+
     public ArrayList<HighPrecedenceNode> getHighPrecedenceNodes() {
         return highPrecedenceNodes;
     }
 
     public ArrayList<Enums.Operator> getOperators() {
         return operators;
+    }
+
+    public void renameVariable (String newName) {
+        highPrecedenceNodes.get(0).renameVariable(newName);
     }
 
     @Override

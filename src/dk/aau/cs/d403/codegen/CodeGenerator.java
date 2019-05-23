@@ -23,6 +23,7 @@ public class CodeGenerator {
     private HashSet<String> usedClasses;
     private static HashMap<String, VariableDeclarationNode> variables;
     private LinkedHashSet<String> usedVariables;
+    private ArrayList<FunctionDeclarationNode> pureFunctions;
 
     public static HashMap<String, VariableDeclarationNode> getVariables(){
         return variables;
@@ -37,6 +38,8 @@ public class CodeGenerator {
 
         variables = new HashMap<>();
         usedVariables = new LinkedHashSet<>();
+
+        pureFunctions = new ArrayList<>();
 
         ProgramNode program = visitProgram(ast);
 
@@ -77,9 +80,11 @@ public class CodeGenerator {
         sb.append(";\n");
 
         sb.append(Shape.getScaleFunctionSignature2D());
-        sb.append(";\n");
+        sb.append(";\n\n");
 
-        sb.append("\n");
+        for (FunctionDeclarationNode functionDeclarationNode : pureFunctions) {
+            sb.append(PrintGLSL.printFunctionDeclaration(functionDeclarationNode, true));
+        }
     }
 
     private void generateFunctions() {
@@ -110,6 +115,10 @@ public class CodeGenerator {
         sb.append("{\n\t");
         sb.append(Shape.getScaleFunctionBody2D());
         sb.append("\n}\n\n");
+
+        for (FunctionDeclarationNode functionDeclarationNode : pureFunctions) {
+            sb.append(PrintGLSL.printFunctionDeclaration(functionDeclarationNode, false));
+        }
     }
 
     private void generateMain() {
@@ -206,11 +215,29 @@ public class CodeGenerator {
     }
 
     private ProgramNode visitProgram(ProgramNode programNode) {
-        return new ProgramNode(visitMain(programNode.getMainNode()),programNode.getClassDeclarationNodes(), programNode.getFunctionDeclarationNodes());
+        MainNode mainNode = visitMain(programNode.getMainNode());
+        ArrayList<ClassDeclarationNode> classDeclarationNodes = programNode.getClassDeclarationNodes();
+        ArrayList<FunctionDeclarationNode> functionDeclarationNodes = new ArrayList<>();
+
+        for (FunctionDeclarationNode functionDeclarationNode : programNode.getFunctionDeclarationNodes()) {
+            functionDeclarationNodes.add(visitFunctionDeclaration(functionDeclarationNode));
+        }
+
+        return new ProgramNode(mainNode, classDeclarationNodes, functionDeclarationNodes);
     }
 
     private MainNode visitMain(MainNode mainNode) {
         return new MainNode(visitBlock(mainNode.getBlockNode()));
+    }
+
+    private FunctionDeclarationNode visitFunctionDeclaration(FunctionDeclarationNode functionDeclarationNode) {
+        if (functionDeclarationNode.getReturnType() != null) {
+            pureFunctions.add(functionDeclarationNode);
+        }
+        else {
+            // Should have been inserted into main. Do nothing here
+        }
+        return functionDeclarationNode;
     }
 
     private BlockNode visitBlock(BlockNode blockNode) {
@@ -693,13 +720,12 @@ public class CodeGenerator {
             case "Scene":
                 switch (functionName) {
                     case "add":
-                        String objectName = argumentNodes.get(0)
-                                .getLowPrecedence()
-                                .getHighPrecedenceNodes().get(0)
-                                .getAtomPrecedenceNodes().get(0)
-                                .getOperand()
-                                .getVariableName();
+                        String objectName = "";
+                        if (argumentNodes.get(0).isOnlyVariableName())
+                            objectName = argumentNodes.get(0).getVariableName();
+
                         SpookObject object = spookObjects.get(objectName);
+
                         if (object != null) {
                             object.setParent(scene);
 
@@ -712,12 +738,15 @@ public class CodeGenerator {
                             if (argumentNodes.size() > 3)
                                 object.setScale(argumentNodes.get(3));
                         }
+                        else {
+                            throw new CompilerException("Object '" + objectName + "' cannot be added to scene, because it does not exist.", objectFunctionCallNode.getCodePosition());
+                        }
                         break;
                     case "setColor":
                         scene.setColor(Color.getColorArgument(argumentNodes.get(0)));
                         break;
                     default:
-                        throw new RuntimeException("Unknown function: " + functionName);
+                        throw new CompilerException("Unknown function: " + functionName, objectFunctionCallNode.getCodePosition());
                 }
                 break;
             case "Color":
@@ -727,7 +756,7 @@ public class CodeGenerator {
                 SpookObject object = spookObjects.get(objectVariableName);
 
                 if (object == null)
-                    throw new RuntimeException("Object (" + objectVariableName + ") not found");
+                    throw new CompilerException("Object (" + objectVariableName + ") not found", objectFunctionCallNode.getCodePosition());
 
                 switch (functionName) {
                     case "setPosition":
@@ -739,15 +768,22 @@ public class CodeGenerator {
                     case "setScale":
                         object.setScale(argumentNodes);
                         break;
+                    case "setColor":
+                        if (object instanceof Shape)
+                            ((Shape)object).setColor(Color.getColorArgument(argumentNodes.get(0)));
+                        else
+                            throw new CompilerException("Cannot setColor() on object (" + object.getName() + ") because it is not a Shape", objectFunctionCallNode.getCodePosition());
+                        break;
                     case "setParent":
-                        String parentName = argumentNodes.get(0)
-                                .getLowPrecedence()
-                                .getHighPrecedenceNodes().get(0)
-                                .getAtomPrecedenceNodes().get(0)
-                                .getOperand()
-                                .getVariableName();
+                        String parentName = "";
+                        if (argumentNodes.get(0).isOnlyVariableName())
+                            parentName = argumentNodes.get(0).getVariableName();
+
                         SpookObject parentObject = spookObjects.get(parentName);
-                        if (parentObject != null)
+
+                        if (parentObject == null)
+                            throw new CompilerException("Object (" + objectVariableName + ") not found", objectFunctionCallNode.getCodePosition());
+                        else
                             object.setParent(parentObject);
                         break;
                     case "setInverted":
@@ -757,7 +793,7 @@ public class CodeGenerator {
                         }
                         break;
                     default:
-                        throw new RuntimeException("Unknown function: " + functionName + " on object: " + objectVariableName);
+                        throw new CompilerException("Unknown function: " + functionName + " on object: " + objectVariableName, objectFunctionCallNode.getCodePosition());
                 }
         }
 

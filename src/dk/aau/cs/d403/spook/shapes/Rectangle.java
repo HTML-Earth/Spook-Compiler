@@ -4,6 +4,7 @@ import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.BoolExpressionNode;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
+import dk.aau.cs.d403.errorhandling.InvalidAmountOfArgumentsException;
 import dk.aau.cs.d403.spook.Vector2;
 import dk.aau.cs.d403.spook.color.Color;
 
@@ -22,10 +23,23 @@ public class Rectangle extends Shape {
 
         this.inverted = BoolExpressionNode.False();
 
-        if (argumentNodes.size() == 3) {
+        if (argumentNodes.size() == 1) {
+            // (Vec2 size)
+            this.size = Vector2.evaluateLowPrecedence(argumentNodes.get(0).getLowPrecedence());
+            this.color = Color.magenta();
+        }
+        else if (argumentNodes.size() == 2) {
+            // (Num width, Num height)
+            this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
+            this.color = Color.magenta();
+        }
+        else if (argumentNodes.size() == 3) {
+            // (Num width, Num height, Vec4 color)
             this.size = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
             this.color = Color.getColorArgument(argumentNodes.get(2));
         }
+        else
+            throw new InvalidAmountOfArgumentsException("Rectangle constructor", 1,3, argumentNodes.size());
     }
 
     public static String getStruct() {
