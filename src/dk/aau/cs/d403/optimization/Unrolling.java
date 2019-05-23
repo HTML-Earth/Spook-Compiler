@@ -8,7 +8,6 @@ import dk.aau.cs.d403.ast.structure.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Stack;
 
 public class Unrolling {
@@ -120,7 +119,9 @@ public class Unrolling {
 
     private void renameVarsInDeclaration(DeclarationNode declarationNode, String oldName, String newName) {
         if (declarationNode instanceof VariableDeclarationNode) {
-            throw new CompilerException("NOT YET IMPLEMENTED");
+            for (VarDeclInitNode varDeclInitNode : ((VariableDeclarationNode)declarationNode).getVarDeclInitNodes()) {
+                renameVarsInAssignment(varDeclInitNode.getAssignmentNode(), oldName, newName);
+            }
         }
         else if (declarationNode instanceof ObjectDeclarationNode) {
             throw new CompilerException("NOT YET IMPLEMENTED");
@@ -128,7 +129,59 @@ public class Unrolling {
     }
 
     private void renameVarsInAssignment(AssignmentNode assignmentNode, String oldName, String newName) {
-        throw new CompilerException("NOT YET IMPLEMENTED");
+        if (assignmentNode.getVariableName().equals(oldName))
+            assignmentNode.renameVariable(newName);
+
+        renameVarsInExpression(assignmentNode.getExpressionNode(), oldName, newName);
+    }
+
+    private void renameVarsInExpression(ExpressionNode expressionNode, String oldName, String newName) {
+        if (expressionNode instanceof ArithExpressionNode) {
+            ArithExpressionNode arithExpressionNode = (ArithExpressionNode)expressionNode;
+            renameVarsInLowPrecedence(arithExpressionNode.getLowPrecedenceNode(), oldName, newName);
+        }
+        else if (expressionNode instanceof BoolExpressionNode) {
+            BoolExpressionNode boolExpressionNode = (BoolExpressionNode)expressionNode;
+            renameVarsInBoolOperations(boolExpressionNode.getBoolOperationsNode(), oldName, newName);
+        }
+        else if (expressionNode instanceof Vector4ExpressionNode) {
+            Vector4ExpressionNode vector4ExpressionNode = (Vector4ExpressionNode)expressionNode;
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode1(), oldName, newName);
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode2(), oldName, newName);
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode3(), oldName, newName);
+            renameVarsInExpression(vector4ExpressionNode.getArithExpressionNode4(), oldName, newName);
+        }
+        else if (expressionNode instanceof Vector3ExpressionNode) {
+            Vector3ExpressionNode vector3ExpressionNode = (Vector3ExpressionNode)expressionNode;
+            renameVarsInExpression(vector3ExpressionNode.getArithExpressionNode1(), oldName, newName);
+            renameVarsInExpression(vector3ExpressionNode.getArithExpressionNode2(), oldName, newName);
+            renameVarsInExpression(vector3ExpressionNode.getArithExpressionNode3(), oldName, newName);
+        }
+        else if (expressionNode instanceof Vector2ExpressionNode) {
+            Vector2ExpressionNode vector2ExpressionNode = (Vector2ExpressionNode)expressionNode;
+            renameVarsInExpression(vector2ExpressionNode.getArithExpressionNode1(), oldName, newName);
+            renameVarsInExpression(vector2ExpressionNode.getArithExpressionNode2(), oldName, newName);
+        }
+        else throw new CompilerException("NOT YET IMPLEMENTED");
+    }
+
+    private void renameVarsInLowPrecedence(LowPrecedenceNode lowPrecedenceNode, String oldName, String newName) {
+        for (HighPrecedenceNode highPrecedenceNode : lowPrecedenceNode.getHighPrecedenceNodes())
+            renameVarsInHighPrecedence(highPrecedenceNode, oldName, newName);
+    }
+
+    private void renameVarsInHighPrecedence(HighPrecedenceNode highPrecedenceNode, String oldName, String newName) {
+        for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes())
+            renameVarsInAtomPrecedence(atomPrecedenceNode, oldName, newName);
+    }
+
+    private void renameVarsInAtomPrecedence(AtomPrecedenceNode atomPrecedenceNode, String oldName, String newName) {
+        if (atomPrecedenceNode.getLowPrecedenceNode() != null)
+            renameVarsInLowPrecedence(atomPrecedenceNode.getLowPrecedenceNode(), oldName, newName);
+
+        if (atomPrecedenceNode.getOperand() != null)
+            if (atomPrecedenceNode.getOperand().getVariableName().equals(oldName))
+                atomPrecedenceNode.getOperand().renameVariable(newName);
     }
 
     private void renameVarsObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode, String oldName, String newName) {
@@ -138,6 +191,10 @@ public class Unrolling {
                     objectArgumentNode.renameVariable(newName);
             }
         }
+    }
+
+    private void renameVarsInBoolOperations(BoolOperationsNode boolOperationsNode, String oldName, String newName) {
+        throw new CompilerException("NOT YET IMPLEMENTED");
     }
 
     private void renameVarsInNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode, String oldName, String newName) {

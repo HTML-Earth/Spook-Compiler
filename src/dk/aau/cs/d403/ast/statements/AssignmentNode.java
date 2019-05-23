@@ -69,6 +69,12 @@ public class AssignmentNode extends StatementNode {
         return sb.toString();
     }
 
+    public void renameVariable(String newName) {
+        if (variableName != null) {
+            variableName = newName;
+        }
+    }
+
     private CodePosition codePosition;
 
     @Override

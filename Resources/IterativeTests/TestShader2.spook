@@ -30,17 +30,17 @@ Shader{
 
   #And Action!
   Scene.setColor(Color.black());
-  Scene.add(circleFactory(radius, Color.red()));
+  #Scene.add(circleFactory(radius, Color.red()));
   Scene.add(rec, 100, yPos);
   Scene.add(billy.setShadow(billy));
   Scene.add(billy);
 }
 
 #Totally unnecessary function to create new circles
-Circle circleFactory(Num radius, Color color) {
-  Circle circle = (radius, color);
-  return circle;
-}
+#Circle circleFactory(Num radius, Color color) {
+#  Circle circle = (radius, color);
+#  return circle;
+#}
 
 Class Bulletbill extends Shape{
   Num length, height;
@@ -63,11 +63,11 @@ Class Bulletbill extends Shape{
   }
 
   #Create shadow func
-  Bulletbill setShadow(Bulletbill bulletbill){
-    Bulletbill billShadow = bulletbill;
+  #Bulletbill setShadow(Bulletbill bulletbill){
+    #Bulletbill billShadow = bulletbill;
 
     #Scale
-    billShadow.setScale(1.3, 0.9);
+    #billShadow.setScale(1.3, 0.9);
 
     #Stretch rectangle
     #billShadow.body.setScale(1.3, 0.9);
@@ -76,8 +76,8 @@ Class Bulletbill extends Shape{
     #billShadow.head.setScale(1.3, 0.9); double dot doesn't work, you need getter
 
     #Place shadow beneath original figure
-    billShadow.setParent(bulletbill - 100);
+    #billShadow.setParent(bulletbill - 100);
 
-    return billShadow;
-  }
+    #return billShadow;
+  #}
 }

@@ -1,0 +1,15 @@
+Shader {
+    Num radius = CoolFunction();
+    Circle c = (radius, Color.red());
+    c.setPosition(CoolFunctionWithArguments(50,100));
+    Scene.add(c);
+}
+
+Num CoolFunction() {
+    return abs(sin(Time * 2) * 50);
+}
+
+Vec2 CoolFunctionWithArguments(Num xOffset, Num yOffset) {
+    Vec2 result = (xOffset + Screen.x / 2, yOffset + Screen.y / 2);
+    return result;
+}
