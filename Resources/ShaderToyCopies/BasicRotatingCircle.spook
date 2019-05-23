@@ -1,0 +1,32 @@
+Shader{
+    #   Parameters
+    Vec4 backCol = (133 / 255, 224 / 255, 224 / 255, 1);
+    Vec4 backCirCol = (0, 75 / 255, 102 / 255, 1);
+    Vec4 rotCirCol = (204 / 255, 255 / 255, 0, 1);
+
+    Num xPos = Screen.x / 2;
+    Num yPos = Screen.y / 2;
+
+    Num radiusRotM = 0.04;
+    Num radiusBackM = 0.2;
+
+    Num radiusRot = radiusRotM * Screen.y;
+    Num radiusBack = radiusBackM * Screen.y;
+
+    #   Circles
+    Circle rotCircle = (radiusRot, rotCirCol);
+    Circle backCircle = (radiusBack, backCirCol);
+
+    backCircle.setRotation((Time * 5 + cos(Time * 5)*0.5) * 60);
+    backCircle.setPosition(xPos, yPos);
+
+    rotCircle.setParent(backCircle);
+    rotCircle.setPosition(90, 0);
+
+    Scene.add(backCircle);
+    Scene.setColor(backCol);
+}
+
+
+
+
