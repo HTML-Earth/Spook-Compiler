@@ -1,6 +1,7 @@
 package dk.aau.cs.d403.ast.expressions;
 
 import dk.aau.cs.d403.ast.CodePosition;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 
 public class BoolExpressionNode extends ExpressionNode {
     private BoolOperationsNode boolOperationsNode;
@@ -22,7 +23,7 @@ public class BoolExpressionNode extends ExpressionNode {
             return sb.toString();
         }
         else
-            return "Invalid BoolExpression";
+            throw new CompilerException("Invalid BoolExpression", codePosition);
     }
 
     private CodePosition codePosition;

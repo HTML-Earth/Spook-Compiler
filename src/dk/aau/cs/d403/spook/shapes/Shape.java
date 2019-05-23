@@ -78,7 +78,7 @@ public abstract class Shape extends SpookObject implements Colorable {
         }
 
         //IF ALPHA IS FULL (1)
-        if (color.getW().getLowPrecedence().getHighPrecedenceNodes().size() == 1) {
+        if (color.getW() != null && color.getW().getLowPrecedence().getHighPrecedenceNodes().size() == 1) {
             HighPrecedenceNode highPrecedenceNode = color.getW().getLowPrecedence().getHighPrecedenceNodes().get(0);
             if (highPrecedenceNode.getAtomPrecedenceNodes().size() == 1) {
                 AtomPrecedenceNode atomPrecedenceNode = highPrecedenceNode.getAtomPrecedenceNodes().get(0);

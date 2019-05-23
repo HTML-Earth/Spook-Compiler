@@ -16,6 +16,7 @@ public class Vector4 {
     private ObjectArgumentNode z;
     private ObjectArgumentNode w;
     private LowPrecedenceNode lowPrecedenceNode;
+    private TernaryOperatorNode ternaryOperatorNode;
 
     public Vector4(ObjectArgumentNode x, ObjectArgumentNode y, ObjectArgumentNode z, ObjectArgumentNode w) {
         this.x = x;
@@ -31,8 +32,16 @@ public class Vector4 {
         this.w = NumberPacking.getObjectArgumentFromDouble(w);
     }
 
+    public Vector4(String variableName) {
+        this.lowPrecedenceNode = new LowPrecedenceNode(variableName);
+    }
+
     public Vector4(LowPrecedenceNode lowPrecedenceNode) {
         this.lowPrecedenceNode = lowPrecedenceNode;
+    }
+
+    public Vector4(TernaryOperatorNode ternaryOperatorNode) {
+        this.ternaryOperatorNode = ternaryOperatorNode;
     }
 
     public Vector4(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
@@ -75,6 +84,10 @@ public class Vector4 {
         return lowPrecedenceNode;
     }
 
+    public TernaryOperatorNode getTernaryOperatorNode() {
+        return ternaryOperatorNode;
+    }
+
     public static Vector4 zero(){
         RealNumberNode zero = new RealNumberNode(0);
         ObjectArgumentNode x = NumberPacking.getObjectArgumentFromRealNumber(zero);
@@ -104,7 +117,29 @@ public class Vector4 {
     }
 
     public static Vector4 evaluateTernary(TernaryOperatorNode ternaryOperatorNode) {
-        throw new CompilerException("Not yet implemented");
+        TernaryOperatorNode evaluatedTernary;
+
+        ExpressionNode expressionNode1 = ternaryOperatorNode.getExpressionNode1();
+        ExpressionNode expressionNode2 = ternaryOperatorNode.getExpressionNode2();
+
+        //if (expressionNode1 instanceof ArithExpressionNode)
+        //    ((ArithExpressionNode)expressionNode1).getLowPrecedenceNode().getHighPrecedenceNodes().get(0).getAtomPrecedenceNodes().get(0).getOperand().getNonObjectFunctionCallNode()
+
+        if (ternaryOperatorNode.getBoolExpressionNode() != null)
+            evaluatedTernary = new TernaryOperatorNode(ternaryOperatorNode.getBoolExpressionNode(), expressionNode1, expressionNode2);
+        else if (ternaryOperatorNode.getVariableName() != null)
+            if (ternaryOperatorNode.getBoolOperator() != null)
+                evaluatedTernary = new TernaryOperatorNode(ternaryOperatorNode.getBoolOperator(), ternaryOperatorNode.getVariableName(), expressionNode1, expressionNode2);
+            else
+                evaluatedTernary = new TernaryOperatorNode(ternaryOperatorNode.getVariableName(), expressionNode1, expressionNode2);
+        else if (ternaryOperatorNode.getNonObjectFunctionCallNode() != null)
+            evaluatedTernary = new TernaryOperatorNode(ternaryOperatorNode.getNonObjectFunctionCallNode(), expressionNode1, expressionNode2);
+        else if (ternaryOperatorNode.getObjectFunctionCallNode() != null)
+            evaluatedTernary = new TernaryOperatorNode(ternaryOperatorNode.getObjectFunctionCallNode(), expressionNode1, expressionNode2);
+        else
+            throw new CompilerException("Invalid ternary", ternaryOperatorNode.getCodePosition());
+
+        return new Vector4(evaluatedTernary);
     }
 
     public static Vector4 evaluateLowPrecedence(LowPrecedenceNode lowPrecedenceNode) {
@@ -174,7 +209,8 @@ public class Vector4 {
                 throw new CompilerException("Object function call on unrecognized object: " + objectFunctionCallNode.getObjectVariableName(), arithOperandNode.getCodePosition());
         }
         else if (variableName != null) {
-            return evaluateVariable(variableName);
+            return new Vector4(variableName);
+            //return evaluateVariable(variableName);
         }
         else if (swizzleNode != null) {
             return evaluateSwizzle(swizzleNode);
@@ -185,18 +221,22 @@ public class Vector4 {
 
     public static Vector4 evaluateVariable(String variableName) {
         VariableDeclarationNode variableDeclarationNode = CodeGenerator.getVariables().get(variableName);
+
         if (variableDeclarationNode != null) {
             for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
                 if (varDeclInitNode.getAssignmentNode().getVariableName().equals(variableName))
                     if (varDeclInitNode.getAssignmentNode().getExpressionNode() != null)
-                        evaluateExpression(varDeclInitNode.getAssignmentNode().getExpressionNode());
+                        return evaluateExpression(varDeclInitNode.getAssignmentNode().getExpressionNode());
                     else if (varDeclInitNode.getAssignmentNode().getSwizzleNode() != null)
-                        evaluateSwizzle(varDeclInitNode.getAssignmentNode().getSwizzleNode());
+                        return evaluateSwizzle(varDeclInitNode.getAssignmentNode().getSwizzleNode());
                     else
                         throw new CompilerException("invalid VarDeclInit", varDeclInitNode.getCodePosition());
             }
+
+            throw new CompilerException("No varDeclInit found for " + variableName);
         }
-        throw new CompilerException("variable " + variableName + " not found");
+        else
+            throw new CompilerException("Variable " + variableName + " not found");
     }
 
     public static ExpressionNode getExpressionFromVariableName(String variableName) {

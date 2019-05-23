@@ -44,6 +44,11 @@ public class HighPrecedenceNode implements ASTnode {
         this.atomPrecedenceNodes.add(new AtomPrecedenceNode(nonObjectFunctionCallNode));
     }
 
+    public HighPrecedenceNode(String variableName) {
+        this.atomPrecedenceNodes = new ArrayList<>();
+        this.atomPrecedenceNodes.add(new AtomPrecedenceNode(variableName));
+    }
+
     public ArrayList<AtomPrecedenceNode> getAtomPrecedenceNodes() {
         return atomPrecedenceNodes;
     }
