@@ -42,7 +42,7 @@ public class PrintGLSL {
         if (expressionNode instanceof ArithExpressionNode)
             return printArithExpression((ArithExpressionNode)expressionNode);
         else if (expressionNode instanceof BoolExpressionNode)
-            throw new CompilerException("Not yet implemented", expressionNode.getCodePosition());
+            return printBoolExpression((BoolExpressionNode)expressionNode);
         else if (expressionNode instanceof Vector4ExpressionNode)
             return printVector4Expression((Vector4ExpressionNode)expressionNode);
         else if (expressionNode instanceof Vector3ExpressionNode)
