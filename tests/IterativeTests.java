@@ -49,4 +49,9 @@ class IterativeTests {
     void TestShader2() {
         testShader("TestShader2");
     }
+
+    @Test
+    void Fibonacci() {
+        testShader("Fibonacci");
+    }
 }
