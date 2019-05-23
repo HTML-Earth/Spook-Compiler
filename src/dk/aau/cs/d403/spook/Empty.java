@@ -3,6 +3,7 @@ package dk.aau.cs.d403.spook;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.ObjectArgumentNode;
 import dk.aau.cs.d403.codegen.PrintGLSL;
+import dk.aau.cs.d403.errorhandling.InvalidAmountOfArgumentsException;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,9 @@ public class Empty extends SpookObject {
         }
         else if (argumentNodes.size() == 2) {
             this.position = new Vector2(argumentNodes.get(0), argumentNodes.get(1));
+        }
+        else {
+            throw new InvalidAmountOfArgumentsException("Empty constructor", 1,2, argumentNodes.size());
         }
     }
 
