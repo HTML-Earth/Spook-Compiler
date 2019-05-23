@@ -687,6 +687,18 @@ public class TypeChecking {
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
         String className = functionDeclarationNode.getClassName();
 
+        if (className != null)
+            throw new CompilerException("Functions currently cannot return objects", functionDeclarationNode.getCodePosition());
+
+        // Non-Void function = pure function (no objects as function arguments)
+        boolean pureFunction = (returnType != null);
+        if (pureFunction) {
+            if (functionArgs != null)
+                for (FunctionArgNode functionArgNode : functionArgs)
+                    if (functionArgNode.getClassName() != null)
+                        throw new CompilerException(functionArgNode.getClassName() + " not allowed as argument in non-Void function", functionDeclarationNode.getCodePosition());
+        }
+
         //Check if name matches predefined
         functionNameMatchesPredefined(functionDeclarationNode);
 
@@ -760,6 +772,9 @@ public class TypeChecking {
     private void visitFunctionBlock(BlockNode blockNode, Enums.DataType returnType, FunctionDeclarationNode functionDeclarationNode) {
         openScope();
 
+        // Non-Void function = pure function (no object declarations and no object function calls)
+        boolean pureFunction = (returnType != null);
+
         //Visit all function arguments and add them as Variable Declarations in the new scope
         if (functionDeclarationNode.getFunctionArgNodes() != null) {
             for (FunctionArgNode functionArgNode : functionDeclarationNode.getFunctionArgNodes()) {
@@ -785,6 +800,13 @@ public class TypeChecking {
         }
 
         for (StatementNode statement : blockNode.getStatementNodes()) {
+            if (pureFunction) {
+                if (statement instanceof ObjectDeclarationNode)
+                    throw new CompilerException("Object declaration not allowed in non-Void function", statement.getCodePosition());
+                else if (statement instanceof ObjectFunctionCallNode)
+                    throw new CompilerException("Object function call not allowed in non-Void function", statement.getCodePosition());
+            }
+
             visitStatement(statement);
         }
         if (returnType != null) {
