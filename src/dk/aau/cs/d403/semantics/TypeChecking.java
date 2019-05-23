@@ -484,7 +484,14 @@ public class TypeChecking {
         ObjectDeclarationNode objectDeclarationNode;
         ClassDeclarationNode classDeclarationNode;
 
-        if (!listOfPredefinedClasses.contains(variableName)) {
+
+        if (listOfPredefinedClasses.contains(variableName)) {
+            switch (variableName) {
+                case "Color":
+                    return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+            }
+        }
+        else {
             
             // Check if variable is declared and initialized
             if (retrieveSymbol(variableName) != null) {
@@ -545,10 +552,8 @@ public class TypeChecking {
                 }
             }
         }
-        for (Map.Entry<String, Enums.DataType> predefinedFunc : this.predefinedFunctions.entrySet()) {
-            if (functionName.equals(predefinedFunc.getKey()))
-                return Enums.dataTypeToStringSpook(predefinedFunc.getValue());
-        }
+
+        // Void function
         return null;
     }
 
@@ -961,7 +966,7 @@ public class TypeChecking {
                     throw new CompilerException("Invalid AtomPrecedence", lowPrecedenceNode.getCodePosition());
             }
         }
-        return null;
+        throw new CompilerException("null");
     }
 
     private void visitBoolExpression(BoolExpressionNode boolExpressionNode) {
