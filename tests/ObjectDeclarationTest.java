@@ -52,7 +52,10 @@ public class ObjectDeclarationTest {
             AstBuilder astBuilder = new AstBuilder();
             Assertions.assertThrows(CompilerException.class, () -> {
                 ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+                programNode.prettyPrint(0);
                 typeChecking.visitProgram(programNode);
+                CodeGenerator codeGenerator = new CodeGenerator();
+                codeGenerator.GenerateGLSL(programNode);
             });
 
         }catch (IOException e) {

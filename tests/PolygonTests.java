@@ -6,17 +6,16 @@ import dk.aau.cs.d403.parser.SpookParser;
 import dk.aau.cs.d403.semantics.TypeChecking;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class ShapeTests {
+public class PolygonTests {
     private TypeChecking typeChecking = new TypeChecking();
 
     void testShader(String shaderName) {
         try {
-            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/ShapeTests/" + shaderName + ".spook"));
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/PolygonTests/" + shaderName + ".spook"));
             SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
 
             AstBuilder astBuilder = new AstBuilder();
@@ -32,23 +31,13 @@ class ShapeTests {
         }
     }
 
-    @AfterEach
-    void printTable() {
-        typeChecking.printSymbolTable();
+    @Test
+    void BigSpook() {
+        testShader("BigSpook");
     }
 
     @Test
-    void ShapeTest() {
-        testShader("ShapeTest");
-    }
-
-    @Test
-    void ShapeTestMoving() {
-        testShader("ShapeTestMoving");
-    }
-
-    @Test
-    void TestShader() {
-        testShader("TestShader");
+    void Polygons() {
+        testShader("Polygons");
     }
 }
