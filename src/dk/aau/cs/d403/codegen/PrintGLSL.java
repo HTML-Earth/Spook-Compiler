@@ -306,9 +306,7 @@ public class PrintGLSL {
 
         sb.append("if (");
 
-        if (ifStatementNode.getIfBool().getBoolLiteral() != null)
-            sb.append(ifStatementNode.getIfBool().getBoolLiteral().toString());
-        else if (ifStatementNode.getIfBool().getBoolExpressionNode() != null)
+        if (ifStatementNode.getIfBool().getBoolExpressionNode() != null)
             sb.append(printBoolExpression(ifStatementNode.getIfBool().getBoolExpressionNode()));
         else if (ifStatementNode.getIfBool().getVariableName() != null)
             sb.append(ifStatementNode.getIfBool().getVariableName());
@@ -329,9 +327,7 @@ public class PrintGLSL {
 
         sb.append("else if (");
 
-        if (elseIfStatementNode.getElseIfBool().getBoolLiteral() != null)
-            sb.append(elseIfStatementNode.getElseIfBool().getBoolLiteral().toString());
-        else if (elseIfStatementNode.getElseIfBool().getBoolExpressionNode() != null)
+        if (elseIfStatementNode.getElseIfBool().getBoolExpressionNode() != null)
             sb.append(printBoolExpression(elseIfStatementNode.getElseIfBool().getBoolExpressionNode()));
         else if (elseIfStatementNode.getElseIfBool().getVariableName() != null)
             sb.append(elseIfStatementNode.getElseIfBool().getVariableName());
