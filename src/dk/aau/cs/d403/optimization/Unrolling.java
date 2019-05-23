@@ -220,12 +220,20 @@ public class Unrolling {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
         String functionName = nonObjectFunctionCallNode.getFunctionName();
+        boolean foundFunction = false;
+        boolean correctArguments = false;
+
         for (FunctionDeclarationNode declarationNode : functionDeclarationNodes) {
+
             if (functionName.equals(declarationNode.getFunctionName())) {
+                foundFunction = true;
+
                 // ARGUMENTS
                 if (nonObjectFunctionCallNode.getArgumentNodes() != null) {
                     if (declarationNode.getFunctionArgNodes() != null) {
                         if (nonObjectFunctionCallNode.getArgumentNodes().size() == declarationNode.getFunctionArgNodes().size()) {
+                            correctArguments = true;
+
                             // NO RETURN TYPE
                             if (declarationNode.getReturnType() == null) {
                                 for (int i = 0; i < declarationNode.getFunctionArgNodes().size(); i++) {
@@ -265,23 +273,28 @@ public class Unrolling {
                             // RETURN TYPE
                             else throw new CompilerException("Only functions that return Void are implemented");
                         }
-                        else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
                     }
                 }
 
                 //NO ARGUMENTS
                 else {
                     if (declarationNode.getFunctionArgNodes() == null) {
+                        correctArguments = true;
+
                         if (declarationNode.getReturnType() == null) {
                             statementNodes.addAll(declarationNode.getBlockNode().getStatementNodes());
                         }
                         else throw new CompilerException("Only functions that return Void are implemented");
                     }
-                    else throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
                 }
             }
-            else throw new CompilerException("No function '" + functionName + "' was found", nonObjectFunctionCallNode.getCodePosition());
         }
+
+        if (!foundFunction)
+            throw new CompilerException("No function '" + functionName + "' was found", nonObjectFunctionCallNode.getCodePosition());
+
+        if (!correctArguments)
+            throw new CompilerException("Amount of arguments does not match", nonObjectFunctionCallNode.getCodePosition());
 
         return statementNodes;
     }
@@ -490,9 +503,13 @@ public class Unrolling {
         SwizzleNode swizzleNode = arithOperandNode.getSwizzleNode();
 
         if (nonObjectFunctionCallNode != null) {
-            ArrayList<ObjectArgumentNode> argumentNodes = unrollObjectArguments(nonObjectFunctionCallNode.getArgumentNodes());
+            NonObjectFunctionCallNode newNonObjectFunCall;
 
-            NonObjectFunctionCallNode newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName(), argumentNodes);
+            if (nonObjectFunctionCallNode.getArgumentNodes() != null)
+                newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName(), unrollObjectArguments(nonObjectFunctionCallNode.getArgumentNodes()));
+            else
+                newNonObjectFunCall = new NonObjectFunctionCallNode(nonObjectFunctionCallNode.getFunctionName());
+
             newNonObjectFunCall.setCodePosition(nonObjectFunctionCallNode.getCodePosition());
 
             newArithOperandNode = new ArithOperandNode(newNonObjectFunCall);
