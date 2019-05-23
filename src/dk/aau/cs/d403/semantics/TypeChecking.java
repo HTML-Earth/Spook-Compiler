@@ -399,11 +399,11 @@ public class TypeChecking {
 
     private FunctionDeclarationNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         boolean notFound = true;
+        FunctionDeclarationNode functionDeclarationNodeReturn = null;
         String functionName = nonObjectFunctionCallNode.getFunctionName();
         ArrayList<ObjectArgumentNode> objectArgumentNodes = nonObjectFunctionCallNode.getArgumentNodes();
 
-        ArrayList<FunctionDeclarationNode> retrievedFunctions = new ArrayList<>();
-        retrievedFunctions = retrieveAllFunctions(functionName);
+        ArrayList<FunctionDeclarationNode> retrievedFunctions = retrieveAllFunctions(functionName);
 
         if (this.predefinedFunctions.containsKey(functionName)) {
             return new FunctionDeclarationNode(predefinedFunctions.get(functionName), functionName, new BlockNode(new ArrayList<>()));
@@ -446,12 +446,12 @@ public class TypeChecking {
                                         System.out.println("get class name data type was null");
                                 }
                                 notFound = false;
-                                return functionDeclarationNode;
+                                functionDeclarationNodeReturn = functionDeclarationNode;
                             }
 
                         } else if (functionDeclarationNode.getFunctionArgNodes() == null && objectArgumentNodes == null) {
                             notFound = false;
-                            return functionDeclarationNode;
+                            functionDeclarationNodeReturn = functionDeclarationNode;
                         }
 
                         else if (notFound && functionDeclarationNode.getFunctionArgNodes() != null)
@@ -468,15 +468,13 @@ public class TypeChecking {
 
                 if (notFound)
                     throw new CompilerException("ERROR: No function with matching parameters was found. (" + functionName + ")", nonObjectFunctionCallNode.getCodePosition());
+                return functionDeclarationNodeReturn;
 
             } else {
                 throw new CompilerException("ERROR: Missing function for function call. (" + functionName + ")", nonObjectFunctionCallNode.getCodePosition());
             }
 
         }
-
-        return null;
-
     }
 
     private String visitObjectFunctionCall(ObjectFunctionCallNode objectFunctionCallNode) {
@@ -714,10 +712,10 @@ public class TypeChecking {
             retrievedFunctions = null;
 
         // Same name
-        if (retrievedFunctions == null)
+        if (retrievedFunctions.isEmpty())
             enterSymbol(functionName, functionDeclarationNode);
 
-        if (retrievedFunctions != null) {
+        if (retrievedFunctions.size() > 0) {
             boolean sameReturnType = true;
             boolean sameFunctionArgs = false;
             boolean sameAmountOfArgs = false;

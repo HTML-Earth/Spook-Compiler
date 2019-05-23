@@ -3,8 +3,12 @@ Shader{
   Num i = 0; Num radius; Num height = 100; Num length = 100; # virker ikke
   Num d;
 
-  #Unused for
+  #Unused for(s)
   for(d = 0 to 1){}
+  for ((10+10) to (9*4)) {}
+  for ((10/2) to (100 % 101)) {}
+  for (i to length) {}
+  for ((i + 1) to (11 - 1)) {}
 
   #Increment i by 4, i = 4
   for (0 to 4) {
