@@ -1,13 +1,16 @@
 package dk.aau.cs.d403.semantics;
 
-import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.ASTnode;
 import dk.aau.cs.d403.ast.Enums;
 import dk.aau.cs.d403.ast.expressions.*;
 import dk.aau.cs.d403.ast.statements.*;
 import dk.aau.cs.d403.ast.structure.*;
+import dk.aau.cs.d403.errorhandling.CompilerException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class TypeChecking {
     private Stack<HashMap<String, ASTnode>> hashMapStack;
@@ -94,6 +97,15 @@ public class TypeChecking {
         this.predefinedFunctions.put("trunc", Enums.DataType.NUM);
         this.predefinedFunctions.put("setScale", Enums.DataType.NUM);
         this.predefinedFunctions.put("setParent", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setColor", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("setPosition", Enums.DataType.NUM);
+        this.predefinedFunctions.put("setRotation", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getColor", Enums.DataType.VEC4);
+        this.predefinedFunctions.put("getScale", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getParent", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getPosition", Enums.DataType.NUM);
+        this.predefinedFunctions.put("getRotation", Enums.DataType.NUM);
+
 
 
         ArithExpressionNode zeroNode = new ArithExpressionNode(LowPrecedenceNode.zero());
@@ -534,6 +546,10 @@ public class TypeChecking {
                     return dataType;
                 }
             }
+        }
+        for (Map.Entry<String, Enums.DataType> predefinedFunc : this.predefinedFunctions.entrySet()) {
+            if (functionName.equals(predefinedFunc.getKey()))
+                return Enums.dataTypeToStringSpook(predefinedFunc.getValue());
         }
         return null;
     }
@@ -1112,11 +1128,13 @@ public class TypeChecking {
         else if (expressionNode instanceof BoolExpressionNode)
             return Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
         else if (expressionNode instanceof Vector2ExpressionNode) {
+            Vector2ExpressionNode vec2 = (Vector2ExpressionNode) expressionNode;
             String tempDataType;
             tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
-            if (expressionNode instanceof Vector3ExpressionNode) {
+            if (vec2 instanceof Vector3ExpressionNode) {
+                Vector3ExpressionNode vec3 = (Vector3ExpressionNode) vec2;
                 tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
-                if (expressionNode instanceof Vector4ExpressionNode)
+                if (vec3 instanceof Vector4ExpressionNode)
                     tempDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
             }
             return tempDataType;
