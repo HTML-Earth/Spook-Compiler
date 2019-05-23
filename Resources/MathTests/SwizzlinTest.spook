@@ -24,8 +24,28 @@ Shader {
     Bool ternary4 = bool1 ? true : true;
     Bool ternary5 = returnTrue() ? false : returnTrue();
 
+    Circle circ = (20, Color.tan());
+    Circle circ2 = (100, Color.cyan());
+
+    Vec4 newColor = true ? circ.getColor() : circ2.getColor();
+    #Spook:         true ? Color.black()   : Color.yellow
+
 
     Num a, r, g = 3, b;
+
+    #Initialization testing
+    Vec2 vec22;
+    Vec3 vec33;
+    Vec4 vec44;
+    Num number;
+    Bool bol;
+
+    Num number2 = vec22.x;
+
+    vec33 = vec33 + vec3;
+    vec44 = vec44 + vec1;
+    vec22 = vec22 + rec;
+
 }
 
 Bool returnTrue() {

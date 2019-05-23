@@ -299,7 +299,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             boolOperationExtendNodes.add((BoolOperationExtendNode) visitBoolOperationExtend(boolOperationExtendContext));
 
         //Case !bool extend
-        if (ctx.NOT() != null && ctx.boolOperation() != null && ctx.boolOperationExtend() != null) {
+        if (ctx.NOT() != null && ctx.boolOperation() != null && ctx.boolOperationExtend() != null && !ctx.boolOperationExtend().isEmpty()) {
             BoolOperationNode boolOperationNode = (BoolOperationNode) visitBoolOperation(ctx.boolOperation());
 
             BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, boolOperationExtendNodes, optionalNOT);
@@ -315,7 +315,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
             return boolOperationsNode;
         }
         //Case bool extend
-        else if (ctx.boolOperation() != null && ctx.boolOperationExtend() != null) {
+        else if (ctx.boolOperation() != null && ctx.boolOperationExtend() != null && !ctx.boolOperationExtend().isEmpty()) {
             BoolOperationNode boolOperationNode = (BoolOperationNode) visitBoolOperation(ctx.boolOperation());
 
             BoolOperationsNode boolOperationsNode = new BoolOperationsNode(boolOperationNode, boolOperationExtendNodes);
@@ -760,7 +760,7 @@ public class AstBuilder extends SpookParserBaseVisitor<ASTnode> {
     @Override
     public ASTnode visitArithOperand(SpookParser.ArithOperandContext ctx) {
         if (ctx.realNumber() != null) {
-            ArithOperandNode arithOperandNode = new ArithOperandNode(new RealNumberNode(getRealNumberValue(ctx.realNumber())));
+            ArithOperandNode arithOperandNode = new ArithOperandNode((RealNumberNode) visitRealNumber((ctx.realNumber())));
             arithOperandNode.setCodePosition(getCodePosition(ctx));
 
             return arithOperandNode;

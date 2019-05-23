@@ -1,3 +1,4 @@
+import dk.aau.cs.d403.codegen.CodeGenerator;
 import dk.aau.cs.d403.errorhandling.CompilerException;
 import dk.aau.cs.d403.ast.AstBuilder;
 import dk.aau.cs.d403.ast.structure.ProgramNode;
@@ -29,8 +30,12 @@ class VariableDeclarationTest {
 
             AstBuilder astBuilder = new AstBuilder();
             ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+            programNode.prettyPrint(0);
 
             typeChecking.visitProgram(programNode);
+            CodeGenerator codeGenerator = new CodeGenerator();
+            codeGenerator.GenerateGLSL(programNode);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +49,7 @@ class VariableDeclarationTest {
 
             AstBuilder builder = new AstBuilder();
             ProgramNode ast = (ProgramNode) builder.visitProgram(parser.program());
+            ast.prettyPrint(0);
 
             //TODO: fix assert to expect specific exception
             assertThrows(CompilerException.class, ()-> typeChecking.visitProgram(ast));
