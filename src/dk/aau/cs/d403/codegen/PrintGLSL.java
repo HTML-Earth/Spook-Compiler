@@ -361,7 +361,7 @@ public class PrintGLSL {
         StringBuilder sb = new StringBuilder();
 
         if (conditionalBlockNode.getStatementNode() != null) {
-            sb.append("\n\t");
+            sb.append("\t\t");
             sb.append(printStatement(conditionalBlockNode.getStatementNode()));
         }
         else if (conditionalBlockNode.getBlockNode() != null) {

@@ -9,7 +9,12 @@ Shader {
 }
 
 Num CoolFunction() {
-    return abs(sin(Time * 2) * 50);
+    Num value = sin(Time * 2) * 50;
+
+    if (value < 0)
+        return -value;
+
+    return value;
 }
 
 Vec2 CoolFunctionWithArguments(Num xOffset, Num yOffset) {
