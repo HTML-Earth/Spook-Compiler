@@ -1,5 +1,5 @@
 Shader {
-    CustomShape custom = (1);
+    #CustomShape custom = (1);
 
     Circle ball = (GiveMeTen(0), Color.red());
     ball.setPosition(xPos, yPos);
