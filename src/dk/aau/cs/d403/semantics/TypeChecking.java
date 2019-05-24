@@ -254,8 +254,6 @@ public class TypeChecking {
 
             if (retrievedNode == null)
                 enterSymbol(varDeclInitNode.getAssignmentNode().getVariableName(), variableDeclarationNode);
-            //else if (retrievedNode.getCodePosition() == null)
-             //   System.out.println(retrievedNode.prettyPrint(0));
             else
                 throw new CompilerException("ERROR: A variable (" + varDeclInitNode.getAssignmentNode().getVariableName() + ") with the same name already exists.", retrievedNode.getCodePosition());
 
@@ -393,8 +391,6 @@ public class TypeChecking {
         else if (assignmentNode.getSwizzleNode() != null) {
             visitSwizzle(assignmentNode.getSwizzleNode());
         }
-
-        visitExpression(assignmentNode.getExpressionNode());
     }
 
     private FunctionDeclarationNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
@@ -949,9 +945,25 @@ public class TypeChecking {
                         else
                             throw new CompilerException("ERROR: Too long swizzle", swizzleNode.getCodePosition());
                     }
-
+                    //Operand: number
                     else if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
                         return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
+
+                    //Operand: vec2
+                    else if (atomPrecedenceNode.getOperand().getVector2ExpressionNode() != null) {
+                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector2ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
+                    }
+                    //Operand: vec3
+                    else if (atomPrecedenceNode.getOperand().getVector3ExpressionNode() != null) {
+                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector3ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
+                    }
+                    //Operand: vec4
+                    else if (atomPrecedenceNode.getOperand().getVector4ExpressionNode() != null) {
+                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector4ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+                    }
 
                     else
                         throw new CompilerException("Invalid Operand", lowPrecedenceNode.getCodePosition());
