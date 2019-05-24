@@ -182,7 +182,8 @@ public class TypeChecking {
 
             stackLevel -= 1;
         }
-        this.functionCounter = 1;
+        //this.functionCounter = 1; <-- If there's two function calls after each other, function Counter does not get
+        //                              incremented and you will not retrieve all the functions.
 
         return symbols;
     }
