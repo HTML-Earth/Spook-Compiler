@@ -4,9 +4,9 @@ Shader{
 
   #Unused for(s)
   for(Num d = 0 to 4){}
-  for ((Num forNum = 10 + 10) to (9*4)) {
+  for (Num forNum = (10 + 10) to (9*4)) {
     Num numbaOne = 1;
-    Circle forCircle = (20, Color.black);
+    Circle forCircle = (20, Color.black());
   }
   for ((10/2) to (100 % 101)) {}
   for (i to length) {}
