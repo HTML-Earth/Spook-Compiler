@@ -4,6 +4,7 @@ import dk.aau.cs.d403.ast.CodePosition;
 
 import java.util.ArrayList;
 
+//Extends expressionNode does not match parser //TODO: implement ASTnode
 public class Vector2ExpressionNode extends ExpressionNode {
     protected ArithExpressionNode arithExpressionNode1;
     protected ArithExpressionNode arithExpressionNode2;
