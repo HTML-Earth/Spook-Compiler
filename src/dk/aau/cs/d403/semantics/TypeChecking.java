@@ -213,7 +213,6 @@ public class TypeChecking {
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
             visitClassDeclaration(classDeclaration);
         visitMain(programNode.getMainNode());
-        System.out.println("gucci gang xd");
     }
 
     private void visitMain(MainNode mainNode) {
@@ -376,6 +375,7 @@ public class TypeChecking {
                 String assignedDataType = null;
                 if (assignmentNode.getExpressionNode() instanceof BoolExpressionNode) {
                     assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
+
                 } else if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
                     assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 }
@@ -384,6 +384,20 @@ public class TypeChecking {
                     TernaryOperatorNode ternaryOperatorNode = (TernaryOperatorNode) assignmentNode.getExpressionNode();
                     visitTernaryOperator(ternaryOperatorNode);
                     assignedDataType = ternaryExprType(assignmentNode.getExpressionNode());
+                }
+                else if (assignmentNode.getExpressionNode() instanceof Vector2ExpressionNode) {
+                    visitVector2Expression((Vector2ExpressionNode) assignmentNode.getExpressionNode());
+                    assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
+
+                    if (assignmentNode.getExpressionNode() instanceof Vector3ExpressionNode) {
+                        visitVector3Expression((Vector3ExpressionNode) assignmentNode.getExpressionNode());
+                        assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
+
+                        if (assignmentNode.getExpressionNode() instanceof Vector4ExpressionNode) {
+                            visitVector4Expression((Vector4ExpressionNode) assignmentNode.getExpressionNode());
+                            assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+                        }
+                    }
                 }
                 if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
                     throw new CompilerException("ERROR: Incompatible types.(" + dataType + " and " + assignedDataType + ")", assignmentNode.getCodePosition());
@@ -866,12 +880,6 @@ public class TypeChecking {
             visitBoolExpression((BoolExpressionNode) expressionNode);
         else if (expressionNode instanceof TernaryOperatorNode)
             visitTernaryOperator((TernaryOperatorNode) expressionNode);
-        else if (expressionNode instanceof  Vector4ExpressionNode)
-            visitVector4Expression((Vector4ExpressionNode) expressionNode);
-        else if (expressionNode instanceof  Vector3ExpressionNode)
-            visitVector3Expression((Vector3ExpressionNode) expressionNode);
-        else if (expressionNode instanceof  Vector2ExpressionNode)
-            visitVector2Expression((Vector2ExpressionNode) expressionNode);
     }
 
     private String visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
@@ -925,6 +933,21 @@ public class TypeChecking {
                         ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
                         return visitObjectFunctionCall(objectFunctionCallNode);
                     }
+                    //Operand: vec2
+                    else if (atomPrecedenceNode.getOperand().getVector2ExpressionNode() != null) {
+                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector2ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
+                    }
+                    //Operand: vec3
+                    else if (atomPrecedenceNode.getOperand().getVector3ExpressionNode() != null) {
+                        visitVector3Expression(atomPrecedenceNode.getOperand().getVector3ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
+                    }
+                    //Operand: vec4
+                    else if (atomPrecedenceNode.getOperand().getVector4ExpressionNode() != null) {
+                        visitVector4Expression(atomPrecedenceNode.getOperand().getVector4ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+                    }
 
                     // Operand: Swizzle
                     else if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
@@ -949,22 +972,6 @@ public class TypeChecking {
                     //Operand: number
                     else if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
                         return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
-
-                    //Operand: vec2
-                    else if (atomPrecedenceNode.getOperand().getVector2ExpressionNode() != null) {
-                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector2ExpressionNode());
-                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
-                    }
-                    //Operand: vec3
-                    else if (atomPrecedenceNode.getOperand().getVector3ExpressionNode() != null) {
-                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector3ExpressionNode());
-                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
-                    }
-                    //Operand: vec4
-                    else if (atomPrecedenceNode.getOperand().getVector4ExpressionNode() != null) {
-                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector4ExpressionNode());
-                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
-                    }
 
                     else
                         throw new CompilerException("Invalid Operand", lowPrecedenceNode.getCodePosition());
