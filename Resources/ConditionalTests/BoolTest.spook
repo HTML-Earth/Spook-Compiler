@@ -1,25 +1,41 @@
 Shader {
-    Num length = 100;
-    Bool hej = true;
+   Num length = 100;
+   Bool hej2 = true;
+   if (true == hej2) {}
 
-    if ((length > 10) && (length < 200)) {
-        Circle circ = (20, Color.white());
+
+   if ((length > 10) && (length < 200)) {
+       Circle circ = (20, Color.white());
+   }
+   Circle circ3 = (2, Color.blue());
+
+
+   Rectangle rec = (length, 100, Color.black());
+   rec.setPosition(100, 50);
+
+   if (true)
+       Scene.add(rec);
+
+   if (!true)
+       Scene.add(circ3);
+
+    if (2 < 12 < 22) {
+        Num i = sut(length, 2);
     }
-    Circle circ3 = (2, Color.blue());
 
+    if (1 == 1) {}
 
-    Rectangle rec = (length, 100, Color.black());
-    rec.setPosition(100, 50);
+    if (1 != 2) {}
 
-    if (true)
-        Scene.add(rec);
+    if (true == true) {}
 
-    if (!true)
-        Scene.add(circ3);
+    if (true != false) {}
 
-    Num i = sut(length, 2);
 
     Num ret = hej(2);
+
+    if (ret != length) {}
+
 }
 
 Num sut(Num int, Num nej) {
