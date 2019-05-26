@@ -1,6 +1,6 @@
 Shader {
     # Unit and center
-    Num u = Screen.y * 0.009;
+    Num u = Screen.y * 0.01;
     Vec2 center = (Screen.x / 2, Screen.y / 2);
 
     # Colors
@@ -29,28 +29,68 @@ Shader {
     Num backLowerRot = cos(Time * walkSpeed + Pi * 2) * lowerRot + lowerRotBase;
     Num backFootRot  = abs(sin(Time * walkSpeed)) * footRot + footRotBase;
 
-    # Body
+    Num backgroundScroll  = (-Time*u * walkSpeed * 20) % (400*u) - 200*u;
+    Num backgroundScroll2 = ((-Time + 3)*u * walkSpeed * 20) % (400*u) - 200*u;
+
+    Rectangle backgroundThing = (50*u, Screen.y, Color.black());
+    backgroundThing.setPosition(center.x + backgroundScroll, center.y);
+    Scene.add(backgroundThing);
+
+    Rectangle backgroundThing2 = (50*u, Screen.y, Color.black());
+    backgroundThing2.setPosition(center.x + backgroundScroll2, center.y);
+    Scene.add(backgroundThing2);
+
+    # Parent object
     Empty body = (center.x - 20*u, center.y + sin(Time * walkSpeed * 2) * 5*u + 40*u);
 
+    # Back Leg
     Vec2 backLegOffset = (cos(Time * walkSpeed + Pi) * 10*u, -sin(Time * walkSpeed + Pi) * 5*u - 5*u);
     createLeg(u, darker, darker, darker, body, backUpperRot, backLowerRot, backFootRot, backLegOffset);
 
-    Circle bodyShape = (25*u, dark);
-    bodyShape.setParent(body);
+    # Body
+    createBody(u, bright, medium, dark, body, walkSpeed);
 
-    Rectangle engine = (15*u, 30*u, medium);
-    engine.setParent(body);
-    engine.setPosition(sin(Time * 30) * 0.5*u - 30*u, sin(Time * 40) * 1*u + 10*u);
-    engine.setRotation(sin(Time * walkSpeed) * 10);
+    # Arm / Gun
+    Empty arms = (sin(Time * walkSpeed + Pi) * 20*u + 90*u, sin(Time * walkSpeed + Pi) * 30*u + 30*u);
+    arms.setParent(body);
+    arms.setRotation(sin(Time * walkSpeed) * 30);
 
-    Rectangle pipe = (5*u, 15*u, bright);
-    pipe.setParent(engine);
-    pipe.setPosition(0, -5*u);
+    Circle leftArm = (10*u, Color.yellow());
+    leftArm.setParent(arms);
+    leftArm.setPosition(-10*u, 0);
+    leftArm.setRotation(110);
+    leftArm.setScale(0.7, 3);
 
-    Rectangle pipeEnd = (20*u, 5*u, bright);
-    pipeEnd.setParent(engine);
-    pipeEnd.setPosition(-10*u, -10*u);
+    Rectangle shotGun = (70*u, 10*u, darker);
+    shotGun.setParent(arms);
 
+    Rectangle pump = (30*u, 10*u, Color.brown());
+    pump.setParent(arms);
+    pump.setPosition(15*u, -5*u);
+
+    Rectangle handle = (10*u, 30*u, Color.brown());
+    handle.setParent(arms);
+    handle.setPosition(-40*u, -10*u);
+    handle.setRotation(30);
+
+    Circle leftHand = (5*u, Color.yellow());
+    leftHand.setParent(arms);
+    leftHand.setPosition(15*u, -10*u);
+    leftHand.setScale(2, 1);
+
+    Circle rightArm = (10*u, Color.yellow());
+    rightArm.setParent(arms);
+    rightArm.setPosition(-60*u, 5*u);
+    rightArm.setRotation(135);
+    rightArm.setScale(0.7, 3);
+
+    Circle rightHand = (10*u, Color.yellow());
+    rightHand.setParent(arms);
+    rightHand.setPosition(-40*u, -10*u);
+    rightHand.setRotation(30);
+    rightHand.setScale(0.7, 1);
+
+    # Front Leg
     Vec2 frontLegOffset = (cos(Time * walkSpeed) * 10*u, -sin(Time * walkSpeed) * 5*u - 5*u);
     createLeg(u, bright, medium, dark, body, frontUpperRot, frontLowerRot, frontFootRot, frontLegOffset);
 
@@ -62,6 +102,34 @@ Shader {
 Vec4 colorFromValue(Num value) {
     Vec4 color = (value, value, value, 1);
     return color;
+}
+
+Void createBody(Num u, Vec4 c_bright, Vec4 c_medium, Vec4 c_dark, Empty body, Num walkSpeed) {
+    Circle bodyShape = (25*u, c_dark);
+    bodyShape.setParent(body);
+    bodyShape.setRotation(sin(Time * walkSpeed) * 10 - 10);
+
+    Rectangle seat = (15*u, 30*u, c_medium);
+    seat.setParent(bodyShape);
+    seat.setPosition(20*u, 20*u);
+    seat.setRotation(135);
+
+    Rectangle engine = (15*u, 30*u, c_medium);
+    engine.setParent(bodyShape);
+    engine.setPosition(sin(Time * 30) * 0.5*u - 28*u, sin(Time * 40) * 1*u + 10*u);
+    engine.setRotation(10);
+
+    Empty pipe = (sin(Time * 40) * 0.5*u, 0);
+    pipe.setParent(engine);
+    pipe.setRotation(sin(Time * 30) * 5);
+
+    Rectangle pipeStart = (5*u, 15*u, c_bright);
+    pipeStart.setParent(pipe);
+    pipeStart.setPosition(0, -5*u);
+
+    Rectangle pipeEnd = (20*u, 5*u, c_bright);
+    pipeEnd.setParent(pipe);
+    pipeEnd.setPosition(-7.5*u, -10*u);
 }
 
 Void createLeg(Num u, Vec4 c_bright, Vec4 c_medium, Vec4 c_dark, Empty body, Num upperRot, Num lowerRot, Num footRot, Vec2 legOffset) {
@@ -98,6 +166,11 @@ Void createLeg(Num u, Vec4 c_bright, Vec4 c_medium, Vec4 c_dark, Empty body, Num
     Empty lower = (0, -45*u);
     lower.setParent(upper);
     lower.setRotation(lowerRot);
+
+    Rectangle footSupport = (2.5*u, 30*u, c_bright);
+    footSupport.setParent(lower);
+    footSupport.setPosition(7.5*u, -29*u);
+    footSupport.setRotation(0-15);
 
     Vec2 lp0 = (-5*u,  -5*u);
     Vec2 lp1 = ( 5*u,  -5*u);
