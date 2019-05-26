@@ -58,14 +58,14 @@ public class Polygon extends Shape {
     public static String getCheckFunctionBody() {
         return "    float angle = 0.0;\n" +
                 "    for (int i = 0; i < amt; i++) {\n" +
-                "        vec2 a = vec2(poly.points[i]-point);\n" +
+                "        vec2 a = vec2(poly.points[i]-point+poly.pos);\n" +
                 "        \n" +
                 "        vec2 b;\n" +
                 "        \n" +
                 "        if (i < amt-1)\n" +
-                "        \tb = vec2(poly.points[i+1]-point);\n" +
+                "        \tb = vec2(poly.points[i+1]-point+poly.pos);\n" +
                 "        else\n" +
-                "            b = vec2(poly.points[0]-point);\n" +
+                "            b = vec2(poly.points[0]-point+poly.pos);\n" +
                 "        \n" +
                 "        angle += abs( acos( dot(a,b) / ( length(a) * length(b) ) ) );\n" +
                 "    }\n" +
@@ -81,8 +81,8 @@ public class Polygon extends Shape {
         for (int i = 0; i < maxPoints; i++) {
             if (i < points.size()) {
                 pointDecl.append(PrintGLSL.printVector2(points.get(i)));
-                pointDecl.append(" + ");
-                pointDecl.append(PrintGLSL.printVector2(getWorldPosition()));
+                //pointDecl.append(" + ");
+                //pointDecl.append(PrintGLSL.printVector2(getWorldPosition()));
             }
             else
                 pointDecl.append(PrintGLSL.printVector2(Vector2.zero()));

@@ -121,6 +121,11 @@ public class TypeChecking {
         timeVarDeclInitList.add(new VarDeclInitNode(timeAssignmentNode));
         this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, timeVarDeclInitList));
 
+        ArrayList<VarDeclInitNode> piVarDeclInitList = new ArrayList<>();
+        AssignmentNode piAssignmentNode = new AssignmentNode("Pi", zeroNode);
+        piVarDeclInitList.add(new VarDeclInitNode(piAssignmentNode));
+        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, piVarDeclInitList));
+
         this.booleanOperatorList = new ArrayList<>();
         this.booleanOperatorList.add(Enums.BoolOperator.AND);
         this.booleanOperatorList.add(Enums.BoolOperator.OR);
@@ -206,6 +211,7 @@ public class TypeChecking {
         // Enter global variables for every block to use
         enterSymbol(this.listOfPredefinedVariables.get(0).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(0));
         enterSymbol(this.listOfPredefinedVariables.get(1).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(1));
+        enterSymbol(this.listOfPredefinedVariables.get(2).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(1));
 
         // Visit all function Decls then all the function blocks
         visitFunctionDeclAndBlock(programNode.getFunctionDeclarationNodes());
