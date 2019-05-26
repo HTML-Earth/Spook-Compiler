@@ -57,4 +57,9 @@ class ExampleShadersTest {
     void Triangles() {
         testShader("Triangles");
     }
+
+    @Test
+    void Legs() {
+        testShader("Legs");
+    }
 }
