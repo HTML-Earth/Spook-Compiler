@@ -131,8 +131,6 @@ public class CodeGenerator {
         sb.append("\t// Variable Declarations\n");
         for (String varDecl : usedVariables) {
             VariableDeclarationNode variableDeclarationNode = variables.get(varDecl);
-            if (varDecl.equals("up0"))
-                System.out.println("dsfdsf");
             if (variableDeclarationNode != null) {
                 sb.append("\t");
                 sb.append(PrintGLSL.printVariableDeclaration(variableDeclarationNode));
