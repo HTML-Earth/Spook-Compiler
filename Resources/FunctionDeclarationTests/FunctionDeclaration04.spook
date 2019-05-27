@@ -1,0 +1,27 @@
+Shader{
+num();
+returnVec2();
+returnVec3();
+returnVec4();
+Circle circArg = (20, Color.blue());
+objectArg(circArg);
+}
+
+Num num() {
+    return  true ? 22 : 20;
+}
+
+Vec2 returnVec2() {
+    return (2, 2);
+}
+
+Vec3 returnVec3() {
+    return (2, 2, 3);
+}
+
+Vec4 returnVec4() {
+    return (2, 2, 4, 4);
+}
+
+Void objectArg(Circle circ) {
+}

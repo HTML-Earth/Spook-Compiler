@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Spook">
+    <output-path>$PROJECT_DIR$/out/artifacts/Spook</output-path>
+    <root id="archive" name="spook.jar">
+      <element id="module-output" name="P4" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/antlr/antlr4-runtime/4.7/antlr4-runtime-4.7.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

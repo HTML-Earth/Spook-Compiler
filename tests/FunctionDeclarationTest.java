@@ -76,4 +76,23 @@ public class FunctionDeclarationTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void FuncDecl04() {
+        try {
+            SpookLexer lexer = new SpookLexer(CharStreams.fromFileName("Resources/FunctionDeclarationTests/FunctionDeclaration04.spook"));
+            SpookParser parser = new SpookParser(new CommonTokenStream(lexer));
+
+            AstBuilder astBuilder = new AstBuilder();
+            ProgramNode programNode = (ProgramNode) astBuilder.visitProgram(parser.program());
+            programNode.prettyPrint(0);
+
+            typeChecking.visitProgram(programNode);
+            CodeGenerator codeGenerator = new CodeGenerator();
+            codeGenerator.GenerateGLSL(programNode);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

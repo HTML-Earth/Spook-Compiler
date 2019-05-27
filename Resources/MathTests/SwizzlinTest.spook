@@ -28,23 +28,11 @@ Shader {
     Circle circ2 = (100, Color.cyan());
 
     Vec4 newColor = true ? circ.getColor() : circ2.getColor();
+    Vec4 vecTern = true ? (2, 2, 2, 2) : (0, 0, 0, 0);
     #Spook:         true ? Color.black()   : Color.yellow
 
 
     Num a, r, g = 3, b;
-
-    #Initialization testing
-    Vec2 vec22;
-    Vec3 vec33;
-    Vec4 vec44;
-    Num number;
-    Bool bol;
-
-    Num number2 = vec22.x;
-
-    vec33 = vec33 + vec3;
-    vec44 = vec44 + vec1;
-    vec22 = vec22 + rec;
 
 }
 
