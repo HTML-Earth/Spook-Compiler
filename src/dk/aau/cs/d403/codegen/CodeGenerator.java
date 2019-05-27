@@ -445,10 +445,55 @@ public class CodeGenerator {
     }
 
     private BoolExpressionNode visitBoolExpression(BoolExpressionNode boolExpressionNode) {
+        if (boolExpressionNode.getBoolOperationsNode() != null)
+            visitBoolOperationsNode(boolExpressionNode.getBoolOperationsNode());
+
         return boolExpressionNode;
     }
 
+    private BoolOperationsNode visitBoolOperationsNode(BoolOperationsNode boolOperationsNode) {
+        if (boolOperationsNode.getArithExpressionNode() != null)
+            visitArithExpression(boolOperationsNode.getArithExpressionNode());
+
+        if (boolOperationsNode.getBoolOperationNode() != null)
+            visitBoolOperationNode(boolOperationsNode.getBoolOperationNode());
+
+        if (boolOperationsNode.getBoolOperationExtendNodes() != null)
+            for (BoolOperationExtendNode boolOperationExtendNode : boolOperationsNode.getBoolOperationExtendNodes())
+                visitBoolOperationExtendNode(boolOperationExtendNode);
+
+        return boolOperationsNode;
+    }
+
+    private BoolOperationNode visitBoolOperationNode(BoolOperationNode boolOperationNode) {
+        if (boolOperationNode.getBoolOperationsNode() != null)
+            visitBoolOperationsNode(boolOperationNode.getBoolOperationsNode());
+
+        return boolOperationNode;
+    }
+
+    private BoolOperationExtendNode visitBoolOperationExtendNode(BoolOperationExtendNode boolOperationExtendNode) {
+        if (boolOperationExtendNode.getArithExpressionNode() != null)
+            visitArithExpression(boolOperationExtendNode.getArithExpressionNode());
+
+        if (boolOperationExtendNode.getBoolOperationNode() != null)
+            visitBoolOperationNode(boolOperationExtendNode.getBoolOperationNode());
+
+        return boolOperationExtendNode;
+    }
+
     private TernaryOperatorNode visitTernaryOperator(TernaryOperatorNode ternaryOperatorNode) {
+        if (ternaryOperatorNode.getBoolExpressionNode() != null)
+            visitBoolExpression(ternaryOperatorNode.getBoolExpressionNode());
+        else if (ternaryOperatorNode.getVariableName() != null)
+            visitVariableName(ternaryOperatorNode.getVariableName());
+        else if (ternaryOperatorNode.getNonObjectFunctionCallNode() != null)
+            visitNonObjectFunctionCall(ternaryOperatorNode.getNonObjectFunctionCallNode());
+        else if (ternaryOperatorNode.getObjectFunctionCallNode() != null)
+            visitObjectFunctionCall(ternaryOperatorNode.getObjectFunctionCallNode());
+
+        visitExpression(ternaryOperatorNode.getExpressionNode1());
+        visitExpression(ternaryOperatorNode.getExpressionNode2());
         return ternaryOperatorNode;
     }
 
