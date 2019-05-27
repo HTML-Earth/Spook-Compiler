@@ -121,6 +121,11 @@ public class TypeChecking {
         timeVarDeclInitList.add(new VarDeclInitNode(timeAssignmentNode));
         this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, timeVarDeclInitList));
 
+        ArrayList<VarDeclInitNode> piVarDeclInitList = new ArrayList<>();
+        AssignmentNode piAssignmentNode = new AssignmentNode("Pi", zeroNode);
+        piVarDeclInitList.add(new VarDeclInitNode(piAssignmentNode));
+        this.listOfPredefinedVariables.add(new VariableDeclarationNode(Enums.DataType.NUM, piVarDeclInitList));
+
         this.booleanOperatorList = new ArrayList<>();
         this.booleanOperatorList.add(Enums.BoolOperator.AND);
         this.booleanOperatorList.add(Enums.BoolOperator.OR);
@@ -182,7 +187,8 @@ public class TypeChecking {
 
             stackLevel -= 1;
         }
-        this.functionCounter = 1;
+        //this.functionCounter = 1; <-- If there's two function calls after each other, function Counter does not get
+        //                              incremented and you will not retrieve all the functions.
 
         return symbols;
     }
@@ -205,6 +211,7 @@ public class TypeChecking {
         // Enter global variables for every block to use
         enterSymbol(this.listOfPredefinedVariables.get(0).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(0));
         enterSymbol(this.listOfPredefinedVariables.get(1).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(1));
+        enterSymbol(this.listOfPredefinedVariables.get(2).getVarDeclInitNodes().get(0).getAssignmentNode().getVariableName(), this.listOfPredefinedVariables.get(1));
 
         // Visit all function Decls then all the function blocks
         visitFunctionDeclAndBlock(programNode.getFunctionDeclarationNodes());
@@ -212,7 +219,6 @@ public class TypeChecking {
         for (ClassDeclarationNode classDeclaration : programNode.getClassDeclarationNodes())
             visitClassDeclaration(classDeclaration);
         visitMain(programNode.getMainNode());
-        System.out.println("gucci gang xd");
     }
 
     private void visitMain(MainNode mainNode) {
@@ -254,8 +260,6 @@ public class TypeChecking {
 
             if (retrievedNode == null)
                 enterSymbol(varDeclInitNode.getAssignmentNode().getVariableName(), variableDeclarationNode);
-            //else if (retrievedNode.getCodePosition() == null)
-             //   System.out.println(retrievedNode.prettyPrint(0));
             else
                 throw new CompilerException("ERROR: A variable (" + varDeclInitNode.getAssignmentNode().getVariableName() + ") with the same name already exists.", retrievedNode.getCodePosition());
 
@@ -377,6 +381,7 @@ public class TypeChecking {
                 String assignedDataType = null;
                 if (assignmentNode.getExpressionNode() instanceof BoolExpressionNode) {
                     assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
+
                 } else if (assignmentNode.getExpressionNode() instanceof ArithExpressionNode) {
                     assignedDataType = visitLowPrecedenceNode(((ArithExpressionNode) assignmentNode.getExpressionNode()).getLowPrecedenceNode());
                 }
@@ -386,6 +391,20 @@ public class TypeChecking {
                     visitTernaryOperator(ternaryOperatorNode);
                     assignedDataType = ternaryExprType(assignmentNode.getExpressionNode());
                 }
+                else if (assignmentNode.getExpressionNode() instanceof Vector2ExpressionNode) {
+                    visitVector2Expression((Vector2ExpressionNode) assignmentNode.getExpressionNode());
+                    assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
+
+                    if (assignmentNode.getExpressionNode() instanceof Vector3ExpressionNode) {
+                        visitVector3Expression((Vector3ExpressionNode) assignmentNode.getExpressionNode());
+                        assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
+
+                        if (assignmentNode.getExpressionNode() instanceof Vector4ExpressionNode) {
+                            visitVector4Expression((Vector4ExpressionNode) assignmentNode.getExpressionNode());
+                            assignedDataType = Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+                        }
+                    }
+                }
                 if (dataType != null && assignedDataType != null && !assignedDataType.equals(dataType))
                     throw new CompilerException("ERROR: Incompatible types.(" + dataType + " and " + assignedDataType + ")", assignmentNode.getCodePosition());
             }
@@ -393,8 +412,6 @@ public class TypeChecking {
         else if (assignmentNode.getSwizzleNode() != null) {
             visitSwizzle(assignmentNode.getSwizzleNode());
         }
-
-        visitExpression(assignmentNode.getExpressionNode());
     }
 
     private FunctionDeclarationNode visitNonObjectFunctionCall(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
@@ -484,6 +501,9 @@ public class TypeChecking {
         ObjectDeclarationNode objectDeclarationNode;
         ClassDeclarationNode classDeclarationNode;
 
+        if (predefinedFunctions.containsKey(functionName)) {
+            return Enums.dataTypeToStringSpook(predefinedFunctions.get(functionName));
+        }
 
         if (listOfPredefinedClasses.contains(variableName)) {
             switch (variableName) {
@@ -598,30 +618,6 @@ public class TypeChecking {
                 visitReturnStatement(ifElseStatementNode.getElseStatementNode().getElseBlock().getReturnNode(), currentFuncNode);
         }
     }
-
-    //Was used to pull assignments out of if's an return them to variable declarations
-    /*private void initVariable(ArrayList<StatementNode> statementNodes) {
-        for (StatementNode statementNode : statementNodes) {
-            initVariable(statementNode);
-        }
-    }
-
-    //Return assignment to declaration
-    private void initVariable(StatementNode statementNode) {
-        if (statementNode instanceof AssignmentNode) {
-            AssignmentNode assignmentNode = (AssignmentNode) statementNode;
-            ASTnode varDecl = retrieveSymbol(assignmentNode.getVariableName());
-            if (varDecl instanceof VariableDeclarationNode) {
-                VarDeclInitNode newAssign = new VarDeclInitNode(assignmentNode);
-                ArrayList<VarDeclInitNode> varDeclInitNodes = new ArrayList<>();
-                varDeclInitNodes.add(newAssign);
-                VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) varDecl;
-                variableDeclarationNode.setVarDeclInitNodes(varDeclInitNodes);
-                enterSymbol(assignmentNode.getVariableName(), variableDeclarationNode);
-            }
-        }
-    }
-    */
 
     private void visitForLoopStatement(ForLoopStatementNode forLoopStatementNode) {
         ForLoopExpressionNode forLoopExpression1 = forLoopStatementNode.getForLoopExpressionNode1();
@@ -836,14 +832,8 @@ public class TypeChecking {
         Enums.DataType returnType = functionDeclarationNode.getReturnType();
         LowPrecedenceNode lowPrecedenceNode;
 
-        if (expressionNode instanceof ArithExpressionNode) {
-            lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
-            String dataType = visitLowPrecedenceNode(lowPrecedenceNode);
 
-            if (dataType != null && !dataType.equals(Enums.dataTypeToStringSpook(returnType)))
-                throw new CompilerException("ERROR: Return statement does not match the return type (" + Enums.dataTypeToStringSpook(returnType) + ") of the function", expressionNode.getCodePosition());
-        }
-        else if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
+        if (expressionNode instanceof BoolExpressionNode && returnType.equals(Enums.DataType.BOOL))
             visitExpression(expressionNode);
         else if (expressionNode instanceof TernaryOperatorNode)
             visitTernaryOperator((TernaryOperatorNode) expressionNode);
@@ -853,6 +843,13 @@ public class TypeChecking {
             visitExpression(expressionNode);
         else if (expressionNode instanceof  Vector2ExpressionNode && returnType.equals(Enums.DataType.VEC2))
             visitExpression(expressionNode);
+        else if (expressionNode instanceof ArithExpressionNode) {
+            lowPrecedenceNode = ((ArithExpressionNode) expressionNode).getLowPrecedenceNode();
+            String dataType = visitLowPrecedenceNode(lowPrecedenceNode);
+
+            if (dataType != null && !dataType.equals(Enums.dataTypeToStringSpook(returnType)))
+                throw new CompilerException("ERROR: Return statement does not match the return type (" + Enums.dataTypeToStringSpook(returnType) + ") of the function", expressionNode.getCodePosition());
+        }
         else
             throw new CompilerException("ERROR: Return statement does not match the return type (" + returnType + ") of the function", expressionNode.getCodePosition());
     }
@@ -869,12 +866,6 @@ public class TypeChecking {
             visitBoolExpression((BoolExpressionNode) expressionNode);
         else if (expressionNode instanceof TernaryOperatorNode)
             visitTernaryOperator((TernaryOperatorNode) expressionNode);
-        else if (expressionNode instanceof  Vector4ExpressionNode)
-            visitVector4Expression((Vector4ExpressionNode) expressionNode);
-        else if (expressionNode instanceof  Vector3ExpressionNode)
-            visitVector3Expression((Vector3ExpressionNode) expressionNode);
-        else if (expressionNode instanceof  Vector2ExpressionNode)
-            visitVector2Expression((Vector2ExpressionNode) expressionNode);
     }
 
     private String visitLowPrecedenceNode(LowPrecedenceNode lowPrecedenceNode) {
@@ -928,6 +919,23 @@ public class TypeChecking {
                         ObjectFunctionCallNode objectFunctionCallNode = atomPrecedenceNode.getOperand().getObjectFunctionCallNode();
                         return visitObjectFunctionCall(objectFunctionCallNode);
                     }
+                    /* Visited in Expression, but should be here to match parser implementation
+                    //Operand: vec2
+                    else if (atomPrecedenceNode.getOperand().getVector2ExpressionNode() != null) {
+                        visitVector2Expression(atomPrecedenceNode.getOperand().getVector2ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC2);
+                    }
+                    //Operand: vec3
+                    else if (atomPrecedenceNode.getOperand().getVector3ExpressionNode() != null) {
+                        visitVector3Expression(atomPrecedenceNode.getOperand().getVector3ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC3);
+                    }
+                    //Operand: vec4
+                    else if (atomPrecedenceNode.getOperand().getVector4ExpressionNode() != null) {
+                        visitVector4Expression(atomPrecedenceNode.getOperand().getVector4ExpressionNode());
+                        return Enums.dataTypeToStringSpook(Enums.DataType.VEC4);
+                    }
+                    */
 
                     // Operand: Swizzle
                     else if (atomPrecedenceNode.getOperand().getSwizzleNode() != null) {
@@ -949,7 +957,7 @@ public class TypeChecking {
                         else
                             throw new CompilerException("ERROR: Too long swizzle", swizzleNode.getCodePosition());
                     }
-
+                    //Operand: number
                     else if (atomPrecedenceNode.getOperand().getRealNumberNode() != null)
                         return Enums.dataTypeToStringSpook(Enums.DataType.NUM);
 
@@ -1049,34 +1057,44 @@ public class TypeChecking {
                         if (boolOperationsNode.getBoolOperationNode() != null && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
                             //OK type
                         }
-                        // originalType = bool && extend = boolOperation
-                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null) {
-                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+                        //The 2 LowPrecedences match type
+                        else if (boolOperationsNode.getArithExpressionNode() != null && extendNodes.get(currentExtend).getArithExpressionNode() != null) {
+                            if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                                String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+                                String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
 
-                            if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
-                                //OK type
+                                if (variableType.equals(extendVariableType)) {
+                                    //OK type
+                                }
+                            }
+                        }
+                        // originalType = bool && extend = boolOperation
+                        else if (boolOperationsNode.getArithExpressionNode() != null) {
+                            if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null) {
+                                String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
+
+                                if (variableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
+                                    //OK type
+                                }
                             }
                         }
                         // original = boolOperation && extendType = bool
-                        else if (extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
-                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
+                        else if (extendNodes.get(currentExtend).getArithExpressionNode() != null) {
+                            if (extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
+                                String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
 
-                            if (extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && boolOperationsNode.getBoolOperationNode() != null) {
-                                //OK type
+                                if (extendVariableType.equals(Enums.dataTypeToStringSpook(Enums.DataType.BOOL)) && boolOperationsNode.getBoolOperationNode() != null) {
+                                    //OK type
+                                }
                             }
                         }
-                        //The 2 LowPrecedences match type
-                        else if (boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode() != null && extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode() != null) {
-                            String variableType = visitLowPrecedenceNode(boolOperationsNode.getArithExpressionNode().getLowPrecedenceNode());
-                            String extendVariableType = visitLowPrecedenceNode(extendNodes.get(currentExtend).getArithExpressionNode().getLowPrecedenceNode());
 
-                            if (variableType.equals(extendVariableType)) {
-                                //OK type
-                            }
-                        } else
+                        else
                             throw new CompilerException("Cannot compare expressions of different types", boolExpressionNode.getCodePosition());
 
-                    } else {
+                    }
+                    /* NEVER NEEDED/USED
+                    else {
                         if (extendNodes.get(currentExtend - 1).getBoolOperationNode() != null && extendNodes.get(currentExtend).getBoolOperationNode() != null) {
                             //OK type
                         } else if (extendNodes.get(currentExtend - 1).getArithExpressionNode() != null && extendNodes.get(currentExtend).getArithExpressionNode() != null) {
@@ -1102,6 +1120,7 @@ public class TypeChecking {
                             throw new CompilerException("Cannot compare expressions of different types", boolExpressionNode.getCodePosition());
 
                     }
+                    */
                 }
             }
         }
@@ -1148,9 +1167,7 @@ public class TypeChecking {
 
     //Returns the type of a single expression in a ternary operator
     private String ternaryExprType(ExpressionNode expressionNode) {
-        if (expressionNode instanceof ArithExpressionNode)
-            return visitLowPrecedenceNode(((ArithExpressionNode) expressionNode).getLowPrecedenceNode());
-        else if (expressionNode instanceof BoolExpressionNode)
+        if (expressionNode instanceof BoolExpressionNode)
             return Enums.dataTypeToStringSpook(Enums.DataType.BOOL);
         else if (expressionNode instanceof Vector2ExpressionNode) {
             Vector2ExpressionNode vec2 = (Vector2ExpressionNode) expressionNode;
@@ -1169,6 +1186,8 @@ public class TypeChecking {
             ternaryExprMatch(ternaryTemp);
             return ternaryExprType(ternaryTemp.getExpressionNode1());
         }
+        else if (expressionNode instanceof ArithExpressionNode)
+            return visitLowPrecedenceNode(((ArithExpressionNode) expressionNode).getLowPrecedenceNode());
         else
             throw new CompilerException("Ternary expression missing type");
     }

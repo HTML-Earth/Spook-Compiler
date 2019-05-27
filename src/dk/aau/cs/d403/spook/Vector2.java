@@ -14,6 +14,7 @@ public class Vector2 {
     private ObjectArgumentNode x;
     private ObjectArgumentNode y;
     private LowPrecedenceNode lowPrecedenceNode;
+    private TernaryOperatorNode ternaryOperatorNode;
 
     public Vector2(ObjectArgumentNode x, ObjectArgumentNode y) {
         this.x = x;
@@ -31,6 +32,10 @@ public class Vector2 {
 
     public Vector2(NonObjectFunctionCallNode nonObjectFunctionCallNode) {
         this.lowPrecedenceNode = new LowPrecedenceNode(nonObjectFunctionCallNode);
+    }
+
+    public Vector2(String variableName) {
+        this.lowPrecedenceNode = new LowPrecedenceNode(variableName);
     }
 
     public ObjectArgumentNode getX() {
@@ -51,6 +56,10 @@ public class Vector2 {
 
     public LowPrecedenceNode getLowPrecedenceNode() {
         return lowPrecedenceNode;
+    }
+
+    public TernaryOperatorNode getTernaryOperatorNode() {
+        return ternaryOperatorNode;
     }
 
     public static Vector2 zero(){
@@ -149,6 +158,7 @@ public class Vector2 {
             throw new CompilerException("Object function call on unrecognized object: " + objectFunctionCallNode.getObjectVariableName(), arithOperandNode.getCodePosition());
         }
         else if (variableName != null) {
+            //return new Vector2(variableName);
             return evaluateExpression(CodeGenerator.getVariables().get(variableName).getVarDeclInitNodes().get(0).getAssignmentNode().getExpressionNode());
         }
         else if (swizzleNode != null) {

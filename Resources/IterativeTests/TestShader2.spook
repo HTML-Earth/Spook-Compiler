@@ -1,11 +1,13 @@
 Shader{
   #Declarations
   Num i = 0; Num radius; Num height = 100; Num length = 100; # virker ikke
-  Num d;
 
   #Unused for(s)
-  for(d = 0 to 1){}
-  for ((10+10) to (9*4)) {}
+  for(Num d = 0 to 4){}
+  for (Num forNum = (10 + 10) to (9*4)) {
+    Num numbaOne = 1;
+    Circle forCircle = (20, Color.black());
+  }
   for ((10/2) to (100 % 101)) {}
   for (i to length) {}
   for ((i + 1) to (11 - 1)) {}
@@ -25,8 +27,9 @@ Shader{
 
   #Get in Shape
   Rectangle red = (height, length, Color.green());
-  Bulletbill billy = (height, length, Color.blue());
-  billy.parent();
+  red.setPosition(100, yPos);
+  #Bulletbill billy = (height, length, Color.blue());
+  #billy.parent();
   if (true) {
     radius = 46 + 100 / 2 + 4; #Det 100
   } else
@@ -35,9 +38,9 @@ Shader{
   #And Action!
   Scene.setColor(Color.black());
   #Scene.add(circleFactory(radius, Color.red()));
-  Scene.add(rec, 100, yPos);
-  Scene.add(billy.setShadow(billy));
-  Scene.add(billy);
+  Scene.add(red);
+  #Scene.add(billy.setShadow(billy));
+  #Scene.add(billy);
 }
 
 #Totally unnecessary function to create new circles

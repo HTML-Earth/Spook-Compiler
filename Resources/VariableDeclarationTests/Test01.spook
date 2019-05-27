@@ -1,12 +1,30 @@
 Shader {
-    # Bool var1 = true && 1 > 0;
-    # Bool var2 = false == 1;
-    # Bool var3 = !1;
-    # Bool var4 = 1 && false;
+    #Bool var1 = true && 1 > 0;
+    #Bool var2 = false == 1;
+    #Bool var3 = !1;
+    #Bool var4 = 1 && false;
     Num i, Hej = 0, k = Hej;
 
     Num var2 = giveMeTen(10, 2);
     Num var47 = giveMeTen();
+
+    #Initialization testing
+    Vec2 vec22;
+    Vec3 vec33;
+    Vec4 vec44;
+    Num number;
+    Bool bol;
+
+    Num number2 = vec22.x;
+
+    vec33 = vec33 + vec3;
+    vec44 = vec44 + vec1;
+    vec22 = vec22 + rec;
+
+    Vec4 init4 = (1, 1, 1, 1);
+    Vec3 init3 = (3, 3, 3);
+    Vec2 init2 = (2, 2);
+
 }
 Num giveMeTen(Num arg1, Num arg2) {
     return 10;
