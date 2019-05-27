@@ -27,6 +27,8 @@ public class Main {
         boolean print = false;
         boolean copy = false;
 
+        boolean debug = false;
+
         String generatedCode = null;
 
         // Parsing arguments
@@ -38,6 +40,9 @@ public class Main {
                         throw new IllegalArgumentException("Expected output file, got: " + arg);
 
                     switch (arg.substring(1)) {
+                        case "debug":
+                            debug = true;
+                            break;
                         case "pp": case "prettyprint":
                             prettyPrint = true;
                             break;
@@ -104,15 +109,18 @@ public class Main {
         Unrolling unrolling = new Unrolling();
         ast = unrolling.unrollProgram(ast);
 
-        // Pretty printing 2
-        if (prettyPrint) {
-            System.out.println("Pretty Print 2:");
-            System.out.println(ast.prettyPrint(0));
-        }
+        // DEBUGGING
+        if (debug) {
+            // Pretty Print after Unrolling
+            if (prettyPrint) {
+                System.out.println("Pretty Print after Unrolling:");
+                System.out.println(ast.prettyPrint(0));
+            }
 
-        // SECOND CONTEXT ANALYSIS
-        typeChecking = new TypeChecking();
-        typeChecking.visitProgram(ast);
+            // SECOND CONTEXT ANALYSIS
+            typeChecking = new TypeChecking();
+            typeChecking.visitProgram(ast);
+        }
 
         // CODE GENERATION
         String inputFileName = new File(inputFile).getName();
