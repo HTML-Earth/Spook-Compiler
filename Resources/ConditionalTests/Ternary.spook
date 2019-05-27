@@ -1,7 +1,9 @@
 Shader {
-    Bool blinking = sin(Time * 8) > 0;
+    Bool blinking;
+    
     Vec4 color1 = Color.blue();
     Vec4 color2 = Color.red();
+    blinking = sin(Time * 8) > 0;
 
     Vec4 finalColor = blinking ? color1 : color2;
 

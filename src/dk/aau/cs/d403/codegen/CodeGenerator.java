@@ -266,7 +266,7 @@ public class CodeGenerator {
         ArrayList<StatementNode> statementNodes = new ArrayList<>();
 
         if (statementNode instanceof AssignmentNode)
-            statementNodes.add(visitAssignment((AssignmentNode)statementNode));
+            statementNodes.add(visitAssignment((AssignmentNode)statementNode, true));
         else if (statementNode instanceof DeclarationNode)
             statementNodes.add(visitDeclaration((DeclarationNode)statementNode));
         else if (statementNode instanceof IfElseStatementNode)
@@ -315,7 +315,7 @@ public class CodeGenerator {
 
     private ForLoopExpressionNode visitForLoopExpressionNode(ForLoopExpressionNode forLoopExpressionNode) {
         if (forLoopExpressionNode.getAssignmentNode() != null)
-            return new ForLoopExpressionNode(visitAssignment(forLoopExpressionNode.getAssignmentNode()));
+            return new ForLoopExpressionNode(visitAssignment(forLoopExpressionNode.getAssignmentNode(), false)); //TODO: maybe set to true
         else if (forLoopExpressionNode.getAtomPrecedenceNode() != null)
             return new ForLoopExpressionNode(forLoopExpressionNode.getAtomPrecedenceNode());
         else if (forLoopExpressionNode.getVariableDeclarationNode() != null)
@@ -399,11 +399,23 @@ public class CodeGenerator {
     }
 
 
-    private AssignmentNode visitAssignment(AssignmentNode assignmentNode) {
+    private AssignmentNode visitAssignment(AssignmentNode assignmentNode, boolean override) {
         ExpressionNode expressionNode = visitExpression(assignmentNode.getExpressionNode());
 
-        if (assignmentNode.getVariableName() != null)
-            return new AssignmentNode(assignmentNode.getVariableName(), expressionNode);
+        String variableName = assignmentNode.getVariableName();
+
+        if (variableName != null) {
+            AssignmentNode newAssignmentNode = new AssignmentNode(variableName, expressionNode);
+
+            if (override) {
+                //Override variable's previous value
+                VariableDeclarationNode variableDeclarationNode = variables.get(variableName);
+                if (variableDeclarationNode != null && variableDeclarationNode.getVarDeclInitNodes() != null)
+                    variableDeclarationNode.getVarDeclInitNodes().set(0, new VarDeclInitNode(newAssignmentNode));
+            }
+
+            return newAssignmentNode;
+        }
         else
             return new AssignmentNode(assignmentNode.getSwizzleNode(), expressionNode);
     }
@@ -626,12 +638,14 @@ public class CodeGenerator {
     }
 
     private String visitVariableName(String variableName) {
-        usedVariables.add(variableName);
+        if (!usedVariables.contains(variableName)) {
+            usedVariables.add(variableName);
 
-        if (variables.get(variableName) != null) {
-            if (variables.get(variableName).getVarDeclInitNodes() != null){
-                for (VarDeclInitNode varDeclInitNode : variables.get(variableName).getVarDeclInitNodes())
-                    visitAssignment(varDeclInitNode.getAssignmentNode());
+            if (variables.get(variableName) != null) {
+                if (variables.get(variableName).getVarDeclInitNodes() != null){
+                    for (VarDeclInitNode varDeclInitNode : variables.get(variableName).getVarDeclInitNodes())
+                        visitAssignment(varDeclInitNode.getAssignmentNode(), false);
+                }
             }
         }
 
@@ -673,7 +687,7 @@ public class CodeGenerator {
             AssignmentNode assignmentNode = varDeclInitNode.getAssignmentNode();
 
             if (assignmentNode != null)
-                varDeclInitNodes.add(new VarDeclInitNode(visitAssignment(assignmentNode)));
+                varDeclInitNodes.add(new VarDeclInitNode(visitAssignment(assignmentNode, false)));
             else {
                 if (variableDeclarationNode.getDataType() == Enums.DataType.NUM) {
                     ArithExpressionNode arithExpressionNode = new ArithExpressionNode(new LowPrecedenceNode(0));
