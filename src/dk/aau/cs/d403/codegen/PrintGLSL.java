@@ -11,12 +11,10 @@ import dk.aau.cs.d403.spook.Vector3;
 import dk.aau.cs.d403.spook.Vector4;
 import dk.aau.cs.d403.spook.color.Color;
 
-import java.awt.font.ImageGraphicAttribute;
 import java.util.ArrayList;
 
 import static dk.aau.cs.d403.ast.Enums.Operator.SUB;
 import static dk.aau.cs.d403.ast.Enums.operatorToString;
-import static dk.aau.cs.d403.ast.Enums.returnTypeToStringGLSL;
 
 public class PrintGLSL {
 
@@ -24,19 +22,22 @@ public class PrintGLSL {
         StringBuilder sb = new StringBuilder();
         sb.append(Enums.dataTypeToStringGLSL(variableDeclarationNode.getDataType()));
         sb.append(" ");
-        for (VarDeclInitNode varDeclInitNode : variableDeclarationNode.getVarDeclInitNodes()) {
-            if (varDeclInitNode.getAssignmentNode() != null)
-                sb.append(printAssignment(varDeclInitNode.getAssignmentNode()));
-            else
-                sb.append(varDeclInitNode.getAssignmentNode().getVariableName()).append(";");
-        }
 
+        int declarationAmount = variableDeclarationNode.getVarDeclInitNodes().size();
+        for (int i = 0; i < declarationAmount; i++) {
+            if (variableDeclarationNode.getVarDeclInitNodes().get(i).getAssignmentNode() != null)
+                sb.append(printAssignment(variableDeclarationNode.getVarDeclInitNodes().get(i).getAssignmentNode()));
+            else
+                sb.append(variableDeclarationNode.getVarDeclInitNodes().get(i).getAssignmentNode().getVariableName()).append(";");
+
+            sb.append((i == declarationAmount - 1 || declarationAmount == 1) ? ";" : ", ");
+        }
 
         return sb.toString();
     }
 
     public static String printAssignment(AssignmentNode assignmentNode) {
-        return assignmentNode.getVariableName() + " = " + printExpression(assignmentNode.getExpressionNode()) + ";";
+        return assignmentNode.getVariableName() + " = " + printExpression(assignmentNode.getExpressionNode());
     }
 
     public static String printExpression(ExpressionNode expressionNode) {
