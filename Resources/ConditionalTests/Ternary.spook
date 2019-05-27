@@ -1,6 +1,11 @@
 Shader {
-    Vec4 blinking = (sin(Time * 8) > 0) ? Color.blue() : Color.red();
-    Square sqr = (50, blinking);
+    Bool blinking = sin(Time * 8) > 0;
+    Vec4 color1 = Color.blue();
+    Vec4 color2 = Color.red();
+
+    Vec4 finalColor = blinking ? color1 : color2;
+
+    Square sqr = (50, finalColor);
 
     Vec2 center = (Screen.x / 2, Screen.y / 2);
     sqr.setPosition(center);
