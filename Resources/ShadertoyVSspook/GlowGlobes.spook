@@ -1,0 +1,48 @@
+Shader{
+#  https://www.shadertoy.com/view/ldl3D7
+
+Num xPos = Screen.x;
+Num yPos = Screen.y;
+
+Num size = xPos/10;
+Num midSize = size * 0.75;
+Num jump = 0;
+Num speed = 6;
+
+Vec2 middle = (xPos/2, yPos/2);
+
+Circle circle = (midSize, Color.black());
+
+Circle globe1 = (size, Color.cyan());
+Circle globe2 = (size, Color.cyan());
+Circle globe3 = (size, Color.cyan());
+Circle globe4 = (size, Color.cyan());
+
+globe1.setParent(circle);
+globe2.setParent(circle);
+globe3.setParent(circle);
+globe4.setParent(circle);
+
+Bool active1;
+Bool active2;
+Bool active3;
+Bool active4;
+
+Num move = abs(xPos / 4 * sin(Time * speed));
+
+Num vary1 = (mod(Time,  4 * Pi/speed) < Pi/speed) ? move : 0;
+Num vary2 = (mod(Time - Pi/speed, 4 * Pi/speed) < Pi/speed) ? move : 0;
+Num vary3 = (mod(Time - Pi/speed * 2, 4 * Pi/speed) < Pi/speed) ? move : 0;
+Num vary4 = (mod(Time - Pi/speed * 3, 4 * Pi/speed) < Pi/speed) ? move : 0;
+
+globe1.setPosition(0, midSize + size + vary1);
+globe2.setPosition(midSize + size + vary2, 0);
+globe3.setPosition(0, - midSize - size- vary3);
+globe4.setPosition(- midSize - size - vary4, 0);
+
+circle.setPosition(middle);
+
+circle.setRotation(Time * 60);
+
+Scene.add(circle);
+}
