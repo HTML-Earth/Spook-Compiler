@@ -15,6 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class CodeGenerator {
+    public enum Target {
+        GLSL3_ShaderToy,
+        GLSL3_HTML
+    }
 
     private StringBuilder sb;
     private Scene scene;
@@ -30,6 +34,10 @@ public class CodeGenerator {
     }
 
     public String GenerateGLSL(ProgramNode ast) {
+        return GenerateGLSL(ast, "-", Target.GLSL3_ShaderToy);
+    }
+
+    public String GenerateGLSL(ProgramNode ast, String inputFileName, Target target) {
         sb = new StringBuilder();
         scene = new Scene();
 
@@ -43,11 +51,27 @@ public class CodeGenerator {
 
         ProgramNode program = visitProgram(ast);
 
+        if (target == Target.GLSL3_HTML) {
+            sb.append(PrintHTML.StartOfHTML(inputFileName));
+            sb.append("#version 300 es\n");
+        }
+
+        sb.append("// ").append(inputFileName).append("\n// Compiled with Spook Compiler \n// https://github.com/HTML-Earth/Spook-Compiler\n\n");
+
+        if (target == Target.GLSL3_HTML)
+            sb.append("precision mediump float;\n\n" +
+                    "out vec4 fragColor;\n\n" +
+                    "uniform vec2 iResolution;\n" +
+                    "uniform float iTime;\n\n");
+
         sb.append("const float PI = 3.1415926535897932384626433832795;\n\n");
         generateStructs();
         generatePrototypes();
-        generateMain();
+        generateMain(target);
         generateFunctions();
+
+        if (target == Target.GLSL3_HTML)
+            sb.append(PrintHTML.EndOfHTML());
 
         return sb.toString();
     }
@@ -121,8 +145,15 @@ public class CodeGenerator {
         }
     }
 
-    private void generateMain() {
-        sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
+    private void generateMain(Target target) {
+        switch (target) {
+            case GLSL3_ShaderToy:
+                sb.append("void mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n");
+                break;
+            case GLSL3_HTML:
+                sb.append("void main() {\nvec2 fragCoord = gl_FragCoord.xy;\n");
+                break;
+        }
 
         //sb.append("\tfragColor = ");
         //sb.append(PrintGLSL.printVector4(scene.getColor()));

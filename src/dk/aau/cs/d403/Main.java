@@ -26,6 +26,7 @@ public class Main {
         boolean prettyPrint = false;
         boolean print = false;
         boolean copy = false;
+        CodeGenerator.Target target = CodeGenerator.Target.GLSL3_ShaderToy;
 
         boolean debug = false;
 
@@ -51,6 +52,12 @@ public class Main {
                             break;
                         case "c": case "copy": case "clipboard": case "pasta":
                             copy = true;
+                            break;
+                        case "shadertoy":
+                            target = CodeGenerator.Target.GLSL3_ShaderToy;
+                            break;
+                        case "html":
+                            target = CodeGenerator.Target.GLSL3_HTML;
                             break;
                         case "o": case "output":
                             nextArgIsOutputFile = true;
@@ -125,8 +132,7 @@ public class Main {
         // CODE GENERATION
         String inputFileName = new File(inputFile).getName();
         CodeGenerator codeGenerator = new CodeGenerator();
-        generatedCode = "// " + inputFileName + "\n// Compiled with Spook Compiler \n// https://github.com/HTML-Earth/Spook-Compiler\n\n";
-        generatedCode = generatedCode + codeGenerator.GenerateGLSL(ast);
+        generatedCode = codeGenerator.GenerateGLSL(ast, inputFileName, target);
 
         // Print the code to the terminal
         if (print) {
