@@ -15,7 +15,7 @@ Shader {
     Num shadowSize = ballSize * sin(yPos * 0.01) * 0.5 + (ballSize / 3);
 
     #Shadow color
-    Num shadowDarkness = shadowSize * 0.005;
+    Num shadowDarkness = shadowSize * 0.005 + 0.5;
     Vec4 shadowColor = (0, 0, 0, shadowDarkness);
 
     #Objects

@@ -528,26 +528,28 @@ public class TypeChecking {
                 // Check if object arguments are declared
                 for (ObjectArgumentNode objectArgumentNode : objectArgumentNodes) {
                     LowPrecedenceNode currentLowPrecedence = objectArgumentNode.getLowPrecedence();
-                    for (HighPrecedenceNode highPrecedenceNode : currentLowPrecedence.getHighPrecedenceNodes()) {
-                        for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
-                            ArithOperandNode currentArg = atomPrecedenceNode.getOperand();
+                    if (currentLowPrecedence != null) {
+                        for (HighPrecedenceNode highPrecedenceNode : currentLowPrecedence.getHighPrecedenceNodes()) {
+                            for (AtomPrecedenceNode atomPrecedenceNode : highPrecedenceNode.getAtomPrecedenceNodes()) {
+                                ArithOperandNode currentArg = atomPrecedenceNode.getOperand();
 
-                            if (currentArg.getNonObjectFunctionCallNode() != null)
-                                visitNonObjectFunctionCall(currentArg.getNonObjectFunctionCallNode());
-                            else if (currentArg.getObjectFunctionCallNode() != null)
-                                visitObjectFunctionCall(currentArg.getObjectFunctionCallNode());
-                            else if (currentArg.getVariableName() != null)
-                                visitVariableName(currentArg.getVariableName());
-                            else if (currentArg.getVector2ExpressionNode() != null)
-                                visitVector2Expression(currentArg.getVector2ExpressionNode());
-                            else if (currentArg.getVector3ExpressionNode() != null)
-                                visitVector3Expression(currentArg.getVector3ExpressionNode());
-                            else if (currentArg.getVector4ExpressionNode() != null)
-                                visitVector4Expression(currentArg.getVector4ExpressionNode());
-                            else if (currentArg.getRealNumberNode() != null || currentArg.getSwizzleNode() != null) {
-                                //do nothing
-                            } else
-                                throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared");
+                                if (currentArg.getNonObjectFunctionCallNode() != null)
+                                    visitNonObjectFunctionCall(currentArg.getNonObjectFunctionCallNode());
+                                else if (currentArg.getObjectFunctionCallNode() != null)
+                                    visitObjectFunctionCall(currentArg.getObjectFunctionCallNode());
+                                else if (currentArg.getVariableName() != null)
+                                    visitVariableName(currentArg.getVariableName());
+                                else if (currentArg.getVector2ExpressionNode() != null)
+                                    visitVector2Expression(currentArg.getVector2ExpressionNode());
+                                else if (currentArg.getVector3ExpressionNode() != null)
+                                    visitVector3Expression(currentArg.getVector3ExpressionNode());
+                                else if (currentArg.getVector4ExpressionNode() != null)
+                                    visitVector4Expression(currentArg.getVector4ExpressionNode());
+                                else if (currentArg.getRealNumberNode() != null || currentArg.getSwizzleNode() != null) {
+                                    //do nothing
+                                } else
+                                    throw new CompilerException("ERROR: Variable (" + variableName + ") is not declared");
+                            }
                         }
                     }
                 }
