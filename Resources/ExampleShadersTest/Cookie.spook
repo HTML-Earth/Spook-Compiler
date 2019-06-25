@@ -1,0 +1,85 @@
+Shader {
+    Vec4 cookieColor = (0.65, 0.40, 0.20, 1);
+    Vec4 cookieColorBright = (0.7, 0.45, 0.25, 1);
+    Vec4 cookieColorDark = (0.45, 0.3, 0.1, 1);
+    Vec4 bright = (1,1,1,0.1);
+    Vec4 chipColor = (0.2, 0.1, 0, 1);
+
+    Vec4 shadowColor = (0, 0, 0, 0.7);
+
+    Scene.setColor(Color.gray());
+
+    Vec2 center = (Screen.x / 2, Screen.y / 2);
+    Vec2 shadowPos = (sin(Time * Pi * 0.5) * cookieRadius * -0.5, cos(Time * Pi * 0.5) * cookieRadius * -0.2 -cookieRadius * 0.1);
+
+    Num cookieRadius = Screen.y / 4;
+
+    Circle cookieShadow = (cookieRadius, shadowColor);
+    cookieShadow.setScale(1, 0.8);
+    Scene.add(cookieShadow, center + shadowPos);
+
+    Circle cookie = (cookieRadius, cookieColor);
+    cookie.setScale(1, 0.8);
+    Scene.add(cookie, center);
+
+    CircleGradient cookieGradient = (cookieRadius * 0.25, cookieRadius * 1.5, cookieColorBright, cookieColorDark);
+    cookieGradient.setParent(cookie);
+    cookieGradient.setPosition(sin(Time * Pi * 0.5) * cookieRadius * 0.5, cos(Time * Pi * 0.5) * cookieRadius * 0.5);
+
+    Circle cookieBright = (cookieRadius * 0.9, cookieColorBright);
+    cookieBright.setParent(cookie);
+    cookieBright.setPosition(0, cookieRadius * 0.1);
+    cookieBright.setRotation(mod(Time * 90, 360));
+
+    CircleGradient cookieGradientTop = (cookieRadius * 0.8, cookieRadius * 1, cookieColor, cookieColorDark);
+    cookieGradientTop.setParent(cookieBright);
+    cookieGradientTop.setPosition(0, cookieRadius * 0.1);
+
+    CircleGradient cookieGradientTop2 = (cookieRadius * 1, bright, Color.clear());
+    cookieGradientTop2.setParent(cookieBright);
+    cookieGradientTop2.setPosition(0, max(0, cos(Time * Pi * 0.5)) * cookieRadius * 0.5);
+
+    Square chip1 = (cookieRadius * 0.28, chipColor);
+    chip1.setParent(cookieBright);
+    chip1.setPosition(cookieRadius * 0.3, cookieRadius * 0.5);
+    chip1.setRotation(25);
+    chip1.setScale(0.7, 1);
+
+    Square chip2 = (cookieRadius * 0.26, chipColor);
+    chip2.setParent(cookieBright);
+    chip2.setPosition(cookieRadius * -0.45, cookieRadius * -0.4);
+    chip2.setRotation((-15));
+    chip2.setScale(1, 0.7);
+
+    Square chip3 = (cookieRadius * 0.26, chipColor);
+    chip3.setParent(cookieBright);
+    chip3.setPosition(cookieRadius * 0.45, cookieRadius * -0.4);
+    chip3.setRotation(67);
+    chip3.setScale(1, 0.7);
+
+    Square chip4 = (cookieRadius * 0.26, chipColor);
+    chip4.setParent(cookieBright);
+    chip4.setPosition(cookieRadius * -0.3, cookieRadius * 0.3);
+    chip4.setRotation(67);
+    chip4.setScale(1, 0.7);
+
+    Square chip5 = (cookieRadius * 0.20, chipColor);
+    chip5.setParent(cookieBright);
+    chip5.setPosition(cookieRadius * -0.1, cookieRadius * -0.15);
+    chip5.setRotation(10);
+    chip5.setScale(1, 0.7);
+
+    Num lightWiden = max(cos(Time * Pi * 0.5) * -2 + 0.75, -1);
+    Vec2 lightScale = (lightWiden + 2, 1.5);
+    Triangle holyLight = (cookieRadius * 6, cookieRadius * 6, Color.clear());
+    Scene.add(holyLight, center, sin(Time * Pi * 0.5) * 60, lightScale);
+
+    Vec4 lightColor = (1,1,0, max(cos(Time * Pi * 0.5) * 0.5 + 0.1, 0));
+    CircleGradient lightGradient = (cookieRadius * 5, lightColor, Color.clear());
+    lightGradient.setParent(holyLight);
+    lightGradient.setPosition(0, cookieRadius * 3);
+
+    Vec4 bgColor = (1,1,0, max(cos(Time * Pi * 0.5) * -0.2 + 0.1, 0));
+    Rectangle lightRect = (Screen.x, Screen.y, bgColor);
+    Scene.add(lightRect, center);
+}
