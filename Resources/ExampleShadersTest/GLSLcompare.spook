@@ -1,0 +1,11 @@
+Shader {
+    Num sqrSize = Screen.y / 4;
+    Vec2 center = (Screen.x / 2, Screen.y / 2);
+    Vec2 movement = (sin(Time) * sqrSize, cos(Time) * sqrSize);
+
+    Square sqr = (sqrSize, Color.yellow());
+    sqr.setPosition(center + movement);
+
+    Scene.setColor(Color.gray());
+    Scene.add(sqr);
+}

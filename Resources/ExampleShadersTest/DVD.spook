@@ -1,0 +1,95 @@
+Shader {
+    Scene.setColor(Color.black());
+
+    Num sqrSize = (Screen.y / 4);
+    Num sqrTime = Time * Screen.y / 5;
+    Vec2 logoPos = calcBounce(sqrTime, sqrSize, sqrSize * 0.6, Screen.x, Screen.y);
+
+    Vec4 logoColor = calcColor(sqrTime, sqrSize, sqrSize * 0.6, Screen.x, Screen.y);
+
+    Empty logo = (logoPos);
+    Scene.add(logo);
+
+    #Rectangle sqr = (sqrSize, sqrSize * 0.6, Color.gray());
+    #sqr.setParent(logo);
+
+    Circle d2 = (sqrSize * 0.3, logoColor);
+    d2.setPosition(sqrSize * 0.2, sqrSize * 0.1);
+    d2.setScale(1, 0.6);
+    d2.setParent(logo);
+
+    Circle hole2 = (sqrSize * 0.2, Color.black());
+    hole2.setParent(d2);
+
+    Rectangle left2 = (sqrSize * 0.5, sqrSize * 0.6, Color.black());
+    left2.setPosition(sqrSize * -0.05, sqrSize * 0.1);
+    left2.setParent(logo);
+
+    Rectangle line2 = (sqrSize * 0.08, sqrSize * 0.36, logoColor);
+    line2.setPosition(sqrSize * 0.16, sqrSize * 0.1);
+    line2.setParent(logo);
+
+    Triangle v = (sqrSize * 0.5, sqrSize * 0.4, logoColor);
+    v.setPosition(sqrSize * -0.05, sqrSize * 0.08);
+    v.setRotation(180);
+    v.setParent(logo);
+
+    Triangle vIn = (sqrSize * 0.5, sqrSize * 0.4, Color.black());
+    vIn.setPosition(0, sqrSize * -0.1);
+    vIn.setParent(v);
+
+    Circle d1 = (sqrSize * 0.3, logoColor);
+    d1.setPosition(sqrSize * -0.45, sqrSize * 0.1);
+    d1.setScale(1, 0.6);
+    d1.setParent(logo);
+
+    Circle hole1 = (sqrSize * 0.2, Color.black());
+    hole1.setParent(d1);
+
+    Rectangle left1 = (sqrSize * 0.5, sqrSize * 0.6, Color.black());
+    left1.setPosition(sqrSize * -0.75, sqrSize * 0.1);
+    left1.setParent(logo);
+
+    Rectangle line1 = (sqrSize * 0.08, sqrSize * 0.36, logoColor);
+    line1.setPosition(sqrSize * -0.46, sqrSize * 0.1);
+    line1.setParent(logo);
+
+    Circle disc = (sqrSize, logoColor);
+    disc.setPosition(0, -sqrSize * 0.2);
+    disc.setScale(0.5, 0.1);
+    disc.setParent(logo);
+
+    Circle discHole = (sqrSize * 0.2, Color.black());
+    discHole.setParent(disc);
+}
+
+Vec2 calcBounce(Num t, Num width, Num height, Num scrWidth, Num scrHeight) {
+    Num xPos = 0;
+    Num yPos = 0;
+    Num w = scrWidth - width;
+    Num h = scrHeight - height;
+
+    if (mod(t, w * 2) < w)
+        xPos = mod(t, w);
+    else
+        xPos = w - (mod(t, w));
+
+    if (mod(t, h * 2) < h)
+        yPos = mod(t, h);
+    else
+        yPos = h - (mod(t, h));
+
+    Vec2 pos = (xPos + width * 0.5, yPos + height * 0.5);
+    return pos;
+}
+
+Vec4 calcColor(Num t, Num width, Num height, Num scrWidth, Num scrHeight) {
+    Num w = scrWidth - width;
+    Num h = scrHeight - height;
+
+    Num r = (mod(t, w * 2) < w) ? 0 : 1;
+    Num b = (mod(t, h * 2) < h) ? 0 : 1;
+
+    Vec4 color = (r, 1, b, 1);
+    return color;
+}

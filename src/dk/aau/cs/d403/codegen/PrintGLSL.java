@@ -429,11 +429,12 @@ public class PrintGLSL {
         if (conditionalBlockNode.getStatementNode() != null) {
             sb.append("\t\t");
             sb.append(printStatement(conditionalBlockNode.getStatementNode()));
+            sb.append(";");
         }
         else if (conditionalBlockNode.getBlockNode() != null) {
-            sb.append("{\n");
+            //sb.append("{\n");
             sb.append(printFunctionBlock(conditionalBlockNode.getBlockNode()));
-            sb.append("}");
+            //sb.append("}");
         }
 
         return sb.toString();
@@ -515,13 +516,13 @@ public class PrintGLSL {
             return printSwizzle(swizzleNode);
         }
         else if (vector2ExpressionNode != null) {
-            return vector2ExpressionNode.prettyPrint(0);
+            return "vec2" + vector2ExpressionNode.prettyPrint(0);
         }
         else if (vector3ExpressionNode != null) {
-            return vector3ExpressionNode.prettyPrint(0);
+            return "vec3" + vector3ExpressionNode.prettyPrint(0);
         }
         else if (vector4ExpressionNode != null) {
-            return vector4ExpressionNode.prettyPrint(0);
+            return "vec4" + vector4ExpressionNode.prettyPrint(0);
         }
         else throw new RuntimeException("Invalid arith operand");
     }
